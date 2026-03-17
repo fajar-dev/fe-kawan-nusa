@@ -15,6 +15,10 @@
 
     <!-- Form -->
     <form @submit.prevent="handleLogin" class="space-y-5">
+        <div>
+            <h1 class="text-lg font-medium text-gray-800">Lupa Kata Sandi?</h1>
+            <p class="text-gray-600 text-sm">Masukkan email kamu untuk reset kata sandi</p>
+        </div>
       <!-- Email -->
       <div>
         <label class="label pb-1">
@@ -29,53 +33,23 @@
         />
       </div>
 
-      <!-- Password -->
-      <div>
-        <label class="label pb-1">
-          <span class="label-text text-sm font-medium text-gray-700">Kata Sandi</span>
-        </label>
-        <div class="relative">
-          <input
-            v-model="password"
-            :type="showPassword ? 'text' : 'password'"
-            placeholder="Masukkan kata sandi kamu"
-            class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary pr-10 bg-white"
-            required
-          />
-          <button
-            type="button"
-            @click="showPassword = !showPassword"
-            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary transition-colors"
-            tabindex="-1"
-          >
-            <Eye v-if="!showPassword" class="h-4 w-4" />
-            <EyeOff v-else class="h-4 w-4" />
-          </button>
-        </div>
-      </div>
-
-      <!-- Remember + Forgot -->
-      <div class="flex items-center justify-between">
-        <label class="label cursor-pointer gap-2 p-0">
-          <input type="checkbox" v-model="rememberMe" class="checkbox checkbox-sm border-gray-300 rounded" />
-          <span class="label-text text-sm text-gray-600">Ingat Saya</span>
-        </label>
-        <NuxtLink to="/auth/forgot-password" class="text-sm text-primary hover:underline">
-          Lupa Kata Sandi?
-        </NuxtLink>
-      </div>
-
       <!-- Submit -->
-      <div>
+      <div class="space-y-8">
         <button
           type="submit"
           :disabled="loading"
-          class="btn btn-primary w-full h-10 rounded-lg text-white text-sm font-semibold border-none
+          class="btn btn-primary w-full h-10 rounded-lg text-white text-sm border-none
                  hover:opacity-90 active:scale-[.98] transition-all shadow-sm flex items-center justify-center gap-2"
         >
           <span v-if="loading" class="loading loading-spinner loading-xs"></span>
-          Login
+          Reset Password
         </button>
+        <div class="text-center">
+          <NuxtLink to="/auth/sign-in" class="text-primary text-sm font-medium hover:underline flex items-center justify-center gap-2">
+            <ArrowLeft class="w-5 h-5" />
+            Kembali ke Login
+          </NuxtLink>
+        </div>
       </div>
 
       <!-- Footer -->
@@ -89,7 +63,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Eye, EyeOff } from 'lucide-vue-next'
+import { ArrowLeft, Eye, EyeOff } from 'lucide-vue-next'
 
 definePageMeta({
   layout: 'auth'

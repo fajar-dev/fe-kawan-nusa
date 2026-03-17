@@ -15,7 +15,7 @@
     </div>
 
     <!-- RIGHT – content section (slot) -->
-    <div class="flex-1 flex flex-col items-center justify-center bg-white px-6 py-12 sm:px-12 relative overflow-hidden">
+    <div class="flex-1 flex flex-col items-center justify-center bg-white px-10 py-12 sm:px-12 relative overflow-hidden">
       <slot />
     </div>
   </div>
