@@ -79,15 +79,19 @@ const handleTarikPoin = () => {
 
 // Prevent background scrolling when modal is open
 watch(isOpen, (val) => {
+  if (!import.meta.client) return
+  
   if (val) {
     document.body.style.overflow = 'hidden'
   } else {
     document.body.style.overflow = ''
   }
-}, { immediate: true })
+})
 
 // Cleanup on unmount
 onUnmounted(() => {
-  document.body.style.overflow = ''
+  if (import.meta.client) {
+    document.body.style.overflow = ''
+  }
 })
 </script>
