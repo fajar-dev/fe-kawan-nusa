@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  --font-sans: "Montserrat", sans-serif;
+  
+  /* Primary Color */
+  --color-primary: #629E43;
+  --color-primary-content: #FEFEFE;
+  
+  /* Secondary Color */
+  --color-secondary: #6C757D;
+  --color-secondary-content: #343A40;
+  
+  /* Status Color */
+  --color-success: #208E18;
+  --color-danger: #EF233C;
+  --color-error: #EF233C;
+  --color-warning: #FCBD29;
+  --color-info: #3077C1;
+  
+  /* Accent Color */
+  --color-accent: #F1F7EF;
+  --color-accent-content: #629E43;
+  
+  /* Surface Color (Container) */
+  --color-base-100: #FFFFFF; /* card-bg */
+  --color-base-200: #F2F3F4; /* border-color-light */
+  --color-base-300: #E6E7E9; /* border-color / border-color-dark */ 
+  
+  /* Text Color / Neutral */
+  --color-base-content: #14293B; /* body */
+  --color-neutral: #14293B; /* black-50 / body */
+  --color-neutral-900: #14293B;
+  --color-neutral-800: #14293B;
+  --color-neutral-700: #343A40; /* muted-dark */
+  --color-neutral-600: #626976; /* muted text */
+  --color-neutral-500: #626976;
+  --color-neutral-400: #626976;
+}
