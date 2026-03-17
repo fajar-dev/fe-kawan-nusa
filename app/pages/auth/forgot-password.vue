@@ -17,7 +17,7 @@
     <form @submit.prevent="handleLogin" class="space-y-5">
         <div>
             <h1 class="text-lg font-medium text-gray-800">Lupa Kata Sandi?</h1>
-            <p class="text-gray-600 text-sm">Masukkan email kamu untuk reset kata sandi</p>
+            <p class="text-gray-600 text-sm pt-2">Masukkan email kamu untuk reset kata sandi</p>
         </div>
       <!-- Email -->
       <div>
@@ -54,7 +54,7 @@
 
       <!-- Footer -->
       <p class="absolute bottom-10 left-0 right-0 text-center text-sm text-gray-500">
-        Belum jadi kawan nusa?
+        Butuh bantuan?
         <NuxtLink to="#" class="text-primary font-semibold hover:underline">Hubungi kami</NuxtLink>
       </p>
     </form>
