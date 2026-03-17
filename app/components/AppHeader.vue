@@ -1,5 +1,5 @@
 <template>
-  <header class="w-full h-16 bg-base-100 flex items-center justify-between px-6 lg:px-5 border-b border-base-300">
+  <header class="w-full h-16 bg-base-100 flex items-center justify-between px-2 lg:px-5 border-b border-base-300">
     <div class="flex items-center flex-1">
       <label for="my-drawer" class="btn btn-square btn-ghost drawer-button lg:hidden mr-2">
         <Menu class="w-6 h-6" />
@@ -8,7 +8,7 @@
       <!-- Logo -->
       <div class="mr-10 lg:mr-10 flex-shrink-0">
         <h1 class="font-semibold text-xl lg:text-2xl leading-tight tracking-tight text-neutral-900">kawan <span class="text-primary">nusa</span></h1>
-        <p class="text-[0.4rem] lg:text-[0.35rem] text-neutral-500 uppercase tracking-widest leading-none">Portal Referral PT. Media Antar Nusa</p>
+        <p class="text-[0.3rem] lg:text-[0.35rem] text-neutral-500 uppercase tracking-widest leading-none">Portal Referral PT. Media Antar Nusa</p>
       </div>
       
       <!-- Search Input -->
@@ -17,22 +17,22 @@
           <input 
             type="text" 
             placeholder="Search..." 
-            class="input border-none focus:outline-none w-full h-10 pl-2 text-sm bg-transparent" 
+            class="input border-none focus:outline-none w-full h-9 pl-2 text-sm bg-transparent" 
           />
-          <Search class="w-6 h-6 text-neutral-800" />
+          <Search class="w-5 h-5 text-neutral-800" />
         </div>
       </div>
     </div>
     
     <div class="flex items-center gap-2 md:gap-2">
-      <button class="btn btn-ghost btn-circle btn-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+      <button class="btn btn-ghost btn-circle btn-sm hover:text-neutral-900 transition-colors">
         <HelpCircle class="w-5 h-5" />
       </button>
-      <button class="btn btn-ghost btn-circle btn-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+      <button class="btn btn-ghost btn-circle btn-sm hover:text-neutral-900 transition-colors">
         <MessageSquareWarning class="w-5 h-5" />
       </button>
       <div class="indicator">
-        <button class="btn btn-ghost btn-circle btn-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+        <button class="btn btn-ghost btn-circle btn-sm hover:text-neutral-900 transition-colors">
           <Bell class="w-5 h-5" />
         </button>
       </div>
@@ -44,7 +44,7 @@
           </div>
         </div>
         <div class="hidden lg:block text-right">
-          <p class="text-sm font-medium text-neutral-800 leading-none text-primary">Rupert Alexander</p>
+          <p class="text-sm font-medium text-neutral-800 leading-none text-primary max-w-30 truncate">Rupert Alexander</p>
         </div>
       </div>
     </div>

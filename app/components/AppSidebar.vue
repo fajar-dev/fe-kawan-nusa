@@ -4,26 +4,26 @@
 
       <ul class="menu w-full gap-1.5 lg:mt-3 mt-18">
         <li>
-          <NuxtLink to="/" class="active text-primary-content bg-primary hover:bg-primary/90 rounded-lg px-3 py-2.5 font-medium">
-            <Home class="w-5 h-5" />
+          <NuxtLink to="/" active-class="bg-primary text-primary-content active hover:bg-primary/90" class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors">
+            <Home class="w-5 h-5 group-[.active]:text-white" />
             Beranda
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/customers" class="hover:bg-base-200 text-neutral-600 rounded-lg px-3 py-2.5 font-medium transition-colors">
-            <Users class="w-5 h-5 text-primary" />
+          <NuxtLink to="/customer" active-class="bg-primary text-primary-content active hover:bg-primary/90" class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors">
+            <Users class="w-5 h-5 group-[.active]:text-white" />
             Customer Saya
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/products" class="hover:bg-base-200 text-neutral-600 rounded-lg px-3 py-2.5 font-medium transition-colors">
-            <Package class="w-5 h-5 text-primary" />
+          <NuxtLink to="/products" active-class="bg-primary text-primary-content active hover:bg-primary/90" class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors">
+            <Package class="w-5 h-5 group-[.active]:text-white" />
             Produk dan Layanan
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/points" class="hover:bg-base-200 text-neutral-600 rounded-lg px-3 py-2.5 font-medium transition-colors">
-            <Coins class="w-5 h-5 text-primary" />
+          <NuxtLink to="/points" active-class="bg-primary text-primary-content active hover:bg-primary/90" class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors">
+            <Coins class="w-5 h-5 group-[.active]:text-white" />
             Poin Saya
           </NuxtLink>
         </li>

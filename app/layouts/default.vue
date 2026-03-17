@@ -7,7 +7,7 @@
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
       
       <div class="drawer-content flex flex-col items-center justify-start">
-        <main class="flex-1 w-full p-4 md:p-6 lg:p-8 mx-auto w-full bg-[#F7FDF9]">
+        <main :class="['flex-1 w-full p-4 md:p-6 lg:p-8 mx-auto w-full', $route.meta.bgColor || 'bg-[#F7FDF9]']">
           <slot />
         </main>
       </div> 
