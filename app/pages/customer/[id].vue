@@ -24,7 +24,7 @@
                 </div>
               </div>
             </div>
-            <div class="text-[11px] text-neutral-400 font-medium tracking-wider mt-1 lg:mt-1.5">
+            <div class="text-[11px] text-neutral-400 font-medium mt-1 lg:mt-1.5">
               <NuxtLink to="/" class="text-primary hover:underline">Beranda</NuxtLink> / 
               <NuxtLink to="/customer" class="text-primary hover:underline">Customer Saya</NuxtLink> / 
               <span class="text-neutral-500">Annette Black</span>

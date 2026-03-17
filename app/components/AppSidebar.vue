@@ -22,7 +22,7 @@
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/points" active-class="bg-primary text-primary-content active hover:bg-primary/90" class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors">
+          <NuxtLink to="/point" active-class="bg-primary text-primary-content active hover:bg-primary/90" class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors">
             <Coins class="w-5 h-5 group-[.active]:text-white" />
             Poin Saya
           </NuxtLink>
