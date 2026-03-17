@@ -41,15 +41,45 @@
                             <span class="text-neutral-800 font-medium text-3xl">1874</span>
                             <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
                         </div>
-                        <button class="btn btn-primary btn-sm rounded-lg text-sm h-8 w-full mt-3">
-                            Tarik Point
+                        <button 
+                            @click="isWithdrawModalOpen = true"
+                            class="btn btn-primary btn-sm rounded-lg text-sm h-8 w-full mt-3"
+                        >
+                            Tarik Poin
                         </button>
                     </div>
                 </div>
             </div>
         </div>
 
+        <ModalWithdraw v-model="isWithdrawModalOpen" />
+
         <div class="flex flex-col gap-6 w-full">
+
+          <!-- Tabs Section -->
+          <div class="flex items-center gap-8 border-b border-base-200">
+            <button 
+              @click="activeTab = 'incoming'"
+              :class="[
+                'pb-3 font-medium transition-all relative',
+                activeTab === 'incoming' ? 'text-primary' : 'text-neutral-500 hover:text-neutral-800'
+              ]"
+            >
+              Poin Masuk
+              <div v-if="activeTab === 'incoming'" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary rounded-full"></div>
+            </button>
+            <button 
+              @click="activeTab = 'withdrawn'"
+              :class="[
+                'pb-3 font-medium transition-all relative',
+                activeTab === 'withdrawn' ? 'text-primary' : 'text-neutral-500 hover:text-neutral-800'
+              ]"
+            >
+              Sudah Ditarik
+              <div v-if="activeTab === 'withdrawn'" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary rounded-full"></div>
+            </button>
+          </div>
+
         <!-- Table Section -->
         <DataTable flat>
         <!-- Filters Slot -->
@@ -57,8 +87,8 @@
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
             <!-- Filter Dropdown -->
             <div class="dropdown dropdown-bottom md:dropdown-start">
-                <div tabindex="0" role="button" class="btn btn-outline border-base-300 text-neutral-600 btn-sm h-10 px-4 gap-2 rounded-lg hover:bg-base-200 hover:text-neutral-800 transition-colors w-full md:w-auto">
-                <ListFilter class="w-4 h-4 text-primary" />
+                <div tabindex="0" role="button" class="btn btn-outline border-primary text-primary btn-sm h-10 px-4 gap-2 rounded-lg hover:bg-base-200 transition-colors w-full md:w-auto">
+                <ListFilter class="w-4 h-4" />
                 Filter
                 </div>
                 <div tabindex="0" class="dropdown-content z-[100] card card-compact bg-base-100 w-[calc(100vw-2rem)] md:w-[450px] shadow-xl border border-base-200 mt-2 left-0 md:left-auto">
@@ -121,12 +151,17 @@
                 <Search class="z-10 w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                 <input 
                     type="text" 
-                    placeholder="Cari Layanan..." 
-                    class="input input-bordered w-full pl-10 bg-white border-base-300 rounded-lg focus:outline-none focus:border-primary text-sm h-10"
+                    placeholder="Search" 
+                    class="input input-bordered w-full pl-10 bg-white border-base-200 rounded-lg focus:outline-none focus:border-primary text-sm h-10"
                 />
                 </div>
-                <button class="btn btn-ghost btn-sm h-10 w-10 p-0 text-neutral-400 hover:bg-base-200 rounded-lg border border-base-300">
-                <Columns2 class="w-5 h-5" />
+                <!-- Layout icon placeholder -->
+                <button class="btn btn-ghost btn-sm h-10 w-10 p-0 text-primary hover:bg-base-200 rounded-lg border border-primary/20">
+                <div class="flex flex-col gap-0.5 items-center">
+                    <div class="h-0.5 w-4 bg-primary"></div>
+                    <div class="h-0.5 w-4 bg-primary"></div>
+                    <div class="h-0.5 w-4 bg-primary"></div>
+                </div>
                 </button>
             </div>
             </div>
@@ -134,14 +169,14 @@
 
         <!-- Table Header -->
         <template #header>
-            <thead class="bg-base-200/50 text-neutral-800 font-semibold border-b border-base-200">
+            <thead class="bg-base-100 text-neutral-800 font-semibold border-b border-base-200">
             <tr>
-                <th v-for="col in columns" :key="col.key" class="border-r border-base-200 font-medium py-3">
-                <div class="flex items-center justify-between">
+                <th v-for="col in currentColumns" :key="col.key" class="border-r border-base-200 font-medium py-3 text-sm">
+                <div class="flex items-center justify-between gap-2">
                     {{ col.label }}
                     <div class="flex flex-col -space-y-1 opacity-40">
-                    <ChevronUp class="w-3.5 h-3.5" />
-                    <ChevronDown class="w-3.5 h-3.5" />
+                    <ChevronUp class="w-3 h-3" />
+                    <ChevronDown class="w-3 h-3" />
                     </div>
                 </div>
                 </th>
@@ -151,20 +186,31 @@
 
         <!-- Table Body -->
         <template #body>
-            <tbody class="text-sm text-neutral-600">
-            <tr v-for="(item, index) in services" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0">
-                <td class="text-primary font-medium py-3 border-r border-base-200 ps-4">{{ item.name }}</td>
-                <td class="py-3 border-r border-base-200 ps-4">{{ item.lastRef }}</td>
-                <td class="py-3 border-r border-base-200 text-center px-4">
-                <div :class="[
-                    'badge border-none font-semibold text-[12px] rounded-lg w-full py-3',
-                    item.status === 'Aktif' ? 'bg-primary/10 text-primary' : 'bg-red-50 text-red-500'
-                ]">
-                    {{ item.status }}
-                </div>
+            <tbody v-if="activeTab === 'incoming'" class="text-sm text-neutral-600">
+            <tr v-for="(item, index) in incomingPoints" :key="index" class="hover:bg-base-100/30 transition-colors border-b border-base-100 last:border-0">
+                <td class="py-3 border-r border-base-200 ps-4">{{ item.waktu }}</td>
+                <td class="py-3 border-r border-base-200 ps-4">{{ item.jumlah }}</td>
+                <td class="py-3 border-r border-base-200 ps-4">
+                  <span class="text-primary font-medium">{{ item.pelanggan.name }}</span>
+                  <span class="text-primary ml-1">- {{ item.pelanggan.id }}</span>
                 </td>
-                <td class="py-3 border-r border-base-200 ps-4">{{ item.points }}</td>
-                <td class="py-3 text-primary font-medium ps-4">{{ item.customers }}</td>
+                <td class="py-3 border-r border-base-200 ps-4 text-primary font-medium">{{ item.layanan }}</td>
+                <td class="py-3 border-r border-base-200 ps-4">{{ item.periode }}</td>
+                <td class="py-3 ps-4">{{ item.tipe }}</td>
+            </tr>
+            </tbody>
+
+            <tbody v-else class="text-sm text-neutral-600">
+            <tr v-for="(item, index) in withdrawnPoints" :key="index" class="hover:bg-base-100/30 transition-colors border-b border-base-100 last:border-0">
+                <td class="py-3 border-r border-base-200 ps-4">{{ item.waktu }}</td>
+                <td class="py-3 border-r border-base-200 ps-4">{{ item.poin }}</td>
+                <td class="py-3 border-r border-base-200 ps-4">{{ item.bank }}</td>
+                <td class="py-3 border-r border-base-200 ps-4">{{ item.rekening }}</td>
+                <td class="py-3 border-r border-base-200 ps-4">{{ item.penerima }}</td>
+                <td class="py-3 ps-4 flex items-center justify-between pr-4 gap-2">
+                  <span class="text-primary font-medium underline truncate cursor-pointer">{{ item.nota }}</span>
+                  <Download class="w-4 h-4 text-primary shrink-0 cursor-pointer" />
+                </td>
             </tr>
             </tbody>
         </template>
@@ -179,34 +225,54 @@ import {
   Users, CircleHelp, ListFilter, Search, Columns2, 
   ChevronUp, ChevronDown, Calendar, X, 
   Package,
-  Coins
+  Coins,
+  Download
 } from 'lucide-vue-next'
 
 definePageMeta({
   bgColor: 'bg-white'
 })
 
-const columns = [
-  { label: 'Nama Layanan', key: 'name' },
-  { label: 'Referensi Terakhir', key: 'lastRef' },
-  { label: 'Status Layanan', key: 'status' },
-  { label: 'Poin Didapatkan', key: 'points' },
-  { label: 'Pelanggan Anda', key: 'customers' }
+const isWithdrawModalOpen = ref(false)
+
+const activeTab = ref('incoming')
+
+const currentColumns = computed(() => {
+  if (activeTab.value === 'incoming') {
+    return [
+      { label: 'Waktu', key: 'waktu' },
+      { label: 'Jumlah Poin', key: 'jumlah' },
+      { label: 'Pelanggan Yang Direferensikan', key: 'pelanggan' },
+      { label: 'Nama Layanan', key: 'layanan' },
+      { label: 'Periode Berlangganan', key: 'periode' },
+      { label: 'Tipe Komisi', key: 'tipe' }
+    ]
+  }
+  return [
+    { label: 'Waktu Penarikan Poin', key: 'waktu' },
+    { label: 'Poin Ditarik', key: 'poin' },
+    { label: 'Nama Bank', key: 'bank' },
+    { label: 'Nomor Akun Bank', key: 'rekening' },
+    { label: 'Nama Penerima', key: 'penerima' },
+    { label: 'Nota', key: 'nota' }
+  ]
+})
+
+const incomingPoints = [
+  { waktu: '7 Jan 2026 - 12:42', jumlah: 300, pelanggan: { name: 'Chalista', id: '328940283830' }, layanan: 'Nusanet Broadband Business EDGE...', periode: 'Okt 2025 - Sep 2026', tipe: 'Recurring per tahun' },
+  { waktu: '5 Jan 2026 - 12:42', jumlah: 145, pelanggan: { name: 'Kurtney', id: '328940286754' }, layanan: 'Nusanet Broadband Business EDGE...', periode: 'Agu 2025 - Agu 2025', tipe: 'Sekali Bayar (OTP)' },
+  { waktu: '11 Des 2025 - 12:42', jumlah: 129, pelanggan: { name: 'Budi', id: '328940282234' }, layanan: 'Nusawork Advance', periode: 'Sep 2025 - Agu 2026', tipe: 'Recurring per bulan' },
+  { waktu: '11 Des 2025 - 12:42', jumlah: 329, pelanggan: { name: 'Anita', id: '328940280912' }, layanan: 'Nusawork Advance', periode: 'Jun 2025 - Mei 2026', tipe: 'Sekali Bayar (OTP)' },
+  { waktu: '6 Des 2025 - 12:42', jumlah: 6732, pelanggan: { name: 'Ali', id: '328940286543' }, layanan: 'Nusafiber Life', periode: 'Sep 2025 - Sep 2025', tipe: 'Recurring per bulan' },
+  { waktu: '5 Des 2025 - 12:42', jumlah: 193, pelanggan: { name: 'David', id: '328940288907' }, layanan: 'Nusafiber Selecta Basic 30', periode: 'Sep 2025 - Sep 2025', tipe: 'Sekali Bayar (OTP)' }
 ]
 
-const services = [
-  { name: 'Nusanet Broadband Business EDGE100', lastRef: '28/12/2025', status: 'Aktif', points: 5678, customers: 99 },
-  { name: 'Nusanet Broadband Business EDGE200', lastRef: '28/12/2025', status: 'Aktif', points: 2231, customers: 54 },
-  { name: 'Nusanet Broadband Business EDGE300', lastRef: '28/12/2025', status: 'Aktif', points: 2332, customers: 21 },
-  { name: 'Nusanet Dedicated Business NOVA90', lastRef: '28/12/2025', status: 'Aktif', points: 4321, customers: 14 },
-  { name: 'Nusanet Dedicated Business NOVA280', lastRef: '28/12/2025', status: 'Aktif', points: 3384, customers: 12 },
-  { name: 'Nusafiber Selecta Basic 30', lastRef: '28/12/2025', status: 'Aktif', points: 831, customers: 3 },
-  { name: 'Nusafiber Selecta Prime 100', lastRef: '22/12/2025', status: 'Aktif', points: 400, customers: 1 },
-  { name: 'Nusafiber Selecta Prime 200', lastRef: '22/12/2025', status: 'Aktif', points: 1210, customers: 5 },
-  { name: 'Google Workspace Starter', lastRef: '22/12/2025', status: 'Aktif', points: 4712, customers: 33 },
-  { name: 'Google Workspace Business', lastRef: '22/12/2025', status: 'Aktif', points: 3942, customers: 12 },
-  { name: 'Nusawork Business', lastRef: '22/12/2025', status: 'Dihentikan', points: 763, customers: 3 },
-  { name: 'Nusawork Advance', lastRef: '22/12/2025', status: 'Dihentikan', points: 100, customers: 1 }
+const withdrawnPoints = [
+  { waktu: '11 Des 2025 - 12:42', poin: 500, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8373001.pdf' },
+  { waktu: '6 Des 2025 - 12:42', poin: 648, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8372902.pdf' },
+  { waktu: '5 Des 2025 - 12:42', poin: 400, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8376789.pdf' },
+  { waktu: '30 Nov 2025 - 12:42', poin: 800, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8376679.pdf' },
+  { waktu: '22 Nov 2025 - 12:42', poin: 150, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8374432.pdf' }
 ]
 
 
