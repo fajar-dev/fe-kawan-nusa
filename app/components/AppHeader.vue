@@ -1,25 +1,25 @@
 <template>
-  <header class="w-full h-20 bg-base-100 flex items-center justify-between px-6 lg:px-10 border-b border-base-300 shadow-xs">
+  <header class="w-full h-16 bg-base-100 flex items-center justify-between px-6 lg:px-5 border-b border-base-300">
     <div class="flex items-center flex-1">
       <label for="my-drawer" class="btn btn-square btn-ghost drawer-button lg:hidden mr-2">
         <Menu class="w-6 h-6" />
       </label>
 
       <!-- Logo -->
-      <div class="mr-6 lg:mr-10 flex-shrink-0">
-        <h1 class="font-semibold text-2xl lg:text-3xl leading-tight tracking-tight text-neutral-900">kawan <span class="text-primary">nusa</span></h1>
-        <p class="text-[0.4rem] lg:text-[0.42rem] text-neutral-500 uppercase tracking-widest leading-none">Portal Referral PT. Media Antar Nusa</p>
+      <div class="mr-10 lg:mr-10 flex-shrink-0">
+        <h1 class="font-semibold text-xl lg:text-2xl leading-tight tracking-tight text-neutral-900">kawan <span class="text-primary">nusa</span></h1>
+        <p class="text-[0.4rem] lg:text-[0.35rem] text-neutral-500 uppercase tracking-widest leading-none">Portal Referral PT. Media Antar Nusa</p>
       </div>
       
       <!-- Search Input -->
       <div class="relative w-full max-w-md hidden md:block group">
-        <input 
-          type="text" 
-          placeholder="Search..." 
-          class="input input-bordered w-full pl-5 h-10 rounded-lg bg-base-100 focus:bg-base-100 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all border-base-300" 
-        />
-        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-medium px-1.5 py-0.5 rounded border border-base-300 text-base-content/50 bg-base-200 shadow-sm">
-          ⌘K
+        <div class="flex items-center border border-base-300 rounded-lg bg-base-100 px-3 transition-all focus-within:ring-2 focus-within:ring-primary/50">
+          <input 
+            type="text" 
+            placeholder="Search..." 
+            class="input border-none focus:outline-none w-full h-10 pl-2 text-sm bg-transparent" 
+          />
+          <Search class="w-6 h-6 text-neutral-800" />
         </div>
       </div>
     </div>

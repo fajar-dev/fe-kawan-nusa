@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-6 w-full">
     <!-- Welcome Banner -->
-    <div class="card bg-base-100 shadow-sm border border-base-200 w-full mb-2">
+    <div class="card bg-base-100 shadow-xs border border-base-200 w-full mb-2 rounded-lg">
       <div class="card-body p-6 lg:p-8">
         <h2 class="text-2xl font-bold text-neutral-800">Selamat Datang, Rupert 👋</h2>
         <p class="text-neutral-500 mt-1">Berikut adalah ringkasan aktivitas referral Anda</p>
@@ -11,7 +11,7 @@
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
       <!-- Total Pelanggan -->
-      <div class="card bg-base-100 shadow-sm border border-base-200">
+      <div class="card bg-base-100 shadow-xs border border-base-200 rounded-lg">
         <div class="card-body p-6 flex flex-row items-start justify-between">
           <div>
             <p class="text-neutral-500 font-medium text-sm">Total Pelanggan</p>
@@ -28,7 +28,7 @@
       </div>
 
       <!-- Total Poin Aktif -->
-      <div class="card bg-base-100 shadow-sm border border-base-200">
+      <div class="card bg-base-100 shadow-xs border border-base-200 rounded-lg">
         <div class="card-body p-6 flex flex-row items-start justify-between">
           <div>
             <p class="text-neutral-500 font-medium text-sm">Total Poin Aktif</p>
@@ -45,7 +45,7 @@
       </div>
 
       <!-- Layanan Direferensikan -->
-      <div class="card bg-base-100 shadow-sm border border-base-200">
+      <div class="card bg-base-100 shadow-xs border border-base-200 rounded-lg">
         <div class="card-body p-6 flex flex-row items-start justify-between">
           <div>
             <p class="text-neutral-500 font-medium text-sm">Layanan Direferensikan</p>
@@ -65,14 +65,14 @@
     <!-- Charts Row -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
       <!-- Line Chart -->
-      <div class="card bg-base-100 shadow-sm border border-base-200 lg:col-span-2">
+      <div class="card bg-base-100 shadow-xs border border-base-200 lg:col-span-2 rounded-lg">
         <div class="card-body p-6">
           <div class="flex items-center justify-between mb-6">
             <div>
               <h3 class="font-bold text-lg text-neutral-800">Pertumbuhan Pelanggan</h3>
               <p class="text-neutral-500 text-sm">Grafik pertumbuhan pelanggan bulan ini</p>
             </div>
-            <select class="select select-bordered select-sm w-full max-w-xs rounded-lg bg-base-100 text-neutral-600 focus:outline-none focus:ring-1 focus:ring-primary shadow-sm">
+            <select class="select select-bordered select-sm w-full max-w-xs rounded-lg bg-base-100 text-neutral-600 focus:outline-none focus:ring-1 focus:ring-primary shadow-xs">
               <option disabled selected>This Month</option>
               <option>Last Month</option>
               <option>This Year</option>
@@ -83,7 +83,7 @@
       </div>
 
       <!-- Top Services List -->
-      <div class="card bg-base-100 shadow-sm border border-base-200">
+      <div class="card bg-base-100 shadow-xs border border-base-200 rounded-lg">
         <div class="card-body p-6 flex flex-col h-full">
           <div class="flex items-center justify-between mb-4">
             <div>
@@ -98,7 +98,7 @@
           <div class="flex flex-col gap-1 mt-2 flex-1 justify-between">
             <!-- Rank 1 -->
             <div class="flex items-center gap-4 py-3 border-b border-base-200 last:border-0">
-              <div class="w-8 h-8 rounded-lg bg-[#2b7c41] text-white flex items-center justify-center font-bold text-sm shadow">1</div>
+              <div class="w-9 h-9 rounded-sm bg-[#2b7c41] text-white flex items-center justify-center font-semibold text-lg shadow">1</div>
               <div class="flex-1 min-w-0">
                 <p class="font-semibold text-neutral-800 text-sm truncate">Nusanet Broadband Business...</p>
                 <p class="text-xs text-neutral-500">99 Pelanggan</p>
@@ -110,7 +110,7 @@
             </div>
             <!-- Rank 2 -->
             <div class="flex items-center gap-4 py-3 border-b border-base-200 last:border-0">
-              <div class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-bold text-sm shadow">2</div>
+              <div class="w-9 h-9 rounded-sm bg-primary text-white flex items-center justify-center  font-semibold text-lg shadow">2</div>
               <div class="flex-1 min-w-0">
                 <p class="font-semibold text-neutral-800 text-sm truncate">Google Workspace Starter</p>
                 <p class="text-xs text-neutral-500">48 Pelanggan</p>
@@ -122,7 +122,7 @@
             </div>
             <!-- Rank 3 -->
             <div class="flex items-center gap-4 py-3 border-b border-base-200 last:border-0">
-              <div class="w-8 h-8 rounded-lg bg-[#73c847] text-white flex items-center justify-center font-bold text-sm shadow">3</div>
+              <div class="w-9 h-9 rounded-sm bg-[#73c847] text-white flex items-center justify-center  font-semibold text-lg shadow">3</div>
               <div class="flex-1 min-w-0">
                 <p class="font-semibold text-neutral-800 text-sm truncate">Nusanet Dedicated Business...</p>
                 <p class="text-xs text-neutral-500">34 Pelanggan</p>
@@ -134,7 +134,7 @@
             </div>
             <!-- Rank 4 -->
             <div class="flex items-center gap-4 py-3 border-b border-base-200 last:border-0">
-              <div class="w-8 h-8 rounded-lg bg-[#a6e267] text-neutral-800 flex items-center justify-center font-bold text-sm shadow">4</div>
+              <div class="w-9 h-9 rounded-sm bg-[#a6e267] text-neutral-800 flex items-center justify-center  font-semibold text-lg shadow">4</div>
               <div class="flex-1 min-w-0">
                 <p class="font-semibold text-neutral-800 text-sm truncate">Google Workspace Business</p>
                 <p class="text-xs text-neutral-500">20 Pelanggan</p>
@@ -146,7 +146,7 @@
             </div>
             <!-- Rank 5 -->
             <div class="flex items-center gap-4 py-3 border-b border-base-200 last:border-0">
-              <div class="w-8 h-8 rounded-lg bg-[#d9f5a8] text-neutral-800 flex items-center justify-center font-bold text-sm shadow">5</div>
+              <div class="w-9 h-9 rounded-sm bg-[#d9f5a8] text-neutral-800 flex items-center justify-center  font-semibold text-lg shadow">5</div>
               <div class="flex-1 min-w-0">
                 <p class="font-semibold text-neutral-800 text-sm truncate">Nusanet Dedicated Business...</p>
                 <p class="text-xs text-neutral-500">24 Pelanggan</p>
@@ -162,7 +162,7 @@
     </div>
 
     <!-- Table Recent Users -->
-    <div class="card bg-base-100 shadow-sm border border-base-200 w-full mb-6 relative overflow-hidden">
+    <div class="card bg-base-100 shadow-xs border border-base-200 w-full mb-6 relative overflow-hidden">
       <div class="card-body p-6">
         <div class="flex items-center justify-between mb-4">
           <div>
@@ -243,7 +243,7 @@
           <div class="text-neutral-500">
             Showing 1 to 5 of 5 entries
           </div>
-          <div class="join border border-base-200 shadow-sm rounded-lg">
+          <div class="join border border-base-200 shadow-xs rounded-lg">
             <button class="join-item btn btn-sm bg-base-100 text-neutral-400 hover:bg-base-200 btn-disabled"><ChevronFirst class="w-4 h-4" /></button>
             <button class="join-item btn btn-sm bg-base-100 text-neutral-400 hover:bg-base-200 btn-disabled"><ChevronLeft class="w-4 h-4" /></button>
             <button class="join-item btn btn-sm bg-primary text-primary-content hover:bg-primary/90 border-0">1</button>

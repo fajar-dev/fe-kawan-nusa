@@ -1,41 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {}
 
 @theme {
   --font-sans: "Montserrat", sans-serif;
   
-  /* Primary Color */
-  --color-primary: #629E43;
-  --color-primary-content: #FEFEFE;
-  
-  /* Secondary Color */
-  --color-secondary: #6C757D;
-  --color-secondary-content: #343A40;
-  
-  /* Status Color */
-  --color-success: #208E18;
-  --color-danger: #EF233C;
-  --color-error: #EF233C;
-  --color-warning: #FCBD29;
-  --color-info: #3077C1;
-  
-  /* Accent Color */
-  --color-accent: #F1F7EF;
-  --color-accent-content: #629E43;
-  
-  /* Surface Color (Container) */
-  --color-base-100: #FFFFFF; /* card-bg */
-  --color-base-200: #F2F3F4; /* border-color-light */
-  --color-base-300: #E6E7E9; /* border-color / border-color-dark */ 
-  
-  /* Text Color / Neutral */
-  --color-base-content: #14293B; /* body */
-  --color-neutral: #14293B; /* black-50 / body */
-  --color-neutral-900: #14293B;
-  --color-neutral-800: #14293B;
-  --color-neutral-700: #343A40; /* muted-dark */
-  --color-neutral-600: #626976; /* muted text */
-  --color-neutral-500: #626976;
-  --color-neutral-400: #626976;
+  --color-primary: #629e43;
+  --color-primary-content: #fefefe;
+  --color-accent: #f1f7ef;
+  --color-accent-content: #629e43;
+  --color-neutral: #14293b;
+  --color-neutral-content: #ffffff;
+  --color-base-100: #ffffff;
+  --color-base-200: #f2f3f4;
+  --color-base-300: #e6e7e9;
+  --color-base-content: #14293b;
+  --color-success: #208e18;
+  --color-warning: #fcbd29;
+  --color-error: #ef233c;
+  --color-info: #3077c1;
+}
+
+/* Force override because DaisyUI v5 might use :where which lowers specificity */
+@layer base {
+  :root, [data-theme="light"] {
+    --color-primary: #629e43 !important;
+    --color-primary-content: #fefefe !important;
+    --color-secondary: #6c757d !important;
+    --color-secondary-content: #343a40 !important;
+    --color-accent: #f1f7ef !important;
+    --color-accent-content: #629e43 !important;
+    --color-neutral: #14293b !important;
+    --color-base-100: #ffffff !important;
+    --color-base-200: #f2f3f4 !important;
+    --color-base-300: #e6e7e9 !important;
+    --color-base-content: #14293b !important;
+    --color-success: #208e18 !important;
+    --color-warning: #fcbd29 !important;
+    --color-error: #ef233c !important;
+    --color-info: #3077c1 !important;
+  }
 }
