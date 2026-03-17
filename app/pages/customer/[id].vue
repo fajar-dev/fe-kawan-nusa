@@ -2,25 +2,29 @@
   <div class="space-y-6">
     <!-- Header / Toolbar -->
     <AppToolbar>
-      <div class="flex flex-col gap-1">
-        <div class="flex items-center gap-4">
-          <div class="w-12 h-12 bg-[#629e43] text-white flex items-center justify-center rounded-lg text-xl font-semibold">
+      <div class="flex flex-col gap-1 w-full">
+        <div class="flex items-start gap-4">
+          <div class="w-12 h-12 bg-primary text-white flex items-center justify-center rounded-lg text-xl font-semibold shrink-0">
             AB
           </div>
-          <div class="flex flex-col">
-            <div class="flex items-center gap-3">
-              <h1 class="text-2xl font-semibold text-neutral-800">Annette Black</h1>
-              <CircleHelp class="w-5 h-5 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
-              <div class="flex items-center gap-1.5 px-3 py-1 bg-neutral-100 rounded-full text-[10px] text-neutral-600">
-                <History class="w-3.5 h-3.5" />
-                Terakhir Direferensikan: <span class="font-semibold">27 Mei 2025</span>
+          <div class="flex flex-col w-full">
+            <div class="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
+              <div class="flex items-center gap-2">
+                <h1 class="text-xl md:text-2xl font-semibold text-neutral-800">Annette Black</h1>
+                <CircleHelp class="w-5 h-5 text-neutral-400 cursor-pointer hover:text-primary transition-colors shrink-0" />
               </div>
-              <div class="flex items-center gap-1.5 px-3 py-1 bg-primary/10 rounded-full text-[10px] text-primary font-semibold">
-                <Package class="w-3.5 h-3.5" />
-                3 Layanan Aktif
+              <div class="flex flex-wrap items-center gap-2">
+                <div class="flex items-center gap-1.5 px-3 py-1 bg-neutral-100 rounded-full text-[10px] text-neutral-600">
+                  <History class="w-3.5 h-3.5 shrink-0" />
+                  <span class="whitespace-nowrap">Terakhir Direferensikan: <span class="font-semibold">27 Mei 2025</span></span>
+                </div>
+                <div class="flex items-center gap-1.5 px-3 py-1 bg-primary/10 rounded-full text-[10px] text-primary font-semibold">
+                  <Package class="w-3.5 h-3.5 shrink-0" />
+                  <span class="whitespace-nowrap">3 Layanan Aktif</span>
+                </div>
               </div>
             </div>
-            <div class="text-[11px] text-neutral-400 font-medium tracking-wider mt-1.5">
+            <div class="text-[11px] text-neutral-400 font-medium tracking-wider mt-1 lg:mt-1.5">
               <NuxtLink to="/" class="text-primary hover:underline">Beranda</NuxtLink> / 
               <NuxtLink to="/customer" class="text-primary hover:underline">Customer Saya</NuxtLink> / 
               <span class="text-neutral-500">Annette Black</span>
@@ -152,22 +156,29 @@
 
             <div class="card-footer">
               <!-- Pagination footer -->
-              <div class="flex flex-col lg:flex-row items-center lg:justify-between lg:gap-0 gap-4 justify-center mt-6 text-sm border-t border-base-300 pt-3">
-                <div class="text-neutral-500 text-xs">Showing 1 to 3 of 10 entries</div>
-                  <div class="join rounded-lg overflow-hidden bg-white">
-                    <button class="btn btn-xs h-7 bg-white border-0 rounded-lg text-neutral-400 disabled:bg-white disabled:text-neutral-200">
-                      <ChevronLeft class="w-3.5 h-3.5" />
+                <div class="flex flex-col lg:flex-row items-center lg:justify-between lg:gap-0 gap-4 justify-center mt-6 text-sm border-t border-base-300 pt-3">
+                  <div class="text-neutral-500 text-sm">
+                    Showing 1 to 3 of 10 entries
+                  </div>
+                  <div class="join">
+                    <button class="btn border-none shadow-none btn-sm rounded-sm bg-base-100 text-neutral-400 hover:bg-base-200 btn-disabled">
+                      <ChevronFirst class="w-4 h-4" />
                     </button>
-                    <button class="btn btn-xs h-7 border-none rounded-lg bg-primary text-white hover:bg-primary/90 text-[11px] px-2.5">1</button>
-                    <button class="btn btn-xs h-7 border-none rounded-lg bg-white text-neutral-600 hover:bg-base-100 text-[11px] px-2.5">2</button>
-                    <button class="btn btn-xs h-7 border-none rounded-lg bg-white text-neutral-600 hover:bg-base-100 text-[11px] px-2.5">3</button>
-                    <button class="btn btn-xs h-7 bg-white border-none rounded-lg text-neutral-600 hover:bg-base-100">
-                      <ChevronRight class="w-3.5 h-3.5" />
+                    <button class="btn border-none shadow-none btn-sm rounded-sm bg-base-100 text-neutral-400 hover:bg-base-200 btn-disabled">
+                      <ChevronLeft class="w-4 h-4" />
+                    </button>
+                    <button class="btn border-none shadow-none btn-sm rounded-sm bg-primary border-0 text-primary-content hover:bg-primary/90">1</button>
+                    <button class="btn border-none shadow-none btn-sm rounded-sm bg-white text-neutral-600 hover:bg-base-200 border border-base-200">2</button>
+                    <button class="btn border-none shadow-none btn-sm rounded-sm bg-white text-neutral-600 hover:bg-base-200 border border-base-200">3</button>
+                    <button class="btn border-none shadow-none btn-sm rounded-sm bg-base-100 text-neutral-600 hover:bg-base-200">
+                      <ChevronRight class="w-4 h-4" />
+                    </button>
+                    <button class="btn border-none shadow-none btn-sm rounded-sm bg-base-100 text-neutral-600 hover:bg-base-200">
+                      <ChevronLast class="w-4 h-4" />
                     </button>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -176,7 +187,7 @@
       <!-- Bottom Card: Detail Transaksi -->
       <div class="card bg-white border border-base-200 shadow-sm">
         <div class="card-body p-6">
-          <div class="flex items-center gap-3 border-b border-base-100 pb-4 mb-6">
+          <div class="flex items-center gap-3 border-b border-base-100 pb-4">
             <FileText class="w-5 h-5 text-neutral-800" />
             <h3 class="font-semibold text-neutral-800">Detail Transaksi</h3>
           </div>
@@ -186,13 +197,13 @@
             <div class="flex border-b border-base-200 w-full md:w-auto">
               <button 
                 @click="activeTab = 'layanan'"
-                :class="['px-6 py-2.5 text-sm font-semibold transition-all border-b-2', activeTab === 'layanan' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
+                :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'layanan' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
               >
                 Layanan Terdaftar
               </button>
               <button 
                 @click="activeTab = 'poin'"
-                :class="['px-6 py-2.5 text-sm font-semibold transition-all border-b-2', activeTab === 'poin' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
+                :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'poin' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
               >
                 Pendapatan Poin
               </button>
@@ -200,8 +211,12 @@
 
             <div class="flex items-center gap-3 w-full md:w-auto">
               <div class="relative w-full md:w-72">
-                <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-                <input type="text" placeholder="Search" class="input input-sm h-10 w-full pl-9 bg-base-100 border-base-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary shadow-xs" />
+                <Search class="z-10 w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+                <input 
+                    type="text" 
+                    placeholder="Cari Layanan..." 
+                    class="input input-bordered w-full pl-10 bg-white border-base-300 rounded-lg focus:outline-none focus:border-primary text-sm h-10"
+                />
               </div>
               <button class="btn btn-outline border-base-300 text-neutral-600 btn-sm h-10 px-0 w-10 min-w-0 rounded-lg hover:bg-base-200 hover:text-neutral-800 transition-colors">
                 <ListFilter class="w-4 h-4 text-primary mx-auto" />
@@ -286,6 +301,7 @@ import {
   CircleHelp, History, Package, MapPin, Users, 
   Calendar, Hash, Mail, Phone, Briefcase, 
   ChevronDown, ChevronUp, ChevronLeft, ChevronRight,
+  ChevronFirst, ChevronLast,
   FileText, Search, ListFilter
 } from 'lucide-vue-next'
 import { ref } from 'vue'

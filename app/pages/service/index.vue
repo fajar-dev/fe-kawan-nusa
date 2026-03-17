@@ -3,14 +3,14 @@
     <AppToolbar>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-4">
-          <Users class="w-9 h-9 mt-1 text-neutral-800" />
+          <Package class="w-9 h-9 mt-1 text-neutral-800" />
           <div>
             <div class="flex items-center gap-2">
-              <h1 class="text-xl font-medium text-neutral-800">Pelanggan Saya</h1>
+              <h1 class="text-xl font-medium text-neutral-800">Produk dan Layanan</h1>
               <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
             </div>
             <p class="text-xs text-neutral-400 font-medium tracking-wider mt-0.5">
-              <NuxtLink to="/" class="text-primary hover:underline">Home</NuxtLink> / Pelanggan Saya
+              <NuxtLink to="/" class="text-primary hover:underline">Home</NuxtLink> / Produk dan Layanan
             </p>
           </div>
         </div>
@@ -32,7 +32,7 @@
             <div tabindex="0" class="dropdown-content z-[100] card card-compact bg-base-100 w-[calc(100vw-2rem)] md:w-[450px] shadow-xl border border-base-200 mt-2 left-0 md:left-auto">
               <div class="card-body p-0">
                 <!-- Header -->
-                <div class="flex items-center justify-between px-6 py-2 border-b border-base-200">
+                <div class="flex items-center justify-between px-6 py-4 border-b border-base-200">
                   <h3 class="font-bold text-lg text-neutral-800">Filter</h3>
                   <button class="btn btn-ghost btn-xs btn-circle"><X class="w-4 h-4" /></button>
                 </div>
@@ -57,20 +57,6 @@
                     </div>
                   </div>
 
-                  <!-- Tipe Industri -->
-                  <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                      <span class="text-neutral-400 text-xs font-medium">Tipe Industri</span>
-                      <span class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
-                    </div>
-                    <select class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
-                      <option selected disabled>Semua Industri</option>
-                      <option>Technology</option>
-                      <option>Manufacturing</option>
-                      <option>Retail</option>
-                    </select>
-                  </div>
-
                   <!-- Status -->
                   <div>
                     <div class="flex items-center justify-between mb-1.5">
@@ -78,22 +64,9 @@
                       <span class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
                     </div>
                     <select class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
-                      <option selected disabled>Pilih Status</option>
+                      <option selected disabled>Semua Status</option>
                       <option>Aktif</option>
-                      <option>Tidak Aktif</option>
-                    </select>
-                  </div>
-
-                  <!-- Layanan -->
-                  <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                      <span class="text-neutral-400 text-xs font-medium">Layanan</span>
-                      <span class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
-                    </div>
-                    <select class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
-                      <option selected disabled>Semua Layanan</option>
-                      <option>Nusanet Dedicated</option>
-                      <option>Nusafiber</option>
+                      <option>Dihentikan</option>
                     </select>
                   </div>
                 </div>
@@ -103,7 +76,7 @@
                   <button class="btn btn-outline border-primary text-primary hover:bg-primary hover:text-white btn-sm rounded-lg text-sm font-semibold h-10 px-6">
                     Atur Ulang
                   </button>
-                  <button class="btn bg-[#e8f2e6] border-none text-primary hover:bg-primary hover:text-white btn-sm rounded-lg text-sm font-semibold h-10 px-6">
+                  <button class="btn bg-primary border-none text-white hover:bg-primary/90 btn-sm rounded-lg text-sm font-semibold h-10 px-6">
                     Terapkan
                   </button>
                 </div>
@@ -116,7 +89,7 @@
               <Search class="z-10 w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
               <input 
                 type="text" 
-                placeholder="Cari Pelanggan..." 
+                placeholder="Cari Layanan..." 
                 class="input input-bordered w-full pl-10 bg-white border-base-300 rounded-lg focus:outline-none focus:border-primary text-sm h-10"
               />
             </div>
@@ -147,31 +120,19 @@
       <!-- Table Body -->
       <template #body>
         <tbody class="text-sm text-neutral-600">
-          <tr v-for="(item, index) in customers" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0">
-            <td class="text-primary font-medium py-3 border-r border-base-200">{{ item.id }}</td>
-            <td class="py-3 border-r border-base-200">{{ item.pic }}</td>
-            <td class="py-3 border-r border-base-200 max-w-[150px]">{{ item.business }}</td>
-            <td class="py-3 border-r border-base-200">
-            <div class="badge bg-accent border-none text-primary font-semibold text-[12px] rounded-lg">{{ item.status  }}</div>
-            </td>
-            <td class="py-3 border-r border-base-200">{{ item.date }}</td>
-            <td class="py-3 border-r border-base-200">
-              <div class="flex items-center justify-between gap-2 px-2">
-                <span class="truncate flex-1">{{ item.email }}</span>
-                <div v-if="item.emailBadge" class="badge bg-accent border-none text-primary font-semibold text-[12px] rounded-lg shrink-0">
-                  +{{ item.emailBadge }} <ChevronDown class="w-3 h-3" />
-                </div>
+          <tr v-for="(item, index) in services" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0">
+            <td class="text-primary font-medium py-3 border-r border-base-200 ps-4">{{ item.name }}</td>
+            <td class="py-3 border-r border-base-200 ps-4">{{ item.lastRef }}</td>
+            <td class="py-3 border-r border-base-200 text-center px-4">
+              <div :class="[
+                'badge border-none font-semibold text-[12px] rounded-lg w-full py-3',
+                item.status === 'Aktif' ? 'bg-primary/10 text-primary' : 'bg-red-50 text-red-500'
+              ]">
+                {{ item.status }}
               </div>
             </td>
-            <td class="py-3 border-r border-base-200">
-              <div class="flex items-center justify-between gap-2 px-2">
-                <span class="truncate flex-1">{{ item.phone }}</span>
-                <div v-if="item.phoneBadge" class="badge bg-accent border-none text-primary font-semibold text-[12px] rounded-lg shrink-0">
-                  +{{ item.phoneBadge }} <ChevronDown class="w-3 h-3" />
-                </div>
-              </div>
-            </td>
-            <td class="py-3">{{ item.am }}</td>
+            <td class="py-3 border-r border-base-200 ps-4">{{ item.points }}</td>
+            <td class="py-3 text-primary font-medium ps-4">{{ item.customers }}</td>
           </tr>
         </tbody>
       </template>
@@ -183,7 +144,8 @@
 <script setup lang="ts">
 import { 
   Users, CircleHelp, ListFilter, Search, Columns2, 
-  ChevronUp, ChevronDown, Calendar, X 
+  ChevronUp, ChevronDown, Calendar, X, 
+  Package
 } from 'lucide-vue-next'
 
 definePageMeta({
@@ -191,22 +153,25 @@ definePageMeta({
 })
 
 const columns = [
-  { label: 'ID Pelanggan', key: 'id' },
-  { label: 'Nama PIC', key: 'pic' },
-  { label: 'Nama Bisnis', key: 'business' },
-  { label: 'Status', key: 'status' },
-  { label: 'Tanggal Aktif', key: 'date' },
-  { label: 'Email', key: 'email' },
-  { label: 'No Telpon', key: 'phone' },
-  { label: 'Nama AM', key: 'am' }
+  { label: 'Nama Layanan', key: 'name' },
+  { label: 'Referensi Terakhir', key: 'lastRef' },
+  { label: 'Status Layanan', key: 'status' },
+  { label: 'Poin Didapatkan', key: 'points' },
+  { label: 'Pelanggan Anda', key: 'customers' }
 ]
 
-const customers = [
-  { id: '02001653520', pic: 'Robert Fox', business: 'PT Rubah Oranye Indo...', status: 'Aktif', date: '-', email: 'foxrobert@email.c...', phone: '+6288456789012', am: 'Marudut Tampu...', emailBadge: '1', phoneBadge: '1' },
-  { id: '02001653513', pic: 'Aulia Syera', business: 'PT Tulang Punggung', status: 'Aktif', date: '-', email: 'aulias@email.com', phone: '+6288456789012', am: 'Marudut Tampu...', emailBadge: null, phoneBadge: '2' },
-  { id: '02001653518', pic: 'Wade Warren', business: '-', status: 'Aktif', date: '28/10/2025', email: 'wade@email.com', phone: '+6288123456789', am: 'Jaya Gharaj', emailBadge: '2', phoneBadge: '2' },
-  { id: '02001267400', pic: 'Annette Black', business: 'PT Kecantikan Alami', status: 'Aktif', date: '15/08/2023', email: 'ann@email.com', phone: '+62881234567890', am: 'Jaka Pangga...', emailBadge: '2', phoneBadge: '2' },
-  { id: '02001651535', pic: 'Savannah Nguyen', business: '-', status: 'Aktif', date: '18/09/2022', email: 'savnguyen@email.com', phone: '+6285456789012', am: 'Mauliddana Putra', emailBadge: null, phoneBadge: '2' },
-  { id: '02001487443', pic: 'Anggi Edwarsa', business: 'PT Fenty Jelita Abadi', status: 'Aktif', date: '12/06/2022', email: 'anggifenty@emai...', phone: '+6288456789012', am: 'Nicholas Simbolon', emailBadge: '2', phoneBadge: '2' }
+const services = [
+  { name: 'Nusanet Broadband Business EDGE100', lastRef: '28/12/2025', status: 'Aktif', points: 5678, customers: 99 },
+  { name: 'Nusanet Broadband Business EDGE200', lastRef: '28/12/2025', status: 'Aktif', points: 2231, customers: 54 },
+  { name: 'Nusanet Broadband Business EDGE300', lastRef: '28/12/2025', status: 'Aktif', points: 2332, customers: 21 },
+  { name: 'Nusanet Dedicated Business NOVA90', lastRef: '28/12/2025', status: 'Aktif', points: 4321, customers: 14 },
+  { name: 'Nusanet Dedicated Business NOVA280', lastRef: '28/12/2025', status: 'Aktif', points: 3384, customers: 12 },
+  { name: 'Nusafiber Selecta Basic 30', lastRef: '28/12/2025', status: 'Aktif', points: 831, customers: 3 },
+  { name: 'Nusafiber Selecta Prime 100', lastRef: '22/12/2025', status: 'Aktif', points: 400, customers: 1 },
+  { name: 'Nusafiber Selecta Prime 200', lastRef: '22/12/2025', status: 'Aktif', points: 1210, customers: 5 },
+  { name: 'Google Workspace Starter', lastRef: '22/12/2025', status: 'Aktif', points: 4712, customers: 33 },
+  { name: 'Google Workspace Business', lastRef: '22/12/2025', status: 'Aktif', points: 3942, customers: 12 },
+  { name: 'Nusawork Business', lastRef: '22/12/2025', status: 'Dihentikan', points: 763, customers: 3 },
+  { name: 'Nusawork Advance', lastRef: '22/12/2025', status: 'Dihentikan', points: 100, customers: 1 }
 ]
 </script>
