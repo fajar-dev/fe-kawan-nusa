@@ -50,10 +50,10 @@
         </div>
         <ul tabindex="0" class="dropdown-content z-[200] menu p-2 shadow-xl bg-base-100 rounded-box w-56 mt-4 border border-base-200 animate-in fade-in slide-in-from-top-2 duration-200">
           <li>
-            <a class="flex items-center gap-3 py-2.5 text-neutral-600 hover:text-primary transition-colors">
+            <NuxtLink to="/setting/account" class="flex items-center gap-3 py-2.5 text-neutral-600 hover:text-primary transition-colors">
               <Settings class="w-4 h-4" />
               <span class="font-medium text-sm">Pengaturan</span>
-            </a>
+            </NuxtLink>
           </li>
           <li>
             <a class="flex items-center gap-3 py-2.5 text-neutral-600 hover:text-primary transition-colors">

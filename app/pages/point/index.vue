@@ -54,7 +54,7 @@
 
         <ModalWithdraw v-model="isWithdrawModalOpen" />
 
-        <div class="flex flex-col gap-6 w-full">
+        <div class="flex flex-col gap-6 w-full pt-10">
 
           <!-- Tabs Section -->
           <div class="flex items-center gap-8 border-b border-base-200">

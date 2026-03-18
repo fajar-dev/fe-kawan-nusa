@@ -34,13 +34,13 @@
       <ul class="menu w-full gap-1">
         <li>
           <NuxtLink to="/education" class="hover:bg-base-200 text-neutral-600 rounded-lg px-3 py-2.5 font-medium transition-colors">
-            <BookOpen class="w-5 h-5 text-primary" />
+            <BookOpen class="w-5 h-5 group-[.active]:text-white" />
             Edukasi
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/settings" class="hover:bg-base-200 text-neutral-600 rounded-lg px-3 py-2.5 font-medium transition-colors">
-            <Settings class="w-5 h-5 text-primary" />
+          <NuxtLink to="/setting" active-class="bg-primary text-primary-content active hover:bg-primary/90" class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors">
+            <Settings class="w-5 h-5 group-[.active]:text-white" />
             Pengaturan
           </NuxtLink>
         </li>
