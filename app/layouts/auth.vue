@@ -18,7 +18,7 @@
             <h1 class="font-medium text-white text-4xl mb-4">
               {{ currentSlide.title }}
             </h1>
-            <p class="text-white/90 text-md font-body font-medium max-w-lg">
+            <p class="text-white/90 text-md font-body font-medium max-w-xl">
               {{ currentSlide.description }}
             </p>
           </div>
@@ -38,8 +38,10 @@
     </div>
 
     <!-- RIGHT – content section (slot) -->
-    <div class="flex-1 flex flex-col items-center justify-center bg-white px-10 py-12 sm:px-12 relative overflow-hidden">
-      <slot />
+    <div class="flex-1 flex flex-col items-center bg-white px-10 py-12 sm:px-12 relative overflow-hidden">
+      <div class="flex-1 flex flex-col w-full max-w-[450px]">
+        <slot />
+      </div>
     </div>
   </div>
 </template>

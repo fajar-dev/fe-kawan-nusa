@@ -1,5 +1,7 @@
 <template>
-  <div class="w-full max-w-[450px]">
+  <div class="flex-1 flex flex-col">
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col justify-center">
     <!-- Logo -->
     <div class="mb-10 flex flex-col items-center">
       <div class="inline-flex flex-col">
@@ -92,8 +94,10 @@
       </div>
     </form>
 
+    </div>
+    
     <!-- Footer -->
-    <p class="mt-16 text-center text-sm text-gray-500">
+    <p class="text-center text-sm text-gray-500 mt-auto pt-10">
       Butuh bantuan?
       <NuxtLink to="#" class="text-primary font-semibold hover:underline">Hubungi kami</NuxtLink>
     </p>
@@ -101,13 +105,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import { ArrowLeft, Eye, EyeOff } from 'lucide-vue-next'
 import { authService } from '~/services/auth-service'
 import { z } from 'zod'
 
 definePageMeta({
-  layout: 'auth'
+  layout: 'auth',
+  middleware: 'guest'
 })
 
 const route = useRoute()
