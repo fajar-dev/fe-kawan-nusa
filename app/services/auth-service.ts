@@ -19,17 +19,17 @@ export class AuthService {
     private restoreSession() {
         if (typeof window === 'undefined') return
 
-        const accessToken = localStorage.getItem(this.ACCESS_TOKEN_KEY)
+            const accessToken = localStorage.getItem(this.ACCESS_TOKEN_KEY)
         if (accessToken) {
-        this.token.value = accessToken
-        const userJson = localStorage.getItem(this.USER_KEY)
-        if (userJson) {
-            try {
-            this.user.value = JSON.parse(userJson)
-            } catch (e) {
-            console.error('Failed to parse user from local storage', e)
+            this.token.value = accessToken
+            const userJson = localStorage.getItem(this.USER_KEY)
+            if (userJson) {
+                try {
+                    this.user.value = JSON.parse(userJson)
+                } catch (e) {
+                    console.error('Failed to parse user from local storage', e)
+                }
             }
-        }
         }
     }
 
@@ -114,28 +114,28 @@ export class AuthService {
             const accessToken = localStorage.getItem(this.ACCESS_TOKEN_KEY)
 
         try {
-        if (this.token.value) {
-            this.token.value = accessToken  
-            await apiService.client.post('/auth/logout',{
-            headers: {
-                Authorization: `Bearer ${accessToken}`
+            if (this.token.value) {
+                this.token.value = accessToken  
+                await apiService.client.post('/auth/logout',{
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                })
             }
-            })
-        }
         } catch (error) {
-        console.error('Logout failed:', error)
+            console.error('Logout failed:', error)
         } finally {
-        localStorage.removeItem(this.ACCESS_TOKEN_KEY)
-        localStorage.removeItem(this.REFRESH_TOKEN_KEY)
-        localStorage.removeItem(this.USER_KEY)
+            localStorage.removeItem(this.ACCESS_TOKEN_KEY)
+            localStorage.removeItem(this.REFRESH_TOKEN_KEY)
+            localStorage.removeItem(this.USER_KEY)
 
-        this.token.value = null
-        this.user.value = null
+            this.token.value = null
+            this.user.value = null
         
-        // Ensure redirect happens
-        if (window.location.pathname !== '/auth/sign-in') {
-            navigateTo('/auth/sign-in')
-        }
+            // Ensure redirect happens
+            if (window.location.pathname !== '/auth/sign-in') {
+                navigateTo('/auth/sign-in')
+            }
         }
     }
 

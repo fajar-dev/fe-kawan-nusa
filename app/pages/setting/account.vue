@@ -15,31 +15,55 @@
             <label class="label mb-1.5 p-0">
               <span class="text-xs text-neutral-800">Nama Depan<span class="text-red-500">*</span></span>
             </label>
-            <input type="text" value="Rupert" class="input input-bordered w-full h-10 bg-neutral-50/50 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" />
+            <input 
+              v-model="form.firstName"
+              type="text" 
+              class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+              :class="{ 'border-red-500': errors.firstName }"
+            />
+            <p v-if="errors.firstName" class="text-[10px] text-red-500 mt-1">{{ errors.firstName }}</p>
           </div>
           <div class="form-control w-full">
             <label class="label mb-1.5 p-0">
               <span class="text-xs text-neutral-800">Nama Belakang<span class="text-red-500">*</span></span>
             </label>
-            <input type="text" value="Alexander" class="input input-bordered w-full h-10 bg-neutral-50/50 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" />
+            <input 
+              v-model="form.lastName"
+              type="text" 
+              class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+              :class="{ 'border-red-500': errors.lastName }"
+            />
+            <p v-if="errors.lastName" class="text-[10px] text-red-500 mt-1">{{ errors.lastName }}</p>
           </div>
           <div class="form-control w-full">
             <label class="label mb-1.5 p-0">
               <span class="text-xs text-neutral-800">Alamat Email<span class="text-red-500">*</span></span>
             </label>
             <div class="relative">
-              <Mail class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-              <input type="email" value="adipragiwaksono@gmail.com" class="input input-bordered w-full h-10 pl-10 bg-neutral-50/50 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" />
+              <input 
+                v-model="form.email"
+                type="email" 
+                class="input input-bordered w-full h-10 pl-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+                :class="{ 'border-red-500': errors.email }"
+              />
+              <Mail class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 z-10 pointer-events-none" />
             </div>
+            <p v-if="errors.email" class="text-[10px] text-red-500 mt-1">{{ errors.email }}</p>
           </div>
           <div class="form-control w-full">
             <label class="label mb-1.5 p-0">
               <span class="text-xs text-neutral-800">Nomor Handphone<span class="text-red-500">*</span></span>
             </label>
             <div class="relative">
-              <Phone class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-              <input type="text" value="+62 822-0870-3090" class="input input-bordered w-full h-10 pl-10 bg-neutral-50/50 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" />
+              <input 
+                v-model="form.phone"
+                type="text" 
+                class="input input-bordered w-full h-10 pl-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+                :class="{ 'border-red-500': errors.phone }"
+              />
+              <Phone class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 z-10 pointer-events-none" />
             </div>
+            <p v-if="errors.phone" class="text-[10px] text-red-500 mt-1">{{ errors.phone }}</p>
           </div>
         </div>
         
@@ -51,15 +75,38 @@
               <label class="label mb-1.5 p-0">
                 <span class="text-xs text-neutral-800">Nama Perusahaan<span class="text-red-500">*</span></span>
               </label>
-              <input type="text" value="HAHAHA Corp" class="input input-bordered w-full h-10 bg-neutral-50/50 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" />
+              <input 
+                v-model="form.company"
+                type="text" 
+                class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+                :class="{ 'border-red-500': errors.company }"
+              />
+              <p v-if="errors.company" class="text-[10px] text-red-500 mt-1">{{ errors.company }}</p>
             </div>
             <div class="form-control w-full">
               <label class="label mb-1.5 p-0">
-                <span class="text-xs ßtext-neutral-800">Jabatan<span class="text-red-500">*</span></span>
+                <span class="text-xs text-neutral-800">Jabatan<span class="text-red-500">*</span></span>
               </label>
-              <input type="text" value="Head of Creative" class="input input-bordered w-full h-10 bg-neutral-50/50 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" />
+              <input 
+                v-model="form.jobPosition"
+                type="text" 
+                class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+                :class="{ 'border-red-500': errors.jobPosition }"
+              />
+              <p v-if="errors.jobPosition" class="text-[10px] text-red-500 mt-1">{{ errors.jobPosition }}</p>
             </div>
           </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-4">
+            <button 
+              @click="handleSave"
+              :disabled="loading"
+              class="btn btn-primary rounded-lg"
+            >
+              <span v-if="loading" class="loading loading-spinner loading-xs"></span>
+              Simpan
+            </button>
         </div>
       </div>
     </div>
@@ -67,7 +114,78 @@
 </template>
 
 <script setup lang="ts">
-import { 
-  MoreHorizontal, Mail, Phone
-} from 'lucide-vue-next'
+import { MoreHorizontal, Mail, Phone } from 'lucide-vue-next'
+import { profileService } from '~/services/profile-service'
+import type { UpdateAccountRequest } from '~/types/profile'
+import type { User } from '~/types/auth'
+import { z } from 'zod'
+
+const toast = useToast()
+const loading = ref(false)
+const errors = ref<Record<string, string>>({})
+
+const profile = inject<Ref<User | null>>('profile')
+const fetchProfile = inject<() => Promise<void>>('fetchProfile')
+
+const accountSchema = z.object({
+  firstName: z.string().min(1, 'Nama depan tidak boleh kosong'),
+  lastName: z.string().min(1, 'Nama belakang tidak boleh kosong'),
+  email: z.string().min(1, 'Email tidak boleh kosong').email('Format email tidak valid'),
+  phone: z.string().min(1, 'Nomor handphone tidak boleh kosong'),
+  company: z.string().min(1, 'Nama perusahaan tidak boleh kosong'),
+  jobPosition: z.string().min(1, 'Jabatan tidak boleh kosong')
+})
+
+const form = reactive<UpdateAccountRequest>({
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  company: '',
+  jobPosition: ''
+})
+
+watch(
+  () => profile?.value,
+  (newProfile) => {
+    if (newProfile) {
+      form.firstName = newProfile.firstName || ''
+      form.lastName = newProfile.lastName || ''
+      form.email = newProfile.email || ''
+      form.phone = newProfile.phone || ''
+      form.company = newProfile.company || ''
+      form.jobPosition = newProfile.jobPosition || ''
+    }
+  },
+  { immediate: true }
+)
+
+const handleSave = async () => {
+  errors.value = {}
+
+  const result = accountSchema.safeParse(form)
+  if (!result.success) {
+    result.error.issues.forEach(issue => {
+      errors.value[issue.path[0] as string] = issue.message
+    })
+    return
+  }
+
+  loading.value = true
+  try {
+    const response = await profileService.updateAccount(result.data)
+    if (response.success) {
+      toast.success({
+        message: response.message || 'Profil berhasil diperbarui'
+      })
+      if (fetchProfile) await fetchProfile()
+    }
+  } catch (error: any) {
+    toast.error({
+      message: error.message || 'Gagal memperbarui profil'
+    })
+  } finally {
+    loading.value = false
+  }
+}
 </script>

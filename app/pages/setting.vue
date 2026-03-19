@@ -16,12 +16,17 @@
             <!-- Avatar -->
             <div class="relative inline-block mx-auto lg:mx-0">
               <div class="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-[4px] lg:border-[6px] border-white shadow-lg overflow-hidden bg-base-100">
-                <img src="https://i.pravatar.cc/150?img=11" alt="Avatar" class="w-full h-full object-cover" />
+                <img v-if="profile?.photo" :src="profile?.photo" alt="Avatar" class="w-full h-full object-cover" />
+                <div v-else class="bg-primary text-white flex items-center justify-center font-bold text-5xl h-full w-full uppercase">
+                  {{ profile?.firstName?.[0] }}{{ profile?.lastName?.[0] }}
+                </div>
               </div>
             </div>
             
             <div class="mt-4 lg:mt-20 text-center lg:text-left">
-              <h1 class="text-lg lg:text-xl font-medium text-neutral-800">Rupert Alexander</h1>
+              <h1 class="text-lg lg:text-xl font-medium text-neutral-800">
+                {{ profile ? `${profile.firstName} ${profile.lastName}` : 'Memuat...' }}
+              </h1>
               <p class="text-xs lg:text-sm text-neutral-500">Bergabung sejak Agustus 2022</p>
               <div class="mt-2 text-primary font-semibold text-[10px] lg:text-xs bg-primary/10 px-3 py-1.5 rounded-lg inline-block">
                 Super Referrer
@@ -92,7 +97,7 @@
                 <div class="flex-1 space-y-1">
                   <div class="flex items-center justify-between">
                     <span class="text-sm font-semibold text-neutral-800">Update & Informasi Terbaru</span>
-                    <input type="checkbox" checked class="toggle toggle-primary toggle-sm" />
+                    <input type="checkbox" :checked="profile?.settings?.isSubscribe" class="toggle toggle-primary toggle-sm" />
                   </div>
                   <p class="text-xs text-neutral-500 leading-relaxed max-w-[240px]">
                     Jika ini aktif, maka Anda akan menerima update setiap hari via email
@@ -108,7 +113,7 @@
                 <div class="flex-1 space-y-1">
                   <div class="flex items-center justify-between">
                     <span class="text-sm font-semibold text-neutral-800 text-right">Penarikan Otomatis</span>
-                    <input type="checkbox" checked class="toggle toggle-primary toggle-sm" />
+                    <input type="checkbox" :checked="profile?.settings?.isAutoWithdraw" class="toggle toggle-primary toggle-sm" />
                   </div>
                   <p class="text-xs text-neutral-500 leading-relaxed max-w-[240px]">
                     Jika ini aktif, maka komisi Anda akan otomatis dikirimkan tanpa pengajuan penarikan
@@ -125,8 +130,40 @@
 
 <script setup lang="ts">
 import { Pencil, User2, Warehouse, LockKeyhole, Mail, DollarSign } from 'lucide-vue-next'
+import { profileService } from '~/services/profile-service'
+import type { User } from '~/types/auth'
 
 definePageMeta({
   bgColor: 'bg-[#f8fcf9]'
+})
+
+const { service: authService } = useAuth()
+const profile = ref<User | null>(null)
+const loading = ref(true)
+
+const fetchProfile = async () => {
+  try {
+    const response = await profileService.getProfile()
+    if (response.success) {
+      profile.value = response.data
+      // Update global auth state
+      authService.user.value = response.data
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('user', JSON.stringify(response.data))
+      }
+    }
+  } catch (error: any) {
+    console.error('Failed to fetch profile:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+// Provide to child components
+provide('profile', profile)
+provide('fetchProfile', fetchProfile)
+
+onMounted(() => {
+  fetchProfile()
 })
 </script>
