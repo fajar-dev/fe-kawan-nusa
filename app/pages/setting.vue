@@ -27,8 +27,10 @@
               <h1 class="text-lg lg:text-xl font-medium text-neutral-800">
                 {{ profile ? `${profile.firstName} ${profile.lastName}` : 'Memuat...' }}
               </h1>
-              <p class="text-xs lg:text-sm text-neutral-500">Bergabung sejak Agustus 2022</p>
-              <div class="mt-2 text-primary font-semibold text-[10px] lg:text-xs bg-primary/10 px-3 py-1.5 rounded-lg inline-block">
+              <p class="text-xs lg:text-sm text-neutral-500">
+                Bergabung sejak {{ formatDate(profile?.createdAt) }}
+              </p>              
+              <div class="mt-2 text-primary font-semibold text-xs bg-primary/10 px-3 py-1.5 rounded-lg inline-block">
                 Super Referrer
               </div>
             </div>
@@ -97,7 +99,12 @@
                 <div class="flex-1 space-y-1">
                   <div class="flex items-center justify-between">
                     <span class="text-sm font-semibold text-neutral-800">Update & Informasi Terbaru</span>
-                    <input type="checkbox" :checked="profile?.settings?.isSubscribe" class="toggle toggle-primary toggle-sm" />
+                    <input 
+                      type="checkbox" 
+                      :checked="profile?.settings?.isSubscribe" 
+                      @change="handlePreferenceUpdate({ isSubscribe: !profile?.settings?.isSubscribe })"
+                      class="toggle toggle-primary toggle-sm" 
+                    />
                   </div>
                   <p class="text-xs text-neutral-500 leading-relaxed max-w-[240px]">
                     Jika ini aktif, maka Anda akan menerima update setiap hari via email
@@ -113,7 +120,12 @@
                 <div class="flex-1 space-y-1">
                   <div class="flex items-center justify-between">
                     <span class="text-sm font-semibold text-neutral-800 text-right">Penarikan Otomatis</span>
-                    <input type="checkbox" :checked="profile?.settings?.isAutoWithdraw" class="toggle toggle-primary toggle-sm" />
+                    <input 
+                      type="checkbox" 
+                      :checked="profile?.settings?.isAutoWithdraw" 
+                      @change="handlePreferenceUpdate({ isAutoWithdraw: !profile?.settings?.isAutoWithdraw })"
+                      class="toggle toggle-primary toggle-sm" 
+                    />
                   </div>
                   <p class="text-xs text-neutral-500 leading-relaxed max-w-[240px]">
                     Jika ini aktif, maka komisi Anda akan otomatis dikirimkan tanpa pengajuan penarikan
@@ -132,6 +144,9 @@
 import { Pencil, User2, Warehouse, LockKeyhole, Mail, DollarSign } from 'lucide-vue-next'
 import { profileService } from '~/services/profile-service'
 import type { User } from '~/types/auth'
+import type { UpdatePreferenceRequest } from '~/types/profile'
+
+const toast = useToast()
 
 definePageMeta({
   bgColor: 'bg-[#f8fcf9]'
@@ -156,6 +171,24 @@ const fetchProfile = async () => {
     console.error('Failed to fetch profile:', error)
   } finally {
     loading.value = false
+  }
+}
+
+const handlePreferenceUpdate = async (data: UpdatePreferenceRequest) => {
+  try {
+    const response = await profileService.updatePreference(data)
+    if (response.success) {
+      profile.value = response.data
+      toast.success({
+        message: response.message || 'Preferensi berhasil diperbarui'
+      })
+    }
+  } catch (error: any) {
+    toast.error({
+      message: error.message || 'Gagal memperbarui preferensi'
+    })
+    // Revert UI by re-fetching profile if needed, or rely on the fact that 'checked' is bound to 'profile'
+    await fetchProfile()
   }
 }
 

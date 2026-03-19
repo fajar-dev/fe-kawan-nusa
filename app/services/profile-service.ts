@@ -1,5 +1,5 @@
 import { apiService } from "./api-service"
-import type { ProfileResponse, UpdateAccountRequest, UpdateBankRequest, UpdatePasswordRequest } from "../types/profile"
+import type { ProfileResponse, UpdateAccountRequest, UpdateBankRequest, UpdatePasswordRequest, UpdatePreferenceRequest } from "../types/profile"
 import type { ApiResponse } from "../types/auth"
 
 export class ProfileService {
@@ -52,6 +52,19 @@ export class ProfileService {
             return response.data
         } catch (error: any) {
             throw new Error(error.response?.data?.message || 'Failed to update password')
+        }
+    }
+
+    async updatePreference(data: UpdatePreferenceRequest): Promise<ProfileResponse> {
+        try {
+            const response = await apiService.client.put<ProfileResponse>('/profile/preference', data, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message || 'Failed to update preferences')
         }
     }
 }

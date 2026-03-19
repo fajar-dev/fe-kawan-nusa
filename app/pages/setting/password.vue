@@ -14,9 +14,9 @@
         <div role="alert" class="alert alert-info bg-info/10 border-info/10 text-info shadow-none flex flex-col items-start gap-1">
           <div class="flex items-center gap-2">
           <Info class="w-4 h-4" />
-            <span class="font-bold">Keamanan Akun</span>
+            <span class="font-bold">Terakhir diubah {{ timeAgo(profile?.passwordUpdatedAt) }}</span>
           </div>
-          <span class="text-xs ml-7 text-neutral-500 font-normal">Demi keamanan akun Anda, kami menyarankan untuk mengganti kata sandi secara berkala.</span>
+          <span class="text-xs ml-7 text-neutral-500 font-normal">Demi keamanan akun Anda, kami menyarankan untuk mengganti kata sandi setiap 90 hari.</span>
         </div>
         
         <div class="space-y-4">
@@ -124,11 +124,14 @@
 <script setup lang="ts">
 import { MoreHorizontal, Info, Eye, EyeOff } from 'lucide-vue-next'
 import { profileService } from '~/services/profile-service'
+import type { User } from '~/types/auth'
 import { z } from 'zod'
 
 const toast = useToast()
 const loading = ref(false)
 const errors = ref<Record<string, string>>({})
+
+const profile = inject<Ref<User | null>>('profile')
 
 const showOldPassword = ref(false)
 const showNewPassword = ref(false)

@@ -9,6 +9,8 @@ export interface User {
     jobPosition: string | null
     bankDetails: BankDetails
     settings: UserSettings
+    createdAt: string
+    passwordUpdatedAt: string
 }
 
 export interface BankDetails {

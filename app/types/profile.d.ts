@@ -20,3 +20,8 @@ export interface UpdatePasswordRequest {
   oldPassword: string;
   newPassword: string;
 }
+
+export interface UpdatePreferenceRequest {
+  isSubscribe?: boolean;
+  isAutoWithdraw?: boolean;
+}
