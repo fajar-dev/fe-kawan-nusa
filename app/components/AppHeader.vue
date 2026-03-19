@@ -41,11 +41,16 @@
         <div tabindex="0" role="button" class="flex items-center gap-3 cursor-pointer hover:bg-base-200/50 p-2 rounded-full pl-3 lg:pl-4 pr-3 transition-colors">
           <div class="avatar online">
             <div class="w-8 h-8 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 transition-all group-hover:ring-primary/80">
-              <img src="https://i.pravatar.cc/150?img=11" alt="Avatar" />
+              <img v-if="authState.user?.photo" :src="authState.user?.photo" alt="Avatar" />
+              <div v-else class="bg-primary text-white flex items-center justify-center font-bold text-xs h-full w-full uppercase">
+                {{ authState.user?.firstName?.[0] }}{{ authState.user?.lastName?.[0] }}
+              </div>
             </div>
           </div>
           <div class="hidden lg:block text-right">
-            <p class="text-sm font-medium leading-none text-primary max-w-30 truncate">Rupert Alexander</p>
+            <p class="text-sm font-medium leading-none text-primary max-w-30 truncate">
+                {{ authState.user?.firstName }} {{ authState.user?.lastName }}
+            </p>
           </div>
         </div>
         <ul tabindex="0" class="dropdown-content z-[200] menu p-2 shadow-xl bg-base-100 rounded-box w-56 mt-4 border border-base-200 animate-in fade-in slide-in-from-top-2 duration-200">
@@ -63,10 +68,10 @@
           </li>
           <div class="divider my-1 opacity-50 mx-2"></div>
           <li>
-            <a href="/auth/sign-in" class="flex items-center gap-3 py-2.5 text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors">
+            <button @click="handleLogout" class="flex items-center gap-3 py-2.5 text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors w-full">
               <LogOut class="w-4 h-4" />
               <span class="font-medium text-sm">Keluar</span>
-            </a>
+            </button>
           </li>
         </ul>
       </div>
@@ -76,4 +81,15 @@
 
 <script setup lang="ts">
 import { Menu, Search, HelpCircle, MessageSquareWarning, Bell, Settings, MessageSquareMore, LogOut } from 'lucide-vue-next'
+import { useAuth } from '~/composables/useAuth'
+
+const { state: authState, service: authService } = useAuth()
+const toast = useToast()
+
+const handleLogout = async () => {
+    await authService.logout()
+    toast.success({
+        message: 'Berhasil keluar'
+    })
+}
 </script>

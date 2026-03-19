@@ -14,7 +14,7 @@
     </div>
 
     <!-- Form -->
-    <form @submit.prevent="handleLogin" class="space-y-5">
+    <form @submit.prevent="handleForgotPassword" class="space-y-5">
         <div>
             <h1 class="text-lg font-medium text-gray-800">Lupa Kata Sandi?</h1>
             <p class="text-gray-600 text-sm pt-2">Masukkan email kamu untuk reset kata sandi</p>
@@ -27,10 +27,11 @@
         <input
           v-model="email"
           type="email"
-          placeholder="Masukkan email atau nomor ponsel kamu"
+          placeholder="Masukkan email terdaftar kamu"
           class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary bg-white"
-          required
+          :class="{ 'border-red-500': errors.email }"
         />
+        <p v-if="errors.email" class="text-[10px] text-red-500 mt-1">{{ errors.email }}</p>
       </div>
 
       <!-- Submit -->
@@ -42,45 +43,78 @@
                  hover:opacity-90 active:scale-[.98] transition-all shadow-sm flex items-center justify-center gap-2"
         >
           <span v-if="loading" class="loading loading-spinner loading-xs"></span>
-          Reset Password
+          {{ loading ? 'Memproses...' : 'Ubah Sandi' }}
         </button>
         <div class="text-center">
           <NuxtLink to="/auth/sign-in" class="text-primary text-sm font-medium hover:underline flex items-center justify-center gap-2">
-            <ArrowLeft class="w-5 h-5" />
+            <ArrowLeft class="w-4 h-4" />
             Kembali ke Login
           </NuxtLink>
         </div>
       </div>
-
-      <!-- Footer -->
-      <p class="absolute bottom-10 left-0 right-0 text-center text-sm text-gray-500">
-        Butuh bantuan?
-        <NuxtLink to="#" class="text-primary font-semibold hover:underline">Hubungi kami</NuxtLink>
-      </p>
     </form>
+
+    <!-- Footer -->
+    <p class="mt-16 text-center text-sm text-gray-500">
+      Butuh bantuan?
+      <NuxtLink to="#" class="text-primary font-semibold hover:underline">Hubungi kami</NuxtLink>
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ArrowLeft, Eye, EyeOff } from 'lucide-vue-next'
+import { ArrowLeft } from 'lucide-vue-next'
+import { authService } from '~/services/auth-service'
+import { z } from 'zod'
 
 definePageMeta({
-  layout: 'auth'
+  layout: 'auth',
+  middleware: 'guest'
+})
+
+// Schema validasi
+const forgotPasswordSchema = z.object({
+  email: z.string()
+    .min(1, 'Email tidak boleh kosong')
+    .email('Format email tidak valid')
 })
 
 const email = ref('')
-const password = ref('')
-const rememberMe = ref(false)
-const showPassword = ref(false)
 const loading = ref(false)
+const errors = ref<Record<string, string>>({})
+const toast = useToast()
 
-const handleLogin = async () => {
+const handleForgotPassword = async () => {
+  if (loading.value) return
+  
+  errors.value = {}
+
+  // Validasi input
+  const result = forgotPasswordSchema.safeParse({
+    email: email.value
+  })
+
+  if (!result.success) {
+    result.error.issues.forEach(issue => {
+      errors.value[issue.path[0] as string] = issue.message
+    })
+    return
+  }
+
   loading.value = true
-  // Simulate login logic
-  setTimeout(() => {
+
+  try {
+    const res = await authService.forgotPassword(email.value)
+    toast.success({
+      message: res.message || 'Instruksi reset password telah dikirim ke email kamu.',
+    })
+    email.value = ''
+  } catch (err: any) {
+    toast.error({
+      message: err.message || 'Gagal mengirim instruksi reset password.',
+    })
+  } finally {
     loading.value = false
-    navigateTo('/')
-  }, 1000)
+  }
 }
 </script>

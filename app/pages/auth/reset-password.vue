@@ -31,7 +31,7 @@
             :type="showNewPassword ? 'text' : 'password'"
             placeholder="Masukkan kata sandi baru"
             class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary pr-10 bg-white"
-            required
+            :class="{ 'border-red-500': errors.newPassword }"
           />
           <button
             type="button"
@@ -43,6 +43,7 @@
             <EyeOff v-else class="h-4 w-4" />
           </button>
         </div>
+        <p v-if="errors.newPassword" class="text-[10px] text-red-500 mt-1">{{ errors.newPassword }}</p>
       </div>
 
       <!-- Confirm Password -->
@@ -56,7 +57,7 @@
             :type="showConfirmPassword ? 'text' : 'password'"
             placeholder="Ulangi kata sandi baru"
             class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary pr-10 bg-white"
-            required
+            :class="{ 'border-red-500': errors.confirmPassword }"
           />
           <button
             type="button"
@@ -68,6 +69,7 @@
             <EyeOff v-else class="h-4 w-4" />
           </button>
         </div>
+        <p v-if="errors.confirmPassword" class="text-[10px] text-red-500 mt-1">{{ errors.confirmPassword }}</p>
       </div>
 
       <!-- Submit -->
@@ -79,50 +81,115 @@
                  hover:opacity-90 active:scale-[.98] transition-all shadow-sm flex items-center justify-center gap-2"
         >
           <span v-if="loading" class="loading loading-spinner loading-xs"></span>
-          Perbarui Kata Sandi
+          {{ loading ? 'Memproses...' : 'Perbarui Kata Sandi' }}
         </button>
         <div class="text-center">
           <NuxtLink to="/auth/sign-in" class="text-primary text-sm font-medium hover:underline flex items-center justify-center gap-2">
-            <ArrowLeft class="w-5 h-5" />
+            <ArrowLeft class="w-4 h-4" />
             Kembali ke Login
           </NuxtLink>
         </div>
       </div>
-
-      <!-- Footer -->
-      <p class="absolute bottom-10 left-0 right-0 text-center text-sm text-gray-500">
-        Butuh bantuan?
-        <NuxtLink to="#" class="text-primary font-semibold hover:underline">Hubungi kami</NuxtLink>
-      </p>
     </form>
+
+    <!-- Footer -->
+    <p class="mt-16 text-center text-sm text-gray-500">
+      Butuh bantuan?
+      <NuxtLink to="#" class="text-primary font-semibold hover:underline">Hubungi kami</NuxtLink>
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { ArrowLeft, Eye, EyeOff } from 'lucide-vue-next'
+import { authService } from '~/services/auth-service'
+import { z } from 'zod'
 
 definePageMeta({
   layout: 'auth'
 })
+
+const route = useRoute()
+const toast = useToast()
+
+const email = route.query.email as string
+const token = route.query.token as string
 
 const newPassword = ref('')
 const confirmPassword = ref('')
 const showNewPassword = ref(false)
 const showConfirmPassword = ref(false)
 const loading = ref(false)
+const errors = ref<Record<string, string>>({})
+
+// Schema validasi
+const resetPasswordSchema = z.object({
+  newPassword: z.string()
+    .min(8, 'Kata sandi minimal 8 karakter')
+    .regex(/[A-Z]/, 'Harus mengandung setidaknya satu huruf besar')
+    .regex(/[a-z]/, 'Harus mengandung setidaknya satu huruf kecil')
+    .regex(/[0-9]/, 'Harus mengandung setidaknya satu angka')
+    .regex(/[^A-Za-z0-9]/, 'Harus mengandung setidaknya satu karakter khusus'),
+  confirmPassword: z.string().min(1, 'Konfirmasi kata sandi wajib diisi')
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: 'Kata sandi tidak cocok',
+  path: ['confirmPassword']
+})
+
+// Validasi token saat load
+onMounted(async () => {
+    if (!email || !token) {
+        toast.error({
+            message: 'Tautan reset tidak valid. Silakan coba lagi.'
+        })
+        navigateTo('/auth/forgot-password')
+        return
+    }
+
+    try {
+        await authService.validateResetPassword(email, token)
+    } catch (err: any) {
+        toast.error({
+            message: err.message || 'Tautan reset sudah kadaluwarsa atau tidak valid.'
+        })
+        navigateTo('/auth/forgot-password')
+    }
+})
 
 const handleResetPassword = async () => {
-  if (newPassword.value !== confirmPassword.value) {
-    alert('Kata sandi tidak cocok!')
+  if (loading.value) return
+  
+  errors.value = {}
+
+  // Validasi input
+  const result = resetPasswordSchema.safeParse({
+    newPassword: newPassword.value,
+    confirmPassword: confirmPassword.value
+  })
+
+  if (!result.success) {
+    result.error.issues.forEach(issue => {
+      errors.value[issue.path[0] as string] = issue.message
+    })
     return
   }
   
   loading.value = true
-  // Simulate password reset logic
-  setTimeout(() => {
-    loading.value = false
+  
+  try {
+    const res = await authService.resetPassword(token, newPassword.value)
+    toast.success({
+      message: res.message || 'Kata sandi berhasil diperbarui.'
+    })
     navigateTo('/auth/sign-in')
-  }, 1000)
+  } catch (err: any) {
+    console.error('Reset password error:', err)
+    toast.error({
+      message: err.message || 'Gagal memperbarui kata sandi.'
+    })
+  } finally {
+    loading.value = false
+  }
 }
 </script>

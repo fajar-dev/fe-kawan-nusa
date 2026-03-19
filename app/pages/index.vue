@@ -3,7 +3,7 @@
     <!-- Welcome Banner -->
     <div class="card bg-base-100 shadow-xs border border-base-200 w-full rounded-lg">
       <div class="card-body p-6 lg:p-8">
-        <h2 class="text-xl font-semibold text-neutral-800 md:text-2xl">Selamat Datang, Rupert 👋</h2>
+        <h2 class="text-xl font-semibold text-neutral-800 md:text-2xl">Selamat Datang, {{ authState.user?.firstName }} {{ authState.user?.lastName }} 👋</h2>
         <p class="text-neutral-500 mt-1">Berikut adalah ringkasan aktivitas referral Anda</p>
       </div>
     </div>
@@ -312,6 +312,9 @@
 
 <script setup lang="ts">
 import { Users, HandCoins, Box, ArrowUpRight, ChevronDown, ChevronUp } from 'lucide-vue-next'
+import { useAuth } from '~/composables/useAuth'
+
+const { state: authState } = useAuth()
 
 interface AreaChartItem {
   month: string
