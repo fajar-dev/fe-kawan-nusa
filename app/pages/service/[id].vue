@@ -7,24 +7,24 @@
           <div class="flex flex-col w-full">
             <div class="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
               <div class="flex items-center gap-2">
-                <h1 class="text-xl md:text-2xl font-semibold text-neutral-800">Nusanet Dedicated Business NOVA90</h1>
+                <h1 class="text-xl md:text-2xl font-semibold text-neutral-800">{{ service?.name }}</h1>
                 <CircleHelp class="w-5 h-5 text-neutral-400 cursor-pointer hover:text-primary transition-colors shrink-0" />
               </div>
               <div class="flex flex-wrap items-center gap-2">
                 <div class="flex items-center gap-1.5 px-3 py-1 bg-neutral-100 rounded-full text-[10px] text-neutral-600">
                   <History class="w-3.5 h-3.5 shrink-0" />
-                  <span class="whitespace-nowrap">Terakhir Direferensikan: <span class="font-semibold">27 Mei 2025</span></span>
+                  <span class="whitespace-nowrap">Terakhir Direferensikan: <span class="font-semibold">{{ formatDate(service?.lastReferanceDate) }}</span></span>
                 </div>
                 <div class="flex items-center gap-1.5 px-3 py-1 bg-primary/10 rounded-full text-[10px] text-primary font-semibold">
                   <Users class="w-3.5 h-3.5 shrink-0" />
-                  <span class="whitespace-nowrap">73 Customer Aktif</span>
+                  <span class="whitespace-nowrap">{{ service?.totalCustomerServices }} Customer Aktif</span>
                 </div>
               </div>
             </div>
             <div class="text-[11px] text-neutral-400 font-medium mt-1 lg:mt-1.5">
               <NuxtLink to="/" class="text-primary hover:underline font-semibold">Beranda</NuxtLink> / 
               <NuxtLink to="/service" class="text-primary hover:underline font-semibold">Produk dan Layanan</NuxtLink> / 
-              <span class="text-neutral-500">Nusanet Dedicated Business NOVA90</span>
+              <span class="text-neutral-500">{{ serviceCode }}</span>
             </div>
           </div>
         </div>
@@ -42,34 +42,39 @@
                 <h3 class="font-semibold text-neutral-800">Detail Layanan</h3>
               </div>
             </div>
-            <div class="card-body p-6 pt-0 flex flex-col gap-5 ps-6">
+            <div v-if="service" class="card-body p-6 pt-0 flex flex-col gap-5 ps-6">
               <div class="space-y-5">
                 <!-- Deskripsi -->
                 <div class="flex flex-col gap-1.5">
                   <span class="text-xs text-neutral-400 font-medium">Deskripsi</span>
                   <p class="text-sm text-neutral-800 font-medium leading-relaxed">
-                    Stabilitas, daya tahan (durability), dan backup redundancy Internet + sistem failover (dual WAN). Untuk bisnis yang tidak boleh down & butuh keandalan jangka panjang.
+                    {{ service.description || '-' }}
                   </p>
                 </div>
                 
                 <!-- Tipe Layanan -->
                 <div class="flex flex-col gap-1.5">
                   <span class="text-xs text-neutral-400 font-medium">Tipe Layanan</span>
-                  <span class="text-[13px] text-neutral-800 font-semibold">Jasa</span>
+                  <span class="text-sm text-neutral-800 font-semibold">{{ service.type }}</span>
                 </div>
 
                 <!-- Status Layanan -->
                 <div class="flex flex-col gap-1.5">
                   <span class="text-xs text-neutral-400 font-medium">Status Layanan</span>
-                  <span class="text-[13px] text-neutral-800 font-semibold">Aktif</span>
+                  <span class="text-sm text-neutral-800 font-semibold">{{ service.isActive ? 'Aktif' : 'Dihentikan' }}</span>
                 </div>
 
                 <!-- Jumlah Berlangganan -->
                 <div class="flex flex-col gap-1.5">
                   <span class="text-xs text-neutral-400 font-medium">Jumlah Berlangganan</span>
-                  <span class="text-[13px] text-neutral-800 font-semibold">99 pelanggan</span>
+                  <span class="text-sm text-neutral-800 font-semibold">{{ service.totalCustomerServices }} pelanggan</span>
                 </div>
               </div>
+            </div>
+            <div v-else class="card-body p-6 space-y-4 animate-pulse">
+              <div class="h-4 bg-neutral-100 rounded-lg w-3/4"></div>
+              <div class="h-4 bg-neutral-100 rounded-lg w-1/2"></div>
+              <div class="h-4 bg-neutral-100 rounded-lg w-2/3"></div>
             </div>
           </div>
         </div>
@@ -78,7 +83,7 @@
         <div class="lg:col-span-12">
           <div class="card bg-white border border-base-200">
             <div class="card-body p-6">
-              <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+              <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
                   <FileText class="w-5 h-5 text-neutral-800" />
                   <h3 class="font-semibold text-neutral-800">Detail Berlangganan</h3>
@@ -91,13 +96,7 @@
                 :columns="columns"
                 v-model:search-query="searchQuery"
                 :is-empty="filteredSubscriptions.length === 0"
-                search-placeholder="Cari Layanan..."
               >
-                <template #filters>
-                  <button class="btn btn-outline border-base-300 text-neutral-600 btn-sm h-10 px-0 w-10 min-w-0 rounded-lg hover:bg-base-200 transition-colors">
-                    <ListFilter class="w-4 h-4 text-primary mx-auto" />
-                  </button>
-                </template>
                 <template #body="{ isColumnVisible }">
                   <tbody class="text-[13px] text-neutral-600 border-x border-base-200">
                     <tr v-for="(item, index) in filteredSubscriptions" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
@@ -125,27 +124,28 @@
 
 <script setup lang="ts">
 import { 
-  CircleHelp, History, Package, MapPin, Users, 
-  Calendar, Hash, Mail, Phone, Briefcase, 
-  ChevronDown, ChevronUp, ChevronLeft, ChevronRight,
-  FileText, Search, ListFilter, Tag, Info
+  CircleHelp, History, Users, 
+  FileText
 } from 'lucide-vue-next'
-import { ref, computed } from 'vue'
+import { serviceService } from '~/services/service-service'
+import { formatDate } from '~/utils/date'
 
 definePageMeta({
   bgColor: 'bg-[#F7FDF9]'
 })
 
-const searchQuery = ref('')
+const route = useRoute()
+const serviceCode = route.params.id as string
 
-interface Subscription {
-  id: string
-  regDate: string
-  lastPayment: string
-  period: string
-  status: string
-  am: string
-}
+// Fetch Service Detail
+const { data: serviceResponse } = await useAsyncData(
+  `service-${serviceCode}`,
+  () => serviceService.getServiceByCode(serviceCode)
+)
+const service = computed(() => serviceResponse.value?.data)
+
+// Search Logic
+const searchQuery = ref('')
 
 const columns = [
   { label: 'ID Pelanggan', key: 'id' },
@@ -164,15 +164,6 @@ const subscriptions = [
   { id: '02001651532', regDate: '28/12/2020', lastPayment: '28/12/2020', period: 'Sep 2021 - Sep 2021', status: 'Tidak Aktif', am: 'Mauliddana Putra' }
 ]
 
-const getStatusClass = (status: string) => {
-  switch (status) {
-    case 'Aktif': return 'bg-primary/10 text-primary'
-    case 'Tidak Aktif': return 'bg-red-50 text-red-500'
-    case 'Block': return 'bg-purple-50 text-purple-500'
-    default: return 'bg-neutral-100 text-neutral-500'
-  }
-}
-
 const filteredSubscriptions = computed(() => {
   if (!searchQuery.value) return subscriptions
   const query = searchQuery.value.toLowerCase()
@@ -182,4 +173,13 @@ const filteredSubscriptions = computed(() => {
     item.status.toLowerCase().includes(query)
   )
 })
+
+const getStatusClass = (status: string) => {
+  switch (status) {
+    case 'Aktif': return 'bg-primary/10 text-primary'
+    case 'Tidak Aktif': return 'bg-red-50 text-red-500'
+    case 'Block': return 'bg-purple-50 text-purple-500'
+    default: return 'bg-neutral-100 text-neutral-500'
+  }
+}
 </script>

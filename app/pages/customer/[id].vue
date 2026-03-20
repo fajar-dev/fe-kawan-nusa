@@ -116,14 +116,14 @@
                 <h3 class="font-semibold text-neutral-800 ps-2">Detail Alamat</h3>
               </div>
             </div>
-            <div class="card-body pt-0 flex flex-col gap-5 ps-8">
+            <div class="card-body pt-0 flex flex-col gap-5 ps-7">
               <div v-if="addresses.length > 0" class="flex-1 space-y-3">
                 <div v-for="(address, index) in addresses" :key="address.id" class="flex gap-1 group">
                   <div class="w-8 h-8 flex items-start justify-center text-neutral-500 shrink-0">
                     <MapPin class="w-4 h-4" />
                   </div>
                   <div class="flex flex-col gap-1">
-                    <span class="text-xs text-neutral-900">{{ address.label || `Alamat Pemasangan ${index + 1}` }}</span>
+                    <span class="text-xs text-neutral-900">{{ `Alamat Pemasangan ${index + 1 + (addressPage - 1) * (addressMeta?.perPage || 10)}` }} {{ address.label ? `(${address.label})` : '' }}</span>
                     <p class="text-sm text-neutral-600 font-medium leading-relaxed whitespace-pre-line">
                       {{ address.address }}
                     </p>
@@ -195,13 +195,13 @@
       <!-- Bottom Card: Detail Transaksi -->
       <div class="card bg-white border border-base-200 shadow-sm">
         <div class="card-body p-6">
-          <div class="flex items-center gap-3 border-b border-base-100 pb-4">
+          <div class="flex items-center gap-3 border-b border-base-100 pb-2">
             <FileText class="w-5 h-5 text-neutral-800" />
             <h3 class="font-semibold text-neutral-800">Detail Transaksi</h3>
           </div>
 
           <!-- Tabs -->
-          <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+          <div class="flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex border-b border-base-200 w-full md:w-auto">
               <button 
                 @click="activeTab = 'layanan'"
@@ -240,7 +240,7 @@
               <template #body="{ isColumnVisible }">
                 <tbody class="text-[13px] text-neutral-600">
                   <tr v-for="(item, index) in customerServices" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
-                    <td v-show="isColumnVisible('name')" class="border-r border-base-200 text-primary ps-4 max-w-[250px] truncate" :title="item.service.name">{{ item.service.name }}</td>
+                    <td v-show="isColumnVisible('service.name')" class="border-r border-base-200 text-primary ps-4 max-w-[250px] truncate" :title="item.service.name">{{ item.service.name }}</td>
                     <td v-show="isColumnVisible('activationDate')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDateShort(item.activationDate) }}</td>
                     <td v-show="isColumnVisible('period')" class="border-r border-base-200 text-neutral-500 min-w-[200px] whitespace-nowrap">
                       {{ formatDate(item.startDate) }}
@@ -349,7 +349,7 @@ interface CustomerLocalPoint {
 }
 
 const serviceColumns = [
-  { label: 'Nama Layanan', key: 'name', sortable: true },
+  { label: 'Nama Layanan', key: 'service.name', sortable: true },
   { label: 'Tanggal Aktif', key: 'activationDate', sortable: true },
   { label: 'Periode Berlangganan', key: 'period', sortable: false },
   { label: 'Status', key: 'status', sortable: true }
