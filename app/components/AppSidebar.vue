@@ -4,26 +4,42 @@
 
       <ul class="menu w-full gap-1.5 lg:mt-3 mt-18">
         <li>
-          <NuxtLink to="/" active-class="bg-primary text-primary-content active hover:bg-primary/90" class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors">
-            <Home class="w-5 h-5 group-[.active]:text-white" />
+          <NuxtLink 
+            to="/" 
+            class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
+            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': $route.path === '/' }"
+          >
+            <Home class="w-5 h-5" :class="{ 'text-white': $route.path === '/' }" />
             Beranda
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/customer" active-class="bg-primary text-primary-content active hover:bg-primary/90" class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors">
-            <Users class="w-5 h-5 group-[.active]:text-white" />
+          <NuxtLink 
+            to="/customer" 
+            class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
+            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': $route.path.startsWith('/customer') }"
+          >
+            <Users class="w-5 h-5" :class="{ 'text-white': $route.path.startsWith('/customer') }" />
             Customer Saya
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/service" active-class="bg-primary text-primary-content active hover:bg-primary/90" class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors">
-            <Package class="w-5 h-5 group-[.active]:text-white" />
+          <NuxtLink 
+            to="/service" 
+            class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
+            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': $route.path.startsWith('/service') }"
+          >
+            <Package class="w-5 h-5" :class="{ 'text-white': $route.path.startsWith('/service') }" />
             Produk dan Layanan
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/point" active-class="bg-primary text-primary-content active hover:bg-primary/90" class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors">
-            <Coins class="w-5 h-5 group-[.active]:text-white" />
+          <NuxtLink 
+            to="/point" 
+            class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
+            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': $route.path.startsWith('/point') }"
+          >
+            <Coins class="w-5 h-5" :class="{ 'text-white': $route.path.startsWith('/point') }" />
             Poin Saya
           </NuxtLink>
         </li>
@@ -39,8 +55,12 @@
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink to="/setting" active-class="bg-primary text-primary-content active hover:bg-primary/90" class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors">
-            <Settings class="w-5 h-5 group-[.active]:text-white" />
+          <NuxtLink 
+            to="/setting" 
+            class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
+            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': $route.path.startsWith('/setting') }"
+          >
+            <Settings class="w-5 h-5" :class="{ 'text-white': $route.path.startsWith('/setting') }" />
             Pengaturan
           </NuxtLink>
         </li>

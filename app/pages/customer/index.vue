@@ -139,7 +139,7 @@
                   {{ item.isActive ? 'Aktif' : 'Tidak Aktif' }}
                 </div>
               </td>
-              <td v-show="isColumnVisible('activationDate')" class="py-3 border-r border-base-200 font-medium">{{ formatDate(item.activationDate) }}</td>
+              <td v-show="isColumnVisible('activationDate')" class="py-3 border-r border-base-200">{{ formatDateShort(item.activationDate) }}</td>
               <td v-show="isColumnVisible('emails')" class="py-3 border-r border-base-200">
                 <div class="flex items-center justify-between gap-2 px-2">
                   <span class="truncate flex-1">{{ item.emails?.[0]?.email || '-' }}</span>

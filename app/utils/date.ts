@@ -18,6 +18,22 @@ export const formatDate = (dateString?: string | null): string => {
 }
 
 /**
+ * Format a date string into dd/MM/yyyy format (e.g., 28/10/2025)
+ */
+export const formatDateShort = (dateString?: string | null): string => {
+  if (!dateString) return '-'
+
+  const date = new Date(dateString)
+  if (isNaN(date.getTime())) return '-'
+
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const year = date.getFullYear()
+
+  return `${day}/${month}/${year}`
+}
+
+/**
  * Format a date string into a relative time format (e.g., 2 hari yang lalu)
  */
 export const timeAgo = (dateString?: string | null): string => {

@@ -43,7 +43,7 @@
             <div class="w-8 h-8 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 transition-all group-hover:ring-primary/80">
               <img v-if="authState.user?.photo" :src="authState.user?.photo" alt="Avatar" />
               <div v-else class="bg-primary text-white flex items-center justify-center font-bold text-xs h-full w-full uppercase">
-                {{ authState.user?.firstName?.[0] }}{{ authState.user?.lastName?.[0] }}
+                {{ getInitials(authState.user?.firstName + ' ' + authState.user?.lastName) }}
               </div>
             </div>
           </div>
