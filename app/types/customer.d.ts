@@ -1,0 +1,58 @@
+import type { ApiResponse } from "./auth"
+
+export interface CustomerPhone {
+  id: number
+  phone: string
+  label: string | null
+}
+
+export interface CustomerEmail {
+  id: number
+  email: string
+  label: string | null
+}
+
+export interface CustomerAddress {
+  id: number
+  address: string
+  label: string | null
+}
+
+export interface Customer {
+  id: string
+  name: string
+  company: string | null
+  type: string | null
+  activationDate: string | null
+  registrationDate: string | null
+  salesName: string | null
+  isActive: boolean
+  phones: CustomerPhone[]
+  emails: CustomerEmail[]
+  addresses: CustomerAddress[]
+}
+
+export interface PaginationMeta {
+  total: number
+  perPage: number
+  currentPage: number
+  lastPage: number
+  from: number
+  to: number
+}
+
+export interface CustomerListResponse extends ApiResponse<Customer[]> {
+  meta: PaginationMeta
+}
+
+export interface CustomerAddressResponse extends ApiResponse<CustomerAddress[]> {
+  meta: PaginationMeta
+}
+
+export interface CustomerQueryParams {
+  q?: string
+  sort?: string
+  order?: 'asc' | 'desc'
+  page?: number
+  limit?: number
+}

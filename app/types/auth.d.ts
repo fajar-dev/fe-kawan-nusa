@@ -32,7 +32,7 @@ export interface AuthData {
 
 export interface ApiResponse<T = any> {
     success: boolean
-    status_code: number
+    statusCode: number
     message: string
     data: T
 }

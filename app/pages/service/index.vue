@@ -18,28 +18,26 @@
     </AppToolbar>
 
     <div class="flex flex-col gap-6 w-full">
-      <!-- Table Section -->
-      <DataTable flat>
-      <!-- Filters Slot -->
-      <template #filters>
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
-          <!-- Filter Dropdown -->
+      <DataTable 
+        flat 
+        :columns="columns"
+        :loading="loading"
+        :is-empty="!loading && services.length === 0"
+        v-model:search-query="searchQuery"
+      >
+        <template #filters>
           <div class="dropdown dropdown-bottom md:dropdown-start">
-            <div tabindex="0" role="button" class="btn btn-outline border-base-300 text-neutral-600 btn-sm h-10 px-4 gap-2 rounded-lg hover:bg-base-200 hover:text-neutral-800 transition-colors w-full md:w-auto">
-              <ListFilter class="w-4 h-4 text-primary" />
+            <div tabindex="0" role="button" class="btn btn-outline border-primary text-primary btn-md h-10 px-4 gap-2 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors w-full md:w-auto">
+              <Filter class="w-4 h-4 text-primary" />
               Filter
             </div>
             <div tabindex="0" class="dropdown-content z-[100] card card-compact bg-base-100 w-[calc(100vw-2rem)] md:w-[450px] shadow-xl border border-base-200 mt-2 left-0 md:left-auto">
               <div class="card-body p-0">
-                <!-- Header -->
                 <div class="flex items-center justify-between px-6 py-4 border-b border-base-200">
                   <h3 class="font-bold text-lg text-neutral-800">Filter</h3>
                   <button class="btn btn-ghost btn-xs btn-circle"><X class="w-4 h-4" /></button>
                 </div>
-                
-                <!-- Content -->
                 <div class="p-6 space-y-4 max-h-[60vh] md:max-h-[45vh] overflow-y-auto">
-                  <!-- Tanggal Aktif -->
                   <div>
                     <div class="flex items-center justify-between mb-1.5">
                       <span class="text-neutral-400 text-xs font-medium">Tanggal Aktif</span>
@@ -56,8 +54,6 @@
                       </div>
                     </div>
                   </div>
-
-                  <!-- Status -->
                   <div>
                     <div class="flex items-center justify-between mb-1.5">
                       <span class="text-neutral-400 text-xs font-medium">Status</span>
@@ -70,95 +66,55 @@
                     </select>
                   </div>
                 </div>
-
-                <!-- Footer -->
                 <div class="p-4 border-t border-base-200 flex items-center justify-between">
-                  <button class="btn btn-outline border-primary text-primary hover:bg-primary hover:text-white btn-sm rounded-lg text-sm font-semibold h-10 px-6">
-                    Atur Ulang
-                  </button>
-                  <button class="btn bg-primary border-none text-white hover:bg-primary/90 btn-sm rounded-lg text-sm font-semibold h-10 px-6">
-                    Terapkan
-                  </button>
+                  <button class="btn btn-outline border-primary text-primary hover:bg-primary hover:text-white btn-sm rounded-lg text-sm font-semibold h-10 px-6">Atur Ulang</button>
+                  <button class="btn bg-primary border-none text-white hover:bg-primary/90 btn-sm rounded-lg text-sm font-semibold h-10 px-6">Terapkan</button>
                 </div>
               </div>
             </div>
           </div>
+        </template>
 
-          <div class="flex items-center gap-2 w-full md:w-auto">
-            <div class="relative flex-1 md:w-64">
-              <Search class="z-10 w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
-              <input 
-                type="text" 
-                placeholder="Cari Layanan..." 
-                class="input input-bordered w-full pl-10 bg-white border-base-300 rounded-lg focus:outline-none focus:border-primary text-sm h-10"
-              />
-            </div>
-            <button class="btn btn-ghost btn-sm h-10 w-10 p-0 text-neutral-400 hover:bg-base-200 rounded-lg border border-base-300">
-              <Columns2 class="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-      </template>
-
-      <!-- Table Header -->
-      <template #header>
-        <thead class="bg-base-200/50 text-neutral-800 font-semibold border-b border-base-200">
-          <tr>
-            <th v-for="col in columns" :key="col.key" class="border-r border-base-200 font-medium py-3">
-              <div class="flex items-center justify-between">
-                {{ col.label }}
-                <div class="flex flex-col -space-y-1 opacity-40">
-                  <ChevronUp class="w-3.5 h-3.5" />
-                  <ChevronDown class="w-3.5 h-3.5" />
+        <template #body="{ isColumnVisible }">
+          <tbody class="text-sm text-neutral-600">
+            <tr v-for="(item, index) in services" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0">
+              <td v-show="isColumnVisible('name')" class="text-primary font-medium py-3 border-r border-base-200 ps-4">{{ item.name }}</td>
+              <td v-show="isColumnVisible('lastRef')" class="py-3 border-r border-base-200 ps-4">{{ item.lastRef }}</td>
+              <td v-show="isColumnVisible('status')" class="py-3 border-r border-base-200 text-center px-4">
+                <div :class="[
+                  'badge border-none font-semibold text-[12px] rounded-lg w-full py-3',
+                  item.status === 'Aktif' ? 'bg-primary/10 text-primary' : 'bg-red-50 text-red-500'
+                ]">
+                  {{ item.status }}
                 </div>
-              </div>
-            </th>
-          </tr>
-        </thead>
-      </template>
-
-      <!-- Table Body -->
-      <template #body>
-        <tbody class="text-sm text-neutral-600">
-          <tr v-for="(item, index) in services" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0">
-            <td class="text-primary font-medium py-3 border-r border-base-200 ps-4">{{ item.name }}</td>
-            <td class="py-3 border-r border-base-200 ps-4">{{ item.lastRef }}</td>
-            <td class="py-3 border-r border-base-200 text-center px-4">
-              <div :class="[
-                'badge border-none font-semibold text-[12px] rounded-lg w-full py-3',
-                item.status === 'Aktif' ? 'bg-primary/10 text-primary' : 'bg-red-50 text-red-500'
-              ]">
-                {{ item.status }}
-              </div>
-            </td>
-            <td class="py-3 border-r border-base-200 ps-4">{{ item.points }}</td>
-            <td class="py-3 text-primary font-medium ps-4">{{ item.customers }}</td>
-          </tr>
-        </tbody>
-      </template>
-    </DataTable>
+              </td>
+              <td v-show="isColumnVisible('points')" class="py-3 border-r border-base-200 ps-4">{{ item.points }}</td>
+              <td v-show="isColumnVisible('customers')" class="py-3 text-primary font-medium ps-4">{{ item.customers }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </DataTable>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { 
-  Users, CircleHelp, ListFilter, Search, Columns2, 
-  ChevronUp, ChevronDown, Calendar, X, 
-  Package
-} from 'lucide-vue-next'
+import { CircleHelp, ListFilter, X, Package, Filter } from 'lucide-vue-next'
 
 definePageMeta({
   bgColor: 'bg-white'
 })
 
 const columns = [
-  { label: 'Nama Layanan', key: 'name' },
-  { label: 'Referensi Terakhir', key: 'lastRef' },
-  { label: 'Status Layanan', key: 'status' },
-  { label: 'Poin Didapatkan', key: 'points' },
-  { label: 'Pelanggan Anda', key: 'customers' }
+  { label: 'Nama Layanan', key: 'name', sortable: true },
+  { label: 'Referensi Terakhir', key: 'lastRef', sortable: true },
+  { label: 'Status Layanan', key: 'status', sortable: true },
+  { label: 'Poin Didapatkan', key: 'points', sortable: true },
+  { label: 'Pelanggan Anda', key: 'customers', sortable: true }
 ]
+
+const loading = ref(false)
+const searchQuery = ref('')
 
 const services = [
   { name: 'Nusanet Broadband Business EDGE100', lastRef: '28/12/2025', status: 'Aktif', points: 5678, customers: 99 },

@@ -83,52 +83,34 @@
                   <FileText class="w-5 h-5 text-neutral-800" />
                   <h3 class="font-semibold text-neutral-800">Detail Berlangganan</h3>
                 </div>
-
-                <div class="flex items-center gap-3 w-full md:w-auto">
-                  <div class="relative flex-1 md:w-64">
-                    <Search class="z-10 w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
-                    <input 
-                        type="text" 
-                        placeholder="Cari Layanan..." 
-                        class="input input-bordered w-full pl-10 bg-white border-base-300 rounded-lg focus:outline-none focus:border-primary text-sm h-10"
-                    />
-                </div>
-                  <button class="btn btn-outline border-base-300 text-neutral-600 btn-sm h-10 px-0 w-10 min-w-0 rounded-lg hover:bg-base-200 transition-colors">
-                    <ListFilter class="w-4 h-4 text-primary mx-auto" />
-                  </button>
-                </div>
               </div>
 
               <!-- Subscriptions Table -->
-              <DataTable flat>
-                <template #header>
-                  <thead class="bg-base-200/50 text-neutral-800 font-semibold border-b border-base-200">
-                    <tr>
-                      <th v-for="col in columns" :key="col.key" class="border-r border-base-200 font-semibold py-3 text-[13px] last:border-r-0">
-                        <div class="flex items-center justify-between">
-                          {{ col.label }}
-                          <div class="flex flex-col -space-y-1 opacity-20">
-                            <ChevronUp class="w-3 h-3" />
-                            <ChevronDown class="w-3 h-3" />
-                          </div>
-                        </div>
-                      </th>
-                    </tr>
-                  </thead>
+              <DataTable 
+                flat 
+                :columns="columns"
+                v-model:search-query="searchQuery"
+                :is-empty="filteredSubscriptions.length === 0"
+                search-placeholder="Cari Layanan..."
+              >
+                <template #filters>
+                  <button class="btn btn-outline border-base-300 text-neutral-600 btn-sm h-10 px-0 w-10 min-w-0 rounded-lg hover:bg-base-200 transition-colors">
+                    <ListFilter class="w-4 h-4 text-primary mx-auto" />
+                  </button>
                 </template>
-                <template #body>
+                <template #body="{ isColumnVisible }">
                   <tbody class="text-[13px] text-neutral-600 border-x border-base-200">
-                    <tr v-for="(item, index) in subscriptions" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
-                      <td class="py-3 border-r border-base-200 text-primary font-semibold ps-4">{{ item.id }}</td>
-                      <td class="py-3 border-r border-base-200 text-neutral-500 ps-4">{{ item.regDate }}</td>
-                      <td class="py-3 border-r border-base-200 text-neutral-500 ps-4">{{ item.lastPayment }}</td>
-                      <td class="py-3 border-r border-base-200 text-neutral-500 ps-4">{{ item.period }}</td>
-                      <td class="py-3 border-r border-base-200 text-center px-4">
+                    <tr v-for="(item, index) in filteredSubscriptions" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
+                      <td v-show="isColumnVisible('id')" class="py-3 border-r border-base-200 text-primary font-semibold ps-4">{{ item.id }}</td>
+                      <td v-show="isColumnVisible('regDate')" class="py-3 border-r border-base-200 text-neutral-500 ps-4">{{ item.regDate }}</td>
+                      <td v-show="isColumnVisible('lastPayment')" class="py-3 border-r border-base-200 text-neutral-500 ps-4">{{ item.lastPayment }}</td>
+                      <td v-show="isColumnVisible('period')" class="py-3 border-r border-base-200 text-neutral-500 ps-4">{{ item.period }}</td>
+                      <td v-show="isColumnVisible('status')" class="py-3 border-r border-base-200 text-center px-4">
                         <div :class="['badge border-none font-semibold text-[10px] rounded-lg w-full py-2.5', getStatusClass(item.status)]">
                           {{ item.status }}
                         </div>
                       </td>
-                      <td class="py-3 ps-4">{{ item.am }}</td>
+                      <td v-show="isColumnVisible('am')" class="py-3 ps-4">{{ item.am }}</td>
                     </tr>
                   </tbody>
                 </template>
@@ -148,11 +130,22 @@ import {
   ChevronDown, ChevronUp, ChevronLeft, ChevronRight,
   FileText, Search, ListFilter, Tag, Info
 } from 'lucide-vue-next'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 definePageMeta({
   bgColor: 'bg-[#F7FDF9]'
 })
+
+const searchQuery = ref('')
+
+interface Subscription {
+  id: string
+  regDate: string
+  lastPayment: string
+  period: string
+  status: string
+  am: string
+}
 
 const columns = [
   { label: 'ID Pelanggan', key: 'id' },
@@ -179,4 +172,14 @@ const getStatusClass = (status: string) => {
     default: return 'bg-neutral-100 text-neutral-500'
   }
 }
+
+const filteredSubscriptions = computed(() => {
+  if (!searchQuery.value) return subscriptions
+  const query = searchQuery.value.toLowerCase()
+  return subscriptions.filter(item => 
+    item.id.toLowerCase().includes(query) ||
+    item.am.toLowerCase().includes(query) ||
+    item.status.toLowerCase().includes(query)
+  )
+})
 </script>

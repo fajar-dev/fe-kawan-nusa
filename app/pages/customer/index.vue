@@ -18,15 +18,28 @@
     </AppToolbar>
 
     <div class="flex flex-col gap-6 w-full">
-      <!-- Table Section -->
-      <DataTable flat>
-      <!-- Filters Slot -->
-      <template #filters>
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
-          <!-- Filter Dropdown -->
+      <DataTable 
+        flat 
+        :columns="columns"
+        :loading="loading"
+        :is-empty="!loading && customers.length === 0"
+        :total-from="meta?.from"
+        :total-to="meta?.to"
+        :total-entries="meta?.total"
+        :current-page="meta?.current_page"
+        :last-page="meta?.last_page"
+        :current-sort="currentSort"
+        :current-order="currentOrder"
+        v-model:search-query="searchQuery"
+        @update:page="handlePageChange"
+        @update:sort="handleSort"
+        @update:order="handleOrderChange"
+      >
+        <!-- Filters Slot -->
+        <template #filters>
           <div class="dropdown dropdown-bottom md:dropdown-start">
-            <div tabindex="0" role="button" class="btn btn-outline border-base-300 text-neutral-600 btn-sm h-10 px-4 gap-2 rounded-lg hover:bg-base-200 hover:text-neutral-800 transition-colors w-full md:w-auto">
-              <ListFilter class="w-4 h-4 text-primary" />
+            <div tabindex="0" role="button" class="btn btn-outline border-primary text-primary btn-md h-10 px-4 gap-2 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors w-full md:w-auto">
+              <FilterIcon class="w-4 h-4 text-primary" />
               Filter
             </div>
             <div tabindex="0" class="dropdown-content z-[100] card card-compact bg-base-100 w-[calc(100vw-2rem)] md:w-[450px] shadow-xl border border-base-200 mt-2 left-0 md:left-auto">
@@ -110,103 +123,124 @@
               </div>
             </div>
           </div>
+        </template>
 
-          <div class="flex items-center gap-2 w-full md:w-auto">
-            <div class="relative flex-1 md:w-64">
-              <Search class="z-10 w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
-              <input 
-                type="text" 
-                placeholder="Cari Pelanggan..." 
-                class="input input-bordered w-full pl-10 bg-white border-base-300 rounded-lg focus:outline-none focus:border-primary text-sm h-10"
-              />
-            </div>
-            <button class="btn btn-ghost btn-sm h-10 w-10 p-0 text-neutral-400 hover:bg-base-200 rounded-lg border border-base-300">
-              <Columns2 class="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-      </template>
-
-      <!-- Table Header -->
-      <template #header>
-        <thead class="bg-base-200/50 text-neutral-800 font-semibold border-b border-base-200">
-          <tr>
-            <th v-for="col in columns" :key="col.key" class="border-r border-base-200 font-medium py-3">
-              <div class="flex items-center justify-between">
-                {{ col.label }}
-                <div class="flex flex-col -space-y-1 opacity-40">
-                  <ChevronUp class="w-3.5 h-3.5" />
-                  <ChevronDown class="w-3.5 h-3.5" />
+        <!-- Body Slot -->
+        <template #body="{ isColumnVisible }">
+          <tbody class="text-sm text-neutral-600">
+            <tr v-for="(item, index) in customers" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0">
+              <td v-show="isColumnVisible('id')" class="text-primary font-medium py-3 border-r border-base-200">
+                <NuxtLink :to="`/customer/${item.id}`" class="hover:underline">{{ item.id }}</NuxtLink>
+              </td>
+              <td v-show="isColumnVisible('name')" class="py-3 border-r border-base-200">{{ item.name }}</td>
+              <td v-show="isColumnVisible('company')" class="py-3 border-r border-base-200 max-w-[150px]">{{ item.company || '-' }}</td>
+              <td v-show="isColumnVisible('isActive')" class="py-3 border-r border-base-200">
+                <div class="badge bg-accent border-none text-primary font-semibold text-[12px] rounded-lg">
+                  {{ item.isActive ? 'Aktif' : 'Tidak Aktif' }}
                 </div>
-              </div>
-            </th>
-          </tr>
-        </thead>
-      </template>
-
-      <!-- Table Body -->
-      <template #body>
-        <tbody class="text-sm text-neutral-600">
-          <tr v-for="(item, index) in customers" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0">
-            <td class="text-primary font-medium py-3 border-r border-base-200">{{ item.id }}</td>
-            <td class="py-3 border-r border-base-200">{{ item.pic }}</td>
-            <td class="py-3 border-r border-base-200 max-w-[150px]">{{ item.business }}</td>
-            <td class="py-3 border-r border-base-200">
-            <div class="badge bg-accent border-none text-primary font-semibold text-[12px] rounded-lg">{{ item.status  }}</div>
-            </td>
-            <td class="py-3 border-r border-base-200">{{ item.date }}</td>
-            <td class="py-3 border-r border-base-200">
-              <div class="flex items-center justify-between gap-2 px-2">
-                <span class="truncate flex-1">{{ item.email }}</span>
-                <div v-if="item.emailBadge" class="badge bg-accent border-none text-primary font-semibold text-[12px] rounded-lg shrink-0">
-                  +{{ item.emailBadge }} <ChevronDown class="w-3 h-3" />
+              </td>
+              <td v-show="isColumnVisible('activationDate')" class="py-3 border-r border-base-200 font-medium">{{ formatDate(item.activationDate) }}</td>
+              <td v-show="isColumnVisible('emails')" class="py-3 border-r border-base-200">
+                <div class="flex items-center justify-between gap-2 px-2">
+                  <span class="truncate flex-1">{{ item.emails?.[0]?.email || '-' }}</span>
+                  <div v-if="item.emails?.length > 1" class="badge bg-accent border-none text-primary font-semibold text-[12px] rounded-lg shrink-0">
+                    +{{ item.emails.length - 1 }} <ChevronDown class="w-3 h-3" />
+                  </div>
                 </div>
-              </div>
-            </td>
-            <td class="py-3 border-r border-base-200">
-              <div class="flex items-center justify-between gap-2 px-2">
-                <span class="truncate flex-1">{{ item.phone }}</span>
-                <div v-if="item.phoneBadge" class="badge bg-accent border-none text-primary font-semibold text-[12px] rounded-lg shrink-0">
-                  +{{ item.phoneBadge }} <ChevronDown class="w-3 h-3" />
+              </td>
+              <td v-show="isColumnVisible('phones')" class="py-3 border-r border-base-200">
+                <div class="flex items-center justify-between gap-2 px-2">
+                  <span class="truncate flex-1">{{ item.phones?.[0]?.phone || '-' }}</span>
+                  <div v-if="item.phones?.length > 1" class="badge bg-accent border-none text-primary font-semibold text-[12px] rounded-lg shrink-0">
+                    +{{ item.phones.length - 1 }} <ChevronDown class="w-3 h-3" />
+                  </div>
                 </div>
-              </div>
-            </td>
-            <td class="py-3">{{ item.am }}</td>
-          </tr>
-        </tbody>
-      </template>
-    </DataTable>
+              </td>
+              <td v-show="isColumnVisible('salesName')" class="py-3">{{ item.salesName || '-' }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </DataTable>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { 
-  Users, CircleHelp, ListFilter, Search, Columns2, 
-  ChevronUp, ChevronDown, Calendar, X 
+  Users, CircleHelp, ChevronDown, X, 
+  Filter as FilterIcon
 } from 'lucide-vue-next'
+import { customerService } from '~/services/customer-service'
+import type { Customer, CustomerQueryParams } from '~/types/customer'
 
 definePageMeta({
   bgColor: 'bg-white'
 })
 
 const columns = [
-  { label: 'ID Pelanggan', key: 'id' },
-  { label: 'Nama PIC', key: 'pic' },
-  { label: 'Nama Bisnis', key: 'business' },
-  { label: 'Status', key: 'status' },
-  { label: 'Tanggal Aktif', key: 'date' },
-  { label: 'Email', key: 'email' },
-  { label: 'No Telpon', key: 'phone' },
-  { label: 'Nama AM', key: 'am' }
+  { label: 'ID Pelanggan', key: 'id', sortable: true },
+  { label: 'Nama PIC', key: 'name', sortable: true },
+  { label: 'Nama Bisnis', key: 'company', sortable: true },
+  { label: 'Status', key: 'isActive', sortable: true },
+  { label: 'Tanggal Aktif', key: 'activationDate', sortable: true },
+  { label: 'Email', key: 'emails', sortable: false },
+  { label: 'No Telpon', key: 'phones', sortable: false },
+  { label: 'Nama AM', key: 'salesName', sortable: true }
 ]
 
-const customers = [
-  { id: '02001653520', pic: 'Robert Fox', business: 'PT Rubah Oranye Indo...', status: 'Aktif', date: '-', email: 'foxrobert@email.c...', phone: '+6288456789012', am: 'Marudut Tampu...', emailBadge: '1', phoneBadge: '1' },
-  { id: '02001653513', pic: 'Aulia Syera', business: 'PT Tulang Punggung', status: 'Aktif', date: '-', email: 'aulias@email.com', phone: '+6288456789012', am: 'Marudut Tampu...', emailBadge: null, phoneBadge: '2' },
-  { id: '02001653518', pic: 'Wade Warren', business: '-', status: 'Aktif', date: '28/10/2025', email: 'wade@email.com', phone: '+6288123456789', am: 'Jaya Gharaj', emailBadge: '2', phoneBadge: '2' },
-  { id: '02001267400', pic: 'Annette Black', business: 'PT Kecantikan Alami', status: 'Aktif', date: '15/08/2023', email: 'ann@email.com', phone: '+62881234567890', am: 'Jaka Pangga...', emailBadge: '2', phoneBadge: '2' },
-  { id: '02001651535', pic: 'Savannah Nguyen', business: '-', status: 'Aktif', date: '18/09/2022', email: 'savnguyen@email.com', phone: '+6285456789012', am: 'Mauliddana Putra', emailBadge: null, phoneBadge: '2' },
-  { id: '02001487443', pic: 'Anggi Edwarsa', business: 'PT Fenty Jelita Abadi', status: 'Aktif', date: '12/06/2022', email: 'anggifenty@emai...', phone: '+6288456789012', am: 'Nicholas Simbolon', emailBadge: '2', phoneBadge: '2' }
-]
+const customers = ref<any[]>([])
+const loading = ref(true)
+const searchQuery = ref('')
+const meta = ref<any>(null)
+const currentSort = ref('activationDate')
+const currentOrder = ref<'asc' | 'desc'>('desc')
+
+const fetchCustomers = async (queryParams: CustomerQueryParams = {}) => {
+  loading.value = true
+  try {
+    const response = await customerService.getCustomers({
+      sort: currentSort.value,
+      order: currentOrder.value,
+      q: searchQuery.value,
+      ...queryParams,
+      page: queryParams.page || 1,
+      limit: 20
+    })
+    
+    if (response.success) {
+      customers.value = response.data
+      meta.value = response.meta
+    }
+  } catch (error) {
+    console.error('Failed to fetch customers:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+let searchTimeout: any = null
+watch(searchQuery, () => {
+  if (searchTimeout) clearTimeout(searchTimeout)
+  searchTimeout = setTimeout(() => {
+    fetchCustomers({ page: 1 })
+  }, 500)
+})
+
+const handlePageChange = (page: number) => {
+  fetchCustomers({ page })
+}
+
+const handleSort = (key: string) => {
+  currentSort.value = key
+  fetchCustomers({ page: 1 })
+}
+
+const handleOrderChange = (order: 'asc' | 'desc') => {
+  currentOrder.value = order
+  fetchCustomers({ page: 1 })
+}
+
+onMounted(() => {
+  fetchCustomers()
+})
 </script>
