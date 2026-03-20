@@ -10,18 +10,18 @@
           <div class="flex flex-col w-full">
             <div class="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-3">
               <div class="flex items-center gap-2">
-                <h1 class="text-xl md:text-2xl font-semibold text-neutral-800">{{ customer?.name || 'Loading...' }}</h1>
+                <h1 class="text-xl md:text-2xl font-semibold text-neutral-800">{{ customer?.name }}</h1>
                 <CircleHelp class="w-5 h-5 text-neutral-400 cursor-pointer hover:text-primary transition-colors shrink-0" />
               </div>
               <div class="flex flex-wrap items-center gap-2">
                 <div class="flex items-center gap-1.5 px-3 py-1 bg-neutral-100 rounded-full text-[10px] text-neutral-600">
                   <History class="w-3.5 h-3.5 shrink-0" />
-                  <span class="whitespace-nowrap">Terakhir Direferensikan: <span class="font-semibold">{{ formatDate(customer?.activationDate) }}</span></span>
+                  <span class="whitespace-nowrap">Terakhir Direferensikan: <span class="font-semibold">{{ formatDate(customer?.latestCustomerService?.referenceDate) }}</span></span>
                 </div>
                 <!-- This could be dynamic if we had service count in the main response -->
                 <div class="flex items-center gap-1.5 px-3 py-1 bg-primary/10 rounded-full text-[10px] text-primary font-semibold">
                   <Package class="w-3.5 h-3.5 shrink-0" />
-                  <span class="whitespace-nowrap">3 Layanan Aktif</span>
+                  <span class="whitespace-nowrap">{{ customer?.totalCustomerServices }} Layanan Aktif</span>
                 </div>
               </div>
             </div>
@@ -224,20 +224,29 @@
               flat 
               :columns="serviceColumns" 
               v-model:search-query="searchQuery"
-              :is-empty="filteredServices.length === 0"
+              :loading="serviceLoading"
+              :is-empty="!serviceLoading && customerServices.length === 0"
+              :total-from="serviceMeta?.from"
+              :total-to="serviceMeta?.to"
+              :total-entries="serviceMeta?.total"
+              :current-page="servicePage"
+              :last-page="serviceMeta?.lastPage"
+              :current-sort="serviceSort"
+              :current-order="serviceOrder"
+              @update:page="servicePage = $event"
+              @update:sort="serviceSort = $event"
+              @update:order="serviceOrder = $event"
             >
-              <template #filters>
-                <button class="btn btn-outline border-base-300 text-neutral-600 btn-sm h-10 px-0 w-10 min-w-0 rounded-lg hover:bg-base-200 transition-colors">
-                  <ListFilter class="w-4 h-4 text-primary mx-auto" />
-                </button>
-              </template>
               <template #body="{ isColumnVisible }">
                 <tbody class="text-[13px] text-neutral-600">
-                  <tr v-for="(item, index) in filteredServices" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
-                    <td v-show="isColumnVisible('name')" class="border-r border-base-200 text-primary ps-4">{{ item.name }}</td>
-                    <td v-show="isColumnVisible('date')" class="border-r border-base-200 text-neutral-500 ps-4">{{ item.activeDate }}</td>
-                    <td v-show="isColumnVisible('period')" class="border-r border-base-200 text-neutral-500 ps-4">{{ item.period }}</td>
-                    <td v-show="isColumnVisible('status')" class="text-center max-w-[50px]">
+                  <tr v-for="(item, index) in customerServices" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
+                    <td v-show="isColumnVisible('name')" class="border-r border-base-200 text-primary ps-4 max-w-[250px] truncate" :title="item.service.name">{{ item.service.name }}</td>
+                    <td v-show="isColumnVisible('activationDate')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDateShort(item.activationDate) }}</td>
+                    <td v-show="isColumnVisible('period')" class="border-r border-base-200 text-neutral-500 min-w-[200px] whitespace-nowrap">
+                      {{ formatDate(item.startDate) }}
+                      <span v-if="item.endDate"> - {{ formatDate(item.endDate) }}</span>
+                    </td>
+                    <td v-show="isColumnVisible('status')" class="text-center max-w-[80px]">
                       <div :class="['badge border-none font-semibold text-xs rounded-lg w-full', getStatusClass(item.status)]">
                         {{ item.status }}
                       </div>
@@ -257,11 +266,6 @@
               search-placeholder="Cari Poin..."
               :is-empty="filteredPoints.length === 0"
             >
-              <template #filters>
-                <button class="btn btn-outline border-base-300 text-neutral-600 btn-sm h-10 px-0 w-10 min-w-0 rounded-lg hover:bg-base-200 transition-colors">
-                  <ListFilter class="w-4 h-4 text-primary mx-auto" />
-                </button>
-              </template>
               <template #body="{ isColumnVisible }">
                 <tbody class="text-[13px] text-neutral-600">
                   <tr v-for="(item, index) in filteredPoints" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
@@ -283,7 +287,6 @@
 
 <script setup lang="ts">
 import { CircleHelp, History, Package, MapPin, Users, Calendar, Hash, Mail, Phone, Briefcase, ChevronDown, ChevronLeft, ChevronRight, ChevronFirst, ChevronLast, FileText, ListFilter } from 'lucide-vue-next'
-import { ref, computed } from 'vue'
 import { customerService } from '~/services/customer-service'
 
 definePageMeta({
@@ -315,13 +318,27 @@ const addressLoading = computed(() => addressStatus.value === 'pending')
 
 const activeTab = ref('layanan')
 const searchQuery = ref('')
+const servicePage = ref(1)
+const serviceSort = ref('startDate')
+const serviceOrder = ref<'asc' | 'desc'>('desc')
 
-interface CustomerLocalService {
-  name: string
-  activeDate: string
-  period: string
-  status: string
-}
+const { data: serviceResponse, status: serviceStatus } = await useAsyncData(
+  `customer-services-${customerId}`,
+  () => customerService.getCustomerServices(customerId, {
+    page: servicePage.value,
+    sort: serviceSort.value,
+    order: serviceOrder.value,
+    q: searchQuery.value,
+    limit: 5
+  }),
+  {
+    watch: [servicePage, serviceSort, serviceOrder, searchQuery]
+  }
+)
+
+const customerServices = computed(() => serviceResponse.value?.data || [])
+const serviceMeta = computed(() => serviceResponse.value?.meta)
+const serviceLoading = computed(() => serviceStatus.value === 'pending')
 
 interface CustomerLocalPoint {
   date: string
@@ -332,18 +349,10 @@ interface CustomerLocalPoint {
 }
 
 const serviceColumns = [
-  { label: 'Nama Layanan', key: 'name' },
-  { label: 'Tanggal Aktif', key: 'date' },
-  { label: 'Periode Berlangganan', key: 'period' },
-  { label: 'Status', key: 'status' }
-]
-
-const services: CustomerLocalService[] = [
-  { name: 'Nusanet Broadband Business EDGE100', activeDate: '28/10/2025', period: 'Okt 2025 - Sep 2026', status: 'Free' },
-  { name: 'Nusanet Broadband Business EDGE200', activeDate: '01/08/2025', period: 'Agu 2025 - Agu 2025', status: 'Aktif' },
-  { name: 'Nusanet Broadband Business EDGE300', activeDate: '18/09/2025', period: 'Sep 2025 - Agu 2026', status: 'Aktif' },
-  { name: 'Nusanet Dedicated Business NOVA90', activeDate: '12/06/2025', period: 'Jun 2025 - Mei 2026', status: 'Tidak Aktif' },
-  { name: 'Nusanet Dedicated Business NOVA280', activeDate: '08/09/2025', period: 'Sep 2025 - Sep 2025', status: 'Block' }
+  { label: 'Nama Layanan', key: 'name', sortable: true },
+  { label: 'Tanggal Aktif', key: 'activationDate', sortable: true },
+  { label: 'Periode Berlangganan', key: 'period', sortable: false },
+  { label: 'Status', key: 'status', sortable: true }
 ]
 
 const pointColumns = [
@@ -362,15 +371,6 @@ const points: CustomerLocalPoint[] = [
   { date: '28/11/2025', points: 542, type: 'Bulanan', service: 'Nusanet Broadband Business EDGE300', price: 1500000 }
 ]
 
-const filteredServices = computed(() => {
-  if (!searchQuery.value) return services
-  const query = searchQuery.value.toLowerCase()
-  return services.filter(item => 
-    item.name.toLowerCase().includes(query) ||
-    item.status.toLowerCase().includes(query)
-  )
-})
-
 const filteredPoints = computed(() => {
   if (!searchQuery.value) return points
   const query = searchQuery.value.toLowerCase()
@@ -380,13 +380,4 @@ const filteredPoints = computed(() => {
   )
 })
 
-const getStatusClass = (status: string) => {
-  switch (status) {
-    case 'Free': return 'bg-yellow-100 text-yellow-600'
-    case 'Aktif': return 'bg-accent text-primary'
-    case 'Tidak Aktif': return 'bg-red-100 text-red-500'
-    case 'Block': return 'bg-purple-100 text-purple-600'
-    default: return 'bg-neutral-100 text-neutral-500'
-  }
-}
 </script>

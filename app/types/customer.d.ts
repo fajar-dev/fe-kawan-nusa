@@ -27,6 +27,8 @@ export interface Customer {
   registrationDate: string | null
   salesName: string | null
   isActive: boolean
+  totalCustomerServices?: number
+  latestCustomerService?: CustomerRegisteredService
   phones: CustomerPhone[]
   emails: CustomerEmail[]
   addresses: CustomerAddress[]
@@ -55,4 +57,26 @@ export interface CustomerQueryParams {
   order?: 'asc' | 'desc'
   page?: number
   limit?: number
+}
+
+export interface CustomerRegisteredService {
+  id: number
+  customerId: string
+  serviceCode: string
+  registrationDate: string
+  activationDate: string
+  startDate: string
+  endDate: string | null
+  status: string
+  referenceDate: string
+  salesName: string | null
+  service: {
+    code: string
+    name: string
+    type: string
+  }
+}
+
+export interface CustomerServiceResponse extends ApiResponse<CustomerRegisteredService[]> {
+  meta: PaginationMeta
 }

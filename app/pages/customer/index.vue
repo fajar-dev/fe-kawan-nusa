@@ -26,8 +26,8 @@
         :total-from="meta?.from"
         :total-to="meta?.to"
         :total-entries="meta?.total"
-        :current-page="meta?.current_page"
-        :last-page="meta?.last_page"
+        :current-page="meta?.currentPage"
+        :last-page="meta?.lastPage"
         :current-sort="currentSort"
         :current-order="currentOrder"
         v-model:search-query="searchQuery"
@@ -129,34 +129,34 @@
         <template #body="{ isColumnVisible }">
           <tbody class="text-sm text-neutral-600">
             <tr v-for="(item, index) in customers" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0">
-              <td v-show="isColumnVisible('id')" class="text-primary font-medium py-3 border-r border-base-200">
+              <td v-show="isColumnVisible('id')" class="text-primary border-r border-base-200 max-w-[100px] truncate">
                 <NuxtLink :to="`/customer/${item.id}`" class="hover:underline">{{ item.id }}</NuxtLink>
               </td>
-              <td v-show="isColumnVisible('name')" class="py-3 border-r border-base-200">{{ item.name }}</td>
-              <td v-show="isColumnVisible('company')" class="py-3 border-r border-base-200 max-w-[150px]">{{ item.company || '-' }}</td>
-              <td v-show="isColumnVisible('isActive')" class="py-3 border-r border-base-200">
-                <div class="badge bg-accent border-none text-primary font-semibold text-[12px] rounded-lg">
+              <td v-show="isColumnVisible('name')" class="border-r border-base-200 max-w-[150px] truncate">{{ item.name }}</td>
+              <td v-show="isColumnVisible('company')" class="border-r border-base-200 max-w-[150px] truncate">{{ item.company || '-' }}</td>
+              <td v-show="isColumnVisible('isActive')" class="border-r border-base-200 text-center">
+                <div class="badge bg-accent border-none text-primary font-semibold text-[12px] w-full rounded-lg">
                   {{ item.isActive ? 'Aktif' : 'Tidak Aktif' }}
                 </div>
               </td>
-              <td v-show="isColumnVisible('activationDate')" class="py-3 border-r border-base-200">{{ formatDateShort(item.activationDate) }}</td>
-              <td v-show="isColumnVisible('emails')" class="py-3 border-r border-base-200">
-                <div class="flex items-center justify-between gap-2 px-2">
+              <td v-show="isColumnVisible('activationDate')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateShort(item.activationDate) }}</td>
+              <td v-show="isColumnVisible('emails')" class="border-r border-base-200 max-w-[180px]">
+                <div class="flex items-center justify-between gap-2">
                   <span class="truncate flex-1">{{ item.emails?.[0]?.email || '-' }}</span>
                   <div v-if="item.emails?.length > 1" class="badge bg-accent border-none text-primary font-semibold text-[12px] rounded-lg shrink-0">
                     +{{ item.emails.length - 1 }} <ChevronDown class="w-3 h-3" />
                   </div>
                 </div>
               </td>
-              <td v-show="isColumnVisible('phones')" class="py-3 border-r border-base-200">
-                <div class="flex items-center justify-between gap-2 px-2">
+              <td v-show="isColumnVisible('phones')" class="border-r border-base-200 max-w-[150px]">
+                <div class="flex items-center justify-between gap-2">
                   <span class="truncate flex-1">{{ item.phones?.[0]?.phone || '-' }}</span>
                   <div v-if="item.phones?.length > 1" class="badge bg-accent border-none text-primary font-semibold text-[12px] rounded-lg shrink-0">
                     +{{ item.phones.length - 1 }} <ChevronDown class="w-3 h-3" />
                   </div>
                 </div>
               </td>
-              <td v-show="isColumnVisible('salesName')" class="py-3">{{ item.salesName || '-' }}</td>
+              <td v-show="isColumnVisible('salesName')" class="max-w-[120px] truncate">{{ item.salesName || '-' }}</td>
             </tr>
           </tbody>
         </template>
