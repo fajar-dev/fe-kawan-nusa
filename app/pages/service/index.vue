@@ -100,7 +100,7 @@
                   {{ item.isActive ? 'Aktif' : 'Dihentikan' }}
                 </div>
               </td>
-              <td v-show="isColumnVisible('totalPoints')" class="border-r border-base-200">{{ item.totalPoints }}</td>
+              <td v-show="isColumnVisible('totalPoint')" class="border-r border-base-200">{{ item.totalPoint }}</td>
               <td v-show="isColumnVisible('totalCustomerServices')" class="text-primary font-medium">{{ item.totalCustomerServices }}</td>
             </tr>
           </tbody>
@@ -124,7 +124,7 @@ const columns = [
   { label: 'Nama Layanan', key: 'name', sortable: true },
   { label: 'Referensi Terakhir', key: 'lastReferanceDate', sortable: true },
   { label: 'Status Layanan', key: 'isActive', sortable: true },
-  { label: 'Poin Didapatkan', key: 'totalPoints', sortable: true },
+  { label: 'Poin Didapatkan', key: 'totalPoint', sortable: true },
   { label: 'Pelanggan Anda', key: 'totalCustomerServices', sortable: true }
 ]
 

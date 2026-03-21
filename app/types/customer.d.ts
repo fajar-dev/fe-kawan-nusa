@@ -80,3 +80,29 @@ export interface CustomerRegisteredService {
 export interface CustomerServiceResponse extends ApiResponse<CustomerRegisteredService[]> {
   meta: PaginationMeta
 }
+
+export interface CustomerReward {
+  id: number
+  customerServiceId: number
+  price: number
+  point: number
+  type: string
+  customerService: {
+    id: number
+    serviceCode: string
+    activationDate: string
+  }
+  service: {
+    code: string
+    name: string
+  }
+  customer: {
+    id: string
+    name: string
+  }
+  createdAt: string
+}
+
+export interface CustomerRewardResponse extends ApiResponse<CustomerReward[]> {
+  meta: PaginationMeta
+}

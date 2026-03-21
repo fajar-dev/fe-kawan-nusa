@@ -240,7 +240,9 @@
               <template #body="{ isColumnVisible }">
                 <tbody class="text-[13px] text-neutral-600">
                   <tr v-for="(item, index) in customerServices" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
-                    <td v-show="isColumnVisible('service.name')" class="border-r border-base-200 text-primary ps-4 max-w-[250px] truncate" :title="item.service.name">{{ item.service.name }}</td>
+                    <td v-show="isColumnVisible('service.name')" class="border-r border-base-200 text-primary ps-4 max-w-[250px] truncate" :title="item.service.name">
+                      <NuxtLink :to="`/service/${item.service.code}`" class="hover:underline">{{ item.service.name }}</NuxtLink>
+                    </td>
                     <td v-show="isColumnVisible('activationDate')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDateShort(item.activationDate) }}</td>
                     <td v-show="isColumnVisible('period')" class="border-r border-base-200 text-neutral-500 min-w-[200px] whitespace-nowrap">
                       {{ formatDate(item.startDate) }}
@@ -264,16 +266,29 @@
               :columns="pointColumns"
               v-model:search-query="searchQuery"
               search-placeholder="Cari Poin..."
-              :is-empty="filteredPoints.length === 0"
+              :loading="pointLoading"
+              :is-empty="!pointLoading && rewards.length === 0"
+              :total-from="pointMeta?.from"
+              :total-to="pointMeta?.to"
+              :total-entries="pointMeta?.total"
+              :current-page="pointPage"
+              :last-page="pointMeta?.lastPage"
+              :current-sort="pointSort"
+              :current-order="pointOrder"
+              @update:page="pointPage = $event"
+              @update:sort="pointSort = $event"
+              @update:order="pointOrder = $event"
             >
               <template #body="{ isColumnVisible }">
                 <tbody class="text-[13px] text-neutral-600">
-                  <tr v-for="(item, index) in filteredPoints" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
-                    <td v-show="isColumnVisible('date')" class="border-r border-base-200 text-neutral-500 ps-4">{{ item.date }}</td>
-                    <td v-show="isColumnVisible('points')" class="border-r border-base-200 text-neutral-500 ps-4">{{ item.points }}</td>
-                    <td v-show="isColumnVisible('type')" class="border-r border-base-200 text-neutral-500 ps-4">{{ item.type }}</td>
-                    <td v-show="isColumnVisible('service')" class="border-r border-base-200 text-primary ps-4">{{ item.service }}</td>
-                    <td v-show="isColumnVisible('price')" class="text-neutral-500 ps-4">Rp. {{ item.price.toLocaleString('id-ID') }}</td>
+                  <tr v-for="(item, index) in rewards" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
+                    <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDateShort(item.createdAt) }}</td>
+                    <td v-show="isColumnVisible('point')" class="border-r border-base-200 text-neutral-500">{{ item.point }}</td>
+                    <td v-show="isColumnVisible('type')" class="border-r border-base-200 text-neutral-500">{{ item.type }}</td>
+                    <td v-show="isColumnVisible('service.name')" class="border-r border-base-200 text-primary max-w-[250px] truncate" :title="item.service.name">
+                      <NuxtLink :to="`/service/${item.service.code}`" class="hover:underline">{{ item.service.name }}</NuxtLink>
+                    </td>
+                    <td v-show="isColumnVisible('price')" class="text-neutral-500">Rp. {{ item.price.toLocaleString('id-ID') }}</td>
                   </tr>
                 </tbody>
               </template>
@@ -340,13 +355,27 @@ const customerServices = computed(() => serviceResponse.value?.data || [])
 const serviceMeta = computed(() => serviceResponse.value?.meta)
 const serviceLoading = computed(() => serviceStatus.value === 'pending')
 
-interface CustomerLocalPoint {
-  date: string
-  points: number
-  type: string
-  service: string
-  price: number
-}
+const pointPage = ref(1)
+const pointSort = ref('updatedAt')
+const pointOrder = ref<'asc' | 'desc'>('desc')
+
+const { data: pointResponse, status: pointStatus } = await useAsyncData(
+  `customer-rewards-${customerId}`,
+  () => customerService.getCustomerRewards(customerId, {
+    page: pointPage.value,
+    sort: pointSort.value,
+    order: pointOrder.value,
+    q: searchQuery.value,
+    limit: 5
+  }),
+  {
+    watch: [pointPage, pointSort, pointOrder, searchQuery]
+  }
+)
+
+const rewards = computed(() => pointResponse.value?.data || [])
+const pointMeta = computed(() => pointResponse.value?.meta)
+const pointLoading = computed(() => pointStatus.value === 'pending')
 
 const serviceColumns = [
   { label: 'Nama Layanan', key: 'service.name', sortable: true },
@@ -356,28 +385,11 @@ const serviceColumns = [
 ]
 
 const pointColumns = [
-  { label: 'Tanggal Didapatkan', key: 'date' },
-  { label: 'Poin Didapatkan', key: 'points' },
-  { label: 'Tipe Poin', key: 'type' },
-  { label: 'Nama Layanan', key: 'service' },
-  { label: 'Harga Layanan', key: 'price' }
+  { label: 'Tanggal Didapatkan', key: 'createdAt', sortable: true },
+  { label: 'Poin Didapatkan', key: 'point', sortable: true },
+  { label: 'Tipe Poin', key: 'type', sortable: true },
+  { label: 'Nama Layanan', key: 'service.name', sortable: true },
+  { label: 'Harga Layanan', key: 'price', sortable: true }
 ]
-
-const points: CustomerLocalPoint[] = [
-  { date: '30/12/2025', points: 390, type: 'OTP', service: 'Nusanet Broadband Business EDGE100', price: 1500000 },
-  { date: '30/12/2025', points: 213, type: 'OTP', service: 'Nusanet Broadband Business EDGE200', price: 1500000 },
-  { date: '28/12/2025', points: 542, type: 'Bulanan', service: 'Nusanet Broadband Business EDGE300', price: 1500000 },
-  { date: '20/12/2025', points: 332, type: 'OTP', service: 'Nusanet Dedicated Business NOVA90', price: 1500000 },
-  { date: '28/11/2025', points: 542, type: 'Bulanan', service: 'Nusanet Broadband Business EDGE300', price: 1500000 }
-]
-
-const filteredPoints = computed(() => {
-  if (!searchQuery.value) return points
-  const query = searchQuery.value.toLowerCase()
-  return points.filter(item => 
-    item.service.toLowerCase().includes(query) ||
-    item.type.toLowerCase().includes(query)
-  )
-})
 
 </script>

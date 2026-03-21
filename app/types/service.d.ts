@@ -9,7 +9,7 @@ export interface Service {
   isActive: boolean
   lastReferanceDate: string | null
   totalCustomerServices: number
-  totalPoints: number
+  totalPoint: number
 }
 
 export interface PaginationMeta {

@@ -1,5 +1,5 @@
 import { apiService } from "./api-service"
-import type { Customer, CustomerListResponse, CustomerQueryParams, CustomerAddressResponse, CustomerServiceResponse } from "../types/customer"
+import type { Customer, CustomerListResponse, CustomerQueryParams, CustomerAddressResponse, CustomerServiceResponse, CustomerRewardResponse } from "../types/customer"
 import type { ApiResponse } from "../types/auth"
 
 export class CustomerService {
@@ -55,6 +55,20 @@ export class CustomerService {
             return response.data
         } catch (error: any) {
             throw new Error(error.response?.data?.message || 'Failed to fetch customer services')
+        }
+    }
+
+    async getCustomerRewards(id: string, params?: CustomerQueryParams): Promise<CustomerRewardResponse> {
+        try {
+            const response = await apiService.client.get<CustomerRewardResponse>(`/customer/${id}/reward`, {
+                params,
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message || 'Failed to fetch customer rewards')
         }
     }
 }

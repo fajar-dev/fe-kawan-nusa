@@ -35,7 +35,7 @@
     <div class="space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <!-- Top: Detail Layanan (4 columns) -->
-        <div class="lg:col-span-4 h-full">
+        <div class="lg:col-span-5 h-full">
           <div class="card bg-white border border-base-200 h-full">
             <div class="card-header p-6 pb-2">
               <div class="flex items-center gap-3 border-b border-base-300 pb-3">
@@ -55,19 +55,19 @@
                 <!-- Tipe Layanan -->
                 <div class="flex flex-col gap-1.5">
                   <span class="text-xs text-neutral-400 font-medium">Tipe Layanan</span>
-                  <span class="text-sm text-neutral-800 font-semibold">{{ service.type }}</span>
+                  <span class="text-sm text-neutral-800 font-medium">{{ service.type }}</span>
                 </div>
 
                 <!-- Status Layanan -->
                 <div class="flex flex-col gap-1.5">
                   <span class="text-xs text-neutral-400 font-medium">Status Layanan</span>
-                  <span class="text-sm text-neutral-800 font-semibold">{{ service.isActive ? 'Aktif' : 'Dihentikan' }}</span>
+                  <span class="text-sm text-neutral-800 font-medium">{{ service.isActive ? 'Aktif' : 'Dihentikan' }}</span>
                 </div>
 
                 <!-- Jumlah Berlangganan -->
                 <div class="flex flex-col gap-1.5">
                   <span class="text-xs text-neutral-400 font-medium">Jumlah Berlangganan</span>
-                  <span class="text-sm text-neutral-800 font-semibold">{{ service.totalCustomerServices }} pelanggan</span>
+                  <span class="text-sm text-neutral-800 font-medium">{{ service.totalCustomerServices }} pelanggan</span>
                 </div>
               </div>
             </div>
