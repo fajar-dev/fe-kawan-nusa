@@ -95,21 +95,37 @@
                 flat 
                 :columns="columns"
                 v-model:search-query="searchQuery"
-                :is-empty="filteredSubscriptions.length === 0"
+                :loading="customerLoading"
+                :is-empty="!customerLoading && customers.length === 0"
+                :total-from="customerMeta?.from"
+                :total-to="customerMeta?.to"
+                :total-entries="customerMeta?.total"
+                :current-page="customerPage"
+                :last-page="customerMeta?.lastPage"
+                :current-sort="customerSort"
+                :current-order="customerOrder"
+                @update:page="customerPage = $event"
+                @update:sort="customerSort = $event"
+                @update:order="customerOrder = $event"
               >
                 <template #body="{ isColumnVisible }">
                   <tbody class="text-[13px] text-neutral-600 border-x border-base-200">
-                    <tr v-for="(item, index) in filteredSubscriptions" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
-                      <td v-show="isColumnVisible('id')" class="py-3 border-r border-base-200 text-primary font-semibold ps-4">{{ item.id }}</td>
-                      <td v-show="isColumnVisible('regDate')" class="py-3 border-r border-base-200 text-neutral-500 ps-4">{{ item.regDate }}</td>
-                      <td v-show="isColumnVisible('lastPayment')" class="py-3 border-r border-base-200 text-neutral-500 ps-4">{{ item.lastPayment }}</td>
-                      <td v-show="isColumnVisible('period')" class="py-3 border-r border-base-200 text-neutral-500 ps-4">{{ item.period }}</td>
-                      <td v-show="isColumnVisible('status')" class="py-3 border-r border-base-200 text-center px-4">
-                        <div :class="['badge border-none font-semibold text-[10px] rounded-lg w-full py-2.5', getStatusClass(item.status)]">
+                    <tr v-for="(item, index) in customers" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
+                      <td v-show="isColumnVisible('customerId')" class="border-r border-base-200 text-primary font-semibold">
+                        <NuxtLink :to="`/customer/${item.customerId}`" class="hover:underline">{{ item.customerId }}</NuxtLink>
+                      </td>
+                      <td v-show="isColumnVisible('registrationDate')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDateShort(item.registrationDate) }}</td>
+                      <td v-show="isColumnVisible('referenceDate')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDate(item.referenceDate) }}</td>
+                      <td v-show="isColumnVisible('period')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">
+                        {{ formatDate(item.startDate) }}
+                        <span v-if="item.endDate"> - {{ formatDate(item.endDate) }}</span>
+                      </td>
+                      <td v-show="isColumnVisible('status')" class="border-r border-base-200 text-center px-4">
+                        <div :class="['badge border-none font-semibold text-xs rounded-lg w-full', getStatusClass(item.status)]">
                           {{ item.status }}
                         </div>
                       </td>
-                      <td v-show="isColumnVisible('am')" class="py-3 ps-4">{{ item.am }}</td>
+                      <td v-show="isColumnVisible('salesName')" class="ps-4 max-w-[200px] truncate" :title="item.salesName">{{ item.salesName }}</td>
                     </tr>
                   </tbody>
                 </template>
@@ -128,7 +144,7 @@ import {
   FileText
 } from 'lucide-vue-next'
 import { serviceService } from '~/services/service-service'
-import { formatDate } from '~/utils/date'
+import { formatDate, formatDateShort } from '~/utils/date'
 
 definePageMeta({
   bgColor: 'bg-[#F7FDF9]'
@@ -144,42 +160,37 @@ const { data: serviceResponse } = await useAsyncData(
 )
 const service = computed(() => serviceResponse.value?.data)
 
-// Search Logic
+// Fetch Customers for Service
 const searchQuery = ref('')
+const customerPage = ref(1)
+const customerSort = ref('updatedAt')
+const customerOrder = ref<'asc' | 'desc'>('desc')
+
+const { data: customerResponse, status: customerStatus } = await useAsyncData(
+  `service-customers-${serviceCode}`,
+  () => serviceService.getServiceCustomers(serviceCode, {
+    page: customerPage.value,
+    sort: customerSort.value,
+    order: customerOrder.value,
+    q: searchQuery.value,
+    limit: 5
+  }),
+  {
+    watch: [customerPage, customerSort, customerOrder, searchQuery]
+  }
+)
+
+const customers = computed(() => customerResponse.value?.data || [])
+const customerMeta = computed(() => customerResponse.value?.meta)
+const customerLoading = computed(() => customerStatus.value === 'pending')
 
 const columns = [
-  { label: 'ID Pelanggan', key: 'id' },
-  { label: 'Tanggal Registrasi', key: 'regDate' },
-  { label: 'Pembayaran Terak...', key: 'lastPayment' },
-  { label: 'Periode Berlangga...', key: 'period' },
-  { label: 'Status', key: 'status' },
-  { label: 'Nama AM', key: 'am' }
+  { label: 'ID Pelanggan', key: 'customerId', sortable: true },
+  { label: 'Tanggal Registrasi', key: 'registrationDate', sortable: true },
+  { label: 'Referensi Terakhir', key: 'referenceDate', sortable: true },
+  { label: 'Periode Berlangganan', key: 'period', sortable: false },
+  { label: 'Status', key: 'status', sortable: true },
+  { label: 'Nama AM', key: 'salesName', sortable: true }
 ]
 
-const subscriptions = [
-  { id: '02001653518', regDate: '28/12/2023', lastPayment: '27/12/2024', period: '27/12/2025', status: 'Aktif', am: 'Jaya Gharaj' },
-  { id: '02001267400', regDate: '28/12/2023', lastPayment: '27/12/2024', period: '27/12/2025', status: 'Aktif', am: 'Jaka Panggabean' },
-  { id: '02001651535', regDate: '28/12/2023', lastPayment: '27/12/2025', period: '27/12/2026', status: 'Aktif', am: 'Mauliddana Putra' },
-  { id: '02001487443', regDate: '28/12/2023', lastPayment: '28/12/2025', period: '12/06/2026', status: 'Block', am: 'Nicholas Simbolon' },
-  { id: '02001651532', regDate: '28/12/2020', lastPayment: '28/12/2020', period: 'Sep 2021 - Sep 2021', status: 'Tidak Aktif', am: 'Mauliddana Putra' }
-]
-
-const filteredSubscriptions = computed(() => {
-  if (!searchQuery.value) return subscriptions
-  const query = searchQuery.value.toLowerCase()
-  return subscriptions.filter(item => 
-    item.id.toLowerCase().includes(query) ||
-    item.am.toLowerCase().includes(query) ||
-    item.status.toLowerCase().includes(query)
-  )
-})
-
-const getStatusClass = (status: string) => {
-  switch (status) {
-    case 'Aktif': return 'bg-primary/10 text-primary'
-    case 'Tidak Aktif': return 'bg-red-50 text-red-500'
-    case 'Block': return 'bg-purple-50 text-purple-500'
-    default: return 'bg-neutral-100 text-neutral-500'
-  }
-}
 </script>

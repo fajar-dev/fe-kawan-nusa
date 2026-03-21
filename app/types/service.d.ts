@@ -32,3 +32,31 @@ export interface ServiceQueryParams {
   page?: number
   limit?: number
 }
+
+export interface ServiceCustomer {
+  id: number
+  customerId: string
+  serviceCode: string
+  registrationDate: string
+  activationDate: string
+  startDate: string
+  endDate: string | null
+  status: string
+  referenceDate: string
+  salesName: string
+  service: {
+    code: string
+    name: string
+    type: string
+  }
+  totalPoint: number
+  latestReward: {
+    point: number
+    type: string
+    createdAt: string
+  } | null
+}
+
+export interface ServiceCustomerResponse extends ApiResponse<ServiceCustomer[]> {
+  meta: PaginationMeta
+}

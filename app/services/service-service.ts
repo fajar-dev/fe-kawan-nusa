@@ -1,6 +1,6 @@
 import { apiService } from "./api-service"
 import type { ApiResponse } from "../types/auth"
-import type { Service, ServiceListResponse, ServiceQueryParams } from "../types/service"
+import type { Service, ServiceListResponse, ServiceQueryParams, ServiceCustomerResponse } from "../types/service"
 
 export class ServiceService {
     async getServices(params?: ServiceQueryParams): Promise<ServiceListResponse> {
@@ -30,9 +30,9 @@ export class ServiceService {
         }
     }
 
-    async getServiceCustomers(code: string, params?: ServiceQueryParams): Promise<any> {
+    async getServiceCustomers(code: string, params?: ServiceQueryParams): Promise<ServiceCustomerResponse> {
         try {
-            const response = await apiService.client.get<any>(`/service/${code}/customer`, {
+            const response = await apiService.client.get<ServiceCustomerResponse>(`/service/${code}/customer`, {
                 params,
                 headers: {
                     Authorization: `Bearer ${useAuth().state.token}`

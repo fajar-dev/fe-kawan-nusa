@@ -11,17 +11,18 @@ export const getStatusClass = (status: string): string => {
   const lowerStatus = status.toLowerCase()
   
   switch (lowerStatus) {
-    case 'free': 
-      return 'bg-yellow-100 text-yellow-600'
-    case 'block': 
-      return 'bg-purple-100 text-purple-600'
-    case 'active':
-    case 'aktif': 
-      return 'bg-accent text-primary'
-    case 'non active':
+    case 'aktif':
+    case 'active': 
+      return 'bg-primary/10 text-primary'
+    case 'tidak aktif':
     case 'inactive':
-    case 'tidak aktif': 
-      return 'bg-red-100 text-red-500'
+    case 'non active':
+      return 'bg-red-50 text-red-500'
+    case 'block':
+    case 'blocked':
+      return 'bg-purple-50 text-purple-500'
+    case 'free':
+      return 'bg-yellow-100 text-yellow-600'
     default: 
       return 'bg-neutral-100 text-neutral-500'
   }
