@@ -91,6 +91,8 @@ export interface CustomerReward {
     id: number
     serviceCode: string
     activationDate: string
+    startDate: string
+    endDate: string | null
   }
   service: {
     code: string
@@ -106,3 +108,4 @@ export interface CustomerReward {
 export interface CustomerRewardResponse extends ApiResponse<CustomerReward[]> {
   meta: PaginationMeta
 }
+

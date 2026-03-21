@@ -39,8 +39,11 @@
                 Total Point Saya
               </h1>
               <div class="flex items-center gap-2">
-                <span class="text-neutral-800 font-medium text-3xl">1874</span>
-                <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
+                <span class="text-neutral-800 font-medium text-3xl">{{ totalPoints.toLocaleString('id-ID') }}</span>
+                <div class="tooltip tooltip-bottom tooltip-neutral" data-tip="Jumlah poin yang anda hasilkan akan diperbaharui pada tanggal 15 setiap bulannya.">
+
+                  <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
+                </div>
               </div>
               <button 
                 @click="isWithdrawModalOpen = true"
@@ -59,14 +62,14 @@
         <!-- Tabs Section -->
         <div class="flex items-center gap-8 border-b border-base-200">
           <button 
-            @click="activeTab = 'incoming'"
+            @click="activeTab = 'reward'"
             :class="[
               'pb-3 font-medium transition-all relative',
-              activeTab === 'incoming' ? 'text-primary' : 'text-neutral-500 hover:text-neutral-800'
+              activeTab === 'reward' ? 'text-primary' : 'text-neutral-500 hover:text-neutral-800'
             ]"
           >
             Poin Masuk
-            <div v-if="activeTab === 'incoming'" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary rounded-full"></div>
+            <div v-if="activeTab === 'reward'" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary rounded-full"></div>
           </button>
           <button 
             @click="activeTab = 'withdrawn'"
@@ -80,12 +83,24 @@
           </button>
         </div>
 
+        <!-- Reward Table -->
         <DataTable 
+          v-if="activeTab === 'reward'"
           flat 
           :columns="currentColumns"
-          :loading="loading"
-          :is-empty="!loading && currentData.length === 0"
+          :loading="rewardLoading"
+          :is-empty="!rewardLoading && rewards.length === 0"
           v-model:search-query="searchQuery"
+          :total-from="rewardMeta?.from"
+          :total-to="rewardMeta?.to"
+          :total-entries="rewardMeta?.total"
+          :current-page="rewardPage"
+          :last-page="rewardMeta?.lastPage"
+          :current-sort="rewardSort"
+          :current-order="rewardOrder"
+          @update:page="rewardPage = $event"
+          @update:sort="rewardSort = $event"
+          @update:order="rewardOrder = $event"
         >
           <template #filters>
             <div class="dropdown dropdown-bottom md:dropdown-start">
@@ -138,28 +153,47 @@
           </template>
 
           <template #body="{ isColumnVisible }">
-            <tbody v-if="activeTab === 'incoming'" class="text-sm text-neutral-600">
-              <tr v-for="(item, index) in filteredIncoming" :key="index" class="hover:bg-base-100/30 transition-colors border-b border-base-100 last:border-0">
-                <td v-show="isColumnVisible('waktu')" class="py-3 border-r border-base-200 ps-4">{{ item.waktu }}</td>
-                <td v-show="isColumnVisible('jumlah')" class="py-3 border-r border-base-200 ps-4">{{ item.jumlah }}</td>
-                <td v-show="isColumnVisible('pelanggan')" class="py-3 border-r border-base-200 ps-4">
-                  <span class="text-primary font-medium">{{ item.pelanggan.name }}</span>
-                  <span class="text-primary ml-1">- {{ item.pelanggan.id }}</span>
+            <tbody class="text-sm text-neutral-600">
+              <tr v-for="(item, index) in rewards" :key="index" class="hover:bg-base-100/30 transition-colors border-b border-base-100 last:border-0">
+                <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 whitespace-nowrap">{{ formatDate(item.createdAt) }}</td>
+                <td v-show="isColumnVisible('point')" class="border-r border-base-200">{{ item.point.toLocaleString('id-ID') }}</td>
+                <td v-show="isColumnVisible('customer.name')" class="border-r border-base-200">
+                  <NuxtLink :to="`customer/${item.customer.id}`" class="hover:underline text-primary">
+                    {{ item.customer.name }} - {{ item.customer.id }}
+                  </NuxtLink>
                 </td>
-                <td v-show="isColumnVisible('layanan')" class="py-3 border-r border-base-200 ps-4 text-primary font-medium">{{ item.layanan }}</td>
-                <td v-show="isColumnVisible('periode')" class="py-3 border-r border-base-200 ps-4">{{ item.periode }}</td>
-                <td v-show="isColumnVisible('tipe')" class="py-3 ps-4">{{ item.tipe }}</td>
+                <td v-show="isColumnVisible('service.name')" class="border-r border-base-200 text-primary max-w-[200px] truncate" :title="item.service.name">
+                  <NuxtLink :to="`service/${item.service.code}`" class="hover:underline">
+                    {{ item.service.name }}
+                  </NuxtLink>
+                </td>
+                <td v-show="isColumnVisible('period')" class="border-r border-base-200 whitespace-nowrap">
+                  {{ formatDate(item.customerService.startDate) }}
+                  <span v-if="item.customerService.endDate"> - {{ formatDate(item.customerService.endDate) }}</span>
+                </td>
+                <td v-show="isColumnVisible('type')">{{ item.type }}</td>
               </tr>
             </tbody>
+          </template>
+        </DataTable>
 
-            <tbody v-else class="text-sm text-neutral-600">
-              <tr v-for="(item, index) in filteredWithdrawn" :key="index" class="hover:bg-base-100/30 transition-colors border-b border-base-100 last:border-0">
-                <td v-show="isColumnVisible('waktu')" class="py-3 border-r border-base-200 ps-4">{{ item.waktu }}</td>
-                <td v-show="isColumnVisible('poin')" class="py-3 border-r border-base-200 ps-4">{{ item.poin }}</td>
-                <td v-show="isColumnVisible('bank')" class="py-3 border-r border-base-200 ps-4">{{ item.bank }}</td>
-                <td v-show="isColumnVisible('rekening')" class="py-3 border-r border-base-200 ps-4">{{ item.rekening }}</td>
-                <td v-show="isColumnVisible('penerima')" class="py-3 border-r border-base-200 ps-4">{{ item.penerima }}</td>
-                <td v-show="isColumnVisible('nota')" class="py-3 ps-4 flex items-center justify-between pr-4 gap-2">
+        <!-- Withdrawn Table -->
+        <DataTable 
+          v-else
+          flat 
+          :columns="currentColumns"
+          v-model:search-query="searchQuery"
+          :is-empty="withdrawnPoints.length === 0"
+        >
+          <template #body="{ isColumnVisible }">
+            <tbody class="text-sm text-neutral-600">
+              <tr v-for="(item, index) in withdrawnPoints" :key="index" class="hover:bg-base-100/30 transition-colors border-b border-base-100 last:border-0">
+                <td v-show="isColumnVisible('waktu')" class="border-r border-base-200">{{ item.waktu }}</td>
+                <td v-show="isColumnVisible('poin')" class="border-r border-base-200">{{ item.poin }}</td>
+                <td v-show="isColumnVisible('bank')" class="border-r border-base-200">{{ item.bank }}</td>
+                <td v-show="isColumnVisible('rekening')" class="border-r border-base-200">{{ item.rekening }}</td>
+                <td v-show="isColumnVisible('penerima')" class="border-r border-base-200">{{ item.penerima }}</td>
+                <td v-show="isColumnVisible('nota')" class="flex items-center justify-between pr-4 gap-2">
                   <span class="text-primary font-medium underline truncate cursor-pointer">{{ item.nota }}</span>
                   <Download class="w-4 h-4 text-primary shrink-0 cursor-pointer" />
                 </td>
@@ -174,29 +208,61 @@
 
 <script setup lang="ts">
 import { 
-  CircleHelp, ListFilter, X, 
+  CircleHelp, X, 
   Coins, Download,
   Filter
 } from 'lucide-vue-next'
+import { rewardService } from '~/services/reward-service'
+import { pointService } from '~/services/point-service'
+import { formatDate, formatDateShort } from '~/utils/date'
 
 definePageMeta({
   bgColor: 'bg-white'
 })
 
 const isWithdrawModalOpen = ref(false)
-const activeTab = ref('incoming')
-const loading = ref(false)
+const activeTab = ref('reward')
 const searchQuery = ref('')
 
+const rewardPage = ref(1)
+const rewardSort = ref('updatedAt')
+const rewardOrder = ref<'asc' | 'desc'>('desc')
+
+const { data: rewardResponse, status: rewardStatus } = await useAsyncData(
+  'rewards',
+  () => rewardService.getRewards({
+    page: rewardPage.value,
+    sort: rewardSort.value,
+    order: rewardOrder.value,
+    q: searchQuery.value,
+    limit: 5
+  }),
+  {
+    watch: [rewardPage, rewardSort, rewardOrder, searchQuery]
+  }
+)
+
+const rewards = computed(() => rewardResponse.value?.data || [])
+const rewardMeta = computed(() => rewardResponse.value?.meta)
+const rewardLoading = computed(() => rewardStatus.value === 'pending')
+
+const { data: pointResponse } = await useAsyncData(
+  'point',
+  () => pointService.getPoint()
+)
+
+
+const totalPoints = computed(() => pointResponse.value?.data.value || 0)
+
 const currentColumns = computed(() => {
-  if (activeTab.value === 'incoming') {
+  if (activeTab.value === 'reward') {
     return [
-      { label: 'Waktu', key: 'waktu', sortable: true },
-      { label: 'Jumlah Poin', key: 'jumlah', sortable: true },
-      { label: 'Pelanggan Yang Direferensikan', key: 'pelanggan', sortable: true },
-      { label: 'Nama Layanan', key: 'layanan', sortable: true },
-      { label: 'Periode Berlangganan', key: 'periode', sortable: true },
-      { label: 'Tipe Komisi', key: 'tipe', sortable: true }
+      { label: 'Waktu', key: 'createdAt', sortable: true },
+      { label: 'Jumlah Poin', key: 'point', sortable: true },
+      { label: 'Pelanggan Yang Direferensikan', key: 'customer.name', sortable: true },
+      { label: 'Nama Layanan', key: 'service.name', sortable: true },
+      { label: 'Periode Berlangganan', key: 'period', sortable: false },
+      { label: 'Tipe Komisi', key: 'type', sortable: true }
     ]
   }
   return [
@@ -209,34 +275,7 @@ const currentColumns = computed(() => {
   ]
 })
 
-interface IncomingPoint {
-  waktu: string
-  jumlah: number
-  pelanggan: { name: string; id: string }
-  layanan: string
-  periode: string
-  tipe: string
-}
-
-interface WithdrawnPoint {
-  waktu: string
-  poin: number
-  bank: string
-  rekening: string
-  penerima: string
-  nota: string
-}
-
-const incomingPoints: IncomingPoint[] = [
-  { waktu: '7 Jan 2026 - 12:42', jumlah: 300, pelanggan: { name: 'Chalista', id: '328940283830' }, layanan: 'Nusanet Broadband Business EDGE...', periode: 'Okt 2025 - Sep 2026', tipe: 'Recurring per tahun' },
-  { waktu: '5 Jan 2026 - 12:42', jumlah: 145, pelanggan: { name: 'Kurtney', id: '328940286754' }, layanan: 'Nusanet Broadband Business EDGE...', periode: 'Agu 2025 - Agu 2025', tipe: 'Sekali Bayar (OTP)' },
-  { waktu: '11 Des 2025 - 12:42', jumlah: 129, pelanggan: { name: 'Budi', id: '328940282234' }, layanan: 'Nusawork Advance', periode: 'Sep 2025 - Agu 2026', tipe: 'Recurring per bulan' },
-  { waktu: '11 Des 2025 - 12:42', jumlah: 329, pelanggan: { name: 'Anita', id: '328940280912' }, layanan: 'Nusawork Advance', periode: 'Jun 2025 - Mei 2026', tipe: 'Sekali Bayar (OTP)' },
-  { waktu: '6 Des 2025 - 12:42', jumlah: 6732, pelanggan: { name: 'Ali', id: '328940286543' }, layanan: 'Nusafiber Life', periode: 'Sep 2025 - Sep 2025', tipe: 'Recurring per bulan' },
-  { waktu: '5 Des 2025 - 12:42', jumlah: 193, pelanggan: { name: 'David', id: '328940288907' }, layanan: 'Nusafiber Selecta Basic 30', periode: 'Sep 2025 - Sep 2025', tipe: 'Sekali Bayar (OTP)' }
-]
-
-const withdrawnPoints: WithdrawnPoint[] = [
+const withdrawnPoints = [
   { waktu: '11 Des 2025 - 12:42', poin: 500, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8373001.pdf' },
   { waktu: '6 Des 2025 - 12:42', poin: 648, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8372902.pdf' },
   { waktu: '5 Des 2025 - 12:42', poin: 400, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8376789.pdf' },
@@ -244,27 +283,7 @@ const withdrawnPoints: WithdrawnPoint[] = [
   { waktu: '22 Nov 2025 - 12:42', poin: 150, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8374432.pdf' }
 ]
 
-const filteredIncoming = computed(() => {
-  if (!searchQuery.value) return incomingPoints
-  const query = searchQuery.value.toLowerCase()
-  return incomingPoints.filter(item => 
-    item.pelanggan.name.toLowerCase().includes(query) ||
-    item.layanan.toLowerCase().includes(query) ||
-    item.pelanggan.id.toLowerCase().includes(query)
-  )
-})
-
-const filteredWithdrawn = computed(() => {
-  if (!searchQuery.value) return withdrawnPoints
-  const query = searchQuery.value.toLowerCase()
-  return withdrawnPoints.filter(item => 
-    item.bank.toLowerCase().includes(query) ||
-    item.penerima.toLowerCase().includes(query) ||
-    item.nota.toLowerCase().includes(query)
-  )
-})
-
-const currentData = computed(() => activeTab.value === 'incoming' ? filteredIncoming.value : filteredWithdrawn.value)
+const currentData = computed(() => activeTab.value === 'reward' ? rewards.value : withdrawnPoints)
 
 interface AreaChartItem {
   month: string
