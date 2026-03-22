@@ -14,7 +14,7 @@
         <div class="card-body p-6 flex flex-row items-start justify-between">
           <div>
             <p class="text-neutral-500 font-medium text-sm">Total Pelanggan</p>
-            <h3 class="text-3xl font-semibold mt-2 text-neutral-800">320</h3>
+            <h3 class="text-3xl font-semibold mt-2 text-neutral-800">{{ statisticCount?.customer ?? '-' }}</h3>
             <div class="flex items-center gap-1 mt-4 text-primary text-xs font-medium">
               <ArrowUpRight class="w-3.5 h-3.5" />
               <span>12% dari bulan lalu</span>
@@ -30,7 +30,7 @@
         <div class="card-body p-6 flex flex-row items-start justify-between">
           <div>
             <p class="text-neutral-500 font-medium text-sm">Total Poin Aktif</p>
-            <h3 class="text-3xl font-semibold mt-2 text-neutral-800">18876</h3>
+            <h3 class="text-3xl font-semibold mt-2 text-neutral-800">{{ statisticCount?.point ?? '-' }}</h3>
             <div class="flex items-center gap-1 mt-4 text-primary text-xs font-medium">
               <ArrowUpRight class="w-3.5 h-3.5" />
               <span>12% dari bulan lalu</span>
@@ -46,7 +46,7 @@
         <div class="card-body p-6 flex flex-row items-start justify-between">
           <div>
             <p class="text-neutral-500 font-medium text-sm">Layanan Direferensikan</p>
-            <h3 class="text-3xl font-semibold mt-2 text-neutral-800">24</h3>
+            <h3 class="text-3xl font-semibold mt-2 text-neutral-800">{{ statisticCount?.customerService ?? '-' }}</h3>
             <div class="flex items-center gap-1 mt-4 text-primary text-xs font-medium">
               <ArrowUpRight class="w-3.5 h-3.5" />
               <span>12% dari bulan lalu</span>
@@ -169,10 +169,18 @@
 import { Users, HandCoins, Box, ArrowUpRight } from 'lucide-vue-next'
 import { useAuth } from '~/composables/useAuth'
 import { serviceService } from '~/services/service-service'
+import { statisticService } from '~/services/statistic-service'
 import { formatDate, formatDateShort } from '~/utils/date'
 import { getStatusClass } from '~/utils/status'
 
 const { state: authState } = useAuth()
+
+const { data: statisticCountResponse } = await useAsyncData(
+  'statistic-count',
+  () => statisticService.getCount()
+)
+
+const statisticCount = computed(() => statisticCountResponse.value?.data)
 
 const { data: topServicesResponse } = await useAsyncData(
   'top-services',
