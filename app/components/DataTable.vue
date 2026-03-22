@@ -5,7 +5,7 @@
   ]">
     <div :class="flat ? '' : 'card-body p-6'">
       <!-- Title & Action -->
-      <div v-if="title || $slots['title-action']" class="flex items-center justify-between mb-4">
+      <div v-if="title || $slots['title-action']" class="flex items-center justify-between">
         <div>
           <h3 v-if="title" class="font-semibold text-lg text-neutral-800">{{ title }}</h3>
           <p v-if="description" class="text-neutral-500 text-sm">{{ description }}</p>

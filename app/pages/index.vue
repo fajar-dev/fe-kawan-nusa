@@ -98,12 +98,12 @@
               <h3 class="font-semibold text-lg text-neutral-800">Layanan Teratas</h3>
               <p class="text-neutral-500 text-sm">Berdasarkan total poin yang diperoleh</p>
             </div>
-            <button class="btn btn-ghost btn-circle btn-sm text-primary transition-colors hover:bg-primary/10">
+            <NuxtLink to="/service" class="btn btn-ghost btn-circle btn-sm text-primary transition-colors hover:bg-primary/10">
               <ArrowUpRight class="w-5 h-5" />
-            </button>
+            </NuxtLink>
           </div>
           
-          <div class="flex flex-col gap-1 mt-2 flex-1 justify-between">
+          <div class="flex flex-col gap-1 mt-2 flex-1 ">
             <div v-for="(svc, idx) in topServices" :key="idx" class="flex items-center gap-4 py-2 border-b border-base-200 last:border-0">
               <div :class="['w-9 h-9 rounded-sm flex items-center justify-center font-semibold text-lg shadow', svc.rankClass]">
                 {{ idx + 1 }}
@@ -113,7 +113,8 @@
                 <p class="text-xs text-neutral-500">{{ svc.customers }} Pelanggan</p>
               </div>
               <div class="text-right">
-                <p class="font-semibold text-primary text-sm">{{ svc.points }}</p>
+                <p class="font-semibold text-primary text-sm">{{ svc.points.toLocaleString('id-ID') }}</p>
+
                 <p class="text-[10px] text-neutral-400 leading-none">Poin</p>
               </div>
             </div>
@@ -129,6 +130,10 @@
       :columns="recentCustomerColumns"
       :show-search="false"
       :show-column-toggle="false"
+      :current-sort="recentSort"
+      :current-order="recentOrder"
+      @update:sort="recentSort = $event"
+      @update:order="recentOrder = $event"
     >
       <template #title-action>
         <NuxtLink to="/customer" class="btn btn-ghost btn-sm text-primary text-sm font-medium hover:bg-primary/10 group">
@@ -140,14 +145,19 @@
       <template #body="{ isColumnVisible }">
         <tbody class="text-sm text-neutral-600">
           <tr v-for="(item, index) in recentCustomers" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0">
-            <td v-show="isColumnVisible('id')" class="text-primary/80 font-medium py-2 border-r border-base-200">{{ item.id }}</td>
-            <td v-show="isColumnVisible('registrationDate')" class="py-2 border-r border-base-200">{{ item.registrationDate }}</td>
-            <td v-show="isColumnVisible('lastPayment')" class="py-2 border-r border-base-200">{{ item.lastPayment }}</td>
-            <td v-show="isColumnVisible('subscriptionPeriod')" class="py-2 border-r border-base-200">{{ item.subscriptionPeriod }}</td>
-            <td v-show="isColumnVisible('status')" class="py-2 border-r border-base-200">
-              <div class="badge bg-accent border-none text-primary font-bold text-[10px] py-1 px-3 rounded-full">{{ item.status }}</div>
+            <td v-show="isColumnVisible('customerId')" class="text-primary/80 font-medium border-r border-base-200" :title="item.customerId">
+              <NuxtLink :to="`/customer/${item.customerId}`" class="hover:underline">{{ item.customerId }}</NuxtLink>
             </td>
-            <td v-show="isColumnVisible('salesName')" class="py-2">{{ item.salesName }}</td>
+            <td v-show="isColumnVisible('registrationDate')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateShort(item.registrationDate) }}</td>
+            <td v-show="isColumnVisible('latestReward.createdAt')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateShort(item.latestReward?.createdAt) }}</td>
+            <td v-show="isColumnVisible('period')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">
+              {{ formatDate(item.startDate) }}
+              <span v-if="item.endDate"> - {{ formatDate(item.endDate) }}</span>
+            </td>
+            <td v-show="isColumnVisible('status')" class=" border-r border-base-200">
+              <div :class="['badge border-none font-medium text-xs rounded-full', getStatusClass(item.status)]">{{ item.status }}</div>
+            </td>
+            <td v-show="isColumnVisible('salesName')" class="max-w-[200px] truncate">{{ item.salesName }}</td>
           </tr>
         </tbody>
       </template>
@@ -158,33 +168,54 @@
 <script setup lang="ts">
 import { Users, HandCoins, Box, ArrowUpRight } from 'lucide-vue-next'
 import { useAuth } from '~/composables/useAuth'
+import { serviceService } from '~/services/service-service'
+import { formatDate, formatDateShort } from '~/utils/date'
+import { getStatusClass } from '~/utils/status'
 
 const { state: authState } = useAuth()
 
+const { data: topServicesResponse } = await useAsyncData(
+  'top-services',
+  () => serviceService.getServices({ sort: 'totalPoint', order: 'desc', limit: 5 })
+)
+
+const rankClasses = [
+  'bg-[#2b7c41] text-white',
+  'bg-primary text-white',
+  'bg-[#73c847] text-white',
+  'bg-[#a6e267] text-neutral-800',
+  'bg-[#d9f5a8] text-neutral-800'
+]
+
+const topServices = computed(() => {
+  return (topServicesResponse.value?.data || []).map((service, index) => ({
+    name: service.name,
+    customers: service.totalCustomerServices,
+    points: service.totalPoint,
+    rankClass: rankClasses[index] || 'bg-neutral-100 text-neutral-500'
+  }))
+})
+
+
 const recentCustomerColumns = [
-  { label: 'ID Pelanggan', key: 'id' },
-  { label: 'Tanggal Registrasi', key: 'registrationDate' },
-  { label: 'Pembayaran Terakhir', key: 'lastPayment' },
-  { label: 'Periode Berlangganan', key: 'subscriptionPeriod' },
-  { label: 'Status', key: 'status' },
-  { label: 'Nama AM', key: 'salesName' }
+  { label: 'ID Pelanggan', key: 'customerId', sortable: true },
+  { label: 'Tanggal Registarasi', key: 'registrationDate', sortable: true },
+  { label: 'Pembayaran Terakhir', key: 'latestReward.createdAt', sortable: true },
+  { label: 'Periode Berlangganan', key: 'period', sortable: false },
+  { label: 'Status', key: 'status', sortable: true },
+  { label: 'Nama AM', key: 'salesName', sortable: true }
 ]
 
-const recentCustomers = [
-  { id: '02001653518', registrationDate: '28/03/2026', lastPayment: '27/12/2027', subscriptionPeriod: '27/12/2028', status: 'Aktif', salesName: 'Jaya Gharaj' },
-  { id: '02001267400', registrationDate: '11/03/2026', lastPayment: '27/12/2027', subscriptionPeriod: '27/12/2028', status: 'Aktif', salesName: 'Jaka Panggabean' },
-  { id: '02001651535', registrationDate: '10/03/2026', lastPayment: '27/12/2027', subscriptionPeriod: '27/12/2028', status: 'Aktif', salesName: 'Mauliddana Putra' },
-  { id: '02001487443', registrationDate: '12/02/2026', lastPayment: '28/12/2027', subscriptionPeriod: '12/06/2028', status: 'Aktif', salesName: 'Nicholas Simbolon' },
-  { id: '02001651532', registrationDate: '01/02/2026', lastPayment: '28/12/2027', subscriptionPeriod: 'Sep 2028 - Sep 2028', status: 'Aktif', salesName: 'Mauliddana Putra' }
-]
+const recentSort = ref('updatedAt')
+const recentOrder = ref<'asc' | 'desc'>('desc')
 
-const topServices = [
-  { name: 'Nusanet Broadband Business...', customers: 99, points: 5678, rankClass: 'bg-[#2b7c41] text-white' },
-  { name: 'Google Workspace Starter', customers: 48, points: 4712, rankClass: 'bg-primary text-white' },
-  { name: 'Nusanet Dedicated Business...', customers: 34, points: 4321, rankClass: 'bg-[#73c847] text-white' },
-  { name: 'Google Workspace Business', customers: 20, points: 3942, rankClass: 'bg-[#a6e267] text-neutral-800' },
-  { name: 'Nusanet Dedicated Business...', customers: 24, points: 3384, rankClass: 'bg-[#d9f5a8] text-neutral-800' }
-]
+const { data: recentCustomerServicesResponse } = await useAsyncData(
+  'recent-customer-services',
+  () => serviceService.getCustomerServices({ sort: recentSort.value, order: recentOrder.value, limit: 5 }),
+  { watch: [recentSort, recentOrder] }
+)
+
+const recentCustomers = computed(() => recentCustomerServicesResponse.value?.data || [])
 
 interface AreaChartItem {
   month: string

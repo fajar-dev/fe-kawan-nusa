@@ -43,6 +43,20 @@ export class ServiceService {
             throw new Error(error.response?.data?.message || 'Failed to fetch service customers')
         }
     }
+
+    async getCustomerServices(params?: ServiceQueryParams): Promise<ServiceCustomerResponse> {
+        try {
+            const response = await apiService.client.get<ServiceCustomerResponse>('/customer-service', {
+                params,
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message || 'Failed to fetch customer services')
+        }
+    }
 }
 
 export const serviceService = new ServiceService()

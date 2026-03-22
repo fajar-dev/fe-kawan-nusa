@@ -225,7 +225,7 @@ const activeTab = ref('reward')
 const searchQuery = ref('')
 
 const rewardPage = ref(1)
-const rewardSort = ref('updatedAt')
+const rewardSort = ref('createdAt')
 const rewardOrder = ref<'asc' | 'desc'>('desc')
 
 const { data: rewardResponse, status: rewardStatus } = await useAsyncData(

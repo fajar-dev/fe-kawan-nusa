@@ -54,7 +54,7 @@
                   <Calendar class="w-5 h-5 text-neutral-400 mt-0.5" />
                   <div class="flex flex-col">
                     <span class="text-xs text-neutral-900">Tanggal Bergabung</span>
-                    <span class="text-[13px] text-neutral-800 font-medium">{{ formatDate(customer.registrationDate || customer.activationDate) }}</span>
+                    <span class="text-xs text-neutral-800 font-medium">{{ formatDate(customer.registrationDate || customer.activationDate) }}</span>
                   </div>
                 </div>
                 <!-- Row 2 -->
@@ -62,7 +62,7 @@
                   <Hash class="w-5 h-5 text-neutral-400 mt-0.5" />
                   <div class="flex flex-col">
                     <span class="text-xs text-neutral-900">ID Pelanggan</span>
-                    <span class="text-[13px] text-neutral-800 font-medium">{{ customer.id }}</span>
+                    <span class="text-xs text-neutral-800 font-medium">{{ customer.id }}</span>
                   </div>
                 </div>
                 <!-- Row 3 -->
@@ -71,9 +71,16 @@
                   <div class="flex flex-col flex-1">
                     <span class="text-xs text-neutral-900">Email</span>
                     <div class="flex items-center justify-between w-full">
-                      <span class="text-[13px] text-neutral-800 font-medium">{{ customer.emails?.[0]?.email || '-' }}</span>
-                      <div v-if="customer.emails && customer.emails.length > 1" class="badge bg-accent border-none text-primary font-medium text-[10px] rounded px-1.5 py-0.5 flex items-center gap-1 cursor-pointer">
-                        +{{ customer.emails.length - 1 }} <ChevronDown class="w-3 h-3" />
+                      <span class="text-xs text-neutral-800 font-medium">{{ customer.emails?.[0]?.email || '-' }}</span>
+                      <div v-if="customer.emails && customer.emails.length > 1" class="dropdown dropdown-end">
+                        <div tabindex="0" role="button" class="badge bg-accent border-none text-primary font-medium text-[10px] rounded px-1.5 py-0.5 flex items-center gap-1 cursor-pointer">
+                          +{{ customer.emails.length - 1 }} <ChevronDown class="w-3 h-3" />
+                        </div>
+                        <ul tabindex="0" class="dropdown-content z-[10] menu bg-base-100 rounded-box shadow-lg border border-base-200 p-2 w-56 mt-1">
+                          <li v-for="email in customer.emails.slice(1)" :key="email.id">
+                              <span class="text-xs text-neutral-700 font-medium">{{ email.email }}</span>
+                          </li>
+                        </ul>
                       </div>
                     </div>
                   </div>
@@ -84,9 +91,16 @@
                   <div class="flex flex-col flex-1">
                     <span class="text-xs text-neutral-900">No Handphone</span>
                     <div class="flex items-center justify-between w-full">
-                      <span class="text-[13px] text-neutral-800 font-medium">{{ customer.phones?.[0]?.phone || '-' }}</span>
-                      <div v-if="customer.phones && customer.phones.length > 1" class="badge bg-accent border-none text-primary font-medium text-[10px] rounded px-1.5 py-0.5 flex items-center gap-1 cursor-pointer">
-                        +{{ customer.phones.length - 1 }} <ChevronDown class="w-3 h-3" />
+                      <span class="text-xs text-neutral-800 font-medium">{{ customer.phones?.[0]?.phone || '-' }}</span>
+                      <div v-if="customer.phones && customer.phones.length > 1" class="dropdown dropdown-end">
+                        <div tabindex="0" role="button" class="badge bg-accent border-none text-primary font-medium text-[10px] rounded px-1.5 py-0.5 flex items-center gap-1 cursor-pointer">
+                          +{{ customer.phones.length - 1 }} <ChevronDown class="w-3 h-3" />
+                        </div>
+                        <ul tabindex="0" class="dropdown-content z-[10] menu bg-base-100 rounded-box shadow-lg border border-base-200 p-2 w-48 mt-1">
+                          <li v-for="phone in customer.phones.slice(1)" :key="phone.id">
+                            <span class="text-xs text-neutral-700 font-medium">{{ phone.phone }}</span>
+                          </li>
+                        </ul>
                       </div>
                     </div>
                   </div>
@@ -96,7 +110,7 @@
                   <Briefcase class="w-5 h-5 text-neutral-400 mt-0.5" />
                   <div class="flex flex-col">
                     <span class="text-xs text-neutral-900">Bidang Industri</span>
-                    <span class="text-[13px] text-neutral-800 font-medium">{{ customer.type || '-' }}</span>
+                    <span class="text-xs text-neutral-800 font-medium">{{ customer.type || '-' }}</span>
                   </div>
                 </div>
               </div>
@@ -238,7 +252,7 @@
               @update:order="serviceOrder = $event"
             >
               <template #body="{ isColumnVisible }">
-                <tbody class="text-[13px] text-neutral-600">
+                <tbody class="text-xs text-neutral-600">
                   <tr v-for="(item, index) in customerServices" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
                     <td v-show="isColumnVisible('service.name')" class="border-r border-base-200 text-primary ps-4 max-w-[250px] truncate" :title="item.service.name">
                       <NuxtLink :to="`/service/${item.service.code}`" class="hover:underline">{{ item.service.name }}</NuxtLink>
@@ -265,7 +279,6 @@
               flat 
               :columns="pointColumns"
               v-model:search-query="searchQuery"
-              search-placeholder="Cari Poin..."
               :loading="pointLoading"
               :is-empty="!pointLoading && rewards.length === 0"
               :total-from="pointMeta?.from"
@@ -280,7 +293,7 @@
               @update:order="pointOrder = $event"
             >
               <template #body="{ isColumnVisible }">
-                <tbody class="text-[13px] text-neutral-600">
+                <tbody class="text-xs text-neutral-600">
                   <tr v-for="(item, index) in rewards" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
                     <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDateShort(item.createdAt) }}</td>
                     <td v-show="isColumnVisible('point')" class="border-r border-base-200 text-neutral-500">{{ item.point }}</td>
@@ -334,7 +347,7 @@ const addressLoading = computed(() => addressStatus.value === 'pending')
 const activeTab = ref('layanan')
 const searchQuery = ref('')
 const servicePage = ref(1)
-const serviceSort = ref('startDate')
+const serviceSort = ref('activationDate')
 const serviceOrder = ref<'asc' | 'desc'>('desc')
 
 const { data: serviceResponse, status: serviceStatus } = await useAsyncData(
@@ -356,7 +369,7 @@ const serviceMeta = computed(() => serviceResponse.value?.meta)
 const serviceLoading = computed(() => serviceStatus.value === 'pending')
 
 const pointPage = ref(1)
-const pointSort = ref('updatedAt')
+const pointSort = ref('createdAt')
 const pointOrder = ref<'asc' | 'desc'>('desc')
 
 const { data: pointResponse, status: pointStatus } = await useAsyncData(

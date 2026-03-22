@@ -171,7 +171,7 @@ import {
   Filter as FilterIcon
 } from 'lucide-vue-next'
 import { customerService } from '~/services/customer-service'
-import type { Customer, CustomerQueryParams } from '~/types/customer'
+import type { CustomerQueryParams } from '~/types/customer'
 
 definePageMeta({
   bgColor: 'bg-white'
@@ -204,7 +204,7 @@ const fetchCustomers = async (queryParams: CustomerQueryParams = {}) => {
       q: searchQuery.value,
       ...queryParams,
       page: queryParams.page || 1,
-      limit: 20
+      limit: 10
     })
     
     if (response.success) {

@@ -109,7 +109,7 @@
                 @update:order="customerOrder = $event"
               >
                 <template #body="{ isColumnVisible }">
-                  <tbody class="text-[13px] text-neutral-600 border-x border-base-200">
+                  <tbody class="text-xs text-neutral-600 border-x border-base-200">
                     <tr v-for="(item, index) in customers" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
                       <td v-show="isColumnVisible('customerId')" class="border-r border-base-200 text-primary font-semibold">
                         <NuxtLink :to="`/customer/${item.customerId}`" class="hover:underline">{{ item.customerId }}</NuxtLink>
@@ -163,7 +163,7 @@ const service = computed(() => serviceResponse.value?.data)
 // Fetch Customers for Service
 const searchQuery = ref('')
 const customerPage = ref(1)
-const customerSort = ref('updatedAt')
+const customerSort = ref('referenceDate')
 const customerOrder = ref<'asc' | 'desc'>('desc')
 
 const { data: customerResponse, status: customerStatus } = await useAsyncData(

@@ -144,7 +144,7 @@ const fetchServices = async (queryParams: ServiceQueryParams = {}) => {
       q: searchQuery.value,
       ...queryParams,
       page: queryParams.page || 1,
-      limit: 20
+      limit: 10
     })
     
     if (response.success) {
