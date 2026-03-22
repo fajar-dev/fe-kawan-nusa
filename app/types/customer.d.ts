@@ -87,10 +87,12 @@ export interface CustomerReward {
   price: number
   point: number
   type: string
+  paymentDate: string
   customerService: {
     id: number
     serviceCode: string
     activationDate: string
+    referenceDate: string
     startDate: string
     endDate: string | null
   }

@@ -149,7 +149,7 @@
               <NuxtLink :to="`/customer/${item.customerId}`" class="hover:underline">{{ item.customerId }}</NuxtLink>
             </td>
             <td v-show="isColumnVisible('registrationDate')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateShort(item.registrationDate) }}</td>
-            <td v-show="isColumnVisible('latestReward.createdAt')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateShort(item.latestReward?.createdAt) }}</td>
+            <td v-show="isColumnVisible('latestReward.paymentDate')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateShort(item.latestReward?.paymentDate) }}</td>
             <td v-show="isColumnVisible('period')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">
               {{ formatDate(item.startDate) }}
               <span v-if="item.endDate"> - {{ formatDate(item.endDate) }}</span>
@@ -200,13 +200,13 @@ const topServices = computed(() => {
 const recentCustomerColumns = [
   { label: 'ID Pelanggan', key: 'customerId', sortable: true },
   { label: 'Tanggal Registarasi', key: 'registrationDate', sortable: true },
-  { label: 'Pembayaran Terakhir', key: 'latestReward.createdAt', sortable: true },
+  { label: 'Pembayaran Terakhir', key: 'latestReward.paymentDate', sortable: true },
   { label: 'Periode Berlangganan', key: 'period', sortable: false },
   { label: 'Status', key: 'status', sortable: true },
   { label: 'Nama AM', key: 'salesName', sortable: true }
 ]
 
-const recentSort = ref('updatedAt')
+const recentSort = ref('registrationDate')
 const recentOrder = ref<'asc' | 'desc'>('desc')
 
 const { data: recentCustomerServicesResponse } = await useAsyncData(
