@@ -110,8 +110,8 @@ const loginSchema = z.object({
   password: z.string().min(6, 'Kata sandi minimal 6 karakter')
 })
 
-const identifier = ref('')
-const password = ref('')
+const identifier = ref('john.doe@nusa.net.id')
+const password = ref('#Password123')
 const rememberMe = ref(false)
 const showPassword = ref(false)
 const loading = ref(false)
