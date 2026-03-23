@@ -56,7 +56,7 @@
         </div>
       </div>
 
-      <ModalWithdraw v-model="isWithdrawModalOpen" />
+      <ModalWithdraw v-model="isWithdrawModalOpen" @success="refreshData" />
 
       <div class="flex flex-col gap-6 w-full pt-10">
         <!-- Tabs Section -->
@@ -262,7 +262,7 @@ const rewards = computed(() => rewardResponse.value?.data || [])
 const rewardMeta = computed(() => rewardResponse.value?.meta)
 const rewardLoading = computed(() => rewardStatus.value === 'pending')
 
-const { data: pointResponse } = await useAsyncData(
+const { data: pointResponse, refresh: refreshPoint } = await useAsyncData(
   'point',
   () => pointService.getPoint()
 )
@@ -274,7 +274,7 @@ const withdrawPage = ref(1)
 const withdrawSort = ref('createdAt')
 const withdrawOrder = ref<'asc' | 'desc'>('desc')
 
-const { data: withdrawResponse, status: withdrawStatus } = await useAsyncData(
+const { data: withdrawResponse, status: withdrawStatus, refresh: refreshWithdrawals } = await useAsyncData(
   'withdrawals',
   () => withdrawService.getWithdrawals({
     page: withdrawPage.value,
@@ -287,6 +287,13 @@ const { data: withdrawResponse, status: withdrawStatus } = await useAsyncData(
     watch: [withdrawPage, withdrawSort, withdrawOrder, searchQuery]
   }
 )
+
+const refreshData = async () => {
+    await Promise.all([
+        refreshPoint(),
+        refreshWithdrawals()
+    ])
+}
 
 const withdrawMeta = computed(() => withdrawResponse.value?.meta)
 const withdrawLoading = computed(() => withdrawStatus.value === 'pending')

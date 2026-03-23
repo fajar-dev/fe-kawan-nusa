@@ -15,6 +15,19 @@ export class WithdrawService {
             throw new Error(error.response?.data?.message || 'Failed to fetch withdrawals')
         }
     }
+
+    async createWithdraw(point: number): Promise<any> {
+        try {
+            const response = await apiService.client.post('/withdraw', { point }, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message || 'Failed to create withdrawal')
+        }
+    }
 }
 
 export const withdrawService = new WithdrawService()
