@@ -73,3 +73,26 @@ export const timeAgo = (dateString?: string | null): string => {
   const diffInYears = Math.floor(diffInMonths / 12)
   return rtf.format(-diffInYears, 'year')
 }
+
+/**
+ * Format a date string into a localized date and time format (e.g., 19 Maret 2026 - 15:30)
+ */
+export const formatDateTime = (dateString?: string | null): string => {
+  if (!dateString) return '-'
+  const date = new Date(dateString)
+  if (isNaN(date.getTime())) return '-'
+
+  const datePart = new Intl.DateTimeFormat('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }).format(date)
+
+  const timePart = new Intl.DateTimeFormat('id-ID', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  }).format(date)
+
+  return `${datePart} - ${timePart.replace('.', ':')}`
+}

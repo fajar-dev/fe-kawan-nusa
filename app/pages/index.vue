@@ -132,6 +132,8 @@
       :show-column-toggle="false"
       :current-sort="recentSort"
       :current-order="recentOrder"
+      :loading="recentStatus === 'pending'"
+      :is-empty="recentCustomers.length === 0"
       @update:sort="recentSort = $event"
       @update:order="recentOrder = $event"
     >
@@ -217,7 +219,7 @@ const recentCustomerColumns = [
 const recentSort = ref('registrationDate')
 const recentOrder = ref<'asc' | 'desc'>('desc')
 
-const { data: recentCustomerServicesResponse } = await useAsyncData(
+const { data: recentCustomerServicesResponse, status: recentStatus } = await useAsyncData(
   'recent-customer-services',
   () => serviceService.getCustomerServices({ sort: recentSort.value, order: recentOrder.value, limit: 5 }),
   { watch: [recentSort, recentOrder] }

@@ -155,7 +155,7 @@
           <template #body="{ isColumnVisible }">
             <tbody class="text-sm text-neutral-600">
               <tr v-for="(item, index) in rewards" :key="index" class="hover:bg-base-100/30 transition-colors border-b border-base-100 last:border-0">
-                <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 whitespace-nowrap">{{ formatDate(item.createdAt) }}</td>
+                <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateTime(item.createdAt) }}</td>
                 <td v-show="isColumnVisible('point')" class="border-r border-base-200">{{ item.point.toLocaleString('id-ID') }}</td>
                 <td v-show="isColumnVisible('customer.name')" class="border-r border-base-200">
                   <NuxtLink :to="`customer/${item.customer.id}`" class="hover:underline text-primary">
@@ -182,20 +182,35 @@
           v-else
           flat 
           :columns="currentColumns"
+          :loading="withdrawLoading"
+          :is-empty="!withdrawLoading && withdrawnPoints.length === 0"
           v-model:search-query="searchQuery"
-          :is-empty="withdrawnPoints.length === 0"
+          :total-from="withdrawMeta?.from"
+          :total-to="withdrawMeta?.to"
+          :total-entries="withdrawMeta?.total"
+          :current-page="withdrawPage"
+          :last-page="withdrawMeta?.lastPage"
+          :current-sort="withdrawSort"
+          :current-order="withdrawOrder"
+          @update:page="withdrawPage = $event"
+          @update:sort="withdrawSort = $event"
+          @update:order="withdrawOrder = $event"
         >
           <template #body="{ isColumnVisible }">
             <tbody class="text-sm text-neutral-600">
               <tr v-for="(item, index) in withdrawnPoints" :key="index" class="hover:bg-base-100/30 transition-colors border-b border-base-100 last:border-0">
-                <td v-show="isColumnVisible('waktu')" class="border-r border-base-200">{{ item.waktu }}</td>
-                <td v-show="isColumnVisible('poin')" class="border-r border-base-200">{{ item.poin }}</td>
-                <td v-show="isColumnVisible('bank')" class="border-r border-base-200">{{ item.bank }}</td>
-                <td v-show="isColumnVisible('rekening')" class="border-r border-base-200">{{ item.rekening }}</td>
-                <td v-show="isColumnVisible('penerima')" class="border-r border-base-200">{{ item.penerima }}</td>
-                <td v-show="isColumnVisible('nota')" class="flex items-center justify-between pr-4 gap-2">
-                  <span class="text-primary font-medium underline truncate cursor-pointer">{{ item.nota }}</span>
-                  <Download class="w-4 h-4 text-primary shrink-0 cursor-pointer" />
+                <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateTime(item.createdAt) }}</td>
+                <td v-show="isColumnVisible('point')" class="border-r border-base-200">{{ Number(item.point).toLocaleString('id-ID') }}</td>
+                <td v-show="isColumnVisible('bankName')" class="border-r border-base-200">{{ item.bankName }}</td>
+                <td v-show="isColumnVisible('accountNumber')" class="border-r border-base-200">{{ item.accountNumber }}</td>
+                <td v-show="isColumnVisible('accountHolderName')" class="border-r border-base-200">{{ item.accountHolderName }}</td>
+                <td v-show="isColumnVisible('id')" class="flex items-center justify-between pr-4 gap-2">
+                  <span class="text-primary font-medium truncate cursor-pointer hover:underline">
+                    <NuxtLink target="_blank" :to="`${useRuntimeConfig().public.apiUrl}/withdraw/${item.id}?token=${useAuth().state.token}`">paid-{{ item.id }}.pdf</NuxtLink>
+                  </span>
+                  <NuxtLink target="_blank" :to="`${useRuntimeConfig().public.apiUrl}/withdraw/${item.id}/download?token=${useAuth().state.token}`">
+                    <Download class="w-4 h-4 text-primary shrink-0 cursor-pointer" />
+                  </NuxtLink>
                 </td>
               </tr>
             </tbody>
@@ -214,7 +229,8 @@ import {
 } from 'lucide-vue-next'
 import { rewardService } from '~/services/reward-service'
 import { pointService } from '~/services/point-service'
-import { formatDate, formatDateShort } from '~/utils/date'
+import { withdrawService } from '~/services/withdraw-service'
+import { formatDate, formatDateShort, formatDateTime } from '~/utils/date'
 
 definePageMeta({
   bgColor: 'bg-white'
@@ -254,6 +270,28 @@ const { data: pointResponse } = await useAsyncData(
 
 const totalPoints = computed(() => pointResponse.value?.data.value || 0)
 
+const withdrawPage = ref(1)
+const withdrawSort = ref('createdAt')
+const withdrawOrder = ref<'asc' | 'desc'>('desc')
+
+const { data: withdrawResponse, status: withdrawStatus } = await useAsyncData(
+  'withdrawals',
+  () => withdrawService.getWithdrawals({
+    page: withdrawPage.value,
+    sort: withdrawSort.value,
+    order: withdrawOrder.value,
+    q: searchQuery.value,
+    limit: 5
+  }),
+  {
+    watch: [withdrawPage, withdrawSort, withdrawOrder, searchQuery]
+  }
+)
+
+const withdrawMeta = computed(() => withdrawResponse.value?.meta)
+const withdrawLoading = computed(() => withdrawStatus.value === 'pending')
+const withdrawnPoints = computed(() => withdrawResponse.value?.data || [])
+
 const currentColumns = computed(() => {
   if (activeTab.value === 'reward') {
     return [
@@ -266,24 +304,16 @@ const currentColumns = computed(() => {
     ]
   }
   return [
-    { label: 'Waktu Penarikan Poin', key: 'waktu', sortable: true },
-    { label: 'Poin Ditarik', key: 'poin', sortable: true },
-    { label: 'Nama Bank', key: 'bank', sortable: true },
-    { label: 'Nomor Akun Bank', key: 'rekening', sortable: true },
-    { label: 'Nama Penerima', key: 'penerima', sortable: true },
-    { label: 'Nota', key: 'nota', sortable: true }
+    { label: 'Waktu Penarikan Poin', key: 'createdAt', sortable: true },
+    { label: 'Poin Ditarik', key: 'point', sortable: true },
+    { label: 'Nama Bank', key: 'bankName', sortable: true },
+    { label: 'Nomor Akun Bank', key: 'accountNumber', sortable: true },
+    { label: 'Nama Penerima', key: 'accountHolderName', sortable: true },
+    { label: 'Nota', key: 'id', sortable: true }
   ]
 })
 
-const withdrawnPoints = [
-  { waktu: '11 Des 2025 - 12:42', poin: 500, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8373001.pdf' },
-  { waktu: '6 Des 2025 - 12:42', poin: 648, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8372902.pdf' },
-  { waktu: '5 Des 2025 - 12:42', poin: 400, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8376789.pdf' },
-  { waktu: '30 Nov 2025 - 12:42', poin: 800, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8376679.pdf' },
-  { waktu: '22 Nov 2025 - 12:42', poin: 150, bank: 'Bank Mandiri', rekening: '1380002254567', penerima: 'SIMU ANDERSON LIU', nota: 'paid-8374432.pdf' }
-]
-
-const currentData = computed(() => activeTab.value === 'reward' ? rewards.value : withdrawnPoints)
+const currentData = computed(() => activeTab.value === 'reward' ? rewards.value : withdrawnPoints.value)
 
 interface AreaChartItem {
   month: string
