@@ -3,3 +3,8 @@ export interface StatisticCount {
     customerService: number
     point: number
 }
+
+export interface MonthPointStatistic {
+    month: number
+    total: number
+}

@@ -24,7 +24,7 @@
             :height="400"
             :categories="categories"
             :y-num-ticks="5"
-            :x-num-ticks="7"
+            :x-num-ticks="AreaChartData.length"
             :y-grid-line="true"
             :hide-legend="true"
             :x-formatter="xFormatter"
@@ -230,6 +230,7 @@ import {
 import { rewardService } from '~/services/reward-service'
 import { pointService } from '~/services/point-service'
 import { withdrawService } from '~/services/withdraw-service'
+import { statisticService } from '~/services/statistic-service'
 import { formatDate, formatDateShort, formatDateTime } from '~/utils/date'
 
 definePageMeta({
@@ -299,6 +300,23 @@ const withdrawMeta = computed(() => withdrawResponse.value?.meta)
 const withdrawLoading = computed(() => withdrawStatus.value === 'pending')
 const withdrawnPoints = computed(() => withdrawResponse.value?.data || [])
 
+const { data: statisticPointResponse } = await useAsyncData(
+  'statistic-point',
+  () => statisticService.getPointStatistic()
+)
+
+const monthNames = [
+  'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+]
+
+const AreaChartData = computed(() => {
+  return (statisticPointResponse.value?.data || []).map(item => ({
+    month: monthNames[item.month - 1] || '-',
+    growth: item.total
+  }))
+})
+
 const currentColumns = computed(() => {
   if (activeTab.value === 'reward') {
     return [
@@ -327,20 +345,11 @@ interface AreaChartItem {
   growth: number
 }
 
-const AreaChartData: AreaChartItem[] = [
-  { month: 'January', growth: 186 },
-  { month: 'February', growth: 305 },
-  { month: 'March', growth: 237 },
-  { month: 'April', growth: 73 },
-  { month: 'May', growth: 209 },
-  { month: 'June', growth: 214 }
-]
-
 const categories = {
   growth: { name: 'Pertumbuhan', color: '#24960F' }
 }
 
 const xFormatter = (tick: number): string => {
-  return AreaChartData[tick]?.month || ''
+  return AreaChartData.value[tick]?.month || ''
 }
 </script>
