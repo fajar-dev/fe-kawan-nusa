@@ -23,4 +23,6 @@ export interface WithdrawQueryParams {
   q?: string
   sort?: string
   order?: 'asc' | 'desc'
+  startDate?: string
+  endDate?: string
 }
