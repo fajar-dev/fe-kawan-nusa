@@ -191,11 +191,7 @@ const handleSave = async () => {
       })
       resetForm()
     }
-  } catch (error: any) {
-    toast.error({
-      message: error.message || 'Gagal mengubah kata sandi'
-    })
-  } finally {
+  }  finally {
     loading.value = false
   }
 }

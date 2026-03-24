@@ -16,7 +16,7 @@
             <!-- Avatar -->
             <div class="relative inline-block mx-auto lg:mx-0">
               <div class="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-[4px] lg:border-[6px] border-white shadow-lg overflow-hidden bg-base-100">
-                <img v-if="profile?.photo" :src="profile?.photo" alt="Avatar" class="w-full h-full object-cover" />
+                <img v-if="profile?.photo" :src="`${useRuntimeConfig().public.apiUrl}${profile?.photo}`" alt="Avatar" class="w-full h-full object-cover" />
                 <div v-else class="bg-primary text-white flex items-center justify-center font-bold text-5xl h-full w-full uppercase">
                   {{ profile?.firstName?.[0] }}{{ profile?.lastName?.[0] }}
                 </div>
@@ -37,10 +37,11 @@
           </div>
           
           <div class="mb-2 flex justify-center lg:justify-end">
-            <button class="btn btn-primary">
+            <button @click="isPhotoModalOpen = true" class="btn btn-primary">
               <Pencil class="w-4 h-4" />
               Ubah Foto
             </button>
+            <ModalProfilePhoto v-model="isPhotoModalOpen" :profile="profile" @success="fetchProfile" />
           </div>
         </div>
         
@@ -159,40 +160,31 @@ useSeoMeta({
 const { service: authService } = useAuth()
 const profile = ref<User | null>(null)
 const loading = ref(true)
+const isPhotoModalOpen = ref(false)
 
 const fetchProfile = async () => {
-  try {
-    const response = await profileService.getProfile()
-    if (response.success) {
-      profile.value = response.data
-      // Update global auth state
-      authService.user.value = response.data
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('user', JSON.stringify(response.data))
-      }
+    try {
+        const response = await profileService.getProfile()
+        if (response.success) {
+            profile.value = response.data
+            // Update global auth state
+            authService.user.value = response.data
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('user', JSON.stringify(response.data))
+            }
+        }
+    } finally {
+        loading.value = false
     }
-  } catch (error: any) {
-    console.error('Failed to fetch profile:', error)
-  } finally {
-    loading.value = false
-  }
 }
 
 const handlePreferenceUpdate = async (data: UpdatePreferenceRequest) => {
-  try {
-    const response = await profileService.updatePreference(data)
-    if (response.success) {
+  const response = await profileService.updatePreference(data)
+  if (response.success) {
       profile.value = response.data
       toast.success({
-        message: response.message || 'Preferensi berhasil diperbarui'
+          message: response.message || 'Preferensi berhasil diperbarui'
       })
-    }
-  } catch (error: any) {
-    toast.error({
-      message: error.message || 'Gagal memperbarui preferensi'
-    })
-    // Revert UI by re-fetching profile if needed, or rely on the fact that 'checked' is bound to 'profile'
-    await fetchProfile()
   }
 }
 

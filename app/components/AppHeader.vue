@@ -41,7 +41,7 @@
         <div tabindex="0" role="button" class="flex items-center gap-3 cursor-pointer hover:bg-base-200/50 p-2 rounded-full pl-3 lg:pl-4 pr-3 transition-colors">
           <div class="avatar online">
             <div class="w-8 h-8 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 transition-all group-hover:ring-primary/80">
-              <img v-if="authState.user?.photo" :src="authState.user?.photo" alt="Avatar" />
+              <img v-if="authState.user?.photo" :src="`${useRuntimeConfig().public.apiUrl}${authState.user?.photo}`" alt="Avatar" />
               <div v-else class="bg-primary text-white flex items-center justify-center font-bold text-xs h-full w-full uppercase">
                 {{ getInitials(authState.user?.firstName + ' ' + authState.user?.lastName) }}
               </div>

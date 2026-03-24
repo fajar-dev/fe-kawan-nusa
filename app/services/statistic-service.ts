@@ -12,7 +12,7 @@ export class StatisticService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch statistic count')
+           handleServiceError(error || 'Failed to fetch statistic count')
         }
     }
 
@@ -25,7 +25,7 @@ export class StatisticService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch point statistic')
+           handleServiceError(error || 'Failed to fetch point statistic')
         }
     }
 
@@ -39,7 +39,7 @@ export class StatisticService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch customer statistic')
+           handleServiceError(error || 'Failed to fetch customer statistic')
         }
     }
 }

@@ -157,9 +157,7 @@ const fetchServices = async (queryParams: ServiceQueryParams = {}) => {
       services.value = response.data
       meta.value = response.meta
     }
-  } catch (error) {
-    console.error('Failed to fetch services:', error)
-  } finally {
+  }  finally {
     loading.value = false
   }
 }

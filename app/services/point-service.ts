@@ -11,7 +11,7 @@ export class PointService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch points')
+           handleServiceError(error || 'Failed to fetch points')
         }
     }
 }

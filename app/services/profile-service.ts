@@ -12,7 +12,7 @@ export class ProfileService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch profile')
+           handleServiceError(error || 'Failed to fetch profile')
         }
     }
 
@@ -25,7 +25,7 @@ export class ProfileService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to update account')
+           handleServiceError(error || 'Failed to update account')
         }
     }
 
@@ -38,7 +38,7 @@ export class ProfileService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to update bank info')
+           handleServiceError(error || 'Failed to update bank info')
         }
     }
 
@@ -51,7 +51,7 @@ export class ProfileService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to update password')
+           handleServiceError(error || 'Failed to update password')
         }
     }
 
@@ -64,7 +64,23 @@ export class ProfileService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to update preferences')
+           handleServiceError(error || 'Failed to update preferences')
+        }
+    }
+
+    async updatePhoto(file: File): Promise<ProfileResponse> {
+        try {
+            const formData = new FormData()
+            formData.append('photo', file)
+            const response = await apiService.client.post<ProfileResponse>('/profile/photo', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            handleServiceError(error || 'Failed to upload photo')
         }
     }
 }

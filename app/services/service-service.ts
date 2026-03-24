@@ -13,7 +13,7 @@ export class ServiceService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch services')
+            handleServiceError(error || 'Failed to fetch services')
         }
     }
 
@@ -26,7 +26,7 @@ export class ServiceService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch service detail')
+           handleServiceError(error || 'Failed to fetch service detail')
         }
     }
 
@@ -40,7 +40,7 @@ export class ServiceService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch service customers')
+           handleServiceError(error || 'Failed to fetch service customers')
         }
     }
 
@@ -54,7 +54,7 @@ export class ServiceService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch customer services')
+           handleServiceError(error || 'Failed to fetch customer services')
         }
     }
 }

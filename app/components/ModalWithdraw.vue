@@ -1,6 +1,6 @@
 <template>
   <Teleport to="body">
-    <div v-if="isOpen" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 animate-in fade-in duration-300">
+    <div v-if="isOpen" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-xs animate-in fade-in duration-300">
       <!-- Backdrop click to close -->
       <div class="absolute inset-0" @click="isOpen = false"></div>
       
@@ -120,8 +120,6 @@ const fetchPoints = async () => {
   try {
     const response = await pointService.getPoint()
     availablePoints.value = response.data.value
-  } catch (error) {
-    console.error('Failed to fetch points:', error)
   } finally {
     isLoadingPoints.value = false
   }
@@ -139,8 +137,6 @@ const handleTarikPoin = async () => {
     await withdrawService.createWithdraw(withdrawAmount.value)
     step.value = 'success'
     emit('success', withdrawAmount.value)
-  } catch (error: any) {
-    errorMessage.value = error.message || 'Terjadi kesalahan saat melakukan penarikan'
   } finally {
     isLoading.value = false
   }

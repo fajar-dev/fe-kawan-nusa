@@ -157,10 +157,7 @@ onMounted(async () => {
 
     try {
         await authService.validateResetPassword(email, token)
-    } catch (err: any) {
-        toast.error({
-            message: err.message || 'Tautan reset sudah kadaluwarsa atau tidak valid.'
-        })
+    } catch (error) {
         navigateTo('/auth/forgot-password')
     }
 })
@@ -184,19 +181,13 @@ const handleResetPassword = async () => {
   }
   
   loading.value = true
-  
   try {
     const res = await authService.resetPassword(token, newPassword.value)
     toast.success({
       message: res.message || 'Kata sandi berhasil diperbarui.'
     })
     navigateTo('/auth/sign-in')
-  } catch (err: any) {
-    console.error('Reset password error:', err)
-    toast.error({
-      message: err.message || 'Gagal memperbarui kata sandi.'
-    })
-  } finally {
+  }  finally {
     loading.value = false
   }
 }

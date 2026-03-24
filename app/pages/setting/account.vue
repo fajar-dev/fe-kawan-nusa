@@ -242,11 +242,7 @@ const handleSave = async () => {
       isEditing.value = false
       if (fetchProfile) await fetchProfile()
     }
-  } catch (error: any) {
-    toast.error({
-      message: error.message || 'Gagal memperbarui profil'
-    })
-  } finally {
+  }  finally {
     loading.value = false
   }
 }

@@ -12,7 +12,7 @@ export class WithdrawService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch withdrawals')
+           handleServiceError(error || 'Failed to fetch withdrawals')
         }
     }
 
@@ -25,7 +25,7 @@ export class WithdrawService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to create withdrawal')
+           handleServiceError(error || 'Failed to create withdrawal')
         }
     }
 }

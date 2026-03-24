@@ -110,18 +110,13 @@ const handleForgotPassword = async () => {
   }
 
   loading.value = true
-
   try {
     const res = await authService.forgotPassword(email.value)
     toast.success({
       message: res.message || 'Instruksi reset password telah dikirim ke email kamu.',
     })
     email.value = ''
-  } catch (err: any) {
-    toast.error({
-      message: err.message || 'Gagal mengirim instruksi reset password.',
-    })
-  } finally {
+  }  finally {
     loading.value = false
   }
 }

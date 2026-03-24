@@ -12,7 +12,7 @@ export class RewardService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch rewards')
+           handleServiceError(error || 'Failed to fetch rewards')
         }
     }
 }

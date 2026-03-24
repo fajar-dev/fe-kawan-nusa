@@ -13,7 +13,7 @@ export class CustomerService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch customers')
+           handleServiceError(error || 'Failed to fetch customers')
         }
     }
 
@@ -26,7 +26,7 @@ export class CustomerService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch customer detail')
+           handleServiceError(error || 'Failed to fetch customer detail')
         }
     }
 
@@ -40,7 +40,7 @@ export class CustomerService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch customer addresses')
+           handleServiceError(error || 'Failed to fetch customer addresses')
         }
     }
 
@@ -54,7 +54,7 @@ export class CustomerService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch customer services')
+           handleServiceError(error || 'Failed to fetch customer services')
         }
     }
 
@@ -68,7 +68,7 @@ export class CustomerService {
             })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response?.data?.message || 'Failed to fetch customer rewards')
+           handleServiceError(error || 'Failed to fetch customer rewards')
         }
     }
 }

@@ -148,11 +148,7 @@ const handleLogin = async () => {
       message: 'Login berhasil! Selamat datang.',
     })
     navigateTo('/')
-  } catch (err: any) {
-    toast.error({
-      message: err.message,
-    })
-  } finally {
+  }  finally {
     loading.value = false
   }
 }

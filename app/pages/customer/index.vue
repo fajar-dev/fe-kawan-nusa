@@ -213,9 +213,7 @@ const fetchCustomers = async (queryParams: CustomerQueryParams = {}) => {
       customers.value = response.data
       meta.value = response.meta
     }
-  } catch (error) {
-    console.error('Failed to fetch customers:', error)
-  } finally {
+  }  finally {
     loading.value = false
   }
 }

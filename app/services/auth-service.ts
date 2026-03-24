@@ -66,7 +66,6 @@ export class AuthService {
             this.setSession(response.data)
             return response.data.data.accessToken
         } catch (error) {
-            console.error('Refresh token failed:', error)
             this.logout()
             return null
         }
@@ -78,7 +77,7 @@ export class AuthService {
             this.setSession(response.data)
             return response.data
         } catch (error: any) {
-            throw new Error(error.response.data.message)
+            handleServiceError(error)
         }
     }
 
@@ -87,7 +86,7 @@ export class AuthService {
             const response = await apiService.client.post<ApiResponse<null>>('/auth/forgot-password', { email })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response.data.message)
+            handleServiceError(error)
         }
     }
 
@@ -96,7 +95,7 @@ export class AuthService {
             const response = await apiService.client.get<ApiResponse<null>>('/auth/validate-reset-token?email=' + email + '&token=' + token)
             return response.data
         } catch (error: any) {
-            throw new Error(error.response.data.message)
+            handleServiceError(error)
         }
     }
 
@@ -105,7 +104,7 @@ export class AuthService {
             const response = await apiService.client.post<ApiResponse<null>>('/auth/reset-password', { token, newPassword })
             return response.data
         } catch (error: any) {
-            throw new Error(error.response.data.message)
+            handleServiceError(error)
         }
     }
 
