@@ -5,6 +5,11 @@ export interface StatisticCount {
 }
 
 export interface MonthPointStatistic {
-    month: number
+    label: string
     total: number
+}
+
+export interface CustomerStatistic {
+    label: string
+    count: number
 }

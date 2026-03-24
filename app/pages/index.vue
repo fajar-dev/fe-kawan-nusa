@@ -68,10 +68,9 @@
               <h3 class="font-semibold text-lg text-neutral-800">Pertumbuhan Pelanggan</h3>
               <p class="text-neutral-500 text-sm">Grafik pertumbuhan pelanggan bulan ini</p>
             </div>
-            <select class="select select-bordered select-sm w-full max-w-xs rounded-lg bg-base-100 text-neutral-600 focus:outline-none focus:ring-1 focus:ring-primary shadow-xs">
-              <option disabled selected>This Month</option>
-              <option>Last Month</option>
-              <option>This Year</option>
+            <select v-model="selectedType" class="select select-bordered select-sm w-full max-w-xs rounded-lg bg-base-100 text-neutral-600 focus:outline-none focus:ring-1 focus:ring-primary shadow-xs">
+              <option value="yearly">Tahun Ini</option>
+              <option value="monthly">Bulan Ini</option>
             </select>
           </div>
           
@@ -81,7 +80,7 @@
               :height="280"
               :categories="categories"
               :y-num-ticks="5"
-              :x-num-ticks="7"
+              :x-num-ticks="AreaChartData.length"
               :y-grid-line="true"
               :hide-legend="true"
               :x-formatter="xFormatter"
@@ -227,25 +226,26 @@ const { data: recentCustomerServicesResponse, status: recentStatus } = await use
 
 const recentCustomers = computed(() => recentCustomerServicesResponse.value?.data || [])
 
-interface AreaChartItem {
-  month: string
-  growth: number
-}
+const selectedType = ref<'monthly' | 'yearly'>('yearly')
 
-const AreaChartData: AreaChartItem[] = [
-  { month: 'January', growth: 186 },
-  { month: 'February', growth: 305 },
-  { month: 'March', growth: 237 },
-  { month: 'April', growth: 73 },
-  { month: 'May', growth: 209 },
-  { month: 'June', growth: 214 }
-]
+const { data: customerStatisticResponse } = await useAsyncData(
+  'customer-statistic',
+  () => statisticService.getCustomerStatistic(selectedType.value),
+  { watch: [selectedType] }
+)
+
+const AreaChartData = computed(() => {
+  return (customerStatisticResponse.value?.data || []).map(item => ({
+    month: item.label,
+    growth: item.count
+  }))
+})
 
 const categories = {
-  growth: { name: 'Pertumbuhan', color: '#24960F' }
+  growth: { name: 'Customer', color: '#24960F' }
 }
 
-const xFormatter = (tick: number): string => {
-  return AreaChartData[tick]?.month || ''
+const xFormatter = (tick: number) => {
+  return AreaChartData.value[tick]?.month || ''
 }
 </script>

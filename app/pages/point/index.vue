@@ -305,14 +305,9 @@ const { data: statisticPointResponse } = await useAsyncData(
   () => statisticService.getPointStatistic()
 )
 
-const monthNames = [
-  'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-]
-
 const AreaChartData = computed(() => {
   return (statisticPointResponse.value?.data || []).map(item => ({
-    month: monthNames[item.month - 1] || '-',
+    month: item.label,
     growth: item.total
   }))
 })
@@ -346,7 +341,7 @@ interface AreaChartItem {
 }
 
 const categories = {
-  growth: { name: 'Pertumbuhan', color: '#24960F' }
+  growth: { name: 'Point', color: '#24960F' }
 }
 
 const xFormatter = (tick: number): string => {

@@ -1,6 +1,6 @@
 import { apiService } from "./api-service"
 import type { ApiResponse } from "../types/auth"
-import type { StatisticCount, MonthPointStatistic } from "../types/statistic"
+import type { StatisticCount, MonthPointStatistic, CustomerStatistic } from "../types/statistic"
 
 export class StatisticService {
     async getCount(): Promise<ApiResponse<StatisticCount>> {
@@ -26,6 +26,20 @@ export class StatisticService {
             return response.data
         } catch (error: any) {
             throw new Error(error.response?.data?.message || 'Failed to fetch point statistic')
+        }
+    }
+
+    async getCustomerStatistic(type: 'monthly' | 'yearly'): Promise<ApiResponse<CustomerStatistic[]>> {
+        try {
+            const response = await apiService.client.get<ApiResponse<CustomerStatistic[]>>('/statistic/customer', {
+                params: { type },
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message || 'Failed to fetch customer statistic')
         }
     }
 }
