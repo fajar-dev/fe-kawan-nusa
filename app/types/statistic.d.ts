@@ -1,7 +1,17 @@
+export interface Achievement {
+    percentage: number
+    isUp: boolean
+}
+
+export interface StatisticItem {
+    value: number
+    achievement: Achievement
+}
+
 export interface StatisticCount {
-    customer: number
-    customerService: number
-    point: number
+    customer: StatisticItem
+    customerService: StatisticItem
+    point: StatisticItem
 }
 
 export interface MonthPointStatistic {

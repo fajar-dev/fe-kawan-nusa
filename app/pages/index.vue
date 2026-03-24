@@ -14,10 +14,10 @@
         <div class="card-body p-6 flex flex-row items-start justify-between">
           <div>
             <p class="text-neutral-500 font-medium text-sm">Total Pelanggan</p>
-            <h3 class="text-3xl font-semibold mt-2 text-neutral-800">{{ statisticCount?.customer ?? '-' }}</h3>
-            <div class="flex items-center gap-1 mt-4 text-primary text-xs font-medium">
-              <ArrowUpRight class="w-3.5 h-3.5" />
-              <span>12% dari bulan lalu</span>
+            <h3 class="text-3xl font-semibold mt-2 text-neutral-800">{{ statisticCount?.customer?.value ?? '-' }}</h3>
+            <div v-if="statisticCount?.customer" class="flex items-center gap-1 mt-4 text-xs font-medium" :class="statisticCount.customer.achievement.isUp ? 'text-primary' : 'text-error'">
+              <component :is="statisticCount.customer.achievement.isUp ? ArrowUpRight : ArrowDownRight" class="w-3.5 h-3.5" />
+              <span>{{ statisticCount.customer.achievement.percentage }}% dari bulan lalu</span>
             </div>
           </div>
           <div class="p-1 text-primary">
@@ -30,10 +30,10 @@
         <div class="card-body p-6 flex flex-row items-start justify-between">
           <div>
             <p class="text-neutral-500 font-medium text-sm">Total Poin Aktif</p>
-            <h3 class="text-3xl font-semibold mt-2 text-neutral-800">{{ statisticCount?.point ?? '-' }}</h3>
-            <div class="flex items-center gap-1 mt-4 text-primary text-xs font-medium">
-              <ArrowUpRight class="w-3.5 h-3.5" />
-              <span>12% dari bulan lalu</span>
+            <h3 class="text-3xl font-semibold mt-2 text-neutral-800">{{ statisticCount?.point?.value ?? '-' }}</h3>
+            <div v-if="statisticCount?.point" class="flex items-center gap-1 mt-4 text-xs font-medium" :class="statisticCount.point.achievement.isUp ? 'text-primary' : 'text-error'">
+              <component :is="statisticCount.point.achievement.isUp ? ArrowUpRight : ArrowDownRight" class="w-3.5 h-3.5" />
+              <span>{{ statisticCount.point.achievement.percentage }}% dari bulan lalu</span>
             </div>
           </div>
           <div class="p-1 text-primary">
@@ -46,10 +46,10 @@
         <div class="card-body p-6 flex flex-row items-start justify-between">
           <div>
             <p class="text-neutral-500 font-medium text-sm">Layanan Direferensikan</p>
-            <h3 class="text-3xl font-semibold mt-2 text-neutral-800">{{ statisticCount?.customerService ?? '-' }}</h3>
-            <div class="flex items-center gap-1 mt-4 text-primary text-xs font-medium">
-              <ArrowUpRight class="w-3.5 h-3.5" />
-              <span>12% dari bulan lalu</span>
+            <h3 class="text-3xl font-semibold mt-2 text-neutral-800">{{ statisticCount?.customerService?.value ?? '-' }}</h3>
+            <div v-if="statisticCount?.customerService" class="flex items-center gap-1 mt-4 text-xs font-medium" :class="statisticCount.customerService.achievement.isUp ? 'text-primary' : 'text-error'">
+              <component :is="statisticCount.customerService.achievement.isUp ? ArrowUpRight : ArrowDownRight" class="w-3.5 h-3.5" />
+              <span>{{ statisticCount.customerService.achievement.percentage }}% dari bulan lalu</span>
             </div>
           </div>
           <div class="p-1 text-primary">
@@ -167,7 +167,7 @@
 </template>
 
 <script setup lang="ts">
-import { Users, HandCoins, Box, ArrowUpRight } from 'lucide-vue-next'
+import { Users, HandCoins, Box, ArrowUpRight, ArrowDownRight } from 'lucide-vue-next'
 import { useAuth } from '~/composables/useAuth'
 import { serviceService } from '~/services/service-service'
 import { statisticService } from '~/services/statistic-service'
