@@ -5,9 +5,41 @@
       <div class="card-body p-5 lg:p-8">
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-lg font-semibold text-neutral-800">Informasi Bank</h3>
-          <button class="btn btn-ghost btn-sm btn-circle text-neutral-400 hover:text-neutral-800 transition-colors">
-            <MoreHorizontal class="w-5 h-5" />
-          </button>
+          <div v-if="isEditing" class="flex items-center justify-end gap-3">
+            <button 
+                @click="handleCancel"
+                class="btn btn-outline btn-primary text-primary hover:bg-primary/5 hover:border-primary rounded-lg"
+              >
+                Batalkan
+              </button>
+              <button 
+                @click="handleSave"
+                :disabled="loading"
+                class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-6"
+              >
+                <span v-if="loading" class="loading loading-spinner loading-xs"></span>
+                Simpan
+              </button>
+          </div>
+          <div v-else class="dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-ghost btn-sm btn-circle text-neutral-400 hover:text-neutral-800 transition-colors">
+              <MoreHorizontal class="w-5 h-5" />
+            </label>
+            <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-sm border border-base-200">
+              <li @click="handleCopy">
+                <a>
+                  <Copy class="w-4 h-4" />
+                  Salin Informasi
+                </a>
+              </li>
+              <li @click="isEditing = true">
+                <a>
+                  <Pencil class="w-4 h-4" />
+                  Ubah Data
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <!-- Info Alert -->
@@ -23,8 +55,9 @@
             </label>
             <input 
               v-model="form.accountHolderName" 
+              :disabled="!isEditing"
               type="text" 
-              class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+              class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
               :class="{ 'border-red-500': errors.accountHolderName }"
             />
             <p v-if="errors.accountHolderName" class="text-[10px] text-red-500 mt-1">{{ errors.accountHolderName }}</p>
@@ -37,7 +70,8 @@
               </label>
               <select 
                 v-model="form.bankName" 
-                class="select select-bordered w-full h-10 min-h-0 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none font-normal"
+                :disabled="!isEditing"
+                class="select select-bordered w-full h-10 min-h-0 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none font-normal disabled:bg-neutral-50 disabled:text-neutral-500"
                 :class="{ 'border-red-500': errors.bankName }"
               >
                 <option disabled value="">Pilih Bank</option>
@@ -54,8 +88,9 @@
               </label>
               <input 
                 v-model="form.accountNumber" 
+                :disabled="!isEditing"
                 type="text" 
-                class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+                class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
                 :class="{ 'border-red-500': errors.accountNumber }"
               />
               <p v-if="errors.accountNumber" class="text-[10px] text-red-500 mt-1">{{ errors.accountNumber }}</p>
@@ -63,23 +98,13 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-end gap-3 pt-6">
-          <button 
-            @click="handleSave"
-            :disabled="loading"
-            class="btn btn-primary rounded-lg min-w-[100px]"
-          >
-            <span v-if="loading" class="loading loading-spinner loading-xs"></span>
-            Simpan
-          </button>
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { MoreHorizontal, Info } from 'lucide-vue-next'
+import { MoreHorizontal, Info, Pencil, Copy } from 'lucide-vue-next'
 import { profileService } from '~/services/profile-service'
 import type { UpdateBankRequest } from '~/types/profile'
 import type { User } from '~/types/auth'
@@ -87,6 +112,7 @@ import { z } from 'zod'
 
 const toast = useToast()
 const loading = ref(false)
+const isEditing = ref(false)
 const errors = ref<Record<string, string>>({})
 
 const profile = inject<Ref<User | null>>('profile')
@@ -116,6 +142,34 @@ watch(
   { immediate: true }
 )
 
+const handleCopy = () => {
+  const info = [
+    `Nama Pemilik: ${form.accountHolderName}`,
+    `Bank: ${form.bankName}`,
+    `Nomor Rekening: ${form.accountNumber}`
+  ].join('\n')
+  
+  navigator.clipboard.writeText(info).then(() => {
+    toast.success({
+      message: 'Informasi bank berhasil disalin ke clipboard'
+    })
+  }).catch(() => {
+    toast.error({
+      message: 'Gagal menyalin informasi'
+    })
+  })
+}
+
+const handleCancel = () => {
+  if (profile?.value?.bankDetails) {
+    form.accountHolderName = profile.value.bankDetails.holderName || ''
+    form.bankName = profile.value.bankDetails.name || ''
+    form.accountNumber = profile.value.bankDetails.number || ''
+  }
+  isEditing.value = false
+  errors.value = {}
+}
+
 const handleSave = async () => {
   errors.value = {}
 
@@ -134,6 +188,7 @@ const handleSave = async () => {
       toast.success({
         message: response.message || 'Informasi bank berhasil diperbarui'
       })
+      isEditing.value = false
       if (fetchProfile) await fetchProfile()
     }
   } catch (error: any) {

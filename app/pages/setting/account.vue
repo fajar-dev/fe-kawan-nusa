@@ -5,9 +5,41 @@
       <div class="card-body p-5 lg:p-8">
         <div class="flex items-center justify-between mb-5">
           <h3 class="text-lg font-semibold text-neutral-800">Informasi Pribadi</h3>
-          <button class="btn btn-ghost btn-sm btn-circle text-neutral-400 hover:text-neutral-800 transition-colors">
-            <MoreHorizontal class="w-5 h-5" />
-          </button>
+          <div v-if="isEditing" class="flex items-center justify-end gap-3 pt-4">
+            <button 
+                @click="handleCancel"
+                class="btn btn-outline btn-primary text-primary hover:bg-primary/5 hover:border-primary rounded-lg"
+              >
+                Batalkan
+              </button>
+              <button 
+                @click="handleSave"
+                :disabled="loading"
+                class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-6"
+              >
+                <span v-if="loading" class="loading loading-spinner loading-xs"></span>
+                Simpan
+              </button>
+          </div>
+          <div v-else class="dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-ghost btn-sm btn-circle text-neutral-400 hover:text-neutral-800 transition-colors">
+              <MoreHorizontal class="w-5 h-5" />
+            </label>
+            <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-sm border border-base-200">
+              <li @click="handleCopy">
+                <a>
+                  <Copy class="w-4 h-4" />
+                  Salin Informasi
+                </a>
+              </li>
+              <li @click="isEditing = true">
+                <a>
+                  <Pencil class="w-4 h-4" />
+                  Ubah Data
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
@@ -17,8 +49,9 @@
             </label>
             <input 
               v-model="form.firstName"
+              :disabled="!isEditing"
               type="text" 
-              class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+              class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
               :class="{ 'border-red-500': errors.firstName }"
             />
             <p v-if="errors.firstName" class="text-[10px] text-red-500 mt-1">{{ errors.firstName }}</p>
@@ -29,8 +62,9 @@
             </label>
             <input 
               v-model="form.lastName"
+              :disabled="!isEditing"
               type="text" 
-              class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+              class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
               :class="{ 'border-red-500': errors.lastName }"
             />
             <p v-if="errors.lastName" class="text-[10px] text-red-500 mt-1">{{ errors.lastName }}</p>
@@ -42,8 +76,9 @@
             <div class="relative">
               <input 
                 v-model="form.email"
+                :disabled="!isEditing"
                 type="email" 
-                class="input input-bordered w-full h-10 pl-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+                class="input input-bordered w-full h-10 pl-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
                 :class="{ 'border-red-500': errors.email }"
               />
               <Mail class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 z-10 pointer-events-none" />
@@ -57,8 +92,9 @@
             <div class="relative">
               <input 
                 v-model="form.phone"
+                :disabled="!isEditing"
                 type="text" 
-                class="input input-bordered w-full h-10 pl-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+                class="input input-bordered w-full h-10 pl-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
                 :class="{ 'border-red-500': errors.phone }"
               />
               <Phone class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 z-10 pointer-events-none" />
@@ -77,8 +113,9 @@
               </label>
               <input 
                 v-model="form.company"
+                :disabled="!isEditing"
                 type="text" 
-                class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+                class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
                 :class="{ 'border-red-500': errors.company }"
               />
               <p v-if="errors.company" class="text-[10px] text-red-500 mt-1">{{ errors.company }}</p>
@@ -89,24 +126,14 @@
               </label>
               <input 
                 v-model="form.jobPosition"
+                :disabled="!isEditing"
                 type="text" 
-                class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none" 
+                class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
                 :class="{ 'border-red-500': errors.jobPosition }"
               />
               <p v-if="errors.jobPosition" class="text-[10px] text-red-500 mt-1">{{ errors.jobPosition }}</p>
             </div>
           </div>
-        </div>
-
-        <div class="flex items-center justify-end gap-3 pt-4">
-            <button 
-              @click="handleSave"
-              :disabled="loading"
-              class="btn btn-primary rounded-lg"
-            >
-              <span v-if="loading" class="loading loading-spinner loading-xs"></span>
-              Simpan
-            </button>
         </div>
       </div>
     </div>
@@ -114,7 +141,7 @@
 </template>
 
 <script setup lang="ts">
-import { MoreHorizontal, Mail, Phone } from 'lucide-vue-next'
+import { MoreHorizontal, Mail, Phone, Pencil, Copy } from 'lucide-vue-next'
 import { profileService } from '~/services/profile-service'
 import type { UpdateAccountRequest } from '~/types/profile'
 import type { User } from '~/types/auth'
@@ -122,6 +149,7 @@ import { z } from 'zod'
 
 const toast = useToast()
 const loading = ref(false)
+const isEditing = ref(false)
 const errors = ref<Record<string, string>>({})
 
 const profile = inject<Ref<User | null>>('profile')
@@ -160,6 +188,39 @@ watch(
   { immediate: true }
 )
 
+const handleCopy = () => {
+  const info = [
+    `Nama: ${form.firstName} ${form.lastName}`,
+    `Email: ${form.email}`,
+    `Phone: ${form.phone}`,
+    `Perusahaan: ${form.company}`,
+    `Jabatan: ${form.jobPosition}`
+  ].join('\n')
+  
+  navigator.clipboard.writeText(info).then(() => {
+    toast.success({
+      message: 'Informasi berhasil disalin ke clipboard'
+    })
+  }).catch(() => {
+    toast.error({
+      message: 'Gagal menyalin informasi'
+    })
+  })
+}
+
+const handleCancel = () => {
+  if (profile?.value) {
+    form.firstName = profile.value.firstName || ''
+    form.lastName = profile.value.lastName || ''
+    form.email = profile.value.email || ''
+    form.phone = profile.value.phone || ''
+    form.company = profile.value.company || ''
+    form.jobPosition = profile.value.jobPosition || ''
+  }
+  isEditing.value = false
+  errors.value = {}
+}
+
 const handleSave = async () => {
   errors.value = {}
 
@@ -178,6 +239,7 @@ const handleSave = async () => {
       toast.success({
         message: response.message || 'Profil berhasil diperbarui'
       })
+      isEditing.value = false
       if (fetchProfile) await fetchProfile()
     }
   } catch (error: any) {

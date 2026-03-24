@@ -102,14 +102,14 @@
           <div class="flex items-center justify-end gap-3 pt-4">
             <button 
               @click="resetForm"
-              class="btn btn-outline btn-primary text-primary hover:bg-primary/5 hover:border-primary rounded-lg px-6"
+              class="btn btn-outline btn-primary text-primary hover:bg-primary/5 hover:border-primary rounded-lg"
             >
               Batalkan
             </button>
             <button 
               @click="handleSave"
               :disabled="loading"
-              class="btn btn-primary rounded-lg px-6"
+              class="btn btn-primary rounded-lg"
             >
               <span v-if="loading" class="loading loading-spinner loading-xs"></span>
               Ubah Kata Sandi
