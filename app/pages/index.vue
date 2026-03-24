@@ -174,6 +174,10 @@ import { statisticService } from '~/services/statistic-service'
 import { formatDate, formatDateShort } from '~/utils/date'
 import { getStatusClass } from '~/utils/status'
 
+useSeoMeta({
+  title: 'Kawan Nusa | Dashboard',
+})
+
 const { state: authState } = useAuth()
 
 const { data: statisticCountResponse } = await useAsyncData(

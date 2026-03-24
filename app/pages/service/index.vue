@@ -120,6 +120,10 @@ definePageMeta({
   bgColor: 'bg-white'
 })
 
+useSeoMeta({
+  title: 'Kawan Nusa | Produk & Layanan',
+})
+
 const columns = [
   { label: 'Nama Layanan', key: 'name', sortable: true },
   { label: 'Referensi Terakhir', key: 'lastReferanceDate', sortable: true },

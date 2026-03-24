@@ -114,6 +114,10 @@ definePageMeta({
   middleware: 'guest'
 })
 
+useSeoMeta({
+  title: 'Kawan Nusa | Reset Kata Sandi',
+})
+
 const route = useRoute()
 const toast = useToast()
 

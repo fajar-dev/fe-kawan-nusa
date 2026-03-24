@@ -237,6 +237,10 @@ definePageMeta({
   bgColor: 'bg-white'
 })
 
+useSeoMeta({
+  title: 'Kawan Nusa | Poin Saya',
+})
+
 const isWithdrawModalOpen = ref(false)
 const activeTab = ref('reward')
 const searchQuery = ref('')
@@ -267,7 +271,6 @@ const { data: pointResponse, refresh: refreshPoint } = await useAsyncData(
   'point',
   () => pointService.getPoint()
 )
-
 
 const totalPoints = computed(() => pointResponse.value?.data.value || 0)
 
@@ -332,13 +335,6 @@ const currentColumns = computed(() => {
     { label: 'Nota', key: 'id', sortable: true }
   ]
 })
-
-const currentData = computed(() => activeTab.value === 'reward' ? rewards.value : withdrawnPoints.value)
-
-interface AreaChartItem {
-  month: string
-  growth: number
-}
 
 const categories = {
   growth: { name: 'Point', color: '#24960F' }

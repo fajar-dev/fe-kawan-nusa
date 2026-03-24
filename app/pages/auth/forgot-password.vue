@@ -76,6 +76,10 @@ definePageMeta({
   middleware: 'guest'
 })
 
+useSeoMeta({
+  title: 'Kawan Nusa | Lupa Kata Sandi',
+})
+
 // Schema validasi
 const forgotPasswordSchema = z.object({
   email: z.string()

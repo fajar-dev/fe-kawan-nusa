@@ -152,6 +152,10 @@ definePageMeta({
   bgColor: 'bg-[#f8fcf9]'
 })
 
+useSeoMeta({
+  title: 'Kawan Nusa | Pengaturan',
+})
+
 const { service: authService } = useAuth()
 const profile = ref<User | null>(null)
 const loading = ref(true)

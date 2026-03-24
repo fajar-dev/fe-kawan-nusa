@@ -150,6 +150,10 @@ definePageMeta({
   bgColor: 'bg-[#F7FDF9]'
 })
 
+useSeoMeta({
+  title: 'Kawan Nusa | Detail Produk & Layanan',
+})
+
 const route = useRoute()
 const serviceCode = route.params.id as string
 

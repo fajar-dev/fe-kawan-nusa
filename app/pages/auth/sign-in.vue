@@ -101,7 +101,11 @@ import { z } from 'zod'
 
 definePageMeta({
   layout: 'auth',
-  middleware: 'guest'
+  middleware: 'guest',
+})
+
+useSeoMeta({
+  title: 'Kawan Nusa | Masuk',
 })
 
 // Schema validasi

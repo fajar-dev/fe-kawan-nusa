@@ -177,6 +177,10 @@ definePageMeta({
   bgColor: 'bg-white'
 })
 
+useSeoMeta({
+  title: 'Kawan Nusa | Pelanggan',
+})
+
 const columns = [
   { label: 'ID Pelanggan', key: 'id', sortable: true },
   { label: 'Nama PIC', key: 'name', sortable: true },

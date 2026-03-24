@@ -321,6 +321,10 @@ definePageMeta({
   bgColor: 'bg-[#F7FDF9]'
 })
 
+useSeoMeta({
+  title: 'Kawan Nusa | Detail Pelanggan',
+})
+
 const route = useRoute()
 const customerId = route.params.id as string
 
