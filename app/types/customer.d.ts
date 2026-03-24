@@ -57,6 +57,11 @@ export interface CustomerQueryParams {
   order?: 'asc' | 'desc'
   page?: number
   limit?: number
+  startDate?: string
+  endDate?: string
+  isActive?: number
+  type?: string
+  serviceCode?: string
 }
 
 export interface CustomerRegisteredService {

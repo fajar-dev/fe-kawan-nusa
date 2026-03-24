@@ -37,92 +37,69 @@
       >
         <!-- Filters Slot -->
         <template #filters>
-          <div class="dropdown dropdown-bottom md:dropdown-start">
-            <div tabindex="0" role="button" class="btn btn-outline border-primary text-primary btn-md h-10 px-4 gap-2 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors w-full md:w-auto">
-              <FilterIcon class="w-4 h-4 text-primary" />
-              Filter
-            </div>
-            <div tabindex="0" class="dropdown-content z-[100] card card-compact bg-base-100 w-[calc(100vw-2rem)] md:w-[450px] shadow-xl border border-base-200 mt-2 left-0 md:left-auto">
-              <div class="card-body p-0">
-                <!-- Header -->
-                <div class="flex items-center justify-between px-6 py-2 border-b border-base-200">
-                  <h3 class="font-bold text-lg text-neutral-800">Filter</h3>
-                  <button class="btn btn-ghost btn-xs btn-circle"><X class="w-4 h-4" /></button>
+          <DataFilter 
+            :is-filter-active="isFilterActive"
+            @apply="applyFilters"
+            @reset="resetFilters"
+            @cancel="cancelFilters"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-neutral-400 text-xs font-medium">Referensi Terakhir</span>
+                <span @click="startDate = ''; endDate = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                  <label class="text-xs font-medium text-neutral-800">Dari:</label>
+                  <input v-model="startDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
                 </div>
-                
-                <!-- Content -->
-                <div class="p-6 space-y-4 max-h-[60vh] md:max-h-[45vh] overflow-y-auto">
-                  <!-- Tanggal Aktif -->
-                  <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                      <span class="text-neutral-400 text-xs font-medium">Tanggal Aktif</span>
-                      <span class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div class="space-y-1.5">
-                        <label class="text-xs font-medium text-neutral-800">Dari:</label>
-                        <input type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
-                      </div>
-                      <div class="space-y-1.5">
-                        <label class="text-xs font-medium text-neutral-800">Sampai:</label>
-                        <input type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Tipe Industri -->
-                  <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                      <span class="text-neutral-400 text-xs font-medium">Tipe Industri</span>
-                      <span class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
-                    </div>
-                    <select class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
-                      <option selected disabled>Semua Industri</option>
-                      <option>Technology</option>
-                      <option>Manufacturing</option>
-                      <option>Retail</option>
-                    </select>
-                  </div>
-
-                  <!-- Status -->
-                  <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                      <span class="text-neutral-400 text-xs font-medium">Status</span>
-                      <span class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
-                    </div>
-                    <select class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
-                      <option selected disabled>Pilih Status</option>
-                      <option>Aktif</option>
-                      <option>Tidak Aktif</option>
-                    </select>
-                  </div>
-
-                  <!-- Layanan -->
-                  <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                      <span class="text-neutral-400 text-xs font-medium">Layanan</span>
-                      <span class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
-                    </div>
-                    <select class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
-                      <option selected disabled>Semua Layanan</option>
-                      <option>Nusanet Dedicated</option>
-                      <option>Nusafiber</option>
-                    </select>
-                  </div>
-                </div>
-
-                <!-- Footer -->
-                <div class="p-4 border-t border-base-200 flex items-center justify-between">
-                  <button class="btn btn-outline border-primary text-primary hover:bg-primary hover:text-white btn-sm rounded-lg text-sm font-semibold h-10 px-6">
-                    Atur Ulang
-                  </button>
-                  <button class="btn bg-[#e8f2e6] border-none text-primary hover:bg-primary hover:text-white btn-sm rounded-lg text-sm font-semibold h-10 px-6">
-                    Terapkan
-                  </button>
+                <div class="space-y-1.5">
+                  <label class="text-xs font-medium text-neutral-800">Sampai:</label>
+                  <input v-model="endDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
                 </div>
               </div>
             </div>
-          </div>
+
+            <!-- Tipe Industri -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-neutral-400 text-xs font-medium">Tipe Industri</span>
+                <span @click="industryType = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+              </div>
+              <select v-model="industryType" class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
+                <option value="">Semua Industri</option>
+                <option>Technology</option>
+                <option>Manufacturing</option>
+                <option>Retail</option>
+              </select>
+            </div>
+
+            <!-- Status -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-neutral-400 text-xs font-medium">Status</span>
+                <span @click="isActive = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+              </div>
+              <select v-model="isActive" class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
+                <option value="">Semua Status</option>
+                <option value="1">Aktif</option>
+                <option value="0">Tidak Aktif</option>
+              </select>
+            </div>
+
+            <!-- Layanan -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-neutral-400 text-xs font-medium">Layanan</span>
+                <span @click="serviceCode = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+              </div>
+              <select v-model="serviceCode" class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
+                <option value="">Semua Layanan</option>
+                <option value="nusanet_dedicated">Nusanet Dedicated</option>
+                <option value="nusafiber">Nusafiber</option>
+              </select>
+            </div>
+          </DataFilter>
         </template>
 
         <!-- Body Slot -->
@@ -199,6 +176,22 @@ const meta = ref<any>(null)
 const currentSort = ref('activationDate')
 const currentOrder = ref<'asc' | 'desc'>('desc')
 
+const isFilterActive = ref(false)
+
+const startDate = ref('')
+const endDate = ref('')
+const industryType = ref('')
+const isActive = ref('')
+const serviceCode = ref('')
+
+const appliedFilters = ref({
+  startDate: '',
+  endDate: '',
+  industryType: '',
+  isActive: '',
+  serviceCode: ''
+})
+
 const fetchCustomers = async (queryParams: CustomerQueryParams = {}) => {
   loading.value = true
   try {
@@ -206,6 +199,11 @@ const fetchCustomers = async (queryParams: CustomerQueryParams = {}) => {
       sort: currentSort.value,
       order: currentOrder.value,
       q: searchQuery.value,
+      startDate: appliedFilters.value.startDate || undefined,
+      endDate: appliedFilters.value.endDate || undefined,
+      type: appliedFilters.value.industryType || undefined,
+      isActive: appliedFilters.value.isActive === '' ? undefined : Number(appliedFilters.value.isActive),
+      serviceCode: appliedFilters.value.serviceCode || undefined,
       ...queryParams,
       page: queryParams.page || 1,
       limit: 10
@@ -242,6 +240,35 @@ const handleSort = (key: string) => {
 const handleOrderChange = (order: 'asc' | 'desc') => {
   currentOrder.value = order
   fetchCustomers({ page: 1 })
+}
+
+const cancelFilters = () => {
+    startDate.value = appliedFilters.value.startDate
+    endDate.value = appliedFilters.value.endDate
+    industryType.value = appliedFilters.value.industryType
+    isActive.value = appliedFilters.value.isActive
+    serviceCode.value = appliedFilters.value.serviceCode
+}
+
+const applyFilters = () => {
+    appliedFilters.value = {
+        startDate: startDate.value,
+        endDate: endDate.value,
+        industryType: industryType.value,
+        isActive: isActive.value,
+        serviceCode: serviceCode.value
+    }
+    isFilterActive.value = Object.values(appliedFilters.value).some(v => v !== '')
+    fetchCustomers({ page: 1 })
+}
+
+const resetFilters = () => {
+    startDate.value = ''
+    endDate.value = ''
+    industryType.value = ''
+    isActive.value = ''
+    serviceCode.value = ''
+    applyFilters()
 }
 
 onMounted(() => {

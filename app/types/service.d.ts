@@ -31,6 +31,9 @@ export interface ServiceQueryParams {
   order?: 'asc' | 'desc'
   page?: number
   limit?: number
+  startDate?: string
+  endDate?: string
+  isActive?: number
 }
 
 export interface ServiceCustomer {

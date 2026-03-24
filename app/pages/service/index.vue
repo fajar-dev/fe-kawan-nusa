@@ -36,53 +36,40 @@
         @update:order="handleOrderChange"
       >
         <template #filters>
-          <div class="dropdown dropdown-bottom md:dropdown-start">
-            <div tabindex="0" role="button" class="btn btn-outline border-primary text-primary btn-md h-10 px-4 gap-2 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors w-full md:w-auto">
-              <Filter class="w-4 h-4 text-primary" />
-              Filter
-            </div>
-            <div tabindex="0" class="dropdown-content z-[100] card card-compact bg-base-100 w-[calc(100vw-2rem)] md:w-[450px] shadow-xl border border-base-200 mt-2 left-0 md:left-auto">
-              <div class="card-body p-0">
-                <div class="flex items-center justify-between px-6 py-4 border-b border-base-200">
-                  <h3 class="font-bold text-lg text-neutral-800">Filter</h3>
-                  <button class="btn btn-ghost btn-xs btn-circle"><X class="w-4 h-4" /></button>
+          <DataFilter 
+            :is-filter-active="isFilterActive"
+            @apply="applyFilters"
+            @reset="resetFilters"
+            @cancel="cancelFilters"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-neutral-400 text-xs font-medium">Referensi Terakhir</span>
+                <span @click="startDate = ''; endDate = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                  <label class="text-xs font-medium text-neutral-800">Dari:</label>
+                  <input v-model="startDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
                 </div>
-                <div class="p-6 space-y-4 max-h-[60vh] md:max-h-[45vh] overflow-y-auto">
-                  <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                      <span class="text-neutral-400 text-xs font-medium">Tanggal Aktif</span>
-                      <span class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div class="space-y-1.5">
-                        <label class="text-xs font-medium text-neutral-800">Dari:</label>
-                        <input type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
-                      </div>
-                      <div class="space-y-1.5">
-                        <label class="text-xs font-medium text-neutral-800">Sampai:</label>
-                        <input type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                      <span class="text-neutral-400 text-xs font-medium">Status</span>
-                      <span class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
-                    </div>
-                    <select class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
-                      <option selected disabled>Semua Status</option>
-                      <option>Aktif</option>
-                      <option>Dihentikan</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="p-4 border-t border-base-200 flex items-center justify-between">
-                  <button class="btn btn-outline border-primary text-primary hover:bg-primary hover:text-white btn-sm rounded-lg text-sm font-semibold h-10 px-6">Atur Ulang</button>
-                  <button class="btn bg-primary border-none text-white hover:bg-primary/90 btn-sm rounded-lg text-sm font-semibold h-10 px-6">Terapkan</button>
+                <div class="space-y-1.5">
+                  <label class="text-xs font-medium text-neutral-800">Sampai:</label>
+                  <input v-model="endDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
                 </div>
               </div>
             </div>
-          </div>
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-neutral-400 text-xs font-medium">Status</span>
+                <span @click="isActive = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+              </div>
+              <select v-model="isActive" class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
+                <option value="">Semua Status</option>
+                <option value="1">Aktif</option>
+                <option value="0">Dihentikan</option>
+              </select>
+            </div>
+          </DataFilter>
         </template>
 
         <template #body="{ isColumnVisible }">
@@ -139,6 +126,18 @@ const meta = ref<PaginationMeta | null>(null)
 const currentSort = ref('name')
 const currentOrder = ref<'asc' | 'desc'>('desc')
 
+const isFilterActive = ref(false)
+
+const startDate = ref('')
+const endDate = ref('')
+const isActive = ref('')
+
+const appliedFilters = ref({
+  startDate: '',
+  endDate: '',
+  isActive: ''
+})
+
 const fetchServices = async (queryParams: ServiceQueryParams = {}) => {
   loading.value = true
   try {
@@ -146,6 +145,9 @@ const fetchServices = async (queryParams: ServiceQueryParams = {}) => {
       sort: currentSort.value,
       order: currentOrder.value,
       q: searchQuery.value,
+      startDate: appliedFilters.value.startDate || undefined,
+      endDate: appliedFilters.value.endDate || undefined,
+      isActive: appliedFilters.value.isActive === '' ? undefined : Number(appliedFilters.value.isActive),
       ...queryParams,
       page: queryParams.page || 1,
       limit: 10
@@ -182,6 +184,29 @@ const handleSort = (key: string) => {
 const handleOrderChange = (order: 'asc' | 'desc') => {
   currentOrder.value = order
   fetchServices({ page: 1 })
+}
+
+const resetFilters = () => {
+    startDate.value = ''
+    endDate.value = ''
+    isActive.value = ''
+    applyFilters()
+}
+
+const cancelFilters = () => {
+    startDate.value = appliedFilters.value.startDate
+    endDate.value = appliedFilters.value.endDate
+    isActive.value = appliedFilters.value.isActive
+}
+
+const applyFilters = () => {
+    appliedFilters.value = {
+        startDate: startDate.value,
+        endDate: endDate.value,
+        isActive: isActive.value
+    }
+    isFilterActive.value = Object.values(appliedFilters.value).some(v => v !== '')
+    fetchServices({ page: 1 })
 }
 
 onMounted(() => {
