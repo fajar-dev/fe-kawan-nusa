@@ -5,7 +5,11 @@ import { handleServiceError } from "../composables/error-helper"
 export class AdditionalService {
     async getServices(): Promise<AdditionalResponse> {
         try {
-            const response = await apiService.client.get<AdditionalResponse>('/additional/service')
+            const response = await apiService.client.get<AdditionalResponse>('/additional/service', {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Gagal mengambil daftar layanan tambahan')
@@ -14,7 +18,11 @@ export class AdditionalService {
 
     async getCustomerTypes(): Promise<AdditionalResponse> {
         try {
-            const response = await apiService.client.get<AdditionalResponse>('/additional/customer-type')
+            const response = await apiService.client.get<AdditionalResponse>('/additional/customer-type', {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Gagal mengambil daftar tipe pelanggan tambahan')
