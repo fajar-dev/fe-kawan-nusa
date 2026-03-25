@@ -328,7 +328,7 @@ useSeoMeta({
 const route = useRoute()
 const customerId = route.params.id as string
 
-const { data: customerResponse } = await useAsyncData(
+const { data: customerResponse } = useAsyncData(
   `customer-${customerId}`,
   () => customerService.getCustomerById(customerId)
 )
@@ -336,7 +336,7 @@ const { data: customerResponse } = await useAsyncData(
 const customer = computed(() => customerResponse.value?.data)
 
 const addressPage = ref(1)
-const { data: addressResponse, status: addressStatus } = await useAsyncData(
+const { data: addressResponse, status: addressStatus } = useAsyncData(
   `customer-addresses-${customerId}`,
   () => customerService.getCustomerAddresses(customerId, { page: addressPage.value }),
   {
@@ -354,7 +354,7 @@ const servicePage = ref(1)
 const serviceSort = ref('activationDate')
 const serviceOrder = ref<'asc' | 'desc'>('desc')
 
-const { data: serviceResponse, status: serviceStatus } = await useAsyncData(
+const { data: serviceResponse, status: serviceStatus } = useAsyncData(
   `customer-services-${customerId}`,
   () => customerService.getCustomerServices(customerId, {
     page: servicePage.value,
@@ -376,7 +376,7 @@ const pointPage = ref(1)
 const pointSort = ref('createdAt')
 const pointOrder = ref<'asc' | 'desc'>('desc')
 
-const { data: pointResponse, status: pointStatus } = await useAsyncData(
+const { data: pointResponse, status: pointStatus } = useAsyncData(
   `customer-rewards-${customerId}`,
   () => customerService.getCustomerRewards(customerId, {
     page: pointPage.value,

@@ -282,7 +282,7 @@ const rewardPage = ref(1)
 const rewardSort = ref('createdAt')
 const rewardOrder = ref<'asc' | 'desc'>('desc')
 
-const { data: rewardResponse, status: rewardStatus } = await useAsyncData(
+const { data: rewardResponse, status: rewardStatus } = useAsyncData(
   'rewards',
   () => rewardService.getRewards({
     page: rewardPage.value,
@@ -302,7 +302,7 @@ const rewards = computed(() => rewardResponse.value?.data || [])
 const rewardMeta = computed(() => rewardResponse.value?.meta)
 const rewardLoading = computed(() => rewardStatus.value === 'pending')
 
-const { data: pointResponse, refresh: refreshPoint } = await useAsyncData(
+const { data: pointResponse, refresh: refreshPoint } = useAsyncData(
   'point',
   () => pointService.getPoint()
 )
@@ -313,7 +313,7 @@ const withdrawPage = ref(1)
 const withdrawSort = ref('createdAt')
 const withdrawOrder = ref<'asc' | 'desc'>('desc')
 
-const { data: withdrawResponse, status: withdrawStatus, refresh: refreshWithdrawals } = await useAsyncData(
+const { data: withdrawResponse, status: withdrawStatus, refresh: refreshWithdrawals } = useAsyncData(
   'withdrawals',
   () => withdrawService.getWithdrawals({
     page: withdrawPage.value,
@@ -340,7 +340,7 @@ const withdrawMeta = computed(() => withdrawResponse.value?.meta)
 const withdrawLoading = computed(() => withdrawStatus.value === 'pending')
 const withdrawnPoints = computed(() => withdrawResponse.value?.data || [])
 
-const { data: statisticPointResponse } = await useAsyncData(
+const { data: statisticPointResponse } = useAsyncData(
   'statistic-point',
   () => statisticService.getPointStatistic()
 )

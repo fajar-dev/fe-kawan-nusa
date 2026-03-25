@@ -158,7 +158,7 @@ const route = useRoute()
 const serviceCode = route.params.id as string
 
 // Fetch Service Detail
-const { data: serviceResponse } = await useAsyncData(
+const { data: serviceResponse } = useAsyncData(
   `service-${serviceCode}`,
   () => serviceService.getServiceByCode(serviceCode)
 )
@@ -170,7 +170,7 @@ const customerPage = ref(1)
 const customerSort = ref('referenceDate')
 const customerOrder = ref<'asc' | 'desc'>('desc')
 
-const { data: customerResponse, status: customerStatus } = await useAsyncData(
+const { data: customerResponse, status: customerStatus } = useAsyncData(
   `service-customers-${serviceCode}`,
   () => serviceService.getServiceCustomers(serviceCode, {
     page: customerPage.value,

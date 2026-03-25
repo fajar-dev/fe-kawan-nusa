@@ -180,14 +180,14 @@ useSeoMeta({
 
 const { state: authState } = useAuth()
 
-const { data: statisticCountResponse } = await useAsyncData(
+const { data: statisticCountResponse } = useAsyncData(
   'statistic-count',
   () => statisticService.getCount()
 )
 
 const statisticCount = computed(() => statisticCountResponse.value?.data)
 
-const { data: topServicesResponse } = await useAsyncData(
+const { data: topServicesResponse } = useAsyncData(
   'top-services',
   () => serviceService.getServices({ sort: 'totalPoint', order: 'desc', limit: 5 })
 )
@@ -222,7 +222,7 @@ const recentCustomerColumns = [
 const recentSort = ref('registrationDate')
 const recentOrder = ref<'asc' | 'desc'>('desc')
 
-const { data: recentCustomerServicesResponse, status: recentStatus } = await useAsyncData(
+const { data: recentCustomerServicesResponse, status: recentStatus } = useAsyncData(
   'recent-customer-services',
   () => serviceService.getCustomerServices({ sort: recentSort.value, order: recentOrder.value, limit: 5 }),
   { watch: [recentSort, recentOrder] }
@@ -232,7 +232,7 @@ const recentCustomers = computed(() => recentCustomerServicesResponse.value?.dat
 
 const selectedType = ref<'monthly' | 'yearly'>('yearly')
 
-const { data: customerStatisticResponse } = await useAsyncData(
+const { data: customerStatisticResponse } = useAsyncData(
   'customer-statistic',
   () => statisticService.getCustomerStatistic(selectedType.value),
   { watch: [selectedType] }
