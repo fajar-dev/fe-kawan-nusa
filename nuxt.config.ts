@@ -11,6 +11,10 @@ export default defineNuxtConfig({
   ],
 
   devtools: { enabled: true },
+  
+  routeRules: {
+    '/api/**': { proxy: process.env.API_BASE_URL + '/**' }
+  },
 
   vite: {
     plugins: [tailwindcss() as any],
@@ -66,6 +70,7 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallback: '/',
+      navigateFallbackDenylist: [/^\/api/],
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
       cleanupOutdatedCaches: true
     },
