@@ -206,12 +206,16 @@
                 <td v-show="isColumnVisible('accountNumber')" class="border-r border-base-200">{{ item.accountNumber }}</td>
                 <td v-show="isColumnVisible('accountHolderName')" class="border-r border-base-200">{{ item.accountHolderName }}</td>
                 <td v-show="isColumnVisible('id')" class="flex items-center justify-between pr-4 gap-2">
-                  <span class="text-primary font-medium truncate cursor-pointer hover:underline">
-                    <NuxtLink target="_blank" :to="`${useRuntimeConfig().public.apiUrl}/withdraw/${item.id}?token=${useAuth().state.token}`">paid-{{ item.id }}.pdf</NuxtLink>
+                  <span 
+                    @click="openUrl(withdrawService.getWithdrawPdfUrl(item.id))"
+                    class="text-primary font-medium truncate cursor-pointer hover:underline"
+                  >
+                    paid-{{ item.id }}.pdf
                   </span>
-                  <NuxtLink target="_blank" :to="`${useRuntimeConfig().public.apiUrl}/withdraw/${item.id}/download?token=${useAuth().state.token}`">
-                    <Download class="w-4 h-4 text-primary shrink-0 cursor-pointer" />
-                  </NuxtLink>
+                  <Download 
+                    @click="openUrl(withdrawService.getWithdrawDownloadUrl(item.id))"
+                    class="w-4 h-4 text-primary shrink-0 cursor-pointer" 
+                  />
                 </td>
               </tr>
             </tbody>
@@ -375,5 +379,9 @@ const categories = {
 
 const xFormatter = (tick: number): string => {
   return AreaChartData.value[tick]?.month || ''
+}
+
+const openUrl = (url: string) => {
+  window.open(url, '_blank')
 }
 </script>
