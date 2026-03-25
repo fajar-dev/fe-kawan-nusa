@@ -45,7 +45,7 @@
           >
             <div>
               <div class="flex items-center justify-between mb-1.5">
-                <span class="text-neutral-400 text-xs font-medium">Referensi Terakhir</span>
+                <span class="text-neutral-400 text-xs font-medium">Tanggal Aktif</span>
                 <span @click="startDate = ''; endDate = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -64,14 +64,16 @@
             <div>
               <div class="flex items-center justify-between mb-1.5">
                 <span class="text-neutral-400 text-xs font-medium">Tipe Industri</span>
-                <span @click="industryType = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+                <span @click="industryType = []" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
               </div>
-              <select v-model="industryType" class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
-                <option value="">Semua Industri</option>
-                <option>Technology</option>
-                <option>Manufacturing</option>
-                <option>Retail</option>
-              </select>
+              <MultiSelect 
+                v-model="industryType" 
+                :options="industryOptions" 
+                labelKey="name"
+                valueKey="name"
+                placeholder="Semua Industri" 
+                searchable
+              />
             </div>
 
             <!-- Status -->
@@ -91,13 +93,16 @@
             <div>
               <div class="flex items-center justify-between mb-1.5">
                 <span class="text-neutral-400 text-xs font-medium">Layanan</span>
-                <span @click="serviceCode = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+                <span @click="serviceCode = []" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
               </div>
-              <select v-model="serviceCode" class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
-                <option value="">Semua Layanan</option>
-                <option value="nusanet_dedicated">Nusanet Dedicated</option>
-                <option value="nusafiber">Nusafiber</option>
-              </select>
+              <MultiSelect 
+                v-model="serviceCode" 
+                :options="serviceOptions" 
+                labelKey="name"
+                valueKey="code"
+                placeholder="Semua Layanan" 
+                searchable
+              />
             </div>
           </DataFilter>
         </template>
@@ -148,7 +153,9 @@ import {
   Filter as FilterIcon
 } from 'lucide-vue-next'
 import { customerService } from '~/services/customer-service'
+import { additionalService } from '~/services/additional-service'
 import type { CustomerQueryParams } from '~/types/customer'
+import type { AdditionalItem } from '~/types/additional'
 
 definePageMeta({
   bgColor: 'bg-white'
@@ -180,16 +187,19 @@ const isFilterActive = ref(false)
 
 const startDate = ref('')
 const endDate = ref('')
-const industryType = ref('')
+const industryOptions = ref<AdditionalItem[]>([])
+const serviceOptions = ref<AdditionalItem[]>([])
+
+const industryType = ref<string[]>([])
 const isActive = ref('')
-const serviceCode = ref('')
+const serviceCode = ref<string[]>([])
 
 const appliedFilters = ref({
   startDate: '',
   endDate: '',
-  industryType: '',
+  industryType: [] as string[],
   isActive: '',
-  serviceCode: ''
+  serviceCode: [] as string[]
 })
 
 const fetchCustomers = async (queryParams: CustomerQueryParams = {}) => {
@@ -243,33 +253,47 @@ const handleOrderChange = (order: 'asc' | 'desc') => {
 const cancelFilters = () => {
     startDate.value = appliedFilters.value.startDate
     endDate.value = appliedFilters.value.endDate
-    industryType.value = appliedFilters.value.industryType
+    industryType.value = [...appliedFilters.value.industryType]
     isActive.value = appliedFilters.value.isActive
-    serviceCode.value = appliedFilters.value.serviceCode
+    serviceCode.value = [...appliedFilters.value.serviceCode]
 }
 
 const applyFilters = () => {
     appliedFilters.value = {
         startDate: startDate.value,
         endDate: endDate.value,
-        industryType: industryType.value,
+        industryType: [...industryType.value],
         isActive: isActive.value,
-        serviceCode: serviceCode.value
+        serviceCode: [...serviceCode.value]
     }
-    isFilterActive.value = Object.values(appliedFilters.value).some(v => v !== '')
+    isFilterActive.value = appliedFilters.value.startDate !== '' || 
+                           appliedFilters.value.endDate !== '' || 
+                           appliedFilters.value.industryType.length > 0 || 
+                           appliedFilters.value.isActive !== '' ||
+                           appliedFilters.value.serviceCode.length > 0
     fetchCustomers({ page: 1 })
 }
 
 const resetFilters = () => {
     startDate.value = ''
     endDate.value = ''
-    industryType.value = ''
+    industryType.value = []
     isActive.value = ''
-    serviceCode.value = ''
+    serviceCode.value = []
     applyFilters()
 }
 
+const fetchFilterOptions = async () => {
+    const [types, svcs] = await Promise.all([
+        additionalService.getCustomerTypes(),
+        additionalService.getServices()
+    ])
+    if (types?.success) industryOptions.value = types.data
+    if (svcs?.success) serviceOptions.value = svcs.data
+}
+
 onMounted(() => {
+  fetchFilterOptions()
   fetchCustomers()
 })
 </script>

@@ -1,5 +1,6 @@
 import axios from "axios"
 import { apiService } from "./api-service"
+import { handleServiceError } from "../composables/error-helper"
 import type { AuthResponse, User, ApiResponse } from "../types/auth"
 
 export class AuthService {
@@ -77,7 +78,7 @@ export class AuthService {
             this.setSession(response.data)
             return response.data
         } catch (error: any) {
-            handleServiceError(error)
+            return handleServiceError(error)
         }
     }
 
@@ -86,7 +87,7 @@ export class AuthService {
             const response = await apiService.client.post<ApiResponse<null>>('/auth/forgot-password', { email })
             return response.data
         } catch (error: any) {
-            handleServiceError(error)
+            return handleServiceError(error)
         }
     }
 
@@ -95,7 +96,7 @@ export class AuthService {
             const response = await apiService.client.get<ApiResponse<null>>('/auth/validate-reset-token?email=' + email + '&token=' + token)
             return response.data
         } catch (error: any) {
-            handleServiceError(error)
+            return handleServiceError(error)
         }
     }
 
@@ -104,7 +105,7 @@ export class AuthService {
             const response = await apiService.client.post<ApiResponse<null>>('/auth/reset-password', { token, newPassword })
             return response.data
         } catch (error: any) {
-            handleServiceError(error)
+            return handleServiceError(error)
         }
     }
 

@@ -60,8 +60,8 @@ export interface CustomerQueryParams {
   startDate?: string
   endDate?: string
   isActive?: number
-  type?: string
-  serviceCode?: string
+  type?: string | string[]
+  serviceCode?: string | string[]
 }
 
 export interface CustomerRegisteredService {

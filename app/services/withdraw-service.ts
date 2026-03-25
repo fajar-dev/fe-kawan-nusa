@@ -1,4 +1,5 @@
 import { apiService } from "./api-service"
+import { handleServiceError } from "../composables/error-helper"
 import type { WithdrawResponse, WithdrawQueryParams } from "../types/withdraw"
 
 export class WithdrawService {
@@ -12,7 +13,7 @@ export class WithdrawService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to fetch withdrawals')
+            return handleServiceError(error || 'Failed to fetch withdrawals')
         }
     }
 
@@ -25,7 +26,7 @@ export class WithdrawService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to create withdrawal')
+            return handleServiceError(error || 'Failed to create withdrawal')
         }
     }
 }

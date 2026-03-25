@@ -1,4 +1,5 @@
 import { apiService } from "./api-service"
+import { handleServiceError } from "../composables/error-helper"
 import type { ApiResponse } from "../types/auth"
 import type { Service, ServiceListResponse, ServiceQueryParams, ServiceCustomerResponse } from "../types/service"
 
@@ -13,7 +14,7 @@ export class ServiceService {
             })
             return response.data
         } catch (error: any) {
-            handleServiceError(error || 'Failed to fetch services')
+            return handleServiceError(error || 'Failed to fetch services')
         }
     }
 
@@ -26,7 +27,7 @@ export class ServiceService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to fetch service detail')
+            return handleServiceError(error || 'Failed to fetch service detail')
         }
     }
 
@@ -40,7 +41,7 @@ export class ServiceService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to fetch service customers')
+            return handleServiceError(error || 'Failed to fetch service customers')
         }
     }
 
@@ -54,7 +55,7 @@ export class ServiceService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to fetch customer services')
+            return handleServiceError(error || 'Failed to fetch customer services')
         }
     }
 }

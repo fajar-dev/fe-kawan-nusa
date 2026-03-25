@@ -1,4 +1,5 @@
 import { apiService } from "./api-service"
+import { handleServiceError } from "../composables/error-helper"
 import type { PointResponse } from "../types/point"
 
 export class PointService {
@@ -11,7 +12,7 @@ export class PointService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to fetch points')
+            return handleServiceError(error || 'Failed to fetch points')
         }
     }
 }

@@ -1,4 +1,5 @@
 import { apiService } from "./api-service"
+import { handleServiceError } from "../composables/error-helper"
 import type { ProfileResponse, UpdateAccountRequest, UpdateBankRequest, UpdatePasswordRequest, UpdatePreferenceRequest } from "../types/profile"
 import type { ApiResponse } from "../types/auth"
 
@@ -12,7 +13,7 @@ export class ProfileService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to fetch profile')
+            return handleServiceError(error || 'Failed to fetch profile')
         }
     }
 
@@ -25,7 +26,7 @@ export class ProfileService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to update account')
+            return handleServiceError(error || 'Failed to update account')
         }
     }
 
@@ -38,7 +39,7 @@ export class ProfileService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to update bank info')
+            return handleServiceError(error || 'Failed to update bank info')
         }
     }
 
@@ -51,7 +52,7 @@ export class ProfileService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to update password')
+            return handleServiceError(error || 'Failed to update password')
         }
     }
 
@@ -64,7 +65,7 @@ export class ProfileService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to update preferences')
+            return handleServiceError(error || 'Failed to update preferences')
         }
     }
 
@@ -80,7 +81,7 @@ export class ProfileService {
             })
             return response.data
         } catch (error: any) {
-            handleServiceError(error || 'Failed to upload photo')
+            return handleServiceError(error || 'Failed to upload photo')
         }
     }
 }

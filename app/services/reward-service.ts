@@ -1,4 +1,5 @@
 import { apiService } from "./api-service"
+import { handleServiceError } from "../composables/error-helper"
 import type { CustomerRewardResponse, CustomerQueryParams } from "../types/customer"
 
 export class RewardService {
@@ -12,7 +13,7 @@ export class RewardService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to fetch rewards')
+            return handleServiceError(error || 'Failed to fetch rewards')
         }
     }
 }

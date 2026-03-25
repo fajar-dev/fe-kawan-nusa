@@ -1,4 +1,5 @@
 import { apiService } from "./api-service"
+import { handleServiceError } from "../composables/error-helper"
 import type { Customer, CustomerListResponse, CustomerQueryParams, CustomerAddressResponse, CustomerServiceResponse, CustomerRewardResponse } from "../types/customer"
 import type { ApiResponse } from "../types/auth"
 
@@ -13,7 +14,7 @@ export class CustomerService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to fetch customers')
+            return handleServiceError(error || 'Failed to fetch customers')
         }
     }
 
@@ -26,7 +27,7 @@ export class CustomerService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to fetch customer detail')
+            return handleServiceError(error || 'Failed to fetch customer detail')
         }
     }
 
@@ -40,7 +41,7 @@ export class CustomerService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to fetch customer addresses')
+            return handleServiceError(error || 'Failed to fetch customer addresses')
         }
     }
 
@@ -54,7 +55,7 @@ export class CustomerService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to fetch customer services')
+            return handleServiceError(error || 'Failed to fetch customer services')
         }
     }
 
@@ -68,7 +69,7 @@ export class CustomerService {
             })
             return response.data
         } catch (error: any) {
-           handleServiceError(error || 'Failed to fetch customer rewards')
+            return handleServiceError(error || 'Failed to fetch customer rewards')
         }
     }
 }
