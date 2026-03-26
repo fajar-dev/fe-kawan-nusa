@@ -7,7 +7,7 @@
       </div>
       {{ label }}
     </summary>
-    <div class="dropdown-content z-[100] card card-compact bg-base-100 w-[calc(100vw-2rem)] md:w-[450px] shadow-xl border border-base-200 mt-2 left-0 md:left-auto">
+    <div class="dropdown-content z-[999] card card-compact bg-base-100 w-[calc(100vw-2rem)] md:w-[450px] shadow-xl border border-base-200 mt-2 left-0 md:left-auto">
       <div class="card-body p-0">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-2 border-b border-base-200">

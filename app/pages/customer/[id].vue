@@ -166,29 +166,93 @@
               @update:page="servicePage = $event"
               @update:sort="serviceSort = $event"
               @update:order="serviceOrder = $event"
+              class="mt-3"
             >
-              <template #body="{ isColumnVisible }">
-                <tbody class="text-xs text-neutral-600">
-                  <tr v-for="(item, index) in customerServices" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
-                    <td v-show="isColumnVisible('service.name')" class="border-r border-base-200 text-primary ps-4 max-w-[250px] truncate" :title="item.service.name">
-                      <NuxtLink :to="`/service/${item.service.code}`" class="hover:underline">{{ item.service.name }}</NuxtLink>
-                    </td>
-                    <td v-show="isColumnVisible('activationDate')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDateShort(item.activationDate) }}</td>
-                    <td v-show="isColumnVisible('period')" class="border-r border-base-200 text-neutral-500 min-w-[200px] whitespace-nowrap">
-                      {{ formatDate(item.startDate) }}
-                      <span v-if="item.endDate"> - {{ formatDate(item.endDate) }}</span>
-                    </td>
-                    <td v-show="isColumnVisible('address')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ item.address }}</td>
-                    <td v-show="isColumnVisible('status')" class="text-center max-w-[80px]">
-                      <div :class="['badge border-none font-semibold text-xs rounded-lg w-full', getStatusClass(item.status)]">
-                        {{ item.status }}
+                <template #filters>
+                  <DataFilter 
+                    :is-filter-active="isFilterActive"
+                    @apply="applyFilters"
+                    @reset="resetFilters"
+                    @cancel="cancelFilters"
+                  >
+                    <div class="space-y-4">
+                      <!-- Registrasi -->
+                      <div>
+                        <div class="flex items-center justify-between mb-1">
+                          <span class="text-neutral-400 text-xs font-medium">Tanggal Registrasi</span>
+                          <span @click="startRegistration = ''; endRegistration = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div class="space-y-1.5">
+                            <label class="text-xs font-medium text-neutral-800">Dari:</label>
+                            <input v-model="startRegistration" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
+                          </div>
+                          <div class="space-y-1.5">
+                            <label class="text-xs font-medium text-neutral-800">Sampai:</label>
+                            <input v-model="endRegistration" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
+                          </div>
+                        </div>
                       </div>
-                    </td>
-                    <td v-show="isColumnVisible('salesName')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ item.salesName }}</td>
-                  </tr>
-                </tbody>
-              </template>
-            </DataTable>
+
+                      <!-- Aktivasi -->
+                      <div>
+                        <div class="flex items-center justify-between mb-1">
+                          <span class="text-neutral-400 text-xs font-medium">Tanggal Aktivasi</span>
+                          <span @click="startActivation = ''; endActivation = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div class="space-y-1.5">
+                            <label class="text-xs font-medium text-neutral-800">Dari:</label>
+                            <input v-model="startActivation" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
+                          </div>
+                          <div class="space-y-1.5">
+                            <label class="text-xs font-medium text-neutral-800">Sampai:</label>
+                            <input v-model="endActivation" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Status -->
+                      <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                          <span class="text-neutral-400 text-xs font-medium">Status</span>
+                          <span @click="status = []" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+                        </div>
+                        <MultiSelect 
+                          v-model="status" 
+                          :options="statusOptions" 
+                          labelKey="name"
+                          valueKey="code"
+                          placeholder="Semua Status" 
+                          searchable
+                        />
+                      </div>
+                    </div>
+                  </DataFilter>
+                </template>
+                <template #body="{ isColumnVisible }">
+                  <tbody class="text-xs text-neutral-600">
+                    <tr v-for="(item, index) in customerServices" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
+                      <td v-show="isColumnVisible('service.name')" class="border-r border-base-200 text-primary ps-4 max-w-[250px] truncate" :title="item.service.name">
+                        <NuxtLink :to="`/service/${item.service.code}`" class="hover:underline">{{ item.service.name }}</NuxtLink>
+                      </td>
+                      <td v-show="isColumnVisible('registrationDate')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDateShort(item.registrationDate) }}</td>
+                      <td v-show="isColumnVisible('activationDate')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDateShort(item.activationDate) }}</td>
+                      <td v-show="isColumnVisible('period')" class="border-r border-base-200 text-neutral-500 min-w-[200px] whitespace-nowrap">
+                        {{ formatDate(item.startDate) }}
+                        <span v-if="item.endDate"> - {{ formatDate(item.endDate) }}</span>
+                      </td>
+                      <td v-show="isColumnVisible('address')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ item.address }}</td>
+                      <td v-show="isColumnVisible('status')" class="text-center max-w-[80px]">
+                        <div :class="['badge border-none font-semibold text-xs rounded-lg w-full', getStatusClass(item.status)]">
+                          {{ item.status }}
+                        </div>
+                      </td>
+                      <td v-show="isColumnVisible('salesName')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ item.salesName }}</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </DataTable>
           </div>
 
           <!-- Points Table -->
@@ -209,7 +273,52 @@
               @update:page="pointPage = $event"
               @update:sort="pointSort = $event"
               @update:order="pointOrder = $event"
+              class="mt-3"
             >
+              <template #filters>
+                  <DataFilter 
+                    :is-filter-active="isFilterActive"
+                    @apply="applyFilters"
+                    @reset="resetFilters"
+                    @cancel="cancelFilters"
+                  >
+                    <div class="space-y-4">
+                      <!-- Registrasi -->
+                      <div>
+                        <div class="flex items-center justify-between mb-1">
+                          <span class="text-neutral-400 text-xs font-medium">Tanggal Didapatkan</span>
+                          <span @click="startDate = ''; endDate = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div class="space-y-1.5">
+                            <label class="text-xs font-medium text-neutral-800">Dari:</label>
+                            <input v-model="startDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10 px-3 bg-white" />
+                          </div>
+                          <div class="space-y-1.5">
+                            <label class="text-xs font-medium text-neutral-800">Sampai:</label>
+                            <input v-model="endDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10 px-3 bg-white" />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Status -->
+                      <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                          <span class="text-neutral-400 text-xs font-medium">Tipe Poin</span>
+                          <span @click="rewardType = []" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+                        </div>
+                        <MultiSelect 
+                          v-model="rewardType" 
+                          :options="rewardTypeOptions" 
+                          labelKey="name"
+                          valueKey="code"
+                          placeholder="Semua Tipe Poin" 
+                          searchable
+                        />
+                      </div>
+                    </div>
+                  </DataFilter>
+                </template>
               <template #body="{ isColumnVisible }">
                 <tbody class="text-xs text-neutral-600">
                   <tr v-for="(item, index) in rewards" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
@@ -234,6 +343,8 @@
 <script setup lang="ts">
 import { CircleHelp, History, Package, Users, Calendar, Hash, Mail, Phone, Briefcase, ChevronDown, FileText } from 'lucide-vue-next'
 import { customerService } from '~/services/customer-service'
+import { additionalService } from '~/services/additional-service'
+import type { AdditionalItem } from '~/types/additional'
 
 definePageMeta({
   bgColor: 'bg-[#F7FDF9]'
@@ -255,6 +366,77 @@ const customer = computed(() => customerResponse.value?.data)
 
 const activeTab = ref('layanan')
 const searchQuery = ref('')
+
+// Filter options
+const statusOptions = ref<AdditionalItem[]>([])
+const rewardTypeOptions = ref<AdditionalItem[]>([])
+
+// Filters
+const startDate = ref('')
+const endDate = ref('')
+const startRegistration = ref('')
+const endRegistration = ref('')
+const startActivation = ref('')
+const endActivation = ref('')
+const status = ref<string[]>([])
+const rewardType = ref<string[]>([])
+
+const appliedFilters = ref({
+  startDate: '',
+  endDate: '',
+  startRegistration: '',
+  endRegistration: '',
+  startActivation: '',
+  endActivation: '',
+  status: [] as string[],
+  rewardType: [] as string[]
+})
+
+const isFilterActive = computed(() => {
+    if (activeTab.value === 'layanan') {
+        return appliedFilters.value.startRegistration !== '' || appliedFilters.value.endRegistration !== '' ||
+               appliedFilters.value.startActivation !== '' || appliedFilters.value.endActivation !== '' ||
+               appliedFilters.value.status.length > 0
+    }
+  return appliedFilters.value.startDate !== '' || appliedFilters.value.endDate !== '' || appliedFilters.value.rewardType.length > 0
+})
+
+const applyFilters = () => {
+    appliedFilters.value = {
+        startDate: startDate.value,
+        endDate: endDate.value,
+        startRegistration: startRegistration.value,
+        endRegistration: endRegistration.value,
+        startActivation: startActivation.value,
+        endActivation: endActivation.value,
+        status: [...status.value],
+        rewardType: [...rewardType.value]
+    }
+}
+
+const resetFilters = () => {
+    startDate.value = ''
+    endDate.value = ''
+    startRegistration.value = ''
+    endRegistration.value = ''
+    startActivation.value = ''
+    endActivation.value = ''
+    status.value = []
+    rewardType.value = []
+    applyFilters()
+}
+
+const cancelFilters = () => {
+    startDate.value = appliedFilters.value.startDate
+    endDate.value = appliedFilters.value.endDate
+    startRegistration.value = appliedFilters.value.startRegistration
+    endRegistration.value = appliedFilters.value.endRegistration
+    startActivation.value = appliedFilters.value.startActivation
+    endActivation.value = appliedFilters.value.endActivation
+    status.value = [...appliedFilters.value.status]
+    rewardType.value = [...appliedFilters.value.rewardType]
+}
+
 const servicePage = ref(1)
 const serviceSort = ref('activationDate')
 const serviceOrder = ref<'asc' | 'desc'>('desc')
@@ -266,10 +448,15 @@ const { data: serviceResponse, status: serviceStatus } = useAsyncData(
     sort: serviceSort.value,
     order: serviceOrder.value,
     q: searchQuery.value,
+    startRegistration: appliedFilters.value.startRegistration || undefined,
+    endRegistration: appliedFilters.value.endRegistration || undefined,
+    startActivation: appliedFilters.value.startActivation || undefined,
+    endActivation: appliedFilters.value.endActivation || undefined,
+    status: appliedFilters.value.status.length > 0 ? appliedFilters.value.status : undefined,
     limit: 5
   }),
   {
-    watch: [servicePage, serviceSort, serviceOrder, searchQuery]
+    watch: [servicePage, serviceSort, serviceOrder, searchQuery, appliedFilters]
   }
 )
 
@@ -288,10 +475,13 @@ const { data: pointResponse, status: pointStatus } = useAsyncData(
     sort: pointSort.value,
     order: pointOrder.value,
     q: searchQuery.value,
+    startDate: appliedFilters.value.startDate || undefined,
+    endDate: appliedFilters.value.endDate || undefined,
+    type: appliedFilters.value.rewardType.length > 0 ? appliedFilters.value.rewardType : undefined,
     limit: 5
   }),
   {
-    watch: [pointPage, pointSort, pointOrder, searchQuery]
+    watch: [pointPage, pointSort, pointOrder, searchQuery, appliedFilters]
   }
 )
 
@@ -301,6 +491,7 @@ const pointLoading = computed(() => pointStatus.value === 'pending')
 
 const serviceColumns = [
   { label: 'Nama Layanan', key: 'service.name', sortable: true },
+  { label: 'Tanggal Registrasi', key: 'registrationDate', sortable: true },
   { label: 'Tanggal Aktif', key: 'activationDate', sortable: true },
   { label: 'Periode Berlangganan', key: 'period', sortable: false },
   { label: 'Alamat Pemasangan', key: 'address', sortable: false },
@@ -316,4 +507,20 @@ const pointColumns = [
   { label: 'Harga Layanan', key: 'price', sortable: true }
 ]
 
+const fetchFilterOptions = async () => {
+  const [statusRes, typeRes] = await Promise.all([
+    additionalService.getCustomerServiceStatuses(),
+    additionalService.getRewardPointTypes()
+  ])
+  if (statusRes.success) {
+    statusOptions.value = statusRes.data
+  }
+  if (typeRes.success) {
+    rewardTypeOptions.value = typeRes.data
+  }
+}
+
+onMounted(() => {
+  fetchFilterOptions()
+})
 </script>

@@ -28,6 +28,32 @@ export class AdditionalService {
             return handleServiceError(error || 'Gagal mengambil daftar tipe pelanggan tambahan')
         }
     }
+
+    async getCustomerServiceStatuses(): Promise<AdditionalResponse> {
+        try {
+            const response = await apiService.client.get<AdditionalResponse>('/additional/customer-service-status', {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Gagal mengambil daftar status layanan pelanggan')
+        }
+    }
+
+    async getRewardPointTypes(): Promise<AdditionalResponse> {
+        try {
+            const response = await apiService.client.get<AdditionalResponse>('/additional/reward-point-type', {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Gagal mengambil daftar tipe poin reward')
+        }
+    }
 }
 
 export const additionalService = new AdditionalService()

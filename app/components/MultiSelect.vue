@@ -29,7 +29,7 @@
         v-if="isOpen"
         ref="dropdownPanel"
         :style="dropdownStyle"
-        class="fixed z-[9999] bg-white border border-base-200 rounded-xl shadow-2xl py-2 flex flex-col min-w-[200px] animate-in fade-in zoom-in-95 duration-200"
+        class="fixed z-[10000] bg-white border border-base-200 rounded-xl shadow-2xl py-2 flex flex-col min-w-[200px] animate-in fade-in zoom-in-95 duration-200"
         @click.stop
       >
         <!-- Search Input -->
@@ -93,7 +93,7 @@ const dropdownPanel = ref<HTMLElement | null>(null)
 const isOpen = ref(false)
 const search = ref('')
 
-const dropdownStyle = ref({
+const dropdownStyle = ref<Record<string, string>>({
   top: '0px',
   left: '0px',
   width: '0px'
@@ -102,10 +102,25 @@ const dropdownStyle = ref({
 const updatePosition = () => {
   if (containerRef.value) {
     const rect = containerRef.value.getBoundingClientRect()
-    dropdownStyle.value = {
-      top: `${rect.bottom + window.scrollY + 4}px`,
-      left: `${rect.left + window.scrollX}px`,
-      width: `${rect.width}px`
+    const estimatedHeight = 300 // typical max height of the dropdown
+    const spaceBelow = window.innerHeight - rect.bottom
+    const spaceAbove = rect.top
+
+    // If space below is limited and there is more space above, flip it
+    if (spaceBelow < estimatedHeight && spaceAbove > spaceBelow) {
+      dropdownStyle.value = {
+        bottom: `${window.innerHeight - rect.top + 4}px`,
+        top: 'auto',
+        left: `${rect.left}px`,
+        width: `${rect.width}px`
+      }
+    } else {
+      dropdownStyle.value = {
+        top: `${rect.bottom + 4}px`,
+        bottom: 'auto',
+        left: `${rect.left}px`,
+        width: `${rect.width}px`
+      }
     }
   }
 }
@@ -189,19 +204,3 @@ const toggleOption = (value: any) => {
   emit('update:modelValue', newValue)
 }
 </script>
-
-<style scoped>
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #e5e7eb;
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #d1d5db;
-}
-</style>

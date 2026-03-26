@@ -39,4 +39,5 @@ export interface RewardQueryParams {
   limit?: number
   startDate?: string
   endDate?: string
+  type?: string | string[]
 }

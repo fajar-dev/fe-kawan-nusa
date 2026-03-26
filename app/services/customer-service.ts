@@ -1,7 +1,7 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
 import type { Customer, CustomerListResponse, CustomerQueryParams, CustomerAddressResponse, CustomerServiceResponse } from "../types/customer"
-import type { CustomerRewardResponse } from "../types/reward"
+import type { CustomerRewardResponse, RewardQueryParams } from "../types/reward"
 import type { ApiResponse } from "../types/auth"
 
 export class CustomerService {
@@ -60,7 +60,7 @@ export class CustomerService {
         }
     }
 
-    async getCustomerRewards(id: string, params?: CustomerQueryParams): Promise<CustomerRewardResponse> {
+    async getCustomerRewards(id: string, params?: RewardQueryParams): Promise<CustomerRewardResponse> {
         try {
             const response = await apiService.client.get<CustomerRewardResponse>(`/customer/${id}/reward`, {
                 params,
