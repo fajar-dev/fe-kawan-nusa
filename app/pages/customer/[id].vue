@@ -233,7 +233,7 @@
                 <template #body="{ isColumnVisible }">
                   <tbody class="text-xs text-neutral-600">
                     <tr v-for="(item, index) in customerServices" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
-                      <td v-show="isColumnVisible('service.name')" class="border-r border-base-200 text-primary ps-4 max-w-[250px] truncate" :title="item.service.name">
+                      <td v-show="isColumnVisible('service.name')" class="border-r border-base-200 text-primary max-w-[250px] truncate" :title="item.service.name">
                         <NuxtLink :to="`/service/${item.service.code}`" class="hover:underline">{{ item.service.name }}</NuxtLink>
                       </td>
                       <td v-show="isColumnVisible('registrationDate')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDateShort(item.registrationDate) }}</td>
@@ -242,7 +242,7 @@
                         {{ formatDate(item.startDate) }}
                         <span v-if="item.endDate"> - {{ formatDate(item.endDate) }}</span>
                       </td>
-                      <td v-show="isColumnVisible('address')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ item.address }}</td>
+                      <td v-show="isColumnVisible('address')" class="border-r border-base-200 text-neutral-500 max-w-[250px] truncate whitespace-nowrap">{{ item.address }}</td>
                       <td v-show="isColumnVisible('status')" class="text-center max-w-[80px]">
                         <div :class="['badge border-none font-semibold text-xs rounded-lg w-full', getStatusClass(item.status)]">
                           {{ item.status }}
