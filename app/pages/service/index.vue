@@ -75,8 +75,8 @@
         <template #body="{ isColumnVisible }">
           <tbody class="text-sm text-neutral-600">
             <tr v-for="(item, index) in services" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0">
-              <td v-show="isColumnVisible('name')" class="text-primary font-medium border-r border-base-200 max-w-[300px] truncate">
-                <NuxtLink :to="`/service/${item.code}`" class="hover:underline" :title="item.name">{{ item.name }}</NuxtLink>
+              <td v-show="isColumnVisible('name')" class="text-primary font-medium border-r border-base-200 max-w-[300px] truncate" :title="item.name">
+                <NuxtLink :to="`/service/${item.code}`" class="hover:underline">{{ item.name }}</NuxtLink>
               </td>
               <td v-show="isColumnVisible('lastReferanceDate')" class="border-r border-base-200">{{ formatDateShort(item.lastReferanceDate) }}</td>
               <td v-show="isColumnVisible('isActive')" class="border-r border-base-200 text-center px-4">
@@ -123,7 +123,7 @@ const services = ref<Service[]>([])
 const loading = ref(true)
 const searchQuery = ref('')
 const meta = ref<PaginationMeta | null>(null)
-const currentSort = ref('name')
+const currentSort = ref('totalPoint')
 const currentOrder = ref<'asc' | 'desc'>('desc')
 
 const isFilterActive = ref(false)

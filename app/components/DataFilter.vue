@@ -1,5 +1,5 @@
 <template>
-  <details class="dropdown dropdown-bottom md:dropdown-start" ref="detailsRef">
+  <details :class="['dropdown dropdown-bottom', align === 'end' ? 'md:dropdown-end' : 'md:dropdown-start']" ref="detailsRef">
     <summary class="btn btn-outline border-primary text-primary btn-md h-10 px-4 gap-2 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors w-full md:w-auto list-none cursor-pointer appearance-none outline-none">
       <div class="indicator">
         <span v-if="isFilterActive" class="indicator-item badge bg-red-500 size-2 p-0 border-none"></span>
@@ -7,7 +7,7 @@
       </div>
       {{ label }}
     </summary>
-    <div class="dropdown-content z-[999] card card-compact bg-base-100 w-[calc(100vw-2rem)] md:w-[450px] shadow-xl border border-base-200 mt-2 left-0 md:left-auto">
+    <div :class="['dropdown-content z-[999] card card-compact bg-base-100 w-[calc(100vw-2rem)] md:w-[500px] shadow-xl border border-base-200 mt-2', align === 'end' ? 'right-0' : 'left-0 md:left-auto']">
       <div class="card-body p-0">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-2 border-b border-base-200">
@@ -40,9 +40,11 @@ import { Filter, X } from 'lucide-vue-next'
 withDefaults(defineProps<{
   isFilterActive?: boolean
   label?: string
+  align?: 'start' | 'end'
 }>(), {
   isFilterActive: false,
-  label: 'Filter'
+  label: 'Filter',
+  align: 'start'
 })
 
 const emit = defineEmits(['apply', 'reset', 'cancel'])

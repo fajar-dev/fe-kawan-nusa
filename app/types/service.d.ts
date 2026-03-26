@@ -34,6 +34,8 @@ export interface ServiceQueryParams {
   startDate?: string
   endDate?: string
   isActive?: number
+  serviceCode?: string | string[]
+  type?: string | string[]
 }
 
 export interface ServiceCustomer {

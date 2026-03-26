@@ -47,7 +47,7 @@
         
         <!-- Tab Navigation -->
         <div class="mt-8 lg:mt-10">
-          <div class="flex items-center lg:justify-end gap-6 lg:gap-8 overflow-x-auto no-scrollbar lg:max-w-sm lg:ml-auto border-b border-base-300">
+          <div class="flex items-center lg:justify-end gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar lg:max-w-sm lg:ml-auto border-b border-base-300">
             <NuxtLink 
               to="/setting/account" 
               class="pb-3 text-xs lg:text-sm transition-all relative inline-flex items-center gap-2 shrink-0"

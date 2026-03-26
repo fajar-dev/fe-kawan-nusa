@@ -209,6 +209,7 @@
                   <span 
                     @click="openUrl(withdrawService.getWithdrawPdfUrl(item.id))"
                     class="text-primary font-medium truncate cursor-pointer hover:underline"
+                    :title="`paid-${item.id}.pdf`"
                   >
                     paid-{{ item.id }}.pdf
                   </span>

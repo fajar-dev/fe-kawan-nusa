@@ -63,7 +63,7 @@
                   <div class="flex flex-col flex-1 min-w-0">
                     <span class="text-xs text-neutral-900">Email</span>
                     <div class="flex items-center justify-between w-full gap-2 min-w-0">
-                      <span class="text-xs text-neutral-800 font-medium truncate">{{ customer.emails?.[0]?.email || '-' }}</span>
+                      <span class="text-xs text-neutral-800 font-medium truncate" :title="customer.emails?.[0]?.email">{{ customer.emails?.[0]?.email || '-' }}</span>
                       <div v-if="customer.emails && customer.emails.length > 1" class="dropdown dropdown-end">
                         <div tabindex="0" role="button" class="badge bg-accent border-none text-primary font-medium text-[10px] rounded px-1.5 py-0.5 flex items-center gap-1 cursor-pointer">
                           +{{ customer.emails.length - 1 }} <ChevronDown class="w-3 h-3" />
@@ -91,7 +91,7 @@
                   <div class="flex flex-col flex-1 min-w-0">
                     <span class="text-xs text-neutral-900">No Handphone</span>
                     <div class="flex items-center justify-between w-full gap-2 min-w-0">
-                      <span class="text-xs text-neutral-800 font-medium truncate">{{ customer.phones?.[0]?.phone || '-' }}</span>
+                      <span class="text-xs text-neutral-800 font-medium truncate" :title="customer.phones?.[0]?.phone">{{ customer.phones?.[0]?.phone || '-' }}</span>
                       <div v-if="customer.phones && customer.phones.length > 1" class="dropdown dropdown-end">
                         <div tabindex="0" role="button" class="badge bg-accent border-none text-primary font-medium text-[10px] rounded px-1.5 py-0.5 flex items-center gap-1 cursor-pointer">
                           +{{ customer.phones.length - 1 }} <ChevronDown class="w-3 h-3" />
@@ -242,7 +242,7 @@
                         {{ formatDate(item.startDate) }}
                         <span v-if="item.endDate"> - {{ formatDate(item.endDate) }}</span>
                       </td>
-                      <td v-show="isColumnVisible('address')" class="border-r border-base-200 text-neutral-500 max-w-[250px] truncate whitespace-nowrap">{{ item.address }}</td>
+                      <td v-show="isColumnVisible('address')" class="border-r border-base-200 text-neutral-500 max-w-[250px] truncate whitespace-nowrap" :title="item.address ?? '-' ">{{ item.address ?? '-' }}</td>
                       <td v-show="isColumnVisible('status')" class="text-center max-w-[80px]">
                         <div :class="['badge border-none font-semibold text-xs rounded-lg w-full', getStatusClass(item.status)]">
                           {{ item.status }}
@@ -438,7 +438,7 @@ const cancelFilters = () => {
 }
 
 const servicePage = ref(1)
-const serviceSort = ref('activationDate')
+const serviceSort = ref('registrationDate')
 const serviceOrder = ref<'asc' | 'desc'>('desc')
 
 const { data: serviceResponse, status: serviceStatus } = useAsyncData(

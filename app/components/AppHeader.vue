@@ -48,7 +48,7 @@
             </div>
           </div>
           <div class="hidden lg:block text-right">
-            <p class="text-sm font-medium leading-none text-primary max-w-30 truncate">
+            <p class="text-sm font-medium leading-none text-primary max-w-30 truncate" :title="authState.user?.firstName + ' ' + authState.user?.lastName">
                 {{ authState.user?.firstName }} {{ authState.user?.lastName }}
             </p>
           </div>
