@@ -222,7 +222,7 @@
                           v-model="status" 
                           :options="statusOptions" 
                           labelKey="name"
-                          valueKey="code"
+                          valueKey="name"
                           placeholder="Semua Status" 
                           searchable
                         />
@@ -311,7 +311,7 @@
                           v-model="rewardType" 
                           :options="rewardTypeOptions" 
                           labelKey="name"
-                          valueKey="code"
+                          valueKey="name"
                           placeholder="Semua Tipe Poin" 
                           searchable
                         />
