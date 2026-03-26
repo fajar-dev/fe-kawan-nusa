@@ -43,23 +43,6 @@
             @reset="resetFilters"
             @cancel="cancelFilters"
           >
-            <div>
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="text-neutral-400 text-xs font-medium">Tanggal Aktif</span>
-                <span @click="startDate = ''; endDate = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="space-y-1.5">
-                  <label class="text-xs font-medium text-neutral-800">Dari:</label>
-                  <input v-model="startDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
-                </div>
-                <div class="space-y-1.5">
-                  <label class="text-xs font-medium text-neutral-800">Sampai:</label>
-                  <input v-model="endDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
-                </div>
-              </div>
-            </div>
-
             <!-- Tipe Industri -->
             <div>
               <div class="flex items-center justify-between mb-1.5">
@@ -121,7 +104,6 @@
                   {{ item.isActive ? 'Aktif' : 'Tidak Aktif' }}
                 </div>
               </td>
-              <td v-show="isColumnVisible('activationDate')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateShort(item.activationDate) }}</td>
               <td v-show="isColumnVisible('emails')" class="border-r border-base-200 max-w-[180px]">
                 <div class="flex items-center justify-between gap-2">
                   <span class="truncate flex-1">{{ item.emails?.[0]?.email || '-' }}</span>
@@ -138,7 +120,6 @@
                   </div>
                 </div>
               </td>
-              <td v-show="isColumnVisible('salesName')" class="max-w-[120px] truncate">{{ item.salesName || '-' }}</td>
             </tr>
           </tbody>
         </template>
@@ -148,10 +129,7 @@
 </template>
 
 <script setup lang="ts">
-import { 
-  Users, CircleHelp, ChevronDown, X, 
-  Filter as FilterIcon
-} from 'lucide-vue-next'
+import { Users, CircleHelp, ChevronDown } from 'lucide-vue-next'
 import { customerService } from '~/services/customer-service'
 import { additionalService } from '~/services/additional-service'
 import type { CustomerQueryParams } from '~/types/customer'
@@ -170,23 +148,19 @@ const columns = [
   { label: 'Nama PIC', key: 'name', sortable: true },
   { label: 'Nama Bisnis', key: 'company', sortable: true },
   { label: 'Status', key: 'isActive', sortable: true },
-  { label: 'Tanggal Aktif', key: 'activationDate', sortable: true },
   { label: 'Email', key: 'emails', sortable: false },
   { label: 'No Telpon', key: 'phones', sortable: false },
-  { label: 'Nama AM', key: 'salesName', sortable: true }
 ]
 
 const customers = ref<any[]>([])
 const loading = ref(true)
 const searchQuery = ref('')
 const meta = ref<any>(null)
-const currentSort = ref('activationDate')
+const currentSort = ref('name')
 const currentOrder = ref<'asc' | 'desc'>('desc')
 
 const isFilterActive = ref(false)
 
-const startDate = ref('')
-const endDate = ref('')
 const industryOptions = ref<AdditionalItem[]>([])
 const serviceOptions = ref<AdditionalItem[]>([])
 
@@ -195,8 +169,6 @@ const isActive = ref('')
 const serviceCode = ref<string[]>([])
 
 const appliedFilters = ref({
-  startDate: '',
-  endDate: '',
   industryType: [] as string[],
   isActive: '',
   serviceCode: [] as string[]
@@ -209,8 +181,6 @@ const fetchCustomers = async (queryParams: CustomerQueryParams = {}) => {
       sort: currentSort.value,
       order: currentOrder.value,
       q: searchQuery.value,
-      startDate: appliedFilters.value.startDate || undefined,
-      endDate: appliedFilters.value.endDate || undefined,
       type: appliedFilters.value.industryType || undefined,
       isActive: appliedFilters.value.isActive === '' ? undefined : Number(appliedFilters.value.isActive),
       serviceCode: appliedFilters.value.serviceCode || undefined,
@@ -251,8 +221,6 @@ const handleOrderChange = (order: 'asc' | 'desc') => {
 }
 
 const cancelFilters = () => {
-    startDate.value = appliedFilters.value.startDate
-    endDate.value = appliedFilters.value.endDate
     industryType.value = [...appliedFilters.value.industryType]
     isActive.value = appliedFilters.value.isActive
     serviceCode.value = [...appliedFilters.value.serviceCode]
@@ -260,23 +228,17 @@ const cancelFilters = () => {
 
 const applyFilters = () => {
     appliedFilters.value = {
-        startDate: startDate.value,
-        endDate: endDate.value,
         industryType: [...industryType.value],
         isActive: isActive.value,
         serviceCode: [...serviceCode.value]
     }
-    isFilterActive.value = appliedFilters.value.startDate !== '' || 
-                           appliedFilters.value.endDate !== '' || 
-                           appliedFilters.value.industryType.length > 0 || 
+    isFilterActive.value = appliedFilters.value.industryType.length > 0 || 
                            appliedFilters.value.isActive !== '' ||
                            appliedFilters.value.serviceCode.length > 0
     fetchCustomers({ page: 1 })
 }
 
 const resetFilters = () => {
-    startDate.value = ''
-    endDate.value = ''
     industryType.value = []
     isActive.value = ''
     serviceCode.value = []

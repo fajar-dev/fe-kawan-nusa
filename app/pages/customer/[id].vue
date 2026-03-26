@@ -38,8 +38,8 @@
     <!-- Main Content -->
     <div class="space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Left Column: Detail Pelanggan -->
-        <div class="lg:col-span-4 h-full">
+        <!-- Detail Pelanggan -->
+        <div class="lg:col-span-5 h-full">
           <div class="card bg-white border border-base-200 h-full">
             <div class="card-header p-6">
               <div class="flex items-center gap-3 border-b border-base-300 pb-3">
@@ -48,30 +48,22 @@
               </div>
             </div>
             <div class="card-body p-6 pt-0 flex flex-col gap-5 ps-8">
-              <div v-if="customer" class="space-y-5">
+              <div v-if="customer" class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-5">
                 <!-- Row 1 -->
                 <div class="flex items-start gap-4">
-                  <Calendar class="w-5 h-5 text-neutral-400 mt-0.5" />
+                  <Calendar class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
                   <div class="flex flex-col">
                     <span class="text-xs text-neutral-900">Tanggal Bergabung</span>
-                    <span class="text-xs text-neutral-800 font-medium">{{ formatDate(customer.registrationDate || customer.activationDate) }}</span>
+                    <span class="text-xs text-neutral-800 font-medium">{{ formatDate(customer.registrationDate) }}</span>
                   </div>
                 </div>
                 <!-- Row 2 -->
-                <div class="flex items-start gap-4">
-                  <Hash class="w-5 h-5 text-neutral-400 mt-0.5" />
-                  <div class="flex flex-col">
-                    <span class="text-xs text-neutral-900">ID Pelanggan</span>
-                    <span class="text-xs text-neutral-800 font-medium">{{ customer.id }}</span>
-                  </div>
-                </div>
-                <!-- Row 3 -->
-                <div class="flex items-start gap-4">
-                  <Mail class="w-5 h-5 text-neutral-400 mt-0.5" />
-                  <div class="flex flex-col flex-1">
+                <div class="flex items-start gap-4 min-w-0">
+                  <Mail class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                  <div class="flex flex-col flex-1 min-w-0">
                     <span class="text-xs text-neutral-900">Email</span>
-                    <div class="flex items-center justify-between w-full">
-                      <span class="text-xs text-neutral-800 font-medium">{{ customer.emails?.[0]?.email || '-' }}</span>
+                    <div class="flex items-center justify-between w-full gap-2 min-w-0">
+                      <span class="text-xs text-neutral-800 font-medium truncate">{{ customer.emails?.[0]?.email || '-' }}</span>
                       <div v-if="customer.emails && customer.emails.length > 1" class="dropdown dropdown-end">
                         <div tabindex="0" role="button" class="badge bg-accent border-none text-primary font-medium text-[10px] rounded px-1.5 py-0.5 flex items-center gap-1 cursor-pointer">
                           +{{ customer.emails.length - 1 }} <ChevronDown class="w-3 h-3" />
@@ -85,13 +77,21 @@
                     </div>
                   </div>
                 </div>
-                <!-- Row 4 -->
+                <!-- Row 3 -->
                 <div class="flex items-start gap-4">
-                  <Phone class="w-5 h-5 text-neutral-400 mt-0.5" />
-                  <div class="flex flex-col flex-1">
+                  <Hash class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                  <div class="flex flex-col">
+                    <span class="text-xs text-neutral-900">ID Pelanggan</span>
+                    <span class="text-xs text-neutral-800 font-medium">{{ customer.id }}</span>
+                  </div>
+                </div>
+                <!-- Row 4 -->
+                <div class="flex items-start gap-4 min-w-0">
+                  <Phone class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                  <div class="flex flex-col flex-1 min-w-0">
                     <span class="text-xs text-neutral-900">No Handphone</span>
-                    <div class="flex items-center justify-between w-full">
-                      <span class="text-xs text-neutral-800 font-medium">{{ customer.phones?.[0]?.phone || '-' }}</span>
+                    <div class="flex items-center justify-between w-full gap-2 min-w-0">
+                      <span class="text-xs text-neutral-800 font-medium truncate">{{ customer.phones?.[0]?.phone || '-' }}</span>
                       <div v-if="customer.phones && customer.phones.length > 1" class="dropdown dropdown-end">
                         <div tabindex="0" role="button" class="badge bg-accent border-none text-primary font-medium text-[10px] rounded px-1.5 py-0.5 flex items-center gap-1 cursor-pointer">
                           +{{ customer.phones.length - 1 }} <ChevronDown class="w-3 h-3" />
@@ -107,7 +107,7 @@
                 </div>
                 <!-- Row 5 -->
                 <div class="flex items-start gap-4">
-                  <Briefcase class="w-5 h-5 text-neutral-400 mt-0.5" />
+                  <Briefcase class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
                   <div class="flex flex-col">
                     <span class="text-xs text-neutral-900">Bidang Industri</span>
                     <span class="text-xs text-neutral-800 font-medium">{{ customer.type || '-' }}</span>
@@ -116,90 +116,6 @@
               </div>
               <div v-else class="space-y-4 animate-pulse">
                 <div v-for="i in 5" :key="i" class="h-10 bg-base-200 rounded-lg"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Column: Detail Alamat -->
-        <div class="lg:col-span-8 h-full">
-          <div class="card bg-white border border-base-200 h-full">
-            <div class="card-header p-6">
-              <div class="flex items-center gap-3 border-b border-base-300 pb-3">
-                <MapPin class="w-5 h-5 text-neutral-800" />
-                <h3 class="font-semibold text-neutral-800 ps-2">Detail Alamat</h3>
-              </div>
-            </div>
-            <div class="card-body pt-0 flex flex-col gap-5 ps-7">
-              <div v-if="addresses.length > 0" class="flex-1 space-y-3">
-                <div v-for="(address, index) in addresses" :key="address.id" class="flex gap-1 group">
-                  <div class="w-8 h-8 flex items-start justify-center text-neutral-500 shrink-0">
-                    <MapPin class="w-4 h-4" />
-                  </div>
-                  <div class="flex flex-col gap-1">
-                    <span class="text-xs text-neutral-900">{{ `Alamat Pemasangan ${index + 1 + (addressPage - 1) * (addressMeta?.perPage || 10)}` }} {{ address.label ? `(${address.label})` : '' }}</span>
-                    <p class="text-sm text-neutral-600 font-medium leading-relaxed whitespace-pre-line">
-                      {{ address.address }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div v-else-if="addressLoading" class="flex-1 space-y-3 animate-pulse">
-                <div v-for="i in 3" :key="i" class="h-20 bg-base-200 rounded-lg"></div>
-              </div>
-              <div v-else class="flex flex-col items-center justify-center py-12 text-neutral-400">
-                <MapPin class="w-12 h-12 mb-2 opacity-20" />
-                <p class="text-sm font-medium">Tidak ada detail alamat</p>
-              </div>
-
-            <div class="card-footer">
-              <!-- Pagination footer -->
-                <div class="flex flex-col lg:flex-row items-center lg:justify-between lg:gap-0 gap-4 justify-center mt-6 text-sm border-t border-base-300 pt-3">
-                  <div class="text-neutral-500 text-sm">
-                    Showing {{ addressMeta?.from || 0 }} to {{ addressMeta?.to || 0 }} of {{ addressMeta?.total || 0 }} entries
-                  </div>
-                  <div class="join">
-                    <button 
-                      class="btn border-none shadow-none btn-sm rounded-sm bg-base-100 text-neutral-400 hover:bg-base-200 disabled:bg-transparent"
-                      :disabled="addressPage === 1 || addressLoading"
-                      @click="addressPage = 1"
-                    >
-                      <ChevronFirst class="w-4 h-4" />
-                    </button>
-                    <button 
-                      class="btn border-none shadow-none btn-sm rounded-sm bg-base-100 text-neutral-400 hover:bg-base-200 disabled:bg-transparent"
-                      :disabled="addressPage === 1 || addressLoading"
-                      @click="addressPage--"
-                    >
-                      <ChevronLeft class="w-4 h-4" />
-                    </button>
-                    
-                    <button 
-                      v-for="page in addressMeta?.lastPage || 1" 
-                      :key="page"
-                      class="btn border-none shadow-none btn-sm rounded-sm"
-                      :class="addressPage === page ? 'bg-primary text-primary-content hover:bg-primary/90' : 'bg-white text-neutral-600 hover:bg-base-200 border border-base-200'"
-                      @click="addressPage = page"
-                    >
-                      {{ page }}
-                    </button>
-
-                    <button 
-                      class="btn border-none shadow-none btn-sm rounded-sm bg-base-100 text-neutral-600 hover:bg-base-200 disabled:bg-transparent"
-                      :disabled="addressPage === (addressMeta?.lastPage || 1) || addressLoading"
-                      @click="addressPage++"
-                    >
-                      <ChevronRight class="w-4 h-4" />
-                    </button>
-                    <button 
-                      class="btn border-none shadow-none btn-sm rounded-sm bg-base-100 text-neutral-600 hover:bg-base-200 disabled:bg-transparent"
-                      :disabled="addressPage === (addressMeta?.lastPage || 1) || addressLoading"
-                      @click="addressPage = addressMeta?.lastPage || 1"
-                    >
-                      <ChevronLast class="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -262,11 +178,13 @@
                       {{ formatDate(item.startDate) }}
                       <span v-if="item.endDate"> - {{ formatDate(item.endDate) }}</span>
                     </td>
+                    <td v-show="isColumnVisible('address')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ item.address }}</td>
                     <td v-show="isColumnVisible('status')" class="text-center max-w-[80px]">
                       <div :class="['badge border-none font-semibold text-xs rounded-lg w-full', getStatusClass(item.status)]">
                         {{ item.status }}
                       </div>
                     </td>
+                    <td v-show="isColumnVisible('salesName')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ item.salesName }}</td>
                   </tr>
                 </tbody>
               </template>
@@ -314,7 +232,7 @@
 </template>
 
 <script setup lang="ts">
-import { CircleHelp, History, Package, MapPin, Users, Calendar, Hash, Mail, Phone, Briefcase, ChevronDown, ChevronLeft, ChevronRight, ChevronFirst, ChevronLast, FileText, ListFilter } from 'lucide-vue-next'
+import { CircleHelp, History, Package, Users, Calendar, Hash, Mail, Phone, Briefcase, ChevronDown, FileText } from 'lucide-vue-next'
 import { customerService } from '~/services/customer-service'
 
 definePageMeta({
@@ -334,19 +252,6 @@ const { data: customerResponse } = useAsyncData(
 )
 
 const customer = computed(() => customerResponse.value?.data)
-
-const addressPage = ref(1)
-const { data: addressResponse, status: addressStatus } = useAsyncData(
-  `customer-addresses-${customerId}`,
-  () => customerService.getCustomerAddresses(customerId, { page: addressPage.value }),
-  {
-    watch: [addressPage]
-  }
-)
-
-const addresses = computed(() => addressResponse.value?.data || [])
-const addressMeta = computed(() => addressResponse.value?.meta)
-const addressLoading = computed(() => addressStatus.value === 'pending')
 
 const activeTab = ref('layanan')
 const searchQuery = ref('')
@@ -398,7 +303,9 @@ const serviceColumns = [
   { label: 'Nama Layanan', key: 'service.name', sortable: true },
   { label: 'Tanggal Aktif', key: 'activationDate', sortable: true },
   { label: 'Periode Berlangganan', key: 'period', sortable: false },
-  { label: 'Status', key: 'status', sortable: true }
+  { label: 'Alamat Pemasangan', key: 'address', sortable: false },
+  { label: 'Status', key: 'status', sortable: true },
+  { label: 'Nama AM', key: 'salesName', sortable: true }
 ]
 
 const pointColumns = [

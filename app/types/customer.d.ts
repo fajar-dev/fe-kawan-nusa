@@ -12,20 +12,12 @@ export interface CustomerEmail {
   label: string | null
 }
 
-export interface CustomerAddress {
-  id: number
-  address: string
-  label: string | null
-}
-
 export interface Customer {
   id: string
   name: string
   company: string | null
   type: string | null
-  activationDate: string | null
   registrationDate: string | null
-  salesName: string | null
   isActive: boolean
   totalCustomerServices?: number
   latestCustomerService?: CustomerRegisteredService
@@ -57,8 +49,6 @@ export interface CustomerQueryParams {
   order?: 'asc' | 'desc'
   page?: number
   limit?: number
-  startDate?: string
-  endDate?: string
   isActive?: number
   type?: string | string[]
   serviceCode?: string | string[]
@@ -75,6 +65,7 @@ export interface CustomerRegisteredService {
   status: string
   referenceDate: string
   salesName: string | null
+  address: string | null
   service: {
     code: string
     name: string
@@ -83,36 +74,6 @@ export interface CustomerRegisteredService {
 }
 
 export interface CustomerServiceResponse extends ApiResponse<CustomerRegisteredService[]> {
-  meta: PaginationMeta
-}
-
-export interface CustomerReward {
-  id: number
-  customerServiceId: number
-  price: number
-  point: number
-  type: string
-  paymentDate: string
-  customerService: {
-    id: number
-    serviceCode: string
-    activationDate: string
-    referenceDate: string
-    startDate: string
-    endDate: string | null
-  }
-  service: {
-    code: string
-    name: string
-  }
-  customer: {
-    id: string
-    name: string
-  }
-  createdAt: string
-}
-
-export interface CustomerRewardResponse extends ApiResponse<CustomerReward[]> {
   meta: PaginationMeta
 }
 

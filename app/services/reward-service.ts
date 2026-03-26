@@ -1,9 +1,9 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
-import type { CustomerRewardResponse, CustomerQueryParams } from "../types/customer"
+import type { CustomerRewardResponse, RewardQueryParams } from "../types/reward"
 
 export class RewardService {
-    async getRewards(params?: CustomerQueryParams): Promise<CustomerRewardResponse> {
+    async getRewards(params?: RewardQueryParams): Promise<CustomerRewardResponse> {
         try {
             const response = await apiService.client.get<CustomerRewardResponse>('/reward', {
                 params,

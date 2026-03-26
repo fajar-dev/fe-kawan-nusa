@@ -1,6 +1,7 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
-import type { Customer, CustomerListResponse, CustomerQueryParams, CustomerAddressResponse, CustomerServiceResponse, CustomerRewardResponse } from "../types/customer"
+import type { Customer, CustomerListResponse, CustomerQueryParams, CustomerAddressResponse, CustomerServiceResponse } from "../types/customer"
+import type { CustomerRewardResponse } from "../types/reward"
 import type { ApiResponse } from "../types/auth"
 
 export class CustomerService {
