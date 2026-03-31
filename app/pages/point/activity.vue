@@ -5,11 +5,10 @@
         <div class="flex items-center gap-4">
           <div>
             <div class="flex items-center gap-2">
-              <h1 class="text-xl font-medium text-neutral-800">Point Saya</h1>
-              <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
+              <h1 class="text-xl font-medium text-neutral-800">Aktivitas Poin</h1>
             </div>
             <p class="text-xs text-neutral-400 font-medium mt-0.5">
-              Ringkasan perolehan dan penarikan poin referral Anda
+              Kelola dan pantau semua pergerakan poin komisi Anda.
             </p>
           </div>
         </div>
@@ -91,7 +90,6 @@ import {
   Coins
 } from 'lucide-vue-next'
 import { pointService } from '~/services/point-service'
-import { withdrawService } from '~/services/withdraw-service'
 import { statisticService } from '~/services/statistic-service'
 
 definePageMeta({
