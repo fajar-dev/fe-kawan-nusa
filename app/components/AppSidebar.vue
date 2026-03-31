@@ -34,14 +34,37 @@
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink 
-            to="/point" 
-            class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
-            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': $route.path.startsWith('/point') }"
-          >
-            <Coins class="w-5 h-5" :class="{ 'text-white': $route.path.startsWith('/point') }" />
-            Poin Saya
-          </NuxtLink>
+          <details :open="$route.path.startsWith('/point')">
+            <summary 
+              class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors cursor-pointer list-none flex items-center gap-2"
+              :class="{ 'text-primary bg-primary/10': $route.path.startsWith('/point') }"
+            >
+              <Coins class="w-5 h-5" :class="{ 'text-primary': $route.path.startsWith('/point') }" />
+              <div class="flex items-center w-40">
+                <span>Poin Saya</span>
+              </div>
+            </summary>
+            <ul class="mt-1 gap-1.5 ml-4">
+              <li>
+                <NuxtLink 
+                  to="/point" 
+                  class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2 font-medium transition-all"
+                  :class="{ 'text-primary active': $route.path === '/point' }"
+                >
+                  Aktivitas Poin
+                </NuxtLink>
+              </li>
+              <li>
+                <NuxtLink 
+                  to="/point/redeem" 
+                  class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2 font-medium transition-all"
+                  :class="{ 'text-primary active': $route.path === '/point/redeem' }"
+                >
+                  Tukar Poin
+                </NuxtLink>
+              </li>
+            </ul>
+          </details>
         </li>
       </ul>
     </div>
@@ -73,5 +96,5 @@
 </template>
 
 <script setup lang="ts">
-import { Home, Users, Package, Coins, BookOpen, Settings } from 'lucide-vue-next'
+import { Home, Users, Package, Coins, BookOpen, Settings, History, ArrowRightLeft } from 'lucide-vue-next'
 </script>

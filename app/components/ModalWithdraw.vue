@@ -18,14 +18,21 @@
           <!-- Body -->
           <div class="p-6 space-y-5">
             <div class="space-y-2">
+              <div role="alert" class="alert alert-info alert-soft text-blue-500 bg-blue-700/">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-5 w-5 shrink-0 stroke-current">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="text-xs">Dana penarikan poin akan ditransfer ke rekening Bank Mandiri – 1380002254567 a.n. Rupert Alexander</span>
+              </div>
+            </div>
+            <div class="space-y-2">
               <div class="flex items-center gap-2">
                 <label class="text-sm font-medium text-neutral-800">Jumlah Poin ditarik</label>
-                <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer" />
               </div>
               <input 
                 v-model="withdrawAmount"
                 type="number" 
-                class="input input-bordered w-full rounded-xl h-12 text-lg focus:border-primary border-base-200 bg-white"
+                class="input input-bordered w-full rounded-xl h-10 text-lg focus:border-primary border-base-200 bg-white"
                 :class="{ 'border-error focus:border-error text-error': isOverPoints }"
                 placeholder="0"
                 :disabled="isLoading"
