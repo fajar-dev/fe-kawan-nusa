@@ -18,11 +18,11 @@
           <!-- Body -->
           <div class="p-6 space-y-5">
             <div class="space-y-2">
-              <div role="alert" class="alert alert-info alert-soft text-blue-500 bg-blue-700/">
+              <div role="alert" class="alert alert-info alert-soft text-blue-500 bg-blue-300/10">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-5 w-5 shrink-0 stroke-current">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <span class="text-xs">Dana penarikan poin akan ditransfer ke rekening Bank Mandiri – 1380002254567 a.n. Rupert Alexander</span>
+                <span class="text-xs">Dana penarikan poin akan ditransfer ke rekening Bank {{ bankName }} – {{ accountNumber }} a.n. {{ accounHolderName }}</span>
               </div>
             </div>
             <div class="space-y-2">
@@ -108,13 +108,17 @@
 </template>
 
 <script setup lang="ts">
-import { X, CircleHelp, Check } from 'lucide-vue-next'
+import { X, Check } from 'lucide-vue-next'
 import { withdrawService } from '~/services/withdraw-service'
 import { pointService } from '~/services/point-service'
+import { profileService } from '~/services/profile-service'
 
 const isOpen = defineModel<boolean>({ default: false })
 const withdrawAmount = ref(0)
 const availablePoints = ref(0)
+const accounHolderName = ref()
+const bankName = ref()
+const accountNumber = ref()
 const isLoadingPoints = ref(false)
 const isLoading = ref(false)
 const errorMessage = ref('')
@@ -126,7 +130,11 @@ const fetchPoints = async () => {
   isLoadingPoints.value = true
   try {
     const response = await pointService.getPoint()
+    const user = await profileService.getProfile()
     availablePoints.value = response.data.value
+    accounHolderName.value = user.data.bankDetails.holderName
+    bankName.value = user.data.bankDetails.name
+    accountNumber.value = user.data.bankDetails.number
   } finally {
     isLoadingPoints.value = false
   }
