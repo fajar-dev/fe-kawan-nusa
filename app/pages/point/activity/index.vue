@@ -2,7 +2,7 @@
 definePageMeta({
   middleware: [
     function (to) {
-      if (to.path === '/point' || to.path === '/point/') {
+      if (to.path === '/point/activity' || to.path === '/point/activity/') {
         return navigateTo('/point/activity/reward')
       }
     },

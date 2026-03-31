@@ -47,18 +47,18 @@
             <ul class="mt-1 gap-1.5 ml-4">
               <li>
                 <NuxtLink 
-                  to="/point" 
+                  to="/point/activity/reward" 
                   class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2 font-medium transition-all"
-                  :class="{ 'text-primary active': $route.path === '/point' }"
+                  :class="{ 'text-primary active': $route.path.startsWith('/point/activity') }"
                 >
                   Aktivitas Poin
                 </NuxtLink>
               </li>
               <li>
                 <NuxtLink 
-                  to="/point/redeem" 
+                  to="/point/reedem" 
                   class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2 font-medium transition-all"
-                  :class="{ 'text-primary active': $route.path === '/point/redeem' }"
+                  :class="{ 'text-primary active': $route.path.startsWith('/point/reedem') }"
                 >
                   Tukar Poin
                 </NuxtLink>

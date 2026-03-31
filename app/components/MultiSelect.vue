@@ -7,13 +7,13 @@
       :class="{ 'border-primary ring-1 ring-primary/20': isOpen }"
     >
       <div class="flex-1 truncate pr-2">
-        <span v-if="modelValue.length === 0" class="text-neutral-400 text-sm font-normal">{{ placeholder }}</span>
+        <span v-if="!modelValue || modelValue.length === 0" class="text-neutral-400 text-sm font-normal">{{ placeholder }}</span>
         <span v-else class="text-neutral-800 text-sm font-medium">
           {{ displayText }}
         </span>
       </div>
       <div class="flex items-center gap-1.5 shrink-0">
-        <div v-if="modelValue.length > 0" class="badge badge-primary badge-sm text-xs h-4 min-h-0 font-bold px-1.5 border-none">
+        <div v-if="modelValue && modelValue.length > 0" class="badge badge-primary badge-sm text-xs h-4 min-h-0 font-bold px-1.5 border-none">
           {{ modelValue.length }}
         </div>
         <ChevronDown 
@@ -51,7 +51,7 @@
           >
             <input 
               type="checkbox" 
-              :checked="modelValue.includes(option.value)"
+              :checked="modelValue && modelValue.includes(option.value)"
               @change="toggleOption(option.value)"
               class="checkbox checkbox-xs checkbox-primary rounded border-neutral-300 pointer-events-none"
             />
@@ -60,7 +60,7 @@
             </span>
           </label>
 
-          <div v-if="filteredOptions.length === 0" class="px-3 py-4 text-center text-xs text-neutral-400">
+          <div v-if="!filteredOptions || filteredOptions.length === 0" class="px-3 py-4 text-center text-xs text-neutral-400">
              Opsi tidak ditemukan
           </div>
         </div>
@@ -156,18 +156,18 @@ onUnmounted(() => {
 
 const isSearchable = computed(() => {
   if (props.searchable !== undefined) return props.searchable
-  return props.options.length > 5
+  return (props.options || []).length > 5
 })
 
 // Normalize and filter options
 const normalizedOptions = computed(() => {
-  return props.options.map(opt => {
+  return (props.options || []).map(opt => {
     if (typeof opt === 'string') {
       return { label: opt, value: opt }
     }
     return {
-      label: opt[props.labelKey],
-      value: opt[props.valueKey]
+      label: opt[props.labelKey] || '',
+      value: opt[props.valueKey] || ''
     }
   })
 })
@@ -179,7 +179,7 @@ const filteredOptions = computed(() => {
 })
 
 const displayText = computed(() => {
-  if (props.modelValue.length === 0) return ''
+  if (!props.modelValue || props.modelValue.length === 0) return ''
   
   const selectedItems = normalizedOptions.value
     .filter(opt => props.modelValue.includes(opt.value))
@@ -192,7 +192,7 @@ const displayText = computed(() => {
 })
 
 const toggleOption = (value: any) => {
-  const newValue = [...props.modelValue]
+  const newValue = [...(props.modelValue || [])]
   const index = newValue.indexOf(value)
   
   if (index === -1) {

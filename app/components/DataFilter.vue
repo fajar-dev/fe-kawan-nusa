@@ -1,6 +1,9 @@
 <template>
   <details :class="['dropdown dropdown-bottom', align === 'end' ? 'md:dropdown-end' : 'md:dropdown-start']" ref="detailsRef">
-    <summary class="btn btn-outline border-primary text-primary btn-md h-10 px-4 gap-2 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors w-full md:w-auto list-none cursor-pointer appearance-none outline-none">
+    <summary 
+      class="btn btn-outline border-primary text-primary btn-md h-10 px-4 gap-2 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors w-full md:w-auto list-none cursor-pointer appearance-none outline-none"
+      :class="{ 'bg-primary/10': isFilterActive }"
+    >
       <div class="indicator">
         <span v-if="isFilterActive" class="indicator-item badge bg-red-500 size-2 p-0 border-none"></span>
         <Filter class="w-4 h-4 text-primary" />
