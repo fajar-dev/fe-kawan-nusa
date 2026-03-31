@@ -132,7 +132,6 @@
             <tbody class="text-sm text-neutral-600">
               <tr v-for="(item, index) in rewards" :key="index" class="hover:bg-base-100/30 transition-colors border-b border-base-100 last:border-0">
                 <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateTime(item.createdAt) }}</td>
-                <td v-show="isColumnVisible('point')" class="border-r border-base-200">{{ item.point.toLocaleString('id-ID') }}</td>
                 <td v-show="isColumnVisible('customer.name')" class="border-r border-base-200">
                   <NuxtLink :to="`customer/${item.customer.id}`" class="hover:underline text-primary">
                     {{ item.customer.name }} - {{ item.customer.id }}
@@ -148,6 +147,7 @@
                   <span v-if="item.customerService.endDate"> - {{ formatDate(item.customerService.endDate) }}</span>
                 </td>
                 <td v-show="isColumnVisible('type')">{{ item.type }}</td>
+                <td v-show="isColumnVisible('point')" class="border-r border-base-200">+ {{ item.point.toLocaleString('id-ID') }}</td>
               </tr>
             </tbody>
           </template>
@@ -357,11 +357,11 @@ const currentColumns = computed(() => {
   if (activeTab.value === 'reward') {
     return [
       { label: 'Waktu', key: 'createdAt', sortable: true },
-      { label: 'Jumlah Poin', key: 'point', sortable: true },
       { label: 'Pelanggan Yang Direferensikan', key: 'customer.name', sortable: true },
       { label: 'Nama Layanan', key: 'service.name', sortable: true },
       { label: 'Periode Berlangganan', key: 'period', sortable: false },
-      { label: 'Tipe Komisi', key: 'type', sortable: true }
+      { label: 'Tipe Poin', key: 'type', sortable: true },
+      { label: 'Poin', key: 'point', sortable: true }
     ]
   }
   return [
