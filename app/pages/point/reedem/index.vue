@@ -91,7 +91,10 @@
                     <Coins class="w-4 h-4 text-primary" />
                     <span class="font-medium text-primary text-sm">{{ reward.points.toLocaleString('id-ID') }} Poin</span>
                     </div>
-                    <button class="text-primary text-xs font-medium flex items-center gap-0.5 hover:underline">
+                    <button 
+                        @click="showTermsModal = true"
+                        class="text-primary text-xs font-medium flex items-center gap-0.5 hover:underline"
+                    >
                     S&K <CircleHelp class="w-3.5 h-3.5 ml-0.5" />
                     </button>
                 </div>
@@ -111,6 +114,9 @@
                 </div>
             </div>
         </div>
+
+        <!-- Terms Modal -->
+        <ModalTerms v-model="showTermsModal" />
     </div>
 </template>
 
@@ -125,6 +131,8 @@ import { ref, computed } from 'vue'
 const userPoints = ref(18874)
 const activeCategory = ref('Semua')
 const categories = ['Semua', 'Belanja', 'Elektronik', 'Hiburan']
+const showTermsModal = ref(false)
+
 
 interface Reward {
   title: string
