@@ -15,7 +15,7 @@
             </div>
         </AppToolbar>
         <div class="card bg-base-100 shadow-xs border border-base-200 w-full rounded-lg">
-            <div class="card-body flex flex-row justify-between items-center">
+            <div class="card-body flex flex-col md:flex-row justify-between md:items-center">
                 <div>
                     <h1 class="text-neutral-500 font-medium flex gap-2">
                         <Coins class="w-4 h-4 text-neutral-500" />
@@ -33,19 +33,19 @@
         </div>
 
         <!-- Categories Tabs -->
-        <div class="my-6">
-          <div class="flex items-center lg:justify-end gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar border-b border-base-300 w-fit lg:ml-auto">
-            <button 
-              v-for="tab in categories" 
-              :key="tab"
-              @click="activeCategory = tab"
-              class="pb-3 text-xs lg:text-sm transition-all relative inline-flex items-center gap-2 shrink-0 font-medium"
-              :class="[ activeCategory === tab ? 'text-primary' : 'text-neutral-600 hover:text-neutral-800' ]"
-            >
-              {{ tab }}
-              <div v-if="activeCategory === tab" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary"></div>
-            </button>
-          </div>
+        <div class="my-6 flex md:justify-end justify-center">
+            <div class="flex items-center gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden no-scrollbar border-b border-base-300 w-fit max-w-full px-4 lg:px-0">
+                <button 
+                v-for="tab in categories" 
+                :key="tab"
+                @click="activeCategory = tab"
+                class="pb-3 text-xs lg:text-sm transition-all relative inline-flex items-center gap-2 shrink-0 font-medium"
+                :class="[ activeCategory === tab ? 'text-primary' : 'text-neutral-600 hover:text-neutral-800' ]"
+                >
+                {{ tab }}
+                <div v-if="activeCategory === tab" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary"></div>
+                </button>
+            </div>
         </div>
 
         <!-- Reward Grid -->
