@@ -25,10 +25,10 @@
                         <span class="text-neutral-800 font-semibold text-4xl">18.874</span>
                     </div>
                 </div>
-                <button class="btn btn-primary font-medium rounded-lg">
+                <NuxtLink to="/point/reedem/history" class="btn btn-primary font-medium rounded-lg">
                     <History class="w-5 h-5" />
                     Riwayat Penukaran
-                </button>
+                </NuxtLink>
             </div>
         </div>
 
