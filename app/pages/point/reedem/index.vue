@@ -102,6 +102,7 @@
                 <!-- CTA Button -->
                 <button
                     :disabled="reward.points > userPoints"
+                    @click="handleSelectReward(reward)"
                     class="btn w-full font-medium rounded-lg"
                     :class="[
                     reward.points <= userPoints
@@ -117,6 +118,14 @@
 
         <!-- Terms Modal -->
         <ModalTerms v-model="showTermsModal" />
+
+        <!-- Confirm Redeem Modal -->
+        <ModalConfirmRedeem 
+          v-model="showConfirmRedeemModal" 
+          :reward="selectedReward" 
+          :userPoints="userPoints"
+          @confirm="onConfirmRedeem"
+        />
     </div>
 </template>
 
@@ -132,6 +141,19 @@ const userPoints = ref(18874)
 const activeCategory = ref('Semua')
 const categories = ['Semua', 'Belanja', 'Elektronik', 'Hiburan']
 const showTermsModal = ref(false)
+const showConfirmRedeemModal = ref(false)
+const selectedReward = ref<Reward | null>(null)
+
+const handleSelectReward = (reward: Reward) => {
+  selectedReward.value = reward
+  showConfirmRedeemModal.value = true
+}
+
+const onConfirmRedeem = () => {
+    // Handle actual redemption logic here (API call etc)
+    showConfirmRedeemModal.value = false
+    alert('Penukaran ' + (selectedReward.value?.title || 'Reward') + ' Berhasil!')
+}
 
 
 interface Reward {
