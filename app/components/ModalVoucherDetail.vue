@@ -31,7 +31,7 @@
             </p>
             <div class="flex items-center justify-center gap-1.5 text-neutral-400 text-xs pt-1">
               <Calendar class="w-3.5 h-3.5" />
-              Berlaku hingga: {{ formatDateTime(redemption?.voucherDetails?.detail?.expiredDate) || '-' }}
+              Berlaku hingga: {{ formatDate(redemption?.voucherDetails?.detail?.expiredDate) || '-' }}
             </div>
           </div>
 
