@@ -88,12 +88,12 @@
                 <!-- Points and S&K -->
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-1.5">
-                    <Coins class="w-4 h-4 text-primary" />
-                    <span class="font-medium text-primary text-sm">{{ (reward.point || 0).toLocaleString('id-ID') }} Poin</span>
+                      <Coins class="w-4 h-4 text-purple-500" />
+                    <span class="font-medium text-purple-500 text-sm">{{ (reward.point || 0).toLocaleString('id-ID') }} Poin</span>
                     </div>
                     <button 
                         @click="showTermsModal = true"
-                        class="text-primary text-xs font-medium flex items-center gap-0.5 hover:underline"
+                        class="text-blue-500 text-xs font-medium flex items-center gap-0.5 hover:underline"
                     >
                     S&K <CircleHelp class="w-3.5 h-3.5 ml-0.5" />
                     </button>

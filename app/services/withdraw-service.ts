@@ -30,17 +30,7 @@ export class WithdrawService {
         }
     }
 
-    getWithdrawPdfUrl(id: string | number): string {
-        const config = useRuntimeConfig()
-        const token = useAuth().state.token
-        return `${config.public.apiUrl}/withdraw/${id}?token=${token}`
-    }
-
-    getWithdrawDownloadUrl(id: string | number): string {
-        const config = useRuntimeConfig()
-        const token = useAuth().state.token
-        return `${config.public.apiUrl}/withdraw/${id}/download?token=${token}`
-    }
+    
 }
 
 export const withdrawService = new WithdrawService()

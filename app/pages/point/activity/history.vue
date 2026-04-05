@@ -1,44 +1,79 @@
 <template>
   <div class="flex flex-col gap-6 w-full">
-    <!-- Withdrawn Table -->
+    <!-- Redemptions Table -->
     <DataTable 
       flat 
       :columns="currentColumns"
-      :loading="withdrawLoading"
-      :is-empty="!withdrawLoading && withdrawnPoints.length === 0"
+      :loading="isLoading"
+      :is-empty="!isLoading && redemptions.length === 0"
       v-model:search-query="searchQuery"
-      :total-from="withdrawMeta?.from"
-      :total-to="withdrawMeta?.to"
-      :total-entries="withdrawMeta?.total"
-      :current-page="withdrawPage"
-      :last-page="withdrawMeta?.lastPage"
-      :current-sort="withdrawSort"
-      :current-order="withdrawOrder"
-      @update:page="withdrawPage = $event"
-      @update:sort="withdrawSort = $event"
-      @update:order="withdrawOrder = $event"
+      :total-from="meta?.from"
+      :total-to="meta?.to"
+      :total-entries="meta?.total"
+      :current-page="page"
+      :last-page="meta?.lastPage"
+      :current-sort="sort"
+      :current-order="order"
+      @update:page="page = $event"
+      @update:sort="sort = $event"
+      @update:order="order = $event"
     >
       <template #filters>
         <DataFilter 
-          :is-filter-active="isWithdrawFilterActive"
-          @apply="applyWithdrawFilters"
-          @reset="resetWithdrawFilters"
-          @cancel="cancelWithdrawFilters"
+          :is-filter-active="isFilterActive"
+          @apply="applyFilters"
+          @reset="resetFilters"
+          @cancel="cancelFilters"
         >
-          <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <span class="text-neutral-400 text-xs font-medium">Tanggal Penarikan Poin</span>
-              <span @click="withdrawStartDate = ''; withdrawEndDate = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+          <div class="space-y-4">
+            <!-- Rentang Tanggal -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-neutral-400 text-xs font-medium">Rentang Tanggal</span>
+                <span @click="tempStartDate = ''; tempEndDate = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus</span>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                  <label class="text-xs font-medium text-neutral-800">Dari:</label>
+                  <input v-model="tempStartDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
+                </div>
+                <div class="space-y-1.5">
+                  <label class="text-xs font-medium text-neutral-800">Sampai:</label>
+                  <input v-model="tempEndDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
+                </div>
+              </div>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="space-y-1.5">
-                <label class="text-xs font-medium text-neutral-800">Dari:</label>
-                <input v-model="withdrawStartDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
+
+            <!-- Tipe Redem -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-neutral-400 text-xs font-medium">Tipe Redem</span>
+                <span @click="tempTypes = []" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus</span>
               </div>
-              <div class="space-y-1.5">
-                <label class="text-xs font-medium text-neutral-800">Sampai:</label>
-                <input v-model="withdrawEndDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10" />
+              <MultiSelect 
+                v-model="tempTypes"
+                :options="typeOptions"
+                labelKey="label"
+                valueKey="value"
+                placeholder="Semua Tipe"
+                searchable
+              />
+            </div>
+
+            <!-- Status -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-neutral-400 text-xs font-medium">Status</span>
+                <span @click="tempStatuses = []" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus</span>
               </div>
+              <MultiSelect 
+                v-model="tempStatuses"
+                :options="statusOptions"
+                labelKey="label"
+                valueKey="value"
+                placeholder="Semua Status"
+                searchable
+              />
             </div>
           </div>
         </DataFilter>
@@ -46,24 +81,54 @@
 
       <template #body="{ isColumnVisible }">
         <tbody class="text-sm text-neutral-600">
-          <tr v-for="(item, index) in withdrawnPoints" :key="index" class="hover:bg-base-100/30 transition-colors border-b border-base-100 last:border-0">
+          <tr v-for="(item, index) in redemptions" :key="index" class="hover:bg-base-100/30 transition-colors border-b border-base-100 last:border-0">
             <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateTime(item.createdAt) }}</td>
-            <td v-show="isColumnVisible('point')" class="border-r border-base-200">{{ Number(item.point).toLocaleString('id-ID') }}</td>
-            <td v-show="isColumnVisible('bankName')" class="border-r border-base-200">{{ item.bankName }}</td>
-            <td v-show="isColumnVisible('accountNumber')" class="border-r border-base-200">{{ item.accountNumber }}</td>
-            <td v-show="isColumnVisible('accountHolderName')" class="border-r border-base-200">{{ item.accountHolderName }}</td>
-            <td v-show="isColumnVisible('id')" class="flex items-center justify-between pr-4 gap-2">
-              <span 
-                @click="openUrl(withdrawService.getWithdrawPdfUrl(item.id))"
-                class="text-primary font-medium truncate cursor-pointer hover:underline"
-                :title="`paid-${item.id}.pdf`"
-              >
-                paid-{{ item.id }}.pdf
+            <td v-show="isColumnVisible('type')" class="border-r border-base-200">
+              <span class="capitalize">{{ formatType(item.type) }}</span>
+            </td>
+            <td v-show="isColumnVisible('reward')" class="border-r border-base-200 max-w-xs">
+              <div v-if="item.type === 'cash' && item.withdrawDetails" class="flex flex-col gap-0.5">
+                <div>Penarikan tunai Rp.{{ (item.withdrawDetails.payout + item.withdrawDetails.tax).toLocaleString('id-ID') }}</div>
+              </div>
+              <div v-else-if="item.type === 'voucher' && item.voucherDetails" class="flex items-center gap-3">
+                <span class="truncate">{{ item.voucherDetails.catalog.name }}</span>
+              </div>
+              <div v-else-if="item.type === 'product' && item.productDetails" class="flex items-center gap-3">
+                <span class="truncate">{{ item.productDetails.catalog.name }}</span>
+              </div>
+            </td>
+            <td v-show="isColumnVisible('status')" class="border-r border-base-200">
+              <span>
+                {{ formatStatus(item.status) }}
               </span>
-              <Download 
-                @click="openUrl(withdrawService.getWithdrawDownloadUrl(item.id))"
-                class="w-4 h-4 text-primary shrink-0 cursor-pointer" 
-              />
+            </td>
+            <td v-show="isColumnVisible('pointsUsed')" class="border-r border-base-200  text-neutral-800">
+              -{{ item.pointsUsed.toLocaleString('id-ID') }}
+            </td>
+            <td v-show="isColumnVisible('action')" class="flex grow pr-4 min-w-[120px]">
+              <div v-if="item.type === 'cash'" class="flex items-center justify-between gap-2 w-full">
+                <button 
+                  @click="openUrl(redemptionService.getWithdrawPdfUrl(item.id))"
+                  class="text-primary hover:underline font-medium"
+                >
+                  {{ item.redempNo }}
+                </button>
+                <Download 
+                  @click="openUrl(redemptionService.getWithdrawDownloadUrl(item.id))"
+                  class="w-4 h-4 text-primary shrink-0 cursor-pointer" 
+                />
+              </div>
+              <div v-else class="w-full flex justify-between">
+                <NuxtLink 
+                  to="/point/reedem/history"
+                  class="text-primary hover:underline font-medium flex justify-between w-full"
+                >
+                Riwayat Penukaran
+                <Link
+                  class="w-4 h-4 text-primary shrink-0 cursor-pointer"
+                />
+                </NuxtLink>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -74,79 +139,127 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { Download } from 'lucide-vue-next'
-import { withdrawService } from '~/services/withdraw-service'
+import { Download, Link } from 'lucide-vue-next'
+import { redemptionService } from '~/services/redemption-service'
 import { formatDateTime } from '~/utils/date'
 
-const withdrawStartDate = ref('')
-const withdrawEndDate = ref('')
-const searchQuery = ref('')
+const typeOptions = [
+  { label: 'Cash', value: 'cash' },
+  { label: 'Voucher', value: 'voucher' },
+  { label: 'Produk', value: 'product' }
+]
 
+const statusOptions = [
+  { label: 'Menunggu', value: 'pending' },
+  { label: 'Diproses', value: 'processing' },
+  { label: 'Selesai', value: 'completed' }
+]
+
+// Filter states for UI (temp)
+const tempStartDate = ref('')
+const tempEndDate = ref('')
+const tempTypes = ref<string[]>([])
+const tempStatuses = ref<string[]>([])
+
+// Applied filter states for Query
 const appliedFilters = ref({
   startDate: '',
-  endDate: ''
+  endDate: '',
+  types: [] as string[],
+  statuses: [] as string[]
 })
 
-const cancelWithdrawFilters = () => {
-  withdrawStartDate.value = appliedFilters.value.startDate
-  withdrawEndDate.value = appliedFilters.value.endDate
+const cancelFilters = () => {
+  tempStartDate.value = appliedFilters.value.startDate
+  tempEndDate.value = appliedFilters.value.endDate
+  tempTypes.value = [...appliedFilters.value.types]
+  tempStatuses.value = [...appliedFilters.value.statuses]
 }
 
-const applyWithdrawFilters = () => {
+const applyFilters = () => {
   appliedFilters.value = {
-    startDate: withdrawStartDate.value,
-    endDate: withdrawEndDate.value
+    startDate: tempStartDate.value,
+    endDate: tempEndDate.value,
+    types: [...tempTypes.value],
+    statuses: [...tempStatuses.value]
   }
-  withdrawPage.value = 1
+  page.value = 1
 }
 
-const resetWithdrawFilters = () => {
-  withdrawStartDate.value = ''
-  withdrawEndDate.value = ''
-  applyWithdrawFilters()
+const resetFilters = () => {
+  tempStartDate.value = ''
+  tempEndDate.value = ''
+  tempTypes.value = []
+  tempStatuses.value = []
+  applyFilters()
 }
 
-const isWithdrawFilterActive = computed(() => {
-  return !!appliedFilters.value.startDate || !!appliedFilters.value.endDate
+const isFilterActive = computed(() => {
+  return !!appliedFilters.value.startDate || 
+  !!appliedFilters.value.endDate || 
+  appliedFilters.value.types.length > 0 || 
+  appliedFilters.value.statuses.length > 0
 })
 
-const withdrawPage = ref(1)
-const withdrawSort = ref('createdAt')
-const withdrawOrder = ref<'asc' | 'desc'>('desc')
+const searchQuery = ref('')
+const page = ref(1)
+const sort = ref('createdAt')
+const order = ref<'asc' | 'desc'>('desc')
 
 const queryParams = computed(() => ({
-  page: withdrawPage.value,
-  sort: withdrawSort.value,
-  order: withdrawOrder.value,
+  page: page.value,
+  sort: sort.value,
+  order: order.value,
   q: searchQuery.value,
+  type: appliedFilters.value.types.length > 0 ? (appliedFilters.value.types as any) : undefined,
+  status: appliedFilters.value.statuses.length > 0 ? appliedFilters.value.statuses : undefined,
   startDate: appliedFilters.value.startDate || undefined,
   endDate: appliedFilters.value.endDate || undefined,
   limit: 5
 }))
 
-const { data: withdrawResponse, status: withdrawStatus, refresh: refreshWithdrawals } = useAsyncData(
-  'withdrawals',
-  () => withdrawService.getWithdrawals(queryParams.value)
+const { data: response, status, refresh: refreshData } = useAsyncData(
+  'redemptions-history',
+  () => redemptionService.getRedemptions(queryParams.value)
 )
 
 watch(queryParams, () => {
-  refreshWithdrawals()
+  refreshData()
 }, { deep: true })
 
-const withdrawMeta = computed(() => withdrawResponse.value?.meta)
-const withdrawLoading = computed(() => withdrawStatus.value === 'pending')
-const withdrawnPoints = computed(() => withdrawResponse.value?.data || [])
+const meta = computed(() => response.value?.meta)
+const isLoading = computed(() => status.value === 'pending')
+const redemptions = computed(() => response.value?.data || [])
 
 const currentColumns = [
-  { label: 'Waktu Penarikan Poin', key: 'createdAt', sortable: true },
-  { label: 'Poin Ditarik', key: 'point', sortable: true },
-  { label: 'Nama Bank', key: 'bankName', sortable: true },
-  { label: 'Nomor Akun Bank', key: 'accountNumber', sortable: true },
-  { label: 'Nama Penerima', key: 'accountHolderName', sortable: true },
-  { label: 'Nota', key: 'id', sortable: true }
+  { label: 'Waktu', key: 'createdAt', sortable: true },
+  { label: 'Tipe Penukaran', key: 'type', sortable: true },
+  { label: 'Penukaran', key: 'reward' },
+  { label: 'Status Penukaran', key: 'status', sortable: true },
+  { label: 'Poin', key: 'pointsUsed', sortable: true },
+  { label: 'Aksi', key: 'action' }
 ]
 
 const openUrl = (url: string) => {
   window.open(url, '_blank')
 }
+
+const formatType = (type: string) => {
+  switch (type) {
+    case 'cash': return 'Cash'
+    case 'voucher': return 'Voucher'
+    case 'product': return 'Produk'
+    default: return type
+  }
+}
+
+const formatStatus = (status: string) => {
+  switch (status.toLowerCase()) {
+    case 'pending': return 'Menunggu Verifikasi'
+    case 'processing': return 'Diproses'
+    case 'completed': return 'Selesai'
+    default: return status
+  }
+}
+
 </script>
