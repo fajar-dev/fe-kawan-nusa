@@ -44,6 +44,11 @@ export interface RedemptionData {
         }
         name: string
         email: string
+        detail: {
+            id: number
+            code: string
+            expiredDate: string
+        } | null
     } | null
     productDetails: {
         catalog: {
@@ -59,6 +64,12 @@ export interface RedemptionData {
         email: string
         phone: string
         address: string
+        shipping: {
+            id: number
+            shipper: string
+            trackingNumber: string
+            shippedAt: string
+        } | null
     } | null
     createdAt: string
 }

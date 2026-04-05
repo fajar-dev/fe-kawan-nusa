@@ -124,7 +124,7 @@
                   class="text-primary hover:underline font-medium flex justify-between w-full"
                 >
                 Riwayat Penukaran
-                <Link
+                <ExternalLink
                   class="w-4 h-4 text-primary shrink-0 cursor-pointer"
                 />
                 </NuxtLink>
@@ -139,7 +139,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { Download, Link } from 'lucide-vue-next'
+import { Download, ExternalLink } from 'lucide-vue-next'
 import { redemptionService } from '~/services/redemption-service'
 import { formatDateTime } from '~/utils/date'
 

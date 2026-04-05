@@ -141,7 +141,7 @@
             </div>
 
             <!-- Specific Voucher Section -->
-            <div v-if="item.type === 'voucher' && item.status === 'completed'" class="p-4 mx-5 mb-5 border border-neutral-200 rounded-xl flex items-center justify-between gap-4">
+            <div v-if="item.type === 'voucher' && item.voucherDetails?.detail" class="p-4 mx-5 mb-5 border border-neutral-200 rounded-xl flex items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-primary/10 text-primary rounded-lg flex items-center justify-center shrink-0">
                         <Ticket class="w-6 h-6" />
@@ -151,8 +151,47 @@
                         <p class="text-xs text-neutral-500 mt-1">Klik tombol untuk melihat kode voucher</p>
                     </div>
                 </div>
+                <button 
+                  @click="showVoucherDetail(item)"
+                  class="btn btn-primary btn-sm rounded-lg text-xs font-medium shrink-0"
+                >
+                  Lihat Voucher
+                </button>
+              </div>
+
+              <!-- Specific Shipping Section -->
+            <div v-if="item.type === 'product' && item.productDetails?.shipping" class="p-4 mx-5 mb-5 border border-neutral-200 rounded-xl flex items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-primary/10 text-primary rounded-lg flex items-center justify-center shrink-0">
+                        <Truck class="w-6 h-6" />
+                    </div>
+                    <div class="space-y-0">
+                        <p class="text-xs font-medium text-neutral-700 mb-1">Paket Dalam Pengiriman</p>
+                        <div class="grid grid-cols-1 text-xs">
+                            <div class="flex gap-4 py-1 border-b border-neutral-50 lg:border-none">
+                                <span class="text-neutral-500 flex gap-2">
+                                    Ekspedisi :
+                                </span>
+                                <span class="text-neutral-900">{{ item.productDetails?.shipping.shipper }}</span>
+                            </div>
+                            <div class="flex gap-4 py-1 border-b border-neutral-50 lg:border-none">
+                                <span class="text-neutral-500 flex gap-2">
+                                    No. Resi :
+                                </span>
+                                <span class="text-neutral-900 group relative">
+                                    {{ item.productDetails?.shipping.trackingNumber }}
+                                </span>
+                            </div>
+                            <div class="flex gap-4 py-1 border-b border-neutral-50 lg:border-none">
+                                <span class="text-neutral-500 flex gap-2"> Dikirim Pada : </span>
+                                <span class="text-neutral-900">{{ formatDateTime(item.productDetails?.shipping.shippedAt) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <button class="btn btn-primary btn-sm rounded-lg text-xs font-medium shrink-0">
-                    Lihat Voucher
+                    <ExternalLink class="w-3.5 h-3.5" />
+                    Lacak Paket
                 </button>
             </div>
             </div>
@@ -165,12 +204,18 @@
                 </div>
             </div>
         </div>
-        </div>
+      </div>
+
+      <!-- Voucher Detail Modal -->
+      <ModalVoucherDetail 
+        v-model="showVoucherModal" 
+        :redemption="selectedRedemption" 
+      />
     </div>
 </template>
 
 <script setup lang="ts">
-import { Hash, Coins, Calendar, CheckCircle2, User, Mail, Phone, MapPin, Clock, Package, CheckCircle, Ticket, Loader2 } from 'lucide-vue-next'
+import { Hash, Coins, Calendar, CheckCircle2, User, Mail, Phone, MapPin, Clock, Package, CheckCircle, Ticket, Loader2, Truck, ExternalLink } from 'lucide-vue-next'
 import { statisticService } from '~/services/statistic-service'
 import { redemptionService } from '~/services/redemption-service'
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
@@ -205,6 +250,15 @@ const page = ref(1)
 const lastPage = ref(1)
 const isLoading = ref(false)
 const sentinel = ref<HTMLElement | null>(null)
+
+// Modal states
+const showVoucherModal = ref(false)
+const selectedRedemption = ref<RedemptionData | null>(null)
+
+const showVoucherDetail = (item: RedemptionData) => {
+    selectedRedemption.value = item
+    showVoucherModal.value = true
+}
 
 const queryStatus = computed(() => {
     const statusMap: Record<string, string> = {
