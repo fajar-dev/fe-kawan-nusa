@@ -1,7 +1,7 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
 import type { ApiResponse } from "../types/auth"
-import type { StatisticCount, MonthPointStatistic, CustomerStatistic } from "../types/statistic"
+import type { StatisticCount, MonthPointStatistic, CustomerStatistic, RedemptionRewardStatistic } from "../types/statistic"
 
 export class StatisticService {
     async getCount(): Promise<ApiResponse<StatisticCount>> {
@@ -41,6 +41,19 @@ export class StatisticService {
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Failed to fetch customer statistic')
+        }
+    }
+
+    async getRedemptionRewardStatistic(): Promise<ApiResponse<RedemptionRewardStatistic[]>> {
+        try {
+            const response = await apiService.client.get<ApiResponse<RedemptionRewardStatistic[]>>('/statistic/redemption-reward', {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch redemption reward statistic')
         }
     }
 }

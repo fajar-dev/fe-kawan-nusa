@@ -42,11 +42,19 @@
 
         <!-- History List -->
         <div class="space-y-6">
-            <div v-for="(item, index) in filteredHistory" :key="index" class="bg-white border border-base-200 rounded-2xl overflow-hidden shadow-xs hover:shadow-sm transition-shadow">
+            <div v-if="redemptions.length === 0 && !isLoading" class="bg-white border border-base-200 rounded-2xl p-12 text-center">
+                <Package class="w-12 h-12 text-neutral-200 mx-auto mb-4" />
+                <p class="text-neutral-500">Belum ada riwayat penukaran</p>
+            </div>
+            <div v-else v-for="(item, index) in redemptions" :key="index" class="bg-white border border-base-200 rounded-2xl overflow-hidden shadow-xs hover:shadow-sm transition-shadow">
             <div class="p-5 flex flex-col md:flex-row gap-6">
                 <!-- Image -->
                 <div class="w-full aspect-video md:aspect-auto md:w-28 md:h-28 shrink-0 bg-neutral-100 rounded-xl overflow-hidden">
-                <img :src="item.image" :alt="item.title" class="w-full h-full object-cover" />
+                <img 
+                    :src="(item.voucherDetails || item.productDetails)?.catalog.image || 'https://picsum.photos/200/200'" 
+                    :alt="(item.voucherDetails || item.productDetails)?.catalog.name" 
+                    class="w-full h-full object-cover" 
+                />
                 </div>
 
                 <!-- Main Content -->
@@ -54,15 +62,17 @@
                     <div class="flex flex-wrap items-start justify-between gap-4 mb-3">
                         <div class="flex flex-col gap-1.5 min-w-0">
                             <div class="flex items-center gap-2 overflow-hidden">
-                                <h3 class="text-neutral-900 font-medium text-sm lg:text-base truncate">{{ item.title }}</h3>
-                                <span class="shrink-0 px-2 py-0.5 bg-primary/10 text-primary text-[10px] lg:text-xs font-medium rounded-md">
-                                    {{ item.category }}
+                                <h3 class="text-neutral-900 font-medium text-sm lg:text-base truncate">
+                                    {{ (item.voucherDetails || item.productDetails)?.catalog.name || 'Reward' }}
+                                </h3>
+                                <span class="shrink-0 px-2 py-0.5 bg-primary/10 text-primary text-[10px] lg:text-xs font-medium rounded-md capitalize">
+                                    {{ (item.voucherDetails || item.productDetails)?.catalog.category.name }}
                                 </span>
                             </div>
                         </div>
                         <div class="px-3 py-1 text-xs font-medium rounded-full border flex items-center gap-1.5 shrink-0" :class="statusStyles[item.status]">
                             <component :is="statusIcons[item.status]" class="w-3.5 h-3.5" />
-                            {{ item.statusText }}
+                            {{ formatStatusDisplay(item.status) }}
                         </div>
                     </div>
 
@@ -72,25 +82,25 @@
                         <span class="text-neutral-500 flex gap-2">
                             <Hash class="w-3.5 h-3.5" /> ID Transaksi :
                         </span>
-                        <span class="text-neutral-900">{{ item.transactionId }}</span>
+                        <span class="text-neutral-900">{{ item.redempNo }}</span>
                         </div>
                         <div class="flex gap-2 py-1 border-b border-neutral-50 lg:border-none">
                         <span class="text-neutral-500 flex gap-2">
                             <Coins class="w-3.5 h-3.5 text-purple-500" /> Poin ditukar :
                         </span>
-                        <span class="text-primary font-medium text-purple-500">{{ item.points }}</span>
+                        <span class="text-primary font-medium text-purple-500">{{ item.pointsUsed.toLocaleString('id-ID') }}</span>
                         </div>
                         <div class="flex gap-2 py-1 border-b border-neutral-50 lg:border-none">
                         <span class="text-neutral-500 flex gap-2">
                             <Calendar class="w-3.5 h-3.5" /> Tanggal penukaran :
                         </span>
-                        <span class="text-neutral-900">{{ item.date }}</span>
+                        <span class="text-neutral-900">{{ formatDateTime(item.createdAt) }}</span>
                         </div>
                         <div class="flex gap-2 py-1">
                         <span class="text-neutral-500 flex gap-2">
                             <CheckCircle2 class="w-3.5 h-3.5" /> Selesai pada :
                         </span>
-                        <span class="text-neutral-900">{{ item.completedAt || '-' }}</span>
+                        <span class="text-neutral-900">{{ item.status === 'completed' ? formatDateTime(item.createdAt) : '-' }}</span>
                         </div>
                     </div>
 
@@ -101,78 +111,43 @@
                     <div class="space-y-2">
                         <p class="text-xs font-medium text-neutral-500">Detail Pengiriman</p>
                         <div class="grid grid-cols-1 text-xs">
-                        <div v-if="item.receiver.name" class="flex gap-2 py-1 border-b border-neutral-50 lg:border-none">
+                        <div v-if="(item.voucherDetails || item.productDetails)?.name" class="flex gap-2 py-1 border-b border-neutral-50 lg:border-none">
                             <span class="text-neutral-500 flex gap-2">
                                 <User class="w-3.5 h-3.5" /> Nama :
                             </span>
-                            <span class="text-neutral-900">{{ item.receiver.name }}</span>
+                            <span class="text-neutral-900">{{ (item.voucherDetails || item.productDetails)?.name }}</span>
                         </div>
                         <div class="flex gap-2 py-1 border-b border-neutral-50 lg:border-none">
                             <span class="text-neutral-500 flex gap-2">
                                 <Mail class="w-3.5 h-3.5" /> Email :
                             </span>
-                            <span class="text-neutral-900">{{ item.receiver.email }}</span>
+                            <span class="text-neutral-900">{{ (item.voucherDetails || item.productDetails)?.email }}</span>
                         </div>
-                        <div class="flex gap-2 py-1 border-b border-neutral-50 lg:border-none">
+                        <div v-if="item.productDetails?.phone" class="flex gap-2 py-1 border-b border-neutral-50 lg:border-none">
                             <span class="text-neutral-500 flex gap-2">
                                 <Phone class="w-3.5 h-3.5" /> No. Handphone :
                             </span>
-                            <span class="text-neutral-900">{{ item.receiver.phone }}</span>
+                            <span class="text-neutral-900">{{ item.productDetails.phone }}</span>
                         </div>
-                        <div v-if="item.receiver.address" class="flex gap-2 py-1">
+                        <div v-if="item.productDetails?.address" class="flex gap-2 py-1">
                             <span class="text-neutral-500 flex gap-2 shrink-0">
                                 <MapPin class="w-3.5 h-3.5" /> Alamat :
                             </span>
-                            <span class="text-neutral-900 leading-relaxed">{{ item.receiver.address }}</span>
+                            <span class="text-neutral-900 leading-relaxed">{{ item.productDetails.address }}</span>
                         </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Bottom Action Section (Conditional based on status) -->
-            <div v-if="item.shippingInfo" class="border border-neutral-200 p-4 mx-5 mb-5 rounded-xl flex items-center justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 bg-primary/10 text-primary rounded-lg flex items-center justify-center shrink-0">
-                        <Truck class="w-6 h-6" />
-                    </div>
-                    <div class="space-y-0">
-                        <p class="text-xs font-medium text-neutral-700 mb-1">Paket Dalam Pengiriman</p>
-                        <div class="grid grid-cols-1 text-xs">
-                            <div class="flex gap-4 py-1 border-b border-neutral-50 lg:border-none">
-                                <span class="text-neutral-500 flex gap-2">
-                                    Kurir :
-                                </span>
-                                <span class="text-neutral-900">{{ item.shippingInfo.courier }}</span>
-                            </div>
-                            <div class="flex gap-4 py-1 border-b border-neutral-50 lg:border-none">
-                                <span class="text-neutral-500 flex gap-2">
-                                    No. Resi :
-                                </span>
-                                <span class="text-neutral-900 group relative">
-                                    {{ item.shippingInfo.trackingNumber }}
-                                </span>
-                            </div>
-                            <div class="flex gap-4 py-1 border-b border-neutral-50 lg:border-none">
-                                <span class="text-neutral-500 flex gap-2"> Dikirim Pada : </span>
-                                <span class="text-neutral-900">{{ item.shippingInfo.shippedAt }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button class="btn btn-primary btn-sm rounded-lg text-xs font-medium shrink-0">
-                    <ExternalLink class="w-3.5 h-3.5" />
-                    Lacak Paket
-                </button>
-            </div>
-
-            <div v-if="item.voucherInfo" class="p-4 mx-5 mb-5 border border-neutral-200 rounded-xl flex items-center justify-between gap-4">
+            <!-- Specific Voucher Section -->
+            <div v-if="item.type === 'voucher' && item.status === 'completed'" class="p-4 mx-5 mb-5 border border-neutral-200 rounded-xl flex items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-primary/10 text-primary rounded-lg flex items-center justify-center shrink-0">
                         <Ticket class="w-6 h-6" />
                     </div>
                     <div>
-                        <p class="text-xs font-medium text-neutral-800">{{ item.voucherInfo.title }}</p>
+                        <p class="text-xs font-medium text-neutral-800">Voucher Tersedia</p>
                         <p class="text-xs text-neutral-500 mt-1">Klik tombol untuk melihat kode voucher</p>
                     </div>
                 </div>
@@ -181,39 +156,138 @@
                 </button>
             </div>
             </div>
+
+            <!-- Sentinel for Infinite Scroll -->
+            <div ref="sentinel" class="flex justify-center p-8 w-full">
+                <Loader2 v-if="isLoading" class="w-8 h-8 animate-spin text-primary" />
+                <div v-else-if="page > lastPage && redemptions.length > 0" class="text-neutral-400 text-sm italic">
+                    Telah mencapai akhir
+                </div>
+            </div>
         </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { 
-  Hash,
-  Coins,
-  Calendar,
-  CheckCircle2,
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Clock,
-  Package,
-  CheckCircle,
-  Truck,
-  ExternalLink,
-  Ticket
-} from 'lucide-vue-next'
-import { ref, computed } from 'vue'
+import { Hash, Coins, Calendar, CheckCircle2, User, Mail, Phone, MapPin, Clock, Package, CheckCircle, Ticket, Loader2 } from 'lucide-vue-next'
+import { statisticService } from '~/services/statistic-service'
+import { redemptionService } from '~/services/redemption-service'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { formatDateTime } from '~/utils/date'
+import type { RedemptionData } from '~/types/redemptions'
 
+// Filter and Tabs
 const activeStatus = ref('Semua')
 const statusTabs = ['Semua', 'Menunggu', 'Diproses', 'Selesai']
 
-const stats = [
-  { label: 'Total Penukaran', value: 6 },
-  { label: 'Menunggu', value: 1 },
-  { label: 'Diproses', value: 3 },
-  { label: 'Selesai', value: 2 }
-]
+// Stats fetching
+const { data: statsResponse } = await useAsyncData(
+    'redemption-reward-statistic',
+    () => statisticService.getRedemptionRewardStatistic()
+)
+
+const stats = computed(() => {
+    const rawData = statsResponse.value?.data || []
+    const getCount = (status: string) => rawData.find(d => d.status === status)?.count || 0
+
+    return [
+        { label: 'Total Penukaran', value: rawData.reduce((acc, curr) => acc + curr.count, 0) },
+        { label: 'Menunggu', value: getCount('pending') },
+        { label: 'Diproses', value: getCount('processing') },
+        { label: 'Selesai', value: getCount('completed') }
+    ]
+})
+
+// Pagination and Data
+const redemptions = ref<RedemptionData[]>([])
+const page = ref(1)
+const lastPage = ref(1)
+const isLoading = ref(false)
+const sentinel = ref<HTMLElement | null>(null)
+
+const queryStatus = computed(() => {
+    const statusMap: Record<string, string> = {
+        'Menunggu': 'pending',
+        'Diproses': 'processing',
+        'Selesai': 'completed'
+    }
+    return statusMap[activeStatus.value]
+})
+
+const fetchRedemptions = async (isReset = false) => {
+    if (isLoading.value) return
+    if (!isReset && page.value > lastPage.value) return
+
+    isLoading.value = true
+    try {
+        const response = await redemptionService.getRedemptions({
+            page: page.value,
+            limit: 5,
+            status: queryStatus.value ? [queryStatus.value] : undefined,
+            type: ['product', 'voucher']
+        })
+        
+        if (response.success && response.data) {
+            if (isReset) {
+                redemptions.value = response.data
+            } else {
+                const newItems = response.data.filter(newItem => 
+                    !redemptions.value.some(existingItem => existingItem.id === newItem.id)
+                )
+                redemptions.value = [...redemptions.value, ...newItems]
+            }
+            lastPage.value = response.meta.lastPage
+            page.value++
+        }
+    } finally {
+        isLoading.value = false
+    }
+}
+
+// Reset when tab changes
+watch(activeStatus, () => {
+    page.value = 1
+    lastPage.value = 1
+    fetchRedemptions(true)
+})
+
+// Observer implementation
+let observer: IntersectionObserver | null = null
+
+const initObserver = () => {
+    if (observer) observer.disconnect()
+    
+    observer = new IntersectionObserver((entries) => {
+        const [entry] = entries
+        if (entry?.isIntersecting && !isLoading.value && page.value <= lastPage.value) {
+            fetchRedemptions()
+        }
+    }, { 
+        rootMargin: '200px',
+        threshold: 0.1 
+    })
+
+    if (sentinel.value) observer.observe(sentinel.value)
+}
+
+onMounted(() => {
+    fetchRedemptions(true)
+    initObserver()
+})
+
+onUnmounted(() => {
+    if (observer) observer.disconnect()
+})
+
+const formatStatusDisplay = (statusValue: string) => {
+    switch (statusValue) {
+        case 'pending': return 'Menunggu Verifikasi'
+        case 'processing': return 'Sedang Diproses'
+        case 'completed': return 'Selesai'
+        default: return statusValue
+    }
+}
 
 type RedeemStatus = 'pending' | 'processing' | 'completed'
 
@@ -228,129 +302,4 @@ const statusIcons: Record<RedeemStatus, any> = {
   processing: Package,
   completed: CheckCircle
 }
-
-
-interface RedeemHistoryItem {
-  title: string
-  category: string
-  status: RedeemStatus
-  statusText: string
-  transactionId: string
-  points: number
-  date: string
-  completedAt: string | null
-  image: string
-  receiver: {
-    name?: string
-    email: string
-    phone: string
-    address?: string
-  }
-  shippingInfo?: {
-    title: string
-    courier: string
-    trackingNumber: string
-    shippedAt: string
-  }
-  voucherInfo?: {
-    title: string
-  }
-}
-
-const history = ref<RedeemHistoryItem[]>([
-  {
-    title: 'Voucher Cashback Blibli Rp50.000',
-    category: 'Belanja',
-    status: 'pending',
-    statusText: 'Menunggu Verifikasi',
-    transactionId: 'TRW24032026247005',
-    points: 50,
-    date: '24 Maret 2026, 11:30 WIB',
-    completedAt: null,
-    image: 'https://picsum.photos/id/10/200/200',
-    receiver: {
-      email: 'adipragiwaksono@gmail.com',
-      phone: '+62 822-0870-3090'
-    }
-  },
-  {
-    title: 'Haylou Solar Plus Smartwatch',
-    category: 'Elektronik',
-    status: 'pending',
-    statusText: 'Menunggu Verifikasi',
-    transactionId: 'TRW24032026247004',
-    points: 550,
-    date: '24 Maret 2026, 08:30 WIB',
-    completedAt: null,
-    image: 'https://picsum.photos/id/1/200/200',
-    receiver: {
-      name: 'Rupert Alexander',
-      email: 'adipragiwaksono@gmail.com',
-      phone: '+62 822-0870-3090',
-      address: 'Jl. Melati Indah No.25, Kel. Sukamaju, Kec. Medan Johor, Kota Medan, Sumatera Utara 20143, RT 003 RW 002'
-    }
-  },
-  {
-    title: 'JBL Go 3 Portable Bluetooth Speaker',
-    category: 'Elektronik',
-    status: 'processing',
-    statusText: 'Sedang Diproses',
-    transactionId: 'TRW12032026247003',
-    points: 1000,
-    date: '12 Maret 2026, 12:30 WIB',
-    completedAt: null,
-    image: 'https://picsum.photos/id/2/200/200',
-    receiver: {
-      name: 'Rupert Alexander',
-      email: 'adipragiwaksono@gmail.com',
-      phone: '+62 822-0870-3090',
-      address: 'Jl. Melati Indah No.25, Kel. Sukamaju, Kec. Medan Johor, Kota Medan, Sumatera Utara 20143, RT 003 RW 002'
-    },
-    shippingInfo: {
-      title: 'Paket Dalam Pengiriman',
-      courier: 'Hanif Purba',
-      trackingNumber: 'JT1234567890123',
-      shippedAt: '15 Maret 2026, 13:00 WIB'
-    }
-  },
-  {
-    title: 'Voucher Rp100.000 Belanja di Indomaret',
-    category: 'Belanja',
-    status: 'completed',
-    statusText: 'Selesai',
-    transactionId: 'TRW09032026247002',
-    points: 100,
-    date: '09 Maret 2026, 12:30 WIB',
-    completedAt: '11 Maret 2026, 10:00 WIB',
-    image: 'https://picsum.photos/id/11/200/200',
-    receiver: {
-      email: 'adipragiwaksono@gmail.com',
-      phone: '+62 822-0870-3090'
-    },
-    voucherInfo: {
-      title: 'Voucher Tersedia'
-    }
-  }
-])
-
-const filteredHistory = computed(() => {
-  if (activeStatus.value === 'Semua') return history.value
-  const statusMap: Record<string, RedeemStatus> = {
-    'Menunggu': 'pending',
-    'Diproses': 'processing',
-    'Selesai': 'completed'
-  }
-  const status = statusMap[activeStatus.value]
-  return history.value.filter(item => item.status === status)
-})
 </script>
-
-<style scoped>
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-</style>

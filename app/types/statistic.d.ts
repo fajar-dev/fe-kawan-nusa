@@ -23,3 +23,8 @@ export interface CustomerStatistic {
     label: string
     count: number
 }
+
+export interface RedemptionRewardStatistic {
+    status: string
+    count: number
+}

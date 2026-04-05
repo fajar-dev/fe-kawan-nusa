@@ -37,6 +37,10 @@ export interface RedemptionData {
             id: number
             name: string
             image: string
+            category: {
+                id: number
+                name: string
+            }
         }
         name: string
         email: string
@@ -46,6 +50,10 @@ export interface RedemptionData {
             id: number
             name: string
             image: string
+            category: {
+                id: number
+                name: string
+            }
         }
         name: string
         email: string
