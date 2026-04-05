@@ -18,13 +18,13 @@
             </div>
           </div>
 
-          <h3 class="text-xl font-semibold text-neutral-800 mb-2">Penukaran Berhasil</h3>
+          <h3 class="text-xl font-semibold text-neutral-800 mb-2">{{ title || 'Penukaran Berhasil' }}</h3>
           <p class="text-xs text-neutral-400 mb-6">
-            Reward Anda sedang diproses dan akan segera dikirimkan
+            {{ message || 'Reward Anda sedang diproses dan akan segera dikirimkan' }}
           </p>
 
           <!-- Details Card -->
-          <div class="w-full bg-primary/10 rounded-xl p-6 space-y-4 mb-8">
+          <div v-if="!hideDetails" class="w-full bg-primary/10 rounded-xl p-6 space-y-4 mb-8">
             <div class="space-y-1">
               <span class="text-xs text-neutral-400">ID Transaksi</span>
               <p class="text-neutral-800 font-semibold text-sm tracking-tight">{{ redemption?.redempNo }}</p>
@@ -42,11 +42,19 @@
           </div>
 
           <NuxtLink 
+            v-if="!hideDetails"
             to="/point/reedem/history"
             class="btn w-full btn-primary rounded-lg"
           >
-            Lihat Riwayat
+            {{ buttonLabel || 'Lihat Riwayat' }}
           </NuxtLink>
+          <button 
+            v-else
+            @click="isOpen = false"
+            class="btn w-full btn-primary rounded-lg"
+          >
+            {{ buttonLabel || 'OK' }}
+          </button>
         </div>
       </div>
     </div>
@@ -59,8 +67,12 @@ import { watch, onUnmounted } from 'vue'
 import type { RedemptionData } from '~/types/redemptions'
 
 const props = defineProps<{
-  redemption: RedemptionData | null
-  rewardName: string
+  redemption?: RedemptionData | null
+  rewardName?: string
+  title?: string
+  message?: string
+  hideDetails?: boolean
+  buttonLabel?: string
 }>()
 
 const isOpen = defineModel<boolean>({ default: false })

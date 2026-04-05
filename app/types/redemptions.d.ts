@@ -22,5 +22,10 @@ export interface RedemptionData {
     createdAt: string
 }
 
+export interface CashRedemptionRequest {
+    pointsUsed: number
+}
+
 export interface ProductRedemptionResponse extends ApiResponse<RedemptionData> {}
 export interface VoucherRedemptionResponse extends ApiResponse<RedemptionData> {}
+export interface CashRedemptionResponse extends ApiResponse<RedemptionData> {}

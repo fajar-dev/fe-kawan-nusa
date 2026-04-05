@@ -1,6 +1,6 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
-import type { ProductRedemptionRequest, ProductRedemptionResponse, VoucherRedemptionRequest, VoucherRedemptionResponse } from "../types/redemptions"
+import type { CashRedemptionRequest, CashRedemptionResponse, ProductRedemptionRequest, ProductRedemptionResponse, VoucherRedemptionRequest, VoucherRedemptionResponse } from "../types/redemptions"
 
 export class RedemptionService {
     async redeemProduct(data: ProductRedemptionRequest): Promise<ProductRedemptionResponse> {
@@ -26,6 +26,19 @@ export class RedemptionService {
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Failed to redeem voucher')
+        }
+    }
+
+    async redeemCash(data: CashRedemptionRequest): Promise<CashRedemptionResponse> {
+        try {
+            const response = await apiService.client.post<CashRedemptionResponse>('/redemptions/cash', data, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to redeem cash')
         }
     }
 }
