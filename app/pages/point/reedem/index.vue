@@ -134,6 +134,27 @@
           :rewardId="selectedReward?.id || null" 
           @confirm="onConfirmRedeem"
         />
+
+        <!-- Product Redeem Modal -->
+        <ModalRedeemProduct
+          v-model="showRedeemProductModal"
+          :catalogId="selectedReward?.id || null"
+          @success="onSuccessRedeem"
+        />
+
+        <!-- Voucher Redeem Modal -->
+        <ModalReedemVoucher
+          v-model="showRedeemVoucherModal"
+          :catalogId="selectedReward?.id || null"
+          @success="onSuccessRedeem"
+        />
+
+        <!-- Success Redeem Modal -->
+        <ModalRedemptionSuccess
+          v-model="showSuccessModal"
+          :redemption="redemptionData"
+          :rewardName="selectedReward?.name || ''"
+        />
     </div>
 </template>
 
@@ -143,9 +164,10 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { catalogService } from '~/services/catalog-service'
 import { pointService } from '~/services/point-service'
 import type { CatalogItem, CatalogCategory } from '~/types/catalog'
+import type { RedemptionData } from '~/types/redemptions'
 
 // Initial data fetching
-const { data: pointResponse } = await useAsyncData('user-points', () => pointService.getPoint())
+const { data: pointResponse, refresh: refreshPoint } = await useAsyncData('user-points', () => pointService.getPoint())
 const { data: categoryResponse } = await useAsyncData('catalog-categories', () => catalogService.getCategories())
 
 const activeCategory = ref<CatalogCategory>({ id: 0, name: 'Semua' })
@@ -229,7 +251,11 @@ onUnmounted(() => {
 // Modal states
 const showTermsModal = ref(false)
 const showConfirmRedeemModal = ref(false)
+const showRedeemProductModal = ref(false)
+const showRedeemVoucherModal = ref(false)
+const showSuccessModal = ref(false)
 const selectedReward = ref<CatalogItem | null>(null)
+const redemptionData = ref<RedemptionData | null>(null)
 
 const handleSelectReward = (reward: CatalogItem) => {
   selectedReward.value = reward
@@ -238,6 +264,23 @@ const handleSelectReward = (reward: CatalogItem) => {
 
 const onConfirmRedeem = () => {
     showConfirmRedeemModal.value = false
-    alert(`Penukaran ${selectedReward.value?.name || 'Reward'} Berhasil!`)
+    
+    if (selectedReward.value?.type === 'product') {
+        showRedeemProductModal.value = true
+    } else if (selectedReward.value?.type === 'voucher') {
+        showRedeemVoucherModal.value = true
+    } else {
+        alert(`Penukaran ${selectedReward.value?.name || 'Reward'} Berhasil!`)
+    }
+}
+
+const onSuccessRedeem = (data: RedemptionData) => {
+    showRedeemProductModal.value = false
+    showRedeemVoucherModal.value = false
+    
+    redemptionData.value = data
+    showSuccessModal.value = true
+    
+    refreshPoint()
 }
 </script>
