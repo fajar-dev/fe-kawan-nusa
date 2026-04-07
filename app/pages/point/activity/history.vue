@@ -30,7 +30,7 @@
             <div>
               <div class="flex items-center justify-between mb-1.5">
                 <span class="text-neutral-400 text-xs font-medium">Rentang Tanggal</span>
-                <span @click="tempStartDate = ''; tempEndDate = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus</span>
+                <span @click="tempStartDate = ''; tempEndDate = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="space-y-1.5">
@@ -48,7 +48,7 @@
             <div class="space-y-1.5">
               <div class="flex items-center justify-between mb-1.5">
                 <span class="text-neutral-400 text-xs font-medium">Tipe Redem</span>
-                <span @click="tempTypes = []" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus</span>
+                <span @click="tempTypes = []" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
               </div>
               <MultiSelect 
                 v-model="tempTypes"
@@ -64,7 +64,7 @@
             <div class="space-y-1.5">
               <div class="flex items-center justify-between mb-1.5">
                 <span class="text-neutral-400 text-xs font-medium">Status</span>
-                <span @click="tempStatuses = []" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus</span>
+                <span @click="tempStatuses = []" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
               </div>
               <MultiSelect 
                 v-model="tempStatuses"
@@ -87,14 +87,97 @@
               <span class="capitalize">{{ formatType(item.type) }}</span>
             </td>
             <td v-show="isColumnVisible('reward')" class="border-r border-base-200 max-w-xs">
-              <div v-if="item.type === 'cash' && item.withdrawDetails" class="flex flex-col gap-0.5">
-                <div>Penarikan tunai Rp.{{ (item.withdrawDetails.payout + item.withdrawDetails.tax).toLocaleString('id-ID') }}</div>
+              <div v-if="item.type === 'cash' && item.withdrawDetails" class="flex items-center justify-between gap-3">
+                <div class="truncate min-w-0">Penarikan tunai Rp.{{ (item.withdrawDetails.payout + item.withdrawDetails.tax).toLocaleString('id-ID') }}</div>
+                
+                <div class="dropdown dropdown-end shrink-0">
+                  <div tabindex="0" role="button" class="p-1 hover:bg-base-200 rounded-full transition-colors cursor-pointer text-neutral-400 hover:text-primary">
+                    <Maximize2 class="w-4 h-4" />
+                  </div>
+                  <div tabindex="0" class="dropdown-content z-[200] card card-compact bg-base-100 w-64 shadow-xl border border-base-200 mt-2">
+                    <div class="card-body">
+                      <h3 class="font-medium text-sm text-neutral-800 border-b border-base-200 pb-2 mb-2">Penarikan Tunai Rp.{{ item.withdrawDetails.payout + item.withdrawDetails.tax }}</h3>
+                      <div class="space-y-3">
+                        <div class="flex flex-col gap-2">
+                          <div class="space-y-0.5">
+                            <div class="text-xs text-neutral-400">Bank:</div>
+                            <div class="text-xs text-neutral-800">{{ item.withdrawDetails.bankName }}</div>
+                          </div>
+                          <div class="space-y-0.5">
+                            <div class="text-xs text-neutral-400">Nama Pemilik Rekening:</div>
+                            <div class="text-xs text-neutral-800">{{ item.withdrawDetails.accountHolderName }}</div>
+                          </div>
+                          <div class="space-y-0.5">
+                            <div class="text-xs text-neutral-400">Nomor Rekening:</div>
+                            <div class="text-xs text-neutral-800">{{ item.withdrawDetails.accountNumber }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div v-else-if="item.type === 'voucher' && item.voucherDetails" class="flex items-center gap-3">
-                <span class="truncate">{{ item.voucherDetails.catalog.name }}</span>
+
+              <div v-else-if="item.type === 'voucher' && item.voucherDetails" class="flex items-center justify-between gap-3">
+                <span class="truncate min-w-0">{{ item.voucherDetails.catalog.name }}</span>
+                
+                <div class="dropdown dropdown-end shrink-0">
+                  <div tabindex="0" role="button" class="p-1 hover:bg-base-200 rounded-full transition-colors cursor-pointer text-neutral-400 hover:text-primary">
+                    <Maximize2 class="w-4 h-4" />
+                  </div>
+                  <div tabindex="0" class="dropdown-content z-[200] card card-compact bg-base-100 w-64 shadow-xl border border-base-200 mt-2">
+                    <div class="card-body">
+                      <h3 class="font-medium text-sm text-neutral-800 border-b border-base-200 pb-2 mb-2 truncate">{{ item.voucherDetails.catalog.name }}</h3>
+                      <div class="space-y-3">
+                        <div class="flex flex-col gap-2">
+                          <div class="space-y-0.5">
+                            <div class="text-xs text-neutral-400">Nama:</div>
+                            <div class="text-xs text-neutral-800">{{ item.voucherDetails.name }}</div>
+                          </div>
+                          <div class="space-y-0.5">
+                            <div class="text-xs text-neutral-400">Email:</div>
+                            <div class="text-xs text-neutral-800">{{ item.voucherDetails.email }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div v-else-if="item.type === 'product' && item.productDetails" class="flex items-center gap-3">
-                <span class="truncate">{{ item.productDetails.catalog.name }}</span>
+
+              <div v-else-if="item.type === 'product' && item.productDetails" class="flex items-center justify-between gap-3">
+                <span class="truncate min-w-0">{{ item.productDetails.catalog.name }}</span>
+
+                <div class="dropdown dropdown-end shrink-0">
+                  <div tabindex="0" role="button" class="p-1 hover:bg-base-200 rounded-full transition-colors cursor-pointer text-neutral-400 hover:text-primary">
+                    <Maximize2 class="w-4 h-4" />
+                  </div>
+                  <div tabindex="0" class="dropdown-content z-[200] card card-compact bg-base-100 w-64 shadow-xl border border-base-200 mt-2">
+                    <div class="card-body">
+                      <h3 class="font-medium text-sm text-neutral-800 border-b border-base-200 pb-2 mb-2 truncate">{{ item.productDetails.catalog.name }}</h3>
+                      <div class="space-y-3">
+                        <div class="flex flex-col gap-2">
+                          <div class="space-y-0.5">
+                            <div class="text-xs text-neutral-400">Nama:</div>
+                            <div class="text-xs text-neutral-800">{{ item.productDetails.name }}</div>
+                          </div>
+                          <div class="space-y-0.5">
+                            <div class="text-xs text-neutral-400">Email:</div>
+                            <div class="text-xs text-neutral-800">{{ item.productDetails.email }}</div>
+                          </div>
+                          <div class="space-y-0.5">
+                            <div class="text-xs text-neutral-400">Nomor Handphone:</div>
+                            <div class="text-xs text-neutral-800">{{ item.productDetails.phone }}</div>
+                          </div>
+                          <div class="space-y-0.5">
+                            <div class="text-xs text-neutral-400">Alamat:</div>
+                            <div class="text-xs text-neutral-800">{{ item.productDetails.address }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </td>
             <td v-show="isColumnVisible('status')" class="border-r border-base-200">
@@ -139,9 +222,9 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { Download, ExternalLink } from 'lucide-vue-next'
+import { Download, ExternalLink, Info, Maximize2 } from 'lucide-vue-next'
 import { redemptionService } from '~/services/redemption-service'
-import { formatDateTime } from '~/utils/date'
+import { formatDateTime, formatDateShort } from '~/utils/date'
 
 const typeOptions = [
   { label: 'Cash', value: 'cash' },
