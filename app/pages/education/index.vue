@@ -19,7 +19,7 @@
             <!-- Top Action Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:px-12 md:px-6">
                 <!-- Katalog Produk -->
-                <div class="card bg-white border border-base-300 hover:shadow-md transition-all cursor-pointer group">
+                <NuxtLink to="/education/service" class="card bg-white border border-base-300 transition-all cursor-pointer group hover:bg-neutral-50">
                     <div class="card-body p-6 flex flex-col items-center text-center">
                         <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 text-primary">
                             <Package class="w-6 h-6" />
@@ -30,10 +30,10 @@
                             Lihat <ArrowUpRight class="w-3.5 h-3.5" />
                         </div>
                     </div>
-                </div>
+                </NuxtLink>
 
                 <!-- Skema Poin -->
-                <div class="card bg-white border border-base-300 hover:shadow-md transition-all cursor-pointer group">
+                <NuxtLink to="/education/scheme" class="card bg-white border border-base-300 transition-all cursor-pointer group hover:bg-neutral-50">
                     <div class="card-body p-6 flex flex-col items-center text-center">
                         <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 text-primary">
                             <Coins class="w-6 h-6" />
@@ -44,10 +44,10 @@
                             Pelajari <ArrowUpRight class="w-3.5 h-3.5" />
                         </div>
                     </div>
-                </div>
+                </NuxtLink>
 
                 <!-- Strategi Penawaran -->
-                <div class="card bg-white border border-base-300 hover:shadow-md transition-all cursor-pointer group">
+                <NuxtLink to="/education/strategy" class="card bg-white border border-base-300 transition-all cursor-pointer group hover:bg-neutral-50">
                     <div class="card-body p-6 flex flex-col items-center text-center">
                         <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 text-primary">
                             <Lightbulb class="w-6 h-6" />
@@ -58,10 +58,10 @@
                             Pelajari <ArrowUpRight class="w-3.5 h-3.5" />
                         </div>
                     </div>
-                </div>
+                </NuxtLink>
 
                 <!-- Update Promo -->
-                <div class="card bg-white border border-base-300 hover:shadow-md transition-all cursor-pointer group">
+                <NuxtLink to="/education/promotion" class="card bg-white border border-base-300 transition-all cursor-pointer group hover:bg-neutral-50">
                     <div class="card-body p-6 flex flex-col items-center text-center">
                         <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-3 text-primary">
                             <BadgePercent class="w-6 h-6" />
@@ -72,7 +72,7 @@
                             Lihat <ArrowUpRight class="w-3.5 h-3.5" />
                         </div>
                     </div>
-                </div>
+                </NuxtLink>
             </div>
             <!-- Artikel Edukasi Section -->
             <section class="space-y-8">

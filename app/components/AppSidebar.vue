@@ -72,8 +72,12 @@
     <div class="mt-auto">
       <ul class="menu w-full gap-1">
         <li>
-          <NuxtLink to="/education" class="hover:bg-base-200 text-neutral-600 rounded-lg px-3 py-2.5 font-medium transition-colors">
-            <BookOpen class="w-5 h-5 group-[.active]:text-white" />
+          <NuxtLink 
+            to="/education" 
+            class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
+            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': $route.path.startsWith('/education') }"
+          >
+            <BookOpen class="w-5 h-5" :class="{ 'text-white': $route.path.startsWith('/education') }" />
             Edukasi
           </NuxtLink>
         </li>
