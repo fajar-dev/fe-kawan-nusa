@@ -59,7 +59,6 @@ export interface ServiceCustomer {
     point: number
     type: string
     createdAt: string
-    paymentDate: string
   } | null
 }
 
