@@ -93,7 +93,7 @@
                     </div>
 
                     <NuxtLink
-                        to="/education/articles"
+                        to="/education/article"
                         class="inline-flex items-center gap-1 self-start text-sm font-semibold text-primary hover:underline md:self-auto md:shrink-0"
                     >
                         <span>Lihat Semua</span>
@@ -175,7 +175,7 @@
                     </div>
 
                     <NuxtLink
-                        to="/education/videos"
+                        to="/education/video"
                         class="inline-flex items-center gap-1 self-start text-sm font-semibold text-primary hover:underline md:self-auto md:shrink-0"
                     >
                         <span>Lihat Semua</span>

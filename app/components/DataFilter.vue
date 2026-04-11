@@ -14,7 +14,7 @@
       <div class="card-body p-0">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-2 border-b border-base-200">
-          <h3 class="font-bold text-lg text-neutral-800">Filter</h3>
+          <h3 class="font-semibold text-lg text-neutral-800">Filter</h3>
           <button @click="handleCancel" type="button" class="btn btn-ghost btn-xs btn-circle"><X class="w-4 h-4" /></button>
         </div>
         

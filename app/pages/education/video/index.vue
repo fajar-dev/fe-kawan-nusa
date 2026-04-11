@@ -3,13 +3,13 @@
         <AppToolbar>
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <Newspaper class="w-9 h-9 mt-1 text-neutral-800" />
+                    <Video class="w-8 h-8 text-neutral-800" />
                     <div>
                         <div class="flex items-center gap-2">
-                        <h1 class="text-xl font-medium text-neutral-800">Artikel Edukasi</h1>
+                        <h1 class="text-xl font-medium text-neutral-800">Video Edukasi</h1>
                         </div>
                         <p class="text-xs text-neutral-400 font-medium mt-0.5">
-                            <NuxtLink to="/education" class="text-primary hover:underline">Edukasi</NuxtLink> / Artikel Edukasi
+                            <NuxtLink to="/education" class="text-primary hover:underline">Edukasi</NuxtLink> / Video Edukasi
                         </p>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
                         <!-- Kategori Artikel -->
                         <div>
                             <div class="flex items-center justify-between mb-1.5">
-                                <span class="text-neutral-400 text-xs font-medium">Kategori Artikel</span>
+                                <span class="text-neutral-400 text-xs font-medium">Kategori Video</span>
                                 <span @click="selectedCategories = []" class="text-xs font-medium text-primary cursor-pointer hover:underline">Hapus Terpilih</span>
                             </div>
                             <MultiSelect 
@@ -45,13 +45,13 @@
                         <!-- Status Baca -->
                         <div>
                             <div class="flex items-center justify-between mb-1.5">
-                                <span class="text-neutral-400 text-xs font-medium">Status Baca</span>
+                                <span class="text-neutral-400 text-xs font-medium">Status Tonton</span>
                                 <span @click="readingStatus = ''" class="text-xs font-medium text-primary cursor-pointer hover:underline">Hapus Terpilih</span>
                             </div>
                             <select v-model="readingStatus" class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
                                 <option value="">Semua Status</option>
-                                <option value="read">Sudah dibaca</option>
-                                <option value="unread">Belum dibaca</option>
+                                <option value="read">Sudah ditonton</option>
+                                <option value="unread">Belum ditonton</option>
                             </select>
                         </div>
                     </DataFilter>
@@ -67,68 +67,75 @@
                 </div>
             </div>
 
-            <!-- Article Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div v-for="article in articles" :key="article.id" class="card h-full bg-white border border-base-300 rounded-xl overflow-hidden transition-all group">
-                    <div class="relative h-52 overflow-hidden p-3">
+                <div v-for="video in videos" :key="video.id" class="card h-full bg-white border border-base-300 rounded-xl overflow-hidden transition-all group">
+                    <div class="relative h-44 overflow-hidden p-3 pb-0 group-hover:scale-105 transition-transform duration-500">
                         <img
-                            :src="article.image"
-                            :alt="article.title"
-                            class="w-full h-full object-cover rounded-xl transition-transform duration-500"
+                            :src="video.image"
+                            :alt="video.title"
+                            class="w-full h-full object-cover rounded-xl"
                         />
+                        <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0  transition-opacity">
+                            <div class="w-12 h-12 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center border border-white/50">
+                                <Play class="w-6 h-6 text-white fill-white" />
+                            </div>
+                        </div>
+                        <!-- Static play icon in middle as per screenshot -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/40">
+                                <Play class="w-5 h-5 text-white fill-white" />
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body p-5 flex flex-col gap-4">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <span v-if="article.isNew" class="px-2 py-0.5 bg-success/10 text-success font-medium text-xs rounded-full">
+                                <span v-if="video.isNew" class="px-2 py-0.5 bg-success/10 text-success font-medium text-xs rounded-full">
                                     Baru
                                 </span>
-                                <span v-if="article.isViewed" class="px-2 py-0.5 bg-purple-100 text-purple-600 font-medium text-xs rounded-full">
+                                <span v-if="video.isViewed" class="px-2 py-0.5 bg-purple-100 text-purple-600 font-medium text-xs rounded-full">
                                     Sudah Dilihat
                                 </span>
                                 <span class="px-2 py-0.5 bg-primary/10 text-primary font-medium text-xs rounded-full">
-                                    {{ article.category.name }}
+                                    {{ video.category.name }}
                                 </span>
                             </div>
-                            <div class="flex items-center gap-1 text-xs text-neutral-400 font-medium">
-                                <Clock class="w-3 h-3" /> {{ article.readTime }}
-                            </div>
                         </div>
-
+    
                         <div class="space-y-2 flex-grow">
                             <h3 class="text-neutral-800 font-medium text-sm line-clamp-2 leading-snug">
-                                {{ article.title }}
+                                {{ video.title }}
                             </h3>
                             <p class="text-neutral-500 text-xs line-clamp-2">
-                                {{ article.description }}
+                                {{ video.description }}
                             </p>
                         </div>
-
+    
                         <div class="flex items-center justify-between py-2 border-y border-base-100">
                             <div class="flex items-center gap-1.5">
                                 <User class="w-3 h-3 text-neutral-400" />
-                                <span class="text-xs text-neutral-400 font-medium">{{ article.author }}</span>
+                                <span class="text-xs text-neutral-400 font-medium">{{ video.author }}</span>
                             </div>
                             <div class="flex items-center gap-1.5">
                                 <Calendar class="w-3 h-3 text-neutral-400" />
-                                <span class="text-xs text-neutral-400 font-medium">{{ article.date }}</span>
+                                <span class="text-xs text-neutral-400 font-medium">{{ video.date }}</span>
                             </div>
                         </div>
-
+    
                         <button class="btn btn-primary btn-sm w-full font-medium text-xs rounded-lg text-white">
-                            Lihat Artikel
+                            Lihat Video
                         </button>
                     </div>
                 </div>
             </div>
 
             <!-- Empty State / Load More (Optional) -->
-            <div v-if="articles.length === 0" class="py-20 text-center space-y-4">
+            <div v-if="videos.length === 0" class="py-20 text-center space-y-4">
                 <div class="w-20 h-20 bg-neutral-100 rounded-full flex items-center justify-center mx-auto">
-                    <Newspaper class="w-10 h-10 text-neutral-300" />
+                    <Video class="w-10 h-10 text-neutral-300" />
                 </div>
                 <div class="space-y-1">
-                    <p class="text-neutral-800 font-medium">Belum ada artikel</p>
+                    <p class="text-neutral-800 font-medium">Belum ada video</p>
                     <p class="text-xs text-neutral-400">Silakan kembali lagi nanti untuk update terbaru</p>
                 </div>
             </div>
@@ -137,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-import { Newspaper, Filter, Search, Clock, User, Calendar, ChevronRight } from 'lucide-vue-next';
+import { Video, Play, Filter, Search, Clock, User, Calendar, ChevronRight } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
 
 definePageMeta({
@@ -145,7 +152,7 @@ definePageMeta({
 })
 
 useSeoMeta({
-  title: 'Kawan Nusa | Artikel Edukasi',
+  title: 'Kawan Nusa | Video Edukasi',
 })
 
 // Filter State
@@ -187,7 +194,7 @@ const resetFilters = () => {
     applyFilters()
 }
 
-const articles = [
+const videos = [
     {
         id: 1,
         title: 'Cara Menjawab Keberatan Harga dari Calon Pelanggan',
