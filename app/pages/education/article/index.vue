@@ -137,8 +137,7 @@
 </template>
 
 <script setup lang="ts">
-import { Newspaper, Filter, Search, Clock, User, Calendar, ChevronRight } from 'lucide-vue-next';
-import { ref, computed } from 'vue';
+import { Newspaper, Search, Clock, User, Calendar } from 'lucide-vue-next';
 
 definePageMeta({
   bgColor: 'bg-white'

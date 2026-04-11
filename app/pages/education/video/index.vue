@@ -3,7 +3,7 @@
         <AppToolbar>
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <Video class="w-8 h-8 text-neutral-800" />
+                    <Newspaper class="w-8 h-8 text-neutral-800" />
                     <div>
                         <div class="flex items-center gap-2">
                         <h1 class="text-xl font-medium text-neutral-800">Video Edukasi</h1>
@@ -144,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-import { Video, Play, Filter, Search, Clock, User, Calendar, ChevronRight } from 'lucide-vue-next';
+import { Video, Play, Filter, Search, Clock, User, Calendar, ChevronRight, Newspaper } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
 
 definePageMeta({
