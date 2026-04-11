@@ -1,0 +1,265 @@
+<template>
+    <div class="flex flex-col w-full">
+        <AppToolbar>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <Newspaper class="w-9 h-9 mt-1 text-neutral-800" />
+                    <div>
+                        <div class="flex items-center gap-2">
+                        <h1 class="text-xl font-medium text-neutral-800">Artikel Edukasi</h1>
+                        </div>
+                        <p class="text-xs text-neutral-400 font-medium mt-0.5">
+                            <NuxtLink to="/education" class="text-primary hover:underline">Edukasi</NuxtLink> / Artikel Edukasi
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </AppToolbar>
+
+        <div class="space-y-8 pb-10">
+            <!-- Filter & Search Bar -->
+            <div class="flex flex-col md:flex-row gap-4 justify-between items-center relative">
+                <div class="flex items-center gap-2">
+                    <DataFilter 
+                        :is-filter-active="hasActiveFilters"
+                        @apply="applyFilters"
+                        @reset="resetFilters"
+                        @cancel="cancelFilters"
+                    >
+                        <!-- Kategori Artikel -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-neutral-400 text-xs font-medium">Kategori Artikel</span>
+                                <span @click="selectedCategories = []" class="text-xs font-medium text-primary cursor-pointer hover:underline">Hapus Terpilih</span>
+                            </div>
+                            <MultiSelect 
+                                v-model="selectedCategories" 
+                                :options="categoryOptions" 
+                                labelKey="name"
+                                valueKey="id"
+                                placeholder="Semua Kategori" 
+                                searchable
+                            />
+                        </div>
+
+                        <!-- Status Baca -->
+                        <div class="space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-neutral-400 text-xs font-medium">Status Baca</span>
+                                <span @click="readingStatus = ''" class="text-xs font-medium text-primary cursor-pointer hover:underline">Hapus Terpilih</span>
+                            </div>
+                            <select v-model="readingStatus" class="select select-bordered w-full rounded-lg text-sm h-10 font-medium focus:outline-none">
+                                <option value="">Semua Status</option>
+                                <option value="read">Sudah dibaca</option>
+                                <option value="unread">Belum dibaca</option>
+                            </select>
+                        </div>
+                    </DataFilter>
+                </div>
+                <div class="relative w-full md:w-80">
+                    <Search class="z-10 w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+                    <input 
+                        type="text" 
+                        v-model="searchQuery"
+                        placeholder="Search" 
+                        class="input input-bordered w-full pl-10 bg-white border-base-300 rounded-lg focus:outline-none focus:border-primary text-sm h-10"
+                    />
+                </div>
+            </div>
+
+            <!-- Article Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div v-for="article in articles" :key="article.id" class="card h-full bg-white border border-base-300 rounded-xl overflow-hidden transition-all group">
+                    <div class="relative h-52 overflow-hidden p-3">
+                        <img
+                            :src="article.image"
+                            :alt="article.title"
+                            class="w-full h-full object-cover rounded-xl transition-transform duration-500"
+                        />
+                    </div>
+                    <div class="card-body p-5 flex flex-col gap-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span v-if="article.isNew" class="px-2 py-0.5 bg-success/10 text-success font-medium text-xs rounded-full">
+                                    Baru
+                                </span>
+                                <span v-if="article.isViewed" class="px-2 py-0.5 bg-purple-100 text-purple-600 font-medium text-xs rounded-full">
+                                    Sudah Dilihat
+                                </span>
+                                <span class="px-2 py-0.5 bg-primary/10 text-primary font-medium text-xs rounded-full">
+                                    {{ article.category.name }}
+                                </span>
+                            </div>
+                            <div class="flex items-center gap-1 text-xs text-neutral-400 font-medium">
+                                <Clock class="w-3 h-3" /> {{ article.readTime }}
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 flex-grow">
+                            <h3 class="text-neutral-800 font-medium text-sm line-clamp-2 leading-snug">
+                                {{ article.title }}
+                            </h3>
+                            <p class="text-neutral-500 text-xs line-clamp-2">
+                                {{ article.description }}
+                            </p>
+                        </div>
+
+                        <div class="flex items-center justify-between py-2 border-y border-base-100">
+                            <div class="flex items-center gap-1.5">
+                                <User class="w-3 h-3 text-neutral-400" />
+                                <span class="text-xs text-neutral-400 font-medium">{{ article.author }}</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <Calendar class="w-3 h-3 text-neutral-400" />
+                                <span class="text-xs text-neutral-400 font-medium">{{ article.date }}</span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary btn-sm w-full font-medium text-xs rounded-lg text-white">
+                            Lihat Artikel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State / Load More (Optional) -->
+            <div v-if="articles.length === 0" class="py-20 text-center space-y-4">
+                <div class="w-20 h-20 bg-neutral-100 rounded-full flex items-center justify-center mx-auto">
+                    <Newspaper class="w-10 h-10 text-neutral-300" />
+                </div>
+                <div class="space-y-1">
+                    <p class="text-neutral-800 font-medium">Belum ada artikel</p>
+                    <p class="text-xs text-neutral-400">Silakan kembali lagi nanti untuk update terbaru</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { Newspaper, Filter, Search, Clock, User, Calendar, ChevronRight } from 'lucide-vue-next';
+import { ref, computed } from 'vue';
+
+definePageMeta({
+  bgColor: 'bg-white'
+})
+
+useSeoMeta({
+  title: 'Kawan Nusa | Artikel Edukasi',
+})
+
+// Filter State
+const searchQuery = ref('')
+const selectedCategories = ref<number[]>([])
+const readingStatus = ref('')
+
+const appliedFilters = ref({
+    categories: [] as number[],
+    readingStatus: ''
+})
+
+const categoryOptions = [
+    { id: 1, name: 'Tips & Trick' },
+    { id: 2, name: 'Berita' },
+    { id: 3, name: 'Panduan' }
+]
+
+const hasActiveFilters = computed(() => {
+    return appliedFilters.value.categories.length > 0 || appliedFilters.value.readingStatus !== ''
+})
+
+const cancelFilters = () => {
+    selectedCategories.value = [...appliedFilters.value.categories]
+    readingStatus.value = appliedFilters.value.readingStatus
+}
+
+const applyFilters = () => {
+    appliedFilters.value = {
+        categories: [...selectedCategories.value],
+        readingStatus: readingStatus.value
+    }
+    // Logic to fetch filtered articles would go here
+}
+
+const resetFilters = () => {
+    selectedCategories.value = []
+    readingStatus.value = ''
+    applyFilters()
+}
+
+const articles = [
+    {
+        id: 1,
+        title: 'Cara Menjawab Keberatan Harga dari Calon Pelanggan',
+        description: 'Harga jadi alasan ragu? Pelajari cara menjawabnya agar calon pelanggan justru semakin yakin. Pahami psikologi pelanggan saat menghadapi harga.',
+        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop',
+        category: { id: 1, name: 'Tips & Trick' },
+        isNew: true,
+        isViewed: false,
+        readTime: '5 menit baca',
+        author: 'Ahmad Syaputra',
+        date: '02/10/2026'
+    },
+    {
+        id: 2,
+        title: 'Bagaimana Referral A Mendapatkan 10 Pelanggan dalam 1 Bulan',
+        description: 'Dari nol hingga 10 pelanggan dalam 1 bulan, ini strategi Referral A yang bisa Anda terapkan mulai hari ini.',
+        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop',
+        category: { id: 1, name: 'Tips & Trick' },
+        isNew: false,
+        isViewed: false,
+        readTime: '5 menit baca',
+        author: 'Ahmad Syaputra',
+        date: '12/03/2026'
+    },
+    {
+        id: 3,
+        title: 'Perubahan Pola Interaksi Pelanggan yang Perlu Dipahami Referral',
+        description: 'Pola interaksi pelanggan berubah!, pahami perubahan ini untuk meningkatkan peluang closing Anda di setiap penawaran.',
+        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop',
+        category: { id: 2, name: 'Berita' },
+        isNew: false,
+        isViewed: true,
+        readTime: '4 menit baca',
+        author: 'Bima Ramadhani',
+        date: '24/02/2026'
+    },
+    {
+        id: 4,
+        title: 'Tips Menghadapi Calon Pelanggan yang Masih Ragu untuk Membeli',
+        description: 'Pelanggan masih ragu? Yakinkan dengan pendekatan yang tepat agar mereka siap membeli produk Anda tanpa rasa khawatir.',
+        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop',
+        category: { id: 1, name: 'Tips & Trick' },
+        isNew: false,
+        isViewed: false,
+        readTime: '5 menit baca',
+        author: 'Ahmad Syaputra',
+        date: '11/02/2026'
+    },
+    {
+        id: 5,
+        title: 'Panduan Menentukan Waktu yang Tepat untuk Menawarkan Produk ke Pelanggan',
+        description: 'Momen yang tepat menentukan hasil, jangan salah timing saat menawarkan produk. Pelajari jendela waktu terbaik untuk menghubungi prospek.',
+        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop',
+        category: { id: 3, name: 'Panduan' },
+        isNew: false,
+        isViewed: false,
+        readTime: '5 menit baca',
+        author: 'Ahmad Syaputra',
+        date: '03/02/2026'
+    },
+    {
+        id: 6,
+        title: 'Pentingnya First Impression dalam Menarik Perhatian Pelanggan',
+        description: 'First impression itu krusial, kesan pertama yang tepat bisa langsung membuka peluang closing yang lebih besar di kemudian hari.',
+        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop',
+        category: { id: 2, name: 'Berita' },
+        isNew: false,
+        isViewed: false,
+        readTime: '5 menit baca',
+        author: 'Bima Ramadhani',
+        date: '24/01/2026'
+    }
+]
+</script>
+
