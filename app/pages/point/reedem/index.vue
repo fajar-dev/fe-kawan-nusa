@@ -164,7 +164,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { catalogService } from '~/services/catalog-service'
 import { pointService } from '~/services/point-service'
 import type { CatalogItem, CatalogCategory } from '~/types/catalog'
-import type { RedemptionData } from '~/types/redemptions'
+import type { RedemptionData } from '~/types/redemption'
 
 // Initial data fetching
 const { data: pointResponse, refresh: refreshPoint } = await useAsyncData('user-points', () => pointService.getPoint())

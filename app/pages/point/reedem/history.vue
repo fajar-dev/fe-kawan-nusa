@@ -220,7 +220,7 @@ import { statisticService } from '~/services/statistic-service'
 import { redemptionService } from '~/services/redemption-service'
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { formatDateTime } from '~/utils/date'
-import type { RedemptionData } from '~/types/redemptions'
+import type { RedemptionData } from '~/types/redemption'
 
 // Filter and Tabs
 const activeStatus = ref('Semua')

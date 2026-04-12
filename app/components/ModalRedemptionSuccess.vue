@@ -64,7 +64,7 @@
 <script setup lang="ts">
 import { X, Check } from 'lucide-vue-next'
 import { watch, onUnmounted } from 'vue'
-import type { RedemptionData } from '~/types/redemptions'
+import type { RedemptionData } from '~/types/redemption'
 
 const props = defineProps<{
   redemption?: RedemptionData | null
