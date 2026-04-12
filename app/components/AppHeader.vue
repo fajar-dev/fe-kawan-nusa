@@ -11,17 +11,19 @@
         <p class="text-[0.3rem] lg:text-[0.35rem] text-neutral-500 uppercase tracking-widest leading-none">Portal Referral PT. Media Antar Nusa</p>
       </div>
       
-      <!-- Search Input -->
-      <div class="relative w-full max-w-md hidden md:block group">
-        <div class="flex items-center border border-base-300 rounded-lg bg-base-100 px-3 transition-all focus-within:ring-2 focus-within:ring-primary/50">
-          <input 
-            type="text" 
-            placeholder="Search..." 
-            class="input border-none focus:outline-none w-full h-9 pl-2 text-sm bg-transparent" 
-          />
-          <Search class="w-5 h-5 text-neutral-800" />
+      <!-- Command Palette Trigger -->
+      <div class="relative w-full max-w-md hidden md:block group cursor-pointer" @click="isPaletteOpen = true">
+        <div class="flex items-center border border-base-300 rounded-lg bg-base-100 px-3 h-9 transition-all hover:border-primary/50">
+          <span class="text-sm text-neutral-400 flex-1">Type a command or search...</span>
+          <div class="flex items-center gap-1">
+            <kbd class="kbd kbd-xs bg-base-200">⌘</kbd>
+            <kbd class="kbd kbd-xs bg-base-200">K</kbd>
+          </div>
+          <Search class="w-4 h-4 text-neutral-400 ml-3" />
         </div>
       </div>
+
+      <AppCommandPalette v-model="isPaletteOpen" />
     </div>
     
     <div class="flex items-center gap-2 md:gap-2">
@@ -83,8 +85,33 @@
 import { Menu, Search, HelpCircle, MessageSquareWarning, Bell, Settings, MessageSquareMore, LogOut } from 'lucide-vue-next'
 import { useAuth } from '~/composables/useAuth'
 
+const isPaletteOpen = ref(false)
 const { state: authState, service: authService } = useAuth()
 const toast = useToast()
+
+const getInitials = (name: string) => {
+  return name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .substring(0, 2)
+}
+
+// Keyboard shortcut (Cmd+K or Ctrl+K)
+const handleKeydown = (e: KeyboardEvent) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        isPaletteOpen.value = !isPaletteOpen.value
+    }
+}
+
+onMounted(() => {
+    window.addEventListener('keydown', handleKeydown)
+})
+
+onUnmounted(() => {
+    window.removeEventListener('keydown', handleKeydown)
+})
 
 const handleLogout = async () => {
     await authService.logout()
