@@ -131,14 +131,10 @@
             </div>
 
             <!-- Empty State -->
-            <div v-if="articles.length === 0 && !isLoading" class="py-20 text-center space-y-4">
-                <div class="w-20 h-20 bg-neutral-100 rounded-full flex items-center justify-center mx-auto">
-                    <Newspaper class="w-10 h-10 text-neutral-300" />
-                </div>
-                <div class="space-y-1">
-                    <p class="text-neutral-800 font-medium">Belum ada artikel</p>
-                    <p class="text-xs text-neutral-400">Silakan kembali lagi nanti untuk update terbaru</p>
-                </div>
+            <div v-if="articles.length === 0 && !isLoading" class="flex flex-col items-center justify-center">
+                <img src="/assets/no-data.png" alt="No Data" class="w-52 h-auto mb-6" />
+                <h3 class="text-xl font-bold text-neutral-800 mb-2">Data Kosong</h3>
+                <p class="text-neutral-500">Saat ini belum ada data yang bisa ditampilkan.</p>
             </div>
         </div>
     </div>
@@ -188,7 +184,7 @@ const fetchArticles = async (isReset = false) => {
         const response = await educationService.getArticles({
             limit: 12,
             page: page.value,
-            search: searchQuery.value || undefined,
+            q: searchQuery.value || undefined,
             categoryId: appliedFilters.value.categories.length === 1 ? appliedFilters.value.categories[0] : undefined,
             isView: appliedFilters.value.readingStatus === 'read' ? 'true' : appliedFilters.value.readingStatus === 'unread' ? 'false' : undefined
         })
@@ -235,12 +231,8 @@ const cancelFilters = () => {
     readingStatus.value = appliedFilters.value.readingStatus
 }
 
-let searchTimeout: any = null
 watch(searchQuery, () => {
-    if (searchTimeout) clearTimeout(searchTimeout)
-    searchTimeout = setTimeout(() => {
-        applyFilters()
-    }, 500)
+    applyFilters()
 })
 
 let observer: IntersectionObserver | null = null

@@ -8,7 +8,7 @@
         <span v-if="isFilterActive" class="indicator-item badge bg-red-500 size-2 p-0 border-none"></span>
         <Filter class="w-4 h-4 text-primary" />
       </div>
-      {{ label }}
+      <span class="hidden md:inline">{{ label }}</span>
     </summary>
     <div :class="['dropdown-content z-[999] card card-compact bg-base-100 w-[calc(100vw-2rem)] md:w-[500px] shadow-xl border border-base-200 mt-2', align === 'end' ? 'right-0' : 'left-0 md:left-auto']">
       <div class="card-body p-0">

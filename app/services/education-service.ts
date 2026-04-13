@@ -3,7 +3,7 @@ import { handleServiceError } from "../composables/error-helper"
 import type { EducationArticleResponse, EducationVideoResponse } from "../types/education"
 
 export class EducationService {
-    async getArticles(params: { categoryId?: number; isView?: string; page?: number; limit?: number; search?: string }): Promise<EducationArticleResponse> {
+    async getArticles(params: { categoryId?: number; isView?: string; page?: number; limit?: number; q?: string }): Promise<EducationArticleResponse> {
         try {
             const response = await apiService.client.get<EducationArticleResponse>('/education/article', {
                 params,
@@ -17,7 +17,7 @@ export class EducationService {
         }
     }
 
-    async getVideos(params: { categoryId?: number; isView?: string; page?: number; limit?: number; search?: string }): Promise<EducationVideoResponse> {
+    async getVideos(params: { categoryId?: number; isView?: string; page?: number; limit?: number; q?: string }): Promise<EducationVideoResponse> {
         try {
             const response = await apiService.client.get<EducationVideoResponse>('/education/video', {
                 params,
