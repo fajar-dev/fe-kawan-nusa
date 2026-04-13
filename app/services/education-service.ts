@@ -30,6 +30,19 @@ export class EducationService {
             return handleServiceError(error || 'Failed to fetch education videos')
         }
     }
+
+    async getCategories(): Promise<{ success: boolean; data: { id: number; name: string }[] }> {
+        try {
+            const response = await apiService.client.get('/education/category', {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch education categories')
+        }
+    }
 }
 
 export const educationService = new EducationService()

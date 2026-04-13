@@ -75,15 +75,11 @@
                             :alt="video.title"
                             class="w-full h-full object-cover rounded-xl"
                         />
-                        <div class="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0  transition-opacity">
-                            <div class="w-12 h-12 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center border border-white/50">
-                                <Play class="w-6 h-6 text-white fill-white" />
-                            </div>
-                        </div>
-                        <!-- Static play icon in middle as per screenshot -->
                         <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/40">
-                                <Play class="w-5 h-5 text-white fill-white" />
+                            <div class="w-12 h-12 rounded-full bg-white/40 backdrop-blur-sm flex items-center justify-center">
+                                <div class="w-8 h-8 rounded-full bg-transparent border border-primary border-2 flex items-center justify-center">
+                                    <Play class="w-5 h-5 text-primary" />
+                                </div>
                             </div>
                         </div>
                     </div>

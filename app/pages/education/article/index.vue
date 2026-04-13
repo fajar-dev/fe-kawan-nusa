@@ -18,7 +18,7 @@
 
         <div class="space-y-8 pb-10">
             <!-- Filter & Search Bar -->
-            <div class="flex flex-col md:flex-row gap-4 justify-between items-center relative">
+            <div class="flex flex-row gap-4 justify-between items-center relative">
                 <div class="flex items-center gap-2">
                     <DataFilter 
                         :is-filter-active="hasActiveFilters"
@@ -68,7 +68,7 @@
             </div>
 
             <!-- Article Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div v-for="article in articles" :key="article.id" class="card h-full bg-white border border-base-300 rounded-xl overflow-hidden transition-all group">
                     <div class="relative h-52 overflow-hidden p-3">
                         <img
@@ -80,18 +80,18 @@
                     <div class="card-body p-5 flex flex-col gap-4">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <span v-if="article.isNew" class="px-2 py-0.5 bg-success/10 text-success font-medium text-xs rounded-full">
+                                <span v-if="isNew(article.createdAt)" class="px-2 py-0.5 bg-success/10 text-success font-medium text-xs rounded-full">
                                     Baru
                                 </span>
-                                <span v-if="article.isViewed" class="px-2 py-0.5 bg-purple-100 text-purple-600 font-medium text-xs rounded-full">
+                                <span v-if="article.isView" class="px-2 py-0.5 bg-purple-100 text-purple-600 font-medium text-xs rounded-full">
                                     Sudah Dilihat
                                 </span>
                                 <span class="px-2 py-0.5 bg-primary/10 text-primary font-medium text-xs rounded-full">
-                                    {{ article.category.name }}
+                                    {{ article.category?.name }}
                                 </span>
                             </div>
                             <div class="flex items-center gap-1 text-xs text-neutral-400 font-medium">
-                                <Clock class="w-3 h-3" /> {{ article.readTime }}
+                                <Clock class="w-3 h-3" /> {{ article.readingTime }}
                             </div>
                         </div>
 
@@ -100,30 +100,38 @@
                                 {{ article.title }}
                             </h3>
                             <p class="text-neutral-500 text-xs line-clamp-2">
-                                {{ article.description }}
+                                {{ stripHtml(article.content) }}
                             </p>
                         </div>
 
                         <div class="flex items-center justify-between py-2 border-y border-base-100">
                             <div class="flex items-center gap-1.5">
-                                <User class="w-3 h-3 text-neutral-400" />
+                                <User class="w-4 h-4 text-neutral-400" />
                                 <span class="text-xs text-neutral-400 font-medium">{{ article.author }}</span>
                             </div>
                             <div class="flex items-center gap-1.5">
-                                <Calendar class="w-3 h-3 text-neutral-400" />
-                                <span class="text-xs text-neutral-400 font-medium">{{ article.date }}</span>
+                                <Calendar class="w-4 h-4 text-neutral-400" />
+                                <span class="text-xs text-neutral-400 font-medium">{{ formatDateShort(article.createdAt) }}</span>
                             </div>
                         </div>
 
-                        <button class="btn btn-primary btn-sm w-full font-medium text-xs rounded-lg text-white">
+                        <NuxtLink :to="`/education/article/${article.id}`" class="btn btn-primary btn-sm w-full font-medium text-xs rounded-lg text-white">
                             Lihat Artikel
-                        </button>
+                        </NuxtLink>
                     </div>
                 </div>
             </div>
 
-            <!-- Empty State / Load More (Optional) -->
-            <div v-if="articles.length === 0" class="py-20 text-center space-y-4">
+            <!-- Sentinel for Infinite Scroll -->
+            <div ref="sentinel" class="flex justify-center p-8 w-full col-span-full">
+                <Loader2 v-if="isLoading" class="w-8 h-8 animate-spin text-primary" />
+                <div v-else-if="page > lastPage && articles.length > 0" class="text-neutral-400 text-sm italic">
+                    Telah mencapai akhir
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div v-if="articles.length === 0 && !isLoading" class="py-20 text-center space-y-4">
                 <div class="w-20 h-20 bg-neutral-100 rounded-full flex items-center justify-center mx-auto">
                     <Newspaper class="w-10 h-10 text-neutral-300" />
                 </div>
@@ -137,7 +145,10 @@
 </template>
 
 <script setup lang="ts">
-import { Newspaper, Search, Clock, User, Calendar } from 'lucide-vue-next';
+import { Newspaper, Search, Clock, User, Calendar, Loader2 } from 'lucide-vue-next';
+import { educationService } from '~/services/education-service';
+import { formatDateShort, isNew } from '~/utils/date';
+import { stripHtml } from '~/utils/string';
 
 definePageMeta({
   bgColor: 'bg-white'
@@ -147,37 +158,70 @@ useSeoMeta({
   title: 'Kawan Nusa | Artikel Edukasi',
 })
 
-// Filter State
 const searchQuery = ref('')
 const selectedCategories = ref<number[]>([])
 const readingStatus = ref('')
+const page = ref(1)
+const lastPage = ref(1)
+const isLoading = ref(false)
+const sentinel = ref<HTMLElement | null>(null)
+const articles = ref<any[]>([])
 
 const appliedFilters = ref({
     categories: [] as number[],
     readingStatus: ''
 })
 
-const categoryOptions = [
-    { id: 1, name: 'Tips & Trick' },
-    { id: 2, name: 'Berita' },
-    { id: 3, name: 'Panduan' }
-]
+const { data: categoryResponse } = useAsyncData(
+    'education-categories',
+    () => educationService.getCategories()
+)
+
+const categoryOptions = computed(() => categoryResponse.value?.data || [])
+
+const fetchArticles = async (isReset = false) => {
+    if (isLoading.value) return
+    if (!isReset && page.value > lastPage.value) return
+
+    isLoading.value = true
+    try {
+        const response = await educationService.getArticles({
+            limit: 12,
+            page: page.value,
+            search: searchQuery.value || undefined,
+            categoryId: appliedFilters.value.categories.length === 1 ? appliedFilters.value.categories[0] : undefined,
+            isView: appliedFilters.value.readingStatus === 'read' ? 'true' : appliedFilters.value.readingStatus === 'unread' ? 'false' : undefined
+        })
+        
+        if (response.success && response.data) {
+            if (isReset) {
+                articles.value = response.data
+            } else {
+                const newItems = response.data.filter(newItem => 
+                    !articles.value.some(existingItem => existingItem.id === newItem.id)
+                )
+                articles.value = [...articles.value, ...newItems]
+            }
+            lastPage.value = response.meta.lastPage
+            page.value++
+        }
+    } finally {
+        isLoading.value = false
+    }
+}
 
 const hasActiveFilters = computed(() => {
     return appliedFilters.value.categories.length > 0 || appliedFilters.value.readingStatus !== ''
 })
-
-const cancelFilters = () => {
-    selectedCategories.value = [...appliedFilters.value.categories]
-    readingStatus.value = appliedFilters.value.readingStatus
-}
 
 const applyFilters = () => {
     appliedFilters.value = {
         categories: [...selectedCategories.value],
         readingStatus: readingStatus.value
     }
-    // Logic to fetch filtered articles would go here
+    page.value = 1
+    lastPage.value = 1
+    fetchArticles(true)
 }
 
 const resetFilters = () => {
@@ -186,79 +230,46 @@ const resetFilters = () => {
     applyFilters()
 }
 
-const articles = [
-    {
-        id: 1,
-        title: 'Cara Menjawab Keberatan Harga dari Calon Pelanggan',
-        description: 'Harga jadi alasan ragu? Pelajari cara menjawabnya agar calon pelanggan justru semakin yakin. Pahami psikologi pelanggan saat menghadapi harga.',
-        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop',
-        category: { id: 1, name: 'Tips & Trick' },
-        isNew: true,
-        isViewed: false,
-        readTime: '5 menit baca',
-        author: 'Ahmad Syaputra',
-        date: '02/10/2026'
-    },
-    {
-        id: 2,
-        title: 'Bagaimana Referral A Mendapatkan 10 Pelanggan dalam 1 Bulan',
-        description: 'Dari nol hingga 10 pelanggan dalam 1 bulan, ini strategi Referral A yang bisa Anda terapkan mulai hari ini.',
-        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop',
-        category: { id: 1, name: 'Tips & Trick' },
-        isNew: false,
-        isViewed: false,
-        readTime: '5 menit baca',
-        author: 'Ahmad Syaputra',
-        date: '12/03/2026'
-    },
-    {
-        id: 3,
-        title: 'Perubahan Pola Interaksi Pelanggan yang Perlu Dipahami Referral',
-        description: 'Pola interaksi pelanggan berubah!, pahami perubahan ini untuk meningkatkan peluang closing Anda di setiap penawaran.',
-        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop',
-        category: { id: 2, name: 'Berita' },
-        isNew: false,
-        isViewed: true,
-        readTime: '4 menit baca',
-        author: 'Bima Ramadhani',
-        date: '24/02/2026'
-    },
-    {
-        id: 4,
-        title: 'Tips Menghadapi Calon Pelanggan yang Masih Ragu untuk Membeli',
-        description: 'Pelanggan masih ragu? Yakinkan dengan pendekatan yang tepat agar mereka siap membeli produk Anda tanpa rasa khawatir.',
-        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop',
-        category: { id: 1, name: 'Tips & Trick' },
-        isNew: false,
-        isViewed: false,
-        readTime: '5 menit baca',
-        author: 'Ahmad Syaputra',
-        date: '11/02/2026'
-    },
-    {
-        id: 5,
-        title: 'Panduan Menentukan Waktu yang Tepat untuk Menawarkan Produk ke Pelanggan',
-        description: 'Momen yang tepat menentukan hasil, jangan salah timing saat menawarkan produk. Pelajari jendela waktu terbaik untuk menghubungi prospek.',
-        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop',
-        category: { id: 3, name: 'Panduan' },
-        isNew: false,
-        isViewed: false,
-        readTime: '5 menit baca',
-        author: 'Ahmad Syaputra',
-        date: '03/02/2026'
-    },
-    {
-        id: 6,
-        title: 'Pentingnya First Impression dalam Menarik Perhatian Pelanggan',
-        description: 'First impression itu krusial, kesan pertama yang tepat bisa langsung membuka peluang closing yang lebih besar di kemudian hari.',
-        image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop',
-        category: { id: 2, name: 'Berita' },
-        isNew: false,
-        isViewed: false,
-        readTime: '5 menit baca',
-        author: 'Bima Ramadhani',
-        date: '24/01/2026'
-    }
-]
+const cancelFilters = () => {
+    selectedCategories.value = [...appliedFilters.value.categories]
+    readingStatus.value = appliedFilters.value.readingStatus
+}
+
+let searchTimeout: any = null
+watch(searchQuery, () => {
+    if (searchTimeout) clearTimeout(searchTimeout)
+    searchTimeout = setTimeout(() => {
+        applyFilters()
+    }, 500)
+})
+
+let observer: IntersectionObserver | null = null
+
+const initObserver = () => {
+    if (observer) observer.disconnect()
+    
+    observer = new IntersectionObserver((entries) => {
+        const [entry] = entries
+        if (entry?.isIntersecting && !isLoading.value && page.value <= lastPage.value) {
+            fetchArticles()
+        }
+    }, { 
+        rootMargin: '200px',
+        threshold: 0.1 
+    })
+
+    if (sentinel.value) observer.observe(sentinel.value)
+}
+
+onMounted(() => {
+    fetchArticles(true)
+    initObserver()
+})
+
+onUnmounted(() => {
+    if (observer) observer.disconnect()
+})
 </script>
+
+
 
