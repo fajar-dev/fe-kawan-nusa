@@ -106,3 +106,15 @@ export const toISODate = (date: Date): string => {
   const day = String(date.getDate()).padStart(2, '0')
   return `${year}-${month}-${day}`
 }
+
+/**
+ * Check if a date is within the last 7 days
+ */
+export const isNew = (dateString?: string | null): boolean => {
+  if (!dateString) return false
+  const date = new Date(dateString)
+  if (isNaN(date.getTime())) return false
+  
+  const now = new Date()
+  return date.getTime() > now.getTime() - 7 * 24 * 60 * 60 * 1000
+}
