@@ -17,12 +17,8 @@
         </AppToolbar>
 
         <div class="space-y-12 pb-10">
-            <div v-if="isLoading" class="flex justify-center py-20">
-                <Loader2 class="w-10 h-10 animate-spin text-primary" />
-            </div>
-
             <!-- Promo Grid -->
-            <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div 
                     v-for="promo in promos" 
                     :key="promo.id"
@@ -32,7 +28,7 @@
                         <img
                             :src="promo.image || 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop'" 
                             :alt="promo.title"
-                            class="w-full h-full object-cover rounded-xl transition-transform duration-500 hover:scale-105"
+                            class="w-full h-full object-cover rounded-xl"
                         />
                     </div>
                     <div class="p-4 space-y-4 flex-grow flex flex-col">
@@ -65,6 +61,12 @@
                         </button>
                     </div>
                 </div>
+            </div>
+
+            <!-- Sentinel for Infinite Scroll -->
+            <div ref="sentinel" class="flex justify-center p-8 w-full col-span-full">
+                <Loader2 v-if="isLoading" class="w-8 h-8 animate-spin text-primary" />
+                <div v-else-if="page > lastPage && promos.length > 0"></div>
             </div>
 
             <!-- Empty State -->
@@ -110,23 +112,62 @@ useSeoMeta({
 
 const isLoading = ref(false);
 const promos = ref<any[]>([]);
+const page = ref(1);
+const lastPage = ref(1);
+const sentinel = ref<HTMLElement | null>(null);
 
-const fetchPromos = async () => {
+const fetchPromos = async (isReset = false) => {
+    if (isLoading.value) return
+    if (!isReset && page.value > lastPage.value) return
+
     isLoading.value = true
     try {
         const response = await serviceService.getPromotions({
-            limit: 10
+            limit: 10,
+            page: page.value
         })
-        if (response.success) {
-            promos.value = response.data
+        if (response.success && response.data) {
+            if (isReset) {
+                promos.value = response.data
+            } else {
+                const newItems = response.data.filter(newItem => 
+                    !promos.value.some(existingItem => existingItem.id === newItem.id)
+                )
+                promos.value = [...promos.value, ...newItems]
+            }
+            lastPage.value = response.meta.lastPage
+            page.value++
         }
     } finally {
         isLoading.value = false
     }
 }
 
+let observer: IntersectionObserver | null = null
+
+const initObserver = () => {
+    if (observer) observer.disconnect()
+    
+    observer = new IntersectionObserver((entries) => {
+        const [entry] = entries
+        if (entry?.isIntersecting && !isLoading.value && page.value <= lastPage.value) {
+            fetchPromos()
+        }
+    }, { 
+        rootMargin: '200px',
+        threshold: 0.1 
+    })
+
+    if (sentinel.value) observer.observe(sentinel.value)
+}
+
 onMounted(() => {
-    fetchPromos()
+    fetchPromos(true)
+    initObserver()
+})
+
+onUnmounted(() => {
+    if (observer) observer.disconnect()
 })
 </script>
 

@@ -30,3 +30,13 @@ export const formatUnit = (unit: string): string => {
     }
     return mapping[unit] || unit
 }
+
+/**
+ * Available marketing template formats
+ */
+export const TEMPLATE_FORMATS = [
+    { key: 'png', label: 'PNG' },
+    { key: 'jpg', label: 'JPG' },
+    { key: 'mp4', label: 'MP4' },
+    { key: 'psd', label: 'PSD' }
+] as const;

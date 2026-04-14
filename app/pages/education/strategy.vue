@@ -93,7 +93,7 @@
                         <div class="w-10 h-10 rounded-lg bg-success flex items-center justify-center text-white font-medium">8</div>
                         <h3 class="font-medium text-neutral-800 text-sm">Bagikan Pengalaman Positif</h3>
                         <p class="text-xs text-neutral-800 text-justify">
-                            Ceritakan pengalaman baik Anda atau pelanggan lain saat menggunakan layanan. Hal ini dapat meningkatkan kepercayaan calon pelanggan.
+                            Ceritaka pengalaman baik Anda atau pelanggan lain saat menggunakan layanan. Hal ini dapat meningkatkan kepercayaan calon pelanggan.
                         </p>
                     </div>
                 </div>
@@ -106,96 +106,19 @@
                     <p class="text-sm text-neutral-500">Download dan edit template siap pakai untuk mempromosikan layanan dan produk di berbagai platform</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Template Card 1 -->
-                    <div class="card bg-white border border-base-300 rounded-xl p-4 flex flex-row gap-4 items-center">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div 
+                        v-for="template in templates" 
+                        :key="template.id"
+                        class="card bg-white border border-base-300 rounded-xl p-4 flex flex-row gap-4 items-center group transition-all"
+                    >
                         <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0">
-                            <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop" class="w-full h-full object-cover" />
+                            <img :src="template.thumbnail" class="w-full h-full object-cover" :alt="template.name" />
                         </div>
                         <div class="flex-1 space-y-2">
-                            <h3 class="font-medium text-neutral-800 text-sm leading-tight">Instagram Story - Flash Sale</h3>
+                            <h3 class="font-medium text-neutral-800 text-sm leading-tight">{{ template.name }}</h3>
                             <div class="flex items-center gap-1.5 text-xs text-neutral-400 font-medium">
-                                <Image class="w-3 h-3" /> JPG, PNG - 1080 x 1920 px
-                            </div>
-                            <button class="btn btn-primary w-full btn-xs font-medium rounded-lg">
-                                <Download class="w-3 h-3" /> Download Template
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Template Card 2 -->
-                    <div class="card bg-white border border-base-300 rounded-xl p-4 flex flex-row gap-4 items-center">
-                        <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0">
-                            <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop" class="w-full h-full object-cover" />
-                        </div>
-                        <div class="flex-1 space-y-2">
-                            <h3 class="font-medium text-neutral-800 text-sm leading-tight">Instagram Story - Mega Sale</h3>
-                            <div class="flex items-center gap-1.5 text-xs text-neutral-400 font-medium">
-                                <Image class="w-3 h-3" /> JPG, PNG - 1080 x 1920 px
-                            </div>
-                            <button class="btn btn-primary w-full btn-xs font-medium rounded-lg">
-                                <Download class="w-3 h-3" /> Download Template
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Template Card 3 -->
-                    <div class="card bg-white border border-base-300 rounded-xl p-4 flex flex-row gap-4 items-center">
-                        <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0">
-                            <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop" class="w-full h-full object-cover" />
-                        </div>
-                        <div class="flex-1 space-y-2">
-                            <h3 class="font-medium text-neutral-800 text-sm leading-tight">Tiktok Cover - Video Promosi</h3>
-                            <div class="flex items-center gap-1.5 text-xs text-neutral-400 font-medium">
-                                <Play class="w-3 h-3" /> MP4 - 1080 x 1920 px (9:16)
-                            </div>
-                            <button class="btn btn-primary w-full btn-xs font-medium rounded-lg">
-                                <Download class="w-3 h-3" /> Download Template
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Template Card 4 -->
-                    <div class="card bg-white border border-base-300 rounded-xl p-4 flex flex-row gap-4 items-center">
-                        <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0">
-                            <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop" class="w-full h-full object-cover" />
-                        </div>
-                        <div class="flex-1 space-y-2">
-                            <h3 class="font-medium text-neutral-800 text-sm leading-tight">WhatsApp Banner - Penawaran Spesial</h3>
-                            <div class="flex items-center gap-1.5 text-xs text-neutral-400 font-medium">
-                                <Image class="w-3 h-3" /> JPG, PNG - 1080 x 1920 px
-                            </div>
-                            <button class="btn btn-primary w-full btn-xs font-medium rounded-lg">
-                                <Download class="w-3 h-3" /> Download Template
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Template Card 5 -->
-                    <div class="card bg-white border border-base-300 rounded-xl p-4 flex flex-row gap-4 items-center">
-                        <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0">
-                            <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop" class="w-full h-full object-cover" />
-                        </div>
-                        <div class="flex-1 space-y-2">
-                            <h3 class="font-medium text-neutral-800 text-sm leading-tight">Instagram Post - Promo Jitu</h3>
-                            <div class="flex items-center gap-1.5 text-xs text-neutral-400 font-medium">
-                                <Image class="w-3 h-3" /> JPG, PNG - 1080 x 1920 px
-                            </div>
-                            <button class="btn btn-primary w-full btn-xs font-medium rounded-lg">
-                                <Download class="w-3 h-3" /> Download Template
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Template Card 6 -->
-                    <div class="card bg-white border border-base-300 rounded-xl p-4 flex flex-row gap-4 items-center">
-                        <div class="w-20 h-20 rounded-xl overflow-hidden shrink-0">
-                            <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop" class="w-full h-full object-cover" />
-                        </div>
-                        <div class="flex-1 space-y-2">
-                            <h3 class="font-medium text-neutral-800 text-sm leading-tight">WhatsApp Banner - Penawaran Spesial</h3>
-                            <div class="flex items-center gap-1.5 text-xs text-neutral-400 font-medium">
-                                <Image class="w-3 h-3" /> JPG, PNG - 1080 x 1920 px
+                                <Image class="w-3 h-3" /> {{ getAvailableFormats(template).join(', ') }}
                             </div>
                             <button class="btn btn-primary w-full btn-xs font-medium rounded-lg">
                                 <Download class="w-3 h-3" /> Download Template
@@ -203,14 +126,29 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Sentinel for Infinite Scroll -->
+                <div ref="sentinel" class="flex justify-center p-8 w-full col-span-full">
+                    <Loader2 v-if="isLoading" class="w-8 h-8 animate-spin text-primary" />
+                    <div v-else-if="page > lastPage && templates.length > 0"></div>
+                </div>
+
+                <!-- Empty State -->
+                <div v-if="templates.length === 0 && !isLoading" class="flex flex-col items-center justify-center py-10">
+                    <img src="/assets/no-data.png" alt="No Data" class="w-40 h-auto mb-4 opacity-70" />
+                    <h3 class="text-lg font-bold text-neutral-800 mb-1">Template Belum Tersedia</h3>
+                    <p class="text-neutral-500 text-xs">Mohon tunggu pembaruan template promosi terbaru kami.</p>
+                </div>
             </section>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { Lightbulb, Download, Image, Play } from 'lucide-vue-next';
-
+import { Lightbulb, Loader2, Image, Download } from 'lucide-vue-next';
+import { templateService } from '~/services/template-service';
+import { TEMPLATE_FORMATS } from '~/utils/string';
+import type { MarketingTemplate } from '~/types/template';
 
 definePageMeta({
   bgColor: 'bg-white'
@@ -219,5 +157,68 @@ definePageMeta({
 useSeoMeta({
   title: 'Kawan Nusa | Strategi Penawaran',
 })
-</script>
 
+const isLoading = ref(false);
+const templates = ref<any[]>([]);
+const page = ref(1);
+const lastPage = ref(1);
+const sentinel = ref<HTMLElement | null>(null);
+
+const getAvailableFormats = (tpl: MarketingTemplate) => {
+    return TEMPLATE_FORMATS.filter(f => tpl[f.key as keyof MarketingTemplate]).map(f => f.label);
+}
+
+const fetchTemplates = async (isReset = false) => {
+    if (isLoading.value) return
+    if (!isReset && page.value > lastPage.value) return
+
+    isLoading.value = true
+    try {
+        const response = await templateService.getTemplates({
+            limit: 8,
+            page: page.value
+        })
+        if (response.success && response.data) {
+            if (isReset) {
+                templates.value = response.data
+            } else {
+                const newItems = response.data.filter(newItem => 
+                    !templates.value.some(existingItem => existingItem.id === newItem.id)
+                )
+                templates.value = [...templates.value, ...newItems]
+            }
+            lastPage.value = response.meta.lastPage
+            page.value++
+        }
+    } finally {
+        isLoading.value = false
+    }
+}
+
+let observer: IntersectionObserver | null = null
+
+const initObserver = () => {
+    if (observer) observer.disconnect()
+    
+    observer = new IntersectionObserver((entries) => {
+        const [entry] = entries
+        if (entry?.isIntersecting && !isLoading.value && page.value <= lastPage.value) {
+            fetchTemplates()
+        }
+    }, { 
+        rootMargin: '200px',
+        threshold: 0.1 
+    })
+
+    if (sentinel.value) observer.observe(sentinel.value)
+}
+
+onMounted(() => {
+    fetchTemplates(true)
+    initObserver()
+})
+
+onUnmounted(() => {
+    if (observer) observer.disconnect()
+})
+</script>

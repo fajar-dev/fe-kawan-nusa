@@ -119,9 +119,7 @@
           <!-- Sentinel for Infinite Scroll -->
           <div ref="sentinel" class="flex justify-center p-8 w-full col-span-full">
               <Loader2 v-if="isLoading" class="w-8 h-8 animate-spin text-primary" />
-              <div v-else-if="page > lastPage && rewards.length > 0" class="text-neutral-400 text-sm italic">
-                  Telah mencapai akhir
-              </div>
+              <div v-else-if="page > lastPage && rewards.length > 0"></div>
           </div>
 
 
