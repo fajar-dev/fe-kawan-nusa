@@ -106,7 +106,7 @@
                     <p class="text-sm text-neutral-500">Download dan edit template siap pakai untuk mempromosikan layanan dan produk di berbagai platform</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div 
                         v-for="template in templates" 
                         :key="template.id"
@@ -116,11 +116,14 @@
                             <img :src="template.thumbnail" class="w-full h-full object-cover" :alt="template.name" />
                         </div>
                         <div class="flex-1 space-y-2">
-                            <h3 class="font-medium text-neutral-800 text-sm leading-tight">{{ template.name }}</h3>
+                            <h3 class="font-medium text-neutral-800 text-sm leading-tight line-clamp-1">{{ template.name }}</h3>
                             <div class="flex items-center gap-1.5 text-xs text-neutral-400 font-medium">
-                                <Image class="w-3 h-3" /> {{ getAvailableFormats(template).join(', ') }}
+                                <ImageIcon class="w-3 h-3" /> {{ getAvailableFormats(template).join(', ') }}
                             </div>
-                            <button class="btn btn-primary w-full btn-xs font-medium rounded-lg">
+                            <button 
+                                @click="openDownloadModal(template.id)"
+                                class="btn btn-primary w-full btn-xs font-medium rounded-lg"
+                            >
                                 <Download class="w-3 h-3" /> Download Template
                             </button>
                         </div>
@@ -141,11 +144,16 @@
                 </div>
             </section>
         </div>
+
+        <ModalTemplateDownload 
+            v-model="isDownloadModalOpen" 
+            :template-id="selectedTemplateId" 
+        />
     </div>
 </template>
 
 <script setup lang="ts">
-import { Lightbulb, Loader2, Image, Download } from 'lucide-vue-next';
+import { Lightbulb, Loader2, Image as ImageIcon, Download } from 'lucide-vue-next';
 import { templateService } from '~/services/template-service';
 import { TEMPLATE_FORMATS } from '~/utils/string';
 import type { MarketingTemplate } from '~/types/template';
@@ -159,13 +167,22 @@ useSeoMeta({
 })
 
 const isLoading = ref(false);
-const templates = ref<any[]>([]);
+const templates = ref<MarketingTemplate[]>([]);
 const page = ref(1);
 const lastPage = ref(1);
 const sentinel = ref<HTMLElement | null>(null);
 
+// Modal state
+const isDownloadModalOpen = ref(false);
+const selectedTemplateId = ref<number | null>(null);
+
+const openDownloadModal = (id: number) => {
+    selectedTemplateId.value = id;
+    isDownloadModalOpen.value = true;
+}
+
 const getAvailableFormats = (tpl: MarketingTemplate) => {
-    return TEMPLATE_FORMATS.filter(f => tpl[f.key as keyof MarketingTemplate]).map(f => f.label);
+    return TEMPLATE_FORMATS.filter(f => (tpl as any)[f.key]).map(f => f.label);
 }
 
 const fetchTemplates = async (isReset = false) => {
@@ -175,7 +192,7 @@ const fetchTemplates = async (isReset = false) => {
     isLoading.value = true
     try {
         const response = await templateService.getTemplates({
-            limit: 8,
+            limit: 12,
             page: page.value
         })
         if (response.success && response.data) {

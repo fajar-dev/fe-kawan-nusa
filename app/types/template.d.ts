@@ -18,6 +18,8 @@ export interface TemplateListResponse extends ApiResponse<MarketingTemplate[]> {
   meta: PaginationMeta
 }
 
+export interface TemplateDetailResponse extends ApiResponse<MarketingTemplate> {}
+
 export interface TemplateQueryParams {
   q?: string
   page?: number
