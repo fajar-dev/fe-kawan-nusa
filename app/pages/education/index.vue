@@ -111,20 +111,20 @@
                             />
                         </div>
                         <div class="card-body p-5 flex flex-col gap-4">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <span v-if="isNew(article.createdAt)" class="px-2 py-0.5 bg-success/10 text-success font-medium text-xs rounded-full">
+                            <div class="flex items-center justify-between gap-3 min-w-0">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span v-if="isNew(article.createdAt)" class="px-2 py-0.5 bg-success/10 text-success font-medium text-xs rounded-full shrink-0">
                                         Baru
                                     </span>
-                                    <span v-if="article.isView" class="px-2 py-0.5 bg-purple-100 text-purple-600 font-medium text-xs rounded-full">
+                                    <span v-if="article.isView" class="px-2 py-0.5 bg-purple-100 text-purple-600 font-medium text-xs rounded-full shrink-0">
                                         Sudah Dilihat
                                     </span>
-                                    <span class="px-2 py-0.5 bg-primary/10 text-primary font-medium text-xs rounded-full">
+                                    <span class="px-2 py-0.5 bg-primary/10 text-primary font-medium text-xs rounded-full truncate">
                                         {{ article.category?.name }}
                                     </span>
                                 </div>
-                                <div class="flex items-center gap-1 text-xs text-neutral-400 font-medium">
-                                    <Clock class="w-3 h-3" /> {{ article.readingTime }}
+                                <div class="flex items-center gap-1 text-xs text-neutral-400 font-medium shrink-0">
+                                    <Clock class="w-4 h-4" /> {{ article.readingTime }}
                                 </div>
                             </div>
 
@@ -139,11 +139,11 @@
 
                             <div class="flex items-center justify-between py-2 border-y border-base-100">
                                 <div class="flex items-center gap-1.5">
-                                    <User class="w-3 h-3 text-neutral-400" />
+                                    <User class="w-4 h-4 text-neutral-400" />
                                     <span class="text-xs text-neutral-400 font-medium">{{ article.author }}</span>
                                 </div>
                                 <div class="flex items-center gap-1.5">
-                                    <Calendar class="w-3 h-3 text-neutral-400" />
+                                    <Calendar class="w-4 h-4 text-neutral-400" />
                                     <span class="text-xs text-neutral-400 font-medium">{{ formatDateShort(article.createdAt) }}</span>
                                 </div>
                             </div>
@@ -200,15 +200,15 @@
                             </div>
                         </div>
                         <div class="card-body p-5 flex flex-col gap-4">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <span v-if="isNew(video.createdAt)" class="px-2 py-0.5 bg-success/10 text-success font-medium text-xs rounded-full">
+                            <div class="flex items-center justify-between gap-2 min-w-0">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span v-if="isNew(video.createdAt)" class="px-2 py-0.5 bg-success/10 text-success font-medium text-xs rounded-full shrink-0">
                                         Baru
                                     </span>
-                                    <span v-if="video.isView" class="px-2 py-0.5 bg-purple-100 text-purple-600 font-medium text-xs rounded-full">
+                                    <span v-if="video.isView" class="px-2 py-0.5 bg-purple-100 text-purple-600 font-medium text-xs rounded-full shrink-0">
                                         Sudah Dilihat
                                     </span>
-                                    <span class="px-2 py-0.5 bg-primary/10 text-primary font-medium text-xs rounded-full">
+                                    <span class="px-2 py-0.5 bg-primary/10 text-primary font-medium text-xs rounded-full truncate">
                                         {{ video.category?.name }}
                                     </span>
                                 </div>
@@ -225,11 +225,11 @@
 
                             <div class="flex items-center justify-between py-2 border-y border-base-100">
                                 <div class="flex items-center gap-1.5">
-                                    <User class="w-3 h-3 text-neutral-400" />
+                                    <User class="w-4 h-4 text-neutral-400" />
                                     <span class="text-xs text-neutral-400 font-medium">{{ video.author }}</span>
                                 </div>
                                 <div class="flex items-center gap-1.5">
-                                    <Calendar class="w-3 h-3 text-neutral-400" />
+                                    <Calendar class="w-4 h-4 text-neutral-400" />
                                     <span class="text-xs text-neutral-400 font-medium">{{ formatDateShort(video.createdAt) }}</span>
                                 </div>
                             </div>

@@ -53,3 +53,17 @@ export interface EducationVideoResponse {
     data: EducationVideo[];
     meta: EducationMeta;
 }
+
+export interface EducationArticleDetailResponse {
+    success: boolean;
+    statusCode: number;
+    message: string;
+    data: EducationArticle;
+}
+
+export interface EducationVideoDetailResponse {
+    success: boolean;
+    statusCode: number;
+    message: string;
+    data: EducationVideo;
+}

@@ -1,6 +1,6 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
-import type { EducationArticleResponse, EducationVideoResponse } from "../types/education"
+import type { EducationArticleResponse, EducationVideoResponse, EducationArticleDetailResponse, EducationVideoDetailResponse } from "../types/education"
 
 export class EducationService {
     async getArticles(params: { categoryId?: number; isView?: string; page?: number; limit?: number; q?: string }): Promise<EducationArticleResponse> {
@@ -41,6 +41,32 @@ export class EducationService {
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Failed to fetch education categories')
+        }
+    }
+
+    async getArticleById(id: number): Promise<EducationArticleDetailResponse> {
+        try {
+            const response = await apiService.client.get<EducationArticleDetailResponse>(`/education/article/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch education article details')
+        }
+    }
+
+    async getVideoById(id: number): Promise<EducationVideoDetailResponse> {
+        try {
+            const response = await apiService.client.get<EducationVideoDetailResponse>(`/education/video/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch education video details')
         }
     }
 }
