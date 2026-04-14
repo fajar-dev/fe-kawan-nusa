@@ -1,7 +1,7 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
 import type { ApiResponse } from "../types/auth"
-import type { Service, ServiceListResponse, ServiceQueryParams, ServiceCustomerResponse } from "../types/service"
+import type { Service, ServiceListResponse, ServiceQueryParams, ServiceCustomerResponse, PromotionListResponse, PromotionQueryParams } from "../types/service"
 
 export class ServiceService {
     async getServices(params?: ServiceQueryParams): Promise<ServiceListResponse> {
@@ -56,6 +56,20 @@ export class ServiceService {
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Failed to fetch customer services')
+        }
+    }
+
+    async getPromotions(params?: PromotionQueryParams): Promise<PromotionListResponse> {
+        try {
+            const response = await apiService.client.get<PromotionListResponse>('/service/promotion', {
+                params,
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch promotions')
         }
     }
 }

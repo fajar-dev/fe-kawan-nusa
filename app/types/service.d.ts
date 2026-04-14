@@ -76,3 +76,28 @@ export interface ServiceCustomer {
 export interface ServiceCustomerResponse extends ApiResponse<ServiceCustomer[]> {
   meta: PaginationMeta
 }
+
+export interface Promotion {
+  id: number
+  title: string
+  description: string
+  image: string
+  url: string
+  startPeriod: string
+  endPeriod: string
+  createdAt: string
+  service: {
+    code: string
+    name: string
+  }
+}
+
+export interface PromotionListResponse extends ApiResponse<Promotion[]> {
+  meta: PaginationMeta
+}
+
+export interface PromotionQueryParams {
+  q?: string
+  page?: number
+  limit?: number
+}

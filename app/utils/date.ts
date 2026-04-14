@@ -118,3 +118,11 @@ export const isNew = (dateString?: string | null): boolean => {
   const now = new Date()
   return date.getTime() > now.getTime() - 7 * 24 * 60 * 60 * 1000
 }
+
+/**
+ * Format a date range into dd/MM/yyyy - dd/MM/yyyy format
+ */
+export const formatPeriod = (start?: string | null, end?: string | null): string => {
+  if (!start && !end) return '-'
+  return `${formatDate(start)} - ${formatDate(end)}`
+}
