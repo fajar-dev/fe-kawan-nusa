@@ -6,3 +6,11 @@ export interface AdditionalItem {
 }
 
 export type AdditionalResponse = ApiResponse<AdditionalItem[]>
+
+export interface SearchResult {
+  title: string
+  module: string
+  route: string
+}
+
+export type SearchResponse = ApiResponse<SearchResult[]>

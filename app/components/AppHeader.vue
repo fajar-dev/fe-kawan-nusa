@@ -97,22 +97,6 @@ const getInitials = (name: string) => {
     .substring(0, 2)
 }
 
-// Keyboard shortcut (Cmd+K or Ctrl+K)
-const handleKeydown = (e: KeyboardEvent) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault()
-        isPaletteOpen.value = !isPaletteOpen.value
-    }
-}
-
-onMounted(() => {
-    window.addEventListener('keydown', handleKeydown)
-})
-
-onUnmounted(() => {
-    window.removeEventListener('keydown', handleKeydown)
-})
-
 const handleLogout = async () => {
     await authService.logout()
     toast.success({

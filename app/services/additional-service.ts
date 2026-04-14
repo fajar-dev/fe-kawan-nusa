@@ -1,5 +1,5 @@
 import { apiService } from "./api-service"
-import type { AdditionalResponse } from "../types/additional"
+import type { AdditionalResponse, SearchResponse } from "../types/additional"
 import { handleServiceError } from "../composables/error-helper"
 import type { ApiResponse } from "../types/auth"
 import type { ServiceCategory } from "../types/service"
@@ -67,6 +67,20 @@ export class AdditionalService {
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Failed to fetch service categories')
+        }
+    }
+
+    async search(q: string): Promise<SearchResponse> {
+        try {
+            const response = await apiService.client.get<SearchResponse>('/additional/search', {
+                params: { q },
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to perform global search')
         }
     }
 }
