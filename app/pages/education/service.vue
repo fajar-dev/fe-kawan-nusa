@@ -33,25 +33,29 @@
                 </div>
             </div>
 
+            <div v-if="isLoading" class="flex justify-center py-20">
+                <Loader2 class="w-10 h-10 animate-spin text-primary" />
+            </div>
+
             <!-- Product Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div 
-                    v-for="product in filteredProducts" 
-                    :key="product.name"
-                    class="card bg-white border border-base-300 rounded-xl p-5 flex flex-col space-y-6 "
+                    v-for="product in products" 
+                    :key="product.id"
+                    class="card bg-white border border-base-300 rounded-xl p-5 flex flex-col space-y-6"
                 >
                     <div class="space-y-3">
                         <h3 class="text-lg font-semibold text-neutral-800">{{ product.name }}</h3>
-                        <p class="text-xs text-neutral-400 min-h-[60px] text-justify">
+                        <p class="text-xs text-neutral-500 min-h-[60px] leading-relaxed line-clamp-3">
                             {{ product.description }}
                         </p>
                     </div>
 
                     <div class="space-y-1">
-                        <p class="text-xs text-neutral-400">Mulai dari</p>
+                        <p class="text-xs text-neutral-400 font-medium">Mulai dari</p>
                         <div class="flex items-baseline gap-1">
-                            <span class="text-2xl font-semibold text-neutral-800">Rp{{ formatNumber(product.price) }}</span>
-                            <span class="text-xs text-neutral-400">/{{ product.unit }}</span>
+                            <span class="text-2xl font-semibold text-neutral-800">Rp. {{ formatNumber(product.price) }}</span>
+                            <span class="text-xs text-neutral-400 font-medium">/{{ formatUnit(product.unit) }}</span>
                         </div>
                     </div>
 
@@ -62,23 +66,43 @@
                                 :key="feature" 
                                 class="flex items-start gap-2"
                             >
-                                <CheckCheck class="w-4 h-4 text-primary mt-0.5" />
-                                <span class="text-xs text-neutral-800">{{ feature }}</span>
+                                <CheckCheck class="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                                <span class="text-xs text-neutral-800 leading-tight">{{ feature }}</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary w-full font-medium rounded-lg mt-4">
+                        <a 
+                            v-if="product.url" 
+                            :href="product.url" 
+                            target="_blank" 
+                            class="btn btn-primary btn-sm w-full font-medium rounded-lg mt-4 text-white"
+                        >
+                            Selengkapnya
+                        </a>
+                        <button v-else class="btn btn-primary btn-sm w-full font-medium rounded-lg mt-4 text-white">
                             Selengkapnya
                         </button>
                     </div>
-
                 </div>
+            </div>
+
+            <!-- Empty State -->
+            <div v-if="products.length === 0 && !isLoading" class="flex flex-col items-center justify-center py-20">
+                <img src="/assets/no-data.png" alt="No Data" class="w-52 h-auto mb-6" />
+                <h3 class="text-xl font-bold text-neutral-800 mb-2">Produk Tidak Ditemukan</h3>
+                <p class="text-neutral-500 text-sm">Maaf, saat ini belum ada produk dalam kategori ini.</p>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { Package, Check, CheckCheck } from 'lucide-vue-next';
+import { Package, CheckCheck, Loader2 } from 'lucide-vue-next';
+import { serviceService } from '~/services/service-service';
+import { additionalService } from '~/services/additional-service';
+import type { ServiceCategory } from '~/types/service';
+import type { ApiResponse } from '~/types/auth';
+
+import { formatNumber, formatUnit } from '~/utils/string';
 
 definePageMeta({
   bgColor: 'bg-white'
@@ -88,103 +112,46 @@ useSeoMeta({
   title: 'Kawan Nusa | Katalog Produk dan Layanan',
 })
 
-const tabs = [
-    { id: 'all', label: 'Semua' },
-    { id: 'business', label: 'Internet Bisnis' },
-    { id: 'home', label: 'Internet Home' },
-    { id: 'digital', label: 'Produk Digital' },
-];
-
 const activeTab = ref('all');
+const isLoading = ref(false);
+const products = ref<any[]>([]);
 
-const products = [
-    {
-        name: 'Broadband Business',
-        category: 'business',
-        description: 'Internet cepat dan stabil untuk mendukung operasional bisnis dengan harga yang terjangkau dan garansi minimum kecepatan di jam sibuk',
-        price: 800000,
-        unit: 'Bulan',
-        features: [
-            'Gratis Domain + Akun Cloud Mail',
-            'Jaminan SLA 98%',
-            'Router WiFi 6 Managed',
-            'IP Local Static + Support CCTV'
-        ]
-    },
-    {
-        name: 'Broadband Home',
-        category: 'home',
-        description: 'Internet rumah unlimited dengan koneksi stabil untuk streaming, bekerja, dan gaming tanpa lag, dilengkapi dukungan teknis 24/7.',
-        price: 200000,
-        unit: 'Bulan',
-        features: [
-            'Hingga 300 Mbps',
-            'Gratis Biaya Instalasi',
-            'Gratis Sewa Modem',
-            'Internet UNLIMITED'
-        ]
-    },
-    {
-        name: 'NusaSelecta',
-        category: 'home',
-        description: 'Nikmati internet WiFi khusus di lokasi terseleksi dengan koneksi lebih cepat, tanpa biaya instalasi, tanpa ribet, dan tanpa iklan di rumah Anda.',
-        price: 140000,
-        unit: 'Bulan',
-        features: [
-            'Gratis Hingga 30 Mbps',
-            'Tanpa Iklan',
-            'Gratis Biaya Pemasangan',
-            'Gratis Sewa Modem'
-        ]
-    },
-    {
-        name: 'Nusafiber',
-        category: 'home',
-        description: 'Nikmati internet tanpa batas dengan kecepatan tinggi dan koneksi stabil setiap hari untuk memenuhi kebutuhan internet rumah dan usaha kecil Anda.',
-        price: 229000,
-        unit: 'Bulan',
-        features: [
-            'Unlimited Internet',
-            'Gratis Biaya Pasang',
-            'Gratis Sewa Modem',
-            'Support Akses CCTV'
-        ]
-    },
-    {
-        name: 'HRIS Nusawork',
-        category: 'digital',
-        description: 'Aplikasi HRIS yang menyediakan solusi lengkap untuk kebutuhan administrasi HR yang terdigitalisasi dan terautomasi.',
-        price: 20000,
-        unit: 'User /Bulan',
-        features: [
-            'Attendance & Employee Management',
-            'Employee Self-Service',
-            'Payroll Management',
-            'Performance & Task Management'
-        ]
-    },
-    {
-        name: 'Zoho Workplace',
-        category: 'digital',
-        description: 'Solusi kolaborasi dalam satu aplikasi terpadu untuk meningkatkan produktivitas tim, fleksibel sesuai kebutuhan dan budget bisnis Anda.',
-        price: 13000,
-        unit: 'User /Bulan',
-        features: [
-            'Email Bisnis Profesional',
-            'Penyimpanan Hingga 50 GB per User',
-            'Keamanan Data Terjamin',
-            'Aplikasi Kerja Terintegrasi'
-        ]
+// Fetch Categories for Tabs
+const { data: categoryResponse } = useAsyncData<ApiResponse<ServiceCategory[]>>(
+    'service-categories',
+    () => additionalService.getServiceCategories()
+)
+
+const tabs = computed(() => {
+    const apiTabs = (categoryResponse.value?.data || []).map((cat: ServiceCategory) => ({
+        id: cat.name, // Use name for filtering as per API spec
+        label: cat.name
+    }))
+    return [
+        { id: 'all', label: 'Semua' },
+        ...apiTabs
+    ]
+})
+
+const fetchProducts = async () => {
+    isLoading.value = true
+    try {
+        const response = await serviceService.getServices({
+            category: activeTab.value === 'all' ? undefined : activeTab.value,
+            limit: 10,
+            isActive: 1
+        })
+        if (response.success) {
+            products.value = response.data
+        }
+    } finally {
+        isLoading.value = false
     }
-];
-
-const filteredProducts = computed(() => {
-    if (activeTab.value === 'all') return products;
-    return products.filter(p => p.category === activeTab.value);
-});
-
-const formatNumber = (num: number) => {
-    return num.toLocaleString('id-ID');
 }
+
+watch(activeTab, () => {
+    fetchProducts()
+}, { immediate: true })
+
 </script>
 

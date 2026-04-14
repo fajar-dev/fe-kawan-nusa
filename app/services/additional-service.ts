@@ -1,6 +1,8 @@
 import { apiService } from "./api-service"
 import type { AdditionalResponse } from "../types/additional"
 import { handleServiceError } from "../composables/error-helper"
+import type { ApiResponse } from "../types/auth"
+import type { ServiceCategory } from "../types/service"
 
 export class AdditionalService {
     async getServices(): Promise<AdditionalResponse> {
@@ -52,6 +54,19 @@ export class AdditionalService {
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Gagal mengambil daftar tipe poin reward')
+        }
+    }
+
+    async getServiceCategories(): Promise<ApiResponse<ServiceCategory[]>> {
+        try {
+            const response = await apiService.client.get<ApiResponse<ServiceCategory[]>>('/additional/service-category', {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch service categories')
         }
     }
 }

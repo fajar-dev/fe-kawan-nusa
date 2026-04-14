@@ -7,9 +7,19 @@ export interface Service {
   description: string
   type: string
   isActive: boolean
+  price: number
+  unit: string
+  category: string
+  features: string[]
+  url: string
   lastReferanceDate: string | null
   totalCustomerServices: number
   totalPoint: number
+}
+
+export interface ServiceCategory {
+  code: string
+  name: string
 }
 
 export interface PaginationMeta {
@@ -34,6 +44,7 @@ export interface ServiceQueryParams {
   startDate?: string
   endDate?: string
   isActive?: number
+  category?: string
   serviceCode?: string | string[]
   type?: string | string[]
 }
