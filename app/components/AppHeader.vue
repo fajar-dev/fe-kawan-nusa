@@ -30,8 +30,13 @@
       <button class="btn btn-ghost btn-circle btn-sm hover:text-neutral-900 transition-colors">
         <HelpCircle class="w-5 h-5" />
       </button>
-      <button class="btn btn-ghost btn-circle btn-sm hover:text-neutral-900 transition-colors">
-        <MessageSquareWarning class="w-5 h-5" />
+      <button 
+        @click="handleFeedbackClick"
+        class="btn btn-ghost btn-circle btn-sm hover:text-neutral-900 transition-colors"
+        :disabled="isCapturingFeedback"
+      >
+        <Loader2 v-if="isCapturingFeedback" class="w-5 h-5 animate-spin text-primary" />
+        <MessageSquareWarning v-else class="w-5 h-5" />
       </button>
       <AppNotificationPopover />
       
@@ -59,10 +64,10 @@
             </NuxtLink>
           </li>
           <li>
-            <a class="flex items-center gap-3 py-2.5 text-neutral-600 hover:text-primary transition-colors">
+            <NuxtLink to="/feedback" class="flex items-center gap-3 py-2.5 text-neutral-600 hover:text-primary transition-colors">
               <MessageSquareMore class="w-4 h-4" />
               <span class="font-medium text-sm">My Feedback</span>
-            </a>
+            </NuxtLink>
           </li>
           <div class="divider my-1 opacity-50 mx-2"></div>
           <li>
@@ -74,58 +79,58 @@
         </ul>
       </div>
     </div>
+
+    <ModalFeedback 
+        v-model="isFeedbackModalOpen"
+        :form-state="feedbackFormState"
+    />
   </header>
 </template>
 
 <script setup lang="ts">
-import { Menu, Search, HelpCircle, MessageSquareWarning, Settings, MessageSquareMore, LogOut, UserPlus, Gift, Info } from 'lucide-vue-next'
+import { Menu, Search, HelpCircle, MessageSquareWarning, Settings, MessageSquareMore, LogOut, Loader2 } from 'lucide-vue-next'
 import { useAuth } from '~/composables/useAuth'
+import { domToBlob } from 'modern-screenshot'
 
 const isPaletteOpen = ref(false)
 const { state: authState, service: authService } = useAuth()
 const toast = useToast()
 
-const notifications = ref([
-  {
-    id: 1,
-    title: 'Referral Baru Bergabung',
-    message: 'Selamat! Budi Santoso baru saja mendaftar menggunakan kode referral Anda.',
-    time: '2 jam yang lalu',
-    icon: UserPlus,
-    iconBg: 'bg-blue-50',
-    iconColor: 'text-blue-500',
-    isRead: false
-  },
-  {
-    id: 2,
-    title: 'Reward Poin Cair',
-    message: 'Poin sebesar 500 telah ditambahkan ke akun Anda dari transaksi PT. Maju Jaya.',
-    time: '5 jam yang lalu',
-    icon: Gift,
-    iconBg: 'bg-success/10',
-    iconColor: 'text-success',
-    isRead: false
-  },
-  {
-    id: 3,
-    title: 'Promo Terbatas!',
-    message: 'Dapatkan tambahan komisi 2% untuk setiap referral baru di bulan ini.',
-    time: '1 hari yang lalu',
-    icon: Info,
-    iconBg: 'bg-amber-50',
-    iconColor: 'text-amber-500',
-    isRead: true
-  }
-])
+// Feedback state
+const isFeedbackModalOpen = ref(false)
+const feedbackFormState = reactive({
+    type: 'keluhan',
+    description: '',
+    images: [] as File[],
+    url: ''
+})
 
-const getInitials = (name: string) => {
-  if (!name) return 'UN'
-  return name
-    .split(' ')
-    .filter(n => n)
-    .map((n) => n[0])
-    .join('')
-    .substring(0, 2)
+const isCapturingFeedback = ref(false)
+const handleFeedbackClick = async () => {
+    isCapturingFeedback.value = true
+    try {
+        const node = document.body
+        const blob = await domToBlob(node, {
+            backgroundColor: '#ffffff'
+        })
+        if (blob) {
+            const file = new File([blob], `screenshot-${Date.now()}.png`, { type: 'image/png' })
+            feedbackFormState.images = [file]
+            feedbackFormState.description = ''
+            feedbackFormState.type = 'keluhan'
+            feedbackFormState.url = window.location.href
+            isFeedbackModalOpen.value = true
+        }
+    } catch (error) {
+        console.error('Screenshot failed', error)
+        feedbackFormState.images = []
+        feedbackFormState.description = ''
+        feedbackFormState.type = 'keluhan'
+        feedbackFormState.url = window.location.href
+        isFeedbackModalOpen.value = true
+    } finally {
+        isCapturingFeedback.value = false
+    }
 }
 
 const handleLogout = async () => {
