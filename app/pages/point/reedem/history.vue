@@ -141,7 +141,7 @@
             </div>
 
             <!-- Specific Voucher Section -->
-            <div v-if="item.type === 'voucher' && item.voucherDetails?.detail" class="p-4 mx-5 mb-5 border border-neutral-200 rounded-xl flex items-center justify-between gap-4">
+            <div v-if="item.type === 'voucher' && item.voucherDetails?.detail" class="p-4 mx-5 mb-5 border border-neutral-200 rounded-xl flex md:flex-row flex-col md:items-center md:justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-primary/10 text-primary rounded-lg flex items-center justify-center shrink-0">
                         <Ticket class="w-6 h-6" />
@@ -152,15 +152,15 @@
                     </div>
                 </div>
                 <button 
-                  @click="showVoucherDetail(item)"
-                  class="btn btn-primary btn-sm rounded-lg text-xs font-medium shrink-0"
+                    @click="showVoucherDetail(item)"
+                    class="btn btn-primary btn-sm rounded-lg text-xs font-medium shrink-0 w-full md:w-auto "
                 >
-                  Lihat Voucher
+                    Lihat Voucher
                 </button>
-              </div>
+            </div>
 
-              <!-- Specific Shipping Section -->
-            <div v-if="item.type === 'product' && item.productDetails?.shipping" class="p-4 mx-5 mb-5 border border-neutral-200 rounded-xl flex items-center justify-between gap-4">
+            <!-- Specific Shipping Section -->
+            <div v-if="item.type === 'product' && item.productDetails?.shipping" class="p-4 mx-5 mb-5 border border-neutral-200 rounded-xl flex md:flex-row flex-col md:items-center md:justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-primary/10 text-primary rounded-lg flex items-center justify-center shrink-0">
                         <Truck class="w-6 h-6" />
@@ -189,7 +189,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-primary btn-sm rounded-lg text-xs font-medium shrink-0">
+                <button class="btn btn-primary btn-sm rounded-lg text-xs font-medium shrink-0 w-full md:w-auto">
                     <ExternalLink class="w-3.5 h-3.5" />
                     Lacak Paket
                 </button>
