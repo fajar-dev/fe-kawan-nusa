@@ -87,10 +87,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
 import { rewardService } from '~/services/reward-service'
 import { additionalService } from '~/services/additional-service'
-import { formatDate, formatDateShort, formatDateTime } from '~/utils/date'
+import { formatDate, formatDateTime } from '~/utils/date'
 import type { AdditionalItem } from '~/types/additional'
 
 // State for filters

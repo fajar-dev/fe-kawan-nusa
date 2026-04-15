@@ -221,10 +221,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { Download, ExternalLink, Info, Maximize2 } from 'lucide-vue-next'
+import { Download, ExternalLink, Maximize2 } from 'lucide-vue-next'
 import { redemptionService } from '~/services/redemption-service'
-import { formatDateTime, formatDateShort } from '~/utils/date'
+import { formatDateTime } from '~/utils/date'
 
 const typeOptions = [
   { label: 'Cash', value: 'cash' },

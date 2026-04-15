@@ -33,11 +33,7 @@
       <button class="btn btn-ghost btn-circle btn-sm hover:text-neutral-900 transition-colors">
         <MessageSquareWarning class="w-5 h-5" />
       </button>
-      <div class="indicator">
-        <button class="btn btn-ghost btn-circle btn-sm hover:text-neutral-900 transition-colors">
-          <Bell class="w-5 h-5" />
-        </button>
-      </div>
+      <AppNotificationPopover />
       
       <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="flex items-center gap-3 cursor-pointer hover:bg-base-200/50 p-2 rounded-full pl-3 lg:pl-4 pr-3 transition-colors">
@@ -82,16 +78,51 @@
 </template>
 
 <script setup lang="ts">
-import { Menu, Search, HelpCircle, MessageSquareWarning, Bell, Settings, MessageSquareMore, LogOut } from 'lucide-vue-next'
+import { Menu, Search, HelpCircle, MessageSquareWarning, Settings, MessageSquareMore, LogOut, UserPlus, Gift, Info } from 'lucide-vue-next'
 import { useAuth } from '~/composables/useAuth'
 
 const isPaletteOpen = ref(false)
 const { state: authState, service: authService } = useAuth()
 const toast = useToast()
 
+const notifications = ref([
+  {
+    id: 1,
+    title: 'Referral Baru Bergabung',
+    message: 'Selamat! Budi Santoso baru saja mendaftar menggunakan kode referral Anda.',
+    time: '2 jam yang lalu',
+    icon: UserPlus,
+    iconBg: 'bg-blue-50',
+    iconColor: 'text-blue-500',
+    isRead: false
+  },
+  {
+    id: 2,
+    title: 'Reward Poin Cair',
+    message: 'Poin sebesar 500 telah ditambahkan ke akun Anda dari transaksi PT. Maju Jaya.',
+    time: '5 jam yang lalu',
+    icon: Gift,
+    iconBg: 'bg-success/10',
+    iconColor: 'text-success',
+    isRead: false
+  },
+  {
+    id: 3,
+    title: 'Promo Terbatas!',
+    message: 'Dapatkan tambahan komisi 2% untuk setiap referral baru di bulan ini.',
+    time: '1 hari yang lalu',
+    icon: Info,
+    iconBg: 'bg-amber-50',
+    iconColor: 'text-amber-500',
+    isRead: true
+  }
+])
+
 const getInitials = (name: string) => {
+  if (!name) return 'UN'
   return name
     .split(' ')
+    .filter(n => n)
     .map((n) => n[0])
     .join('')
     .substring(0, 2)

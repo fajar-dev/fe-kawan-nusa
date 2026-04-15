@@ -216,7 +216,6 @@
 import { Hash, Coins, Calendar, CheckCircle2, User, Mail, Phone, MapPin, Clock, Package, CheckCircle, Ticket, Loader2, Truck, ExternalLink } from 'lucide-vue-next'
 import { statisticService } from '~/services/statistic-service'
 import { redemptionService } from '~/services/redemption-service'
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { formatDateTime } from '~/utils/date'
 import type { RedemptionData } from '~/types/redemption'
 

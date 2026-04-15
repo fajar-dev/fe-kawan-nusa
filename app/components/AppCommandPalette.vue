@@ -139,7 +139,6 @@ import {
   Newspaper
 } from 'lucide-vue-next'
 import { Command } from 'vue-command-palette'
-import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { additionalService } from '~/services/additional-service'
 import type { SearchResult } from '~/types/additional'
 

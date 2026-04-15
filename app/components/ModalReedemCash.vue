@@ -97,7 +97,6 @@
 import { X, Check } from 'lucide-vue-next'
 import { pointService } from '~/services/point-service'
 import { profileService } from '~/services/profile-service'
-import { ref, computed, watch, onUnmounted } from 'vue'
 import { redemptionService } from '~/services/redemption-service'
 
 const isOpen = defineModel<boolean>({ default: false })

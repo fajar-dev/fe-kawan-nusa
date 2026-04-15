@@ -158,7 +158,6 @@
 
 <script setup lang="ts">
 import { CircleHelp, Coins, History, Loader2 } from 'lucide-vue-next'
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { catalogService } from '~/services/catalog-service'
 import { pointService } from '~/services/point-service'
 import type { CatalogItem, CatalogCategory } from '~/types/catalog'

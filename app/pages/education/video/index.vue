@@ -128,7 +128,9 @@
             <!-- Sentinel for Infinite Scroll -->
             <div ref="sentinel" class="flex justify-center p-8 w-full col-span-full">
                 <Loader2 v-if="isLoading" class="w-8 h-8 animate-spin text-primary" />
-                <div v-else-if="page > lastPage && videos.length > 0"></div>
+                <div v-else-if="page > lastPage && videos.length > 0" class="text-neutral-400 text-sm italic">
+                    Telah mencapai akhir
+                </div>
             </div>
 
             <!-- Empty State -->
@@ -143,7 +145,6 @@
 
 <script setup lang="ts">
 import { Video, Play, Search, User, Calendar, Loader2 } from 'lucide-vue-next';
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { educationService } from '~/services/education-service';
 import { formatDateShort, isNew } from '~/utils/date';
 import { stripHtml } from '~/utils/string';
