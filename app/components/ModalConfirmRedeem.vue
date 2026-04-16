@@ -83,7 +83,6 @@
 
 <script setup lang="ts">
 import { X, Coins, Loader2 } from 'lucide-vue-next'
-import { watch, onUnmounted, computed } from 'vue'
 import { catalogService } from '~/services/catalog-service'
 import { pointService } from '~/services/point-service'
 

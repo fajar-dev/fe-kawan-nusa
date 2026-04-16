@@ -64,7 +64,6 @@
 
 <script setup lang="ts">
 import { X, Ticket, Calendar, Copy, Check } from 'lucide-vue-next'
-import { ref, watch, onUnmounted } from 'vue'
 import type { RedemptionData } from '~/types/redemption'
 
 const props = defineProps<{

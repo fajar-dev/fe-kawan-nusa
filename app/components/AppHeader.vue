@@ -100,7 +100,7 @@ const toast = useToast()
 const isFeedbackModalOpen = ref(false)
 const feedbackFormState = reactive({
     type: 'keluhan',
-    description: '',
+    message: '',
     images: [] as File[],
     url: ''
 })
@@ -110,13 +110,30 @@ const handleFeedbackClick = async () => {
     isCapturingFeedback.value = true
     try {
         const node = document.body
+        const scrollable = document.querySelector('.drawer-content') as HTMLElement
+        const scrollTop = scrollable?.scrollTop || 0
+        const scrollLeft = scrollable?.scrollLeft || 0
+
         const blob = await domToBlob(node, {
-            backgroundColor: '#ffffff'
-        })
+            backgroundColor: '#ffffff',
+            width: window.innerWidth,
+            height: window.innerHeight,
+            onCloneNode: (clone: any) => {
+                const scrollableClone = (clone as HTMLElement).querySelector('.drawer-content') as HTMLElement
+                if (scrollableClone) {
+                    scrollableClone.scrollTop = scrollTop
+                    scrollableClone.scrollLeft = scrollLeft
+                }
+            },
+            features: {
+                restoreScrollPosition: true
+            },
+            scale: 2 
+        } as any)
         if (blob) {
             const file = new File([blob], `screenshot-${Date.now()}.png`, { type: 'image/png' })
             feedbackFormState.images = [file]
-            feedbackFormState.description = ''
+            feedbackFormState.message = ''
             feedbackFormState.type = 'keluhan'
             feedbackFormState.url = window.location.href
             isFeedbackModalOpen.value = true
@@ -124,7 +141,7 @@ const handleFeedbackClick = async () => {
     } catch (error) {
         console.error('Screenshot failed', error)
         feedbackFormState.images = []
-        feedbackFormState.description = ''
+        feedbackFormState.message = ''
         feedbackFormState.type = 'keluhan'
         feedbackFormState.url = window.location.href
         isFeedbackModalOpen.value = true

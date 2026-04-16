@@ -3,8 +3,9 @@ import { handleServiceError } from "../composables/error-helper"
 import type { ApiResponse } from "../types/auth"
 
 export interface FeedbackRequest {
+  url: string
   type: 'keluhan' | 'saran' | 'pujian'
-  description: string
+  message: string
   images: File[]
 }
 
@@ -13,7 +14,8 @@ export class FeedbackService {
         try {
             const formData = new FormData()
             formData.append('type', data.type)
-            formData.append('description', data.description)
+            formData.append('message', data.message)
+            formData.append('url', data.url)
             
             if (data.images && data.images.length > 0) {
                 data.images.forEach((file) => {
@@ -21,7 +23,7 @@ export class FeedbackService {
                 })
             }
 
-            const response = await apiService.client.post<ApiResponse<any>>('/additional/feedback', formData, {
+            const response = await apiService.client.post<ApiResponse<any>>('/feedback', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${useAuth().state.token}`

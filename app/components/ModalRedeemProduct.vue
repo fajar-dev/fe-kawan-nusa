@@ -100,7 +100,6 @@
 
 <script setup lang="ts">
 import { X, Loader2 } from 'lucide-vue-next'
-import { ref, computed, watch, onUnmounted } from 'vue'
 import { profileService } from '~/services/profile-service'
 import { redemptionService } from '~/services/redemption-service'
 

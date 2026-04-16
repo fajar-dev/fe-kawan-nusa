@@ -50,15 +50,15 @@
               </div>
             </div>
 
-            <!-- Description -->
+            <!-- Message -->
             <div class="space-y-2">
               <label class="text-xs text-neutral-500">Pesan Anda</label>
               <textarea 
-                v-model="state.description"
+                v-model="state.message"
                 class="textarea textarea-bordered w-full h-18 text-xs focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all bg-neutral-50/30"
                 placeholder="Tuliskan keluhan, saran, atau pujian Anda di sini..."
               ></textarea>
-              <p v-if="errors.description" class="text-xs text-red-500 font-medium italic">{{ errors.description }}</p>
+              <p v-if="errors.message" class="text-xs text-red-500 font-medium italic">{{ errors.message }}</p>
             </div>
 
             <!-- Images / Screenshot -->
@@ -152,7 +152,7 @@ import { feedbackService } from '~/services/feedback-service'
 const props = defineProps<{
   formState: {
     type: string
-    description: string
+    message: string
     images: File[]
     url: string
   }
@@ -173,32 +173,51 @@ const typeOptions = [
 
 const schema = z.object({
   type: z.enum(['keluhan', 'saran', 'pujian']),
-  description: z.string().min(1, 'Deskripsi wajib diisi'),
-  images: z.array(z.instanceof(File)).min(1, 'Minimal 1 gambar terlampir').max(3, 'Maksimal 3 gambar')
+  message: z.string().min(1, 'Pesan wajib diisi'),
+  images: z.array(z.instanceof(File)).min(1, 'Minimal 1 gambar terlampir').max(3, 'Maksimal 3 gambar'),
+  url: z.string().optional()
 })
 
 const state = reactive({
   type: (['keluhan', 'saran', 'pujian'].includes(props.formState.type) ? props.formState.type : 'keluhan') as 'keluhan' | 'saran' | 'pujian',
-  description: props.formState.description,
+  message: props.formState.message || (props.formState as any).description || '',
   images: [...props.formState.images],
   url: props.formState.url
 })
 
 const errors = reactive({
-    description: '',
+    message: '',
     images: ''
 })
 
 watch(() => props.formState, (v) => {
     state.type = (['keluhan', 'saran', 'pujian'].includes(v.type) ? v.type : 'keluhan') as 'keluhan' | 'saran' | 'pujian'
-    state.description = v.description
+    state.message = v.message || (v as any).description || ''
     state.images = [...v.images]
     state.url = v.url
 }, { deep: true })
 
+const imageUrlCache = new Map<File, string>()
+
 const getImageUrl = (file: File) => {
-    return URL.createObjectURL(file)
+    if (imageUrlCache.has(file)) {
+        return imageUrlCache.get(file)!
+    }
+    const url = URL.createObjectURL(file)
+    imageUrlCache.set(file, url)
+    return url
 }
+
+// Cleanup URLs when images are removed or component is unmounted
+watch(() => state.images, (newImages) => {
+    // Identify URLs to revoke
+    for (const [file, url] of imageUrlCache.entries()) {
+        if (!newImages.includes(file)) {
+            URL.revokeObjectURL(url)
+            imageUrlCache.delete(file)
+        }
+    }
+}, { deep: true })
 
 const triggerFileInput = () => {
     fileInput.value?.click()
@@ -222,13 +241,13 @@ const closeModal = () => {
 }
 
 const onSubmit = async () => {
-    errors.description = ''
+    errors.message = ''
     errors.images = ''
     
     const result = schema.safeParse(state)
     if (!result.success) {
         result.error.issues.forEach(issue => {
-            if (issue.path[0] === 'description') errors.description = issue.message
+            if (issue.path[0] === 'message') errors.message = issue.message
             if (issue.path[0] === 'images') errors.images = issue.message
         })
         return
@@ -244,7 +263,7 @@ const onSubmit = async () => {
             emit('created')
             closeModal()
             // Reset local state if needed
-            state.description = ''
+            state.message = ''
             state.images = []
         } else {
             toast.error({
@@ -274,5 +293,8 @@ onUnmounted(() => {
   if (import.meta.client) {
     document.body.style.overflow = ''
   }
+  // Cleanup blob URLs
+  imageUrlCache.forEach(url => URL.revokeObjectURL(url))
+  imageUrlCache.clear()
 })
 </script>
