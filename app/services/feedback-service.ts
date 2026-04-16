@@ -1,13 +1,7 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
 import type { ApiResponse } from "../types/auth"
-
-export interface FeedbackRequest {
-  url: string
-  type: 'keluhan' | 'saran' | 'pujian'
-  message: string
-  images: File[]
-}
+import type { FeedbackRequest, FeedbackEntry } from "../types/feedback"
 
 export class FeedbackService {
     async createFeedback(data: FeedbackRequest): Promise<ApiResponse<any>> {
@@ -32,6 +26,20 @@ export class FeedbackService {
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Gagal mengirim feedback')
+        }
+    }
+
+    async getFeedback(params?: any): Promise<ApiResponse<FeedbackEntry[]>> {
+        try {
+            const response = await apiService.client.get<ApiResponse<FeedbackEntry[]>>('/feedback', {
+                params,
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Gagal mengambil data feedback')
         }
     }
 }

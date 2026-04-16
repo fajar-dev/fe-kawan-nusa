@@ -65,8 +65,8 @@
           </li>
           <li>
             <NuxtLink to="/feedback" class="flex items-center gap-3 py-2.5 text-neutral-600 hover:text-primary transition-colors">
-              <MessageSquareMore class="w-4 h-4" />
-              <span class="font-medium text-sm">My Feedback</span>
+              <MessageSquareWarning class="w-4 h-4" />
+              <span class="font-medium text-sm">Riwayat Feedback</span>
             </NuxtLink>
           </li>
           <div class="divider my-1 opacity-50 mx-2"></div>

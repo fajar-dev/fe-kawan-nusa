@@ -131,13 +131,7 @@
 </template>
 
 <script setup lang="ts">
-import { 
-  Home, Users, Package, Coins, 
-  BookOpen, Settings, History, 
-  ArrowRightLeft, ChevronRight, ChevronLeft, Search,
-  MessageSquare, Loader2, FileText, Video,
-  Newspaper
-} from 'lucide-vue-next'
+import { Home, Users, Package, Coins, BookOpen, Settings, History, ArrowRightLeft, ChevronRight, ChevronLeft, Search, Loader2, Video, Newspaper, MessageSquareWarning } from 'lucide-vue-next'
 import { Command } from 'vue-command-palette'
 import { additionalService } from '~/services/additional-service'
 import type { SearchResult } from '~/types/additional'
@@ -215,7 +209,7 @@ const pointItems = [
 const otherItems = [
   { label: 'Edukasi', value: 'education', path: '/education', icon: BookOpen },
   { label: 'Pengaturan', value: 'setting', path: '/setting', icon: Settings },
-  { label: 'Feedback Saya', value: 'feedback', path: '/feedback', icon: MessageSquare },
+  { label: 'Riwayat Feedback', value: 'feedback', path: '/feedback', icon: MessageSquareWarning },
 ]
 
 const handleItemAction = (item: any) => {
