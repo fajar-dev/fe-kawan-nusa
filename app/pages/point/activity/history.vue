@@ -179,6 +179,9 @@
                   </div>
                 </div>
               </div>
+              <div v-else class="flex items-center gap-2">
+                -
+              </div>
             </td>
             <td v-show="isColumnVisible('status')" class="border-r border-base-200">
               <span>
@@ -200,6 +203,9 @@
                   @click="openUrl(redemptionService.getWithdrawDownloadUrl(item.id))"
                   class="w-4 h-4 text-primary shrink-0 cursor-pointer" 
                 />
+              </div>
+              <div v-else-if="item.type === 'expired'" class="flex items-center gap-2">
+                -
               </div>
               <div v-else class="w-full flex justify-between">
                 <NuxtLink 
@@ -228,13 +234,16 @@ import { formatDateTime } from '~/utils/date'
 const typeOptions = [
   { label: 'Cash', value: 'cash' },
   { label: 'Voucher', value: 'voucher' },
-  { label: 'Produk', value: 'product' }
+  { label: 'Produk', value: 'product' },
+  { label: 'Expired', value: 'expired' }
 ]
 
 const statusOptions = [
   { label: 'Menunggu', value: 'pending' },
   { label: 'Diproses', value: 'processing' },
-  { label: 'Selesai', value: 'completed' }
+  { label: 'Selesai', value: 'completed' },
+  { label: 'Dibatalkan', value: 'cancelled' },
+  { label: '-', value: 'expired' }
 ]
 
 // Filter states for UI (temp)
@@ -331,6 +340,7 @@ const formatType = (type: string) => {
     case 'cash': return 'Cash'
     case 'voucher': return 'Voucher'
     case 'product': return 'Produk'
+    case 'expired': return 'Expired'
     default: return type
   }
 }
@@ -340,6 +350,8 @@ const formatStatus = (status: string) => {
     case 'pending': return 'Menunggu Verifikasi'
     case 'processing': return 'Diproses'
     case 'completed': return 'Selesai'
+    case 'cancelled': return 'Dibatalkan'
+    case 'expired': return '-'
     default: return status
   }
 }

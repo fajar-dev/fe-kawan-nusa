@@ -79,6 +79,7 @@
             </td>
             <td v-show="isColumnVisible('type')">{{ item.type }}</td>
             <td v-show="isColumnVisible('point')" class="border-r border-base-200">+ {{ item.point.toLocaleString('id-ID') }}</td>
+            <td v-show="isColumnVisible('expiredDate')" class="border-r border-base-200">{{ formatDate(item.expiredDate) }}</td>
           </tr>
         </tbody>
       </template>
@@ -167,7 +168,8 @@ const currentColumns = [
   { label: 'Nama Layanan', key: 'service.name', sortable: true },
   { label: 'Periode Berlangganan', key: 'period', sortable: false },
   { label: 'Tipe Poin', key: 'type', sortable: true },
-  { label: 'Poin', key: 'point', sortable: true }
+  { label: 'Poin', key: 'point', sortable: true },
+  { label: 'Tanggal Kadaluarsa', key: 'expiredDate', sortable: true }
 ]
 
 const fetchFilterOptions = async () => {

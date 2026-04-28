@@ -22,8 +22,8 @@ export interface RedemptionData {
     id: number
     redempNo: string
     pointsUsed: number
-    type: 'cash' | 'voucher' | 'product'
-    status: 'pending' | 'processing' | 'completed'
+    type: 'cash' | 'voucher' | 'product' | 'expired'
+    status: 'pending' | 'processing' | 'completed' | 'cancelled' | 'expired'
     notes: string | null
     withdrawDetails: {
         bankName: string
@@ -84,7 +84,7 @@ export interface RedemptionQueryParams {
     sort?: string
     order?: 'asc' | 'desc'
     q?: string
-    type?: ('cash' | 'voucher' | 'product')[]
+    type?: ('cash' | 'voucher' | 'product' | 'expired')[]
     status?: string[]
     startDate?: string
     endDate?: string

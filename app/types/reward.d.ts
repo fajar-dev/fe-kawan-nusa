@@ -5,13 +5,15 @@ export interface CustomerReward {
   id: number
   customerServiceId: number
   price: number
+  expiredDate: string
   point: number
+  remainingPoint: number
+  isExpired: boolean
   type: string
   customerService: {
     id: number
     serviceCode: string
     activationDate: string
-    referenceDate: string
     startDate: string
     endDate: string | null
   }
@@ -25,6 +27,7 @@ export interface CustomerReward {
   }
   createdAt: string
 }
+
 
 export interface CustomerRewardResponse extends ApiResponse<CustomerReward[]> {
   meta: PaginationMeta
