@@ -72,7 +72,7 @@
             class="pb-3 font-medium transition-all relative"
             :class="[ $route.path === '/point/activity/history' ? 'text-primary' : 'text-neutral-500 hover:text-neutral-800' ]"
           >
-            Poin Terpakai
+            Poin Keluar
             <div v-if="$route.path === '/point/activity/history'" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary rounded-full"></div>
           </NuxtLink>
         </div>

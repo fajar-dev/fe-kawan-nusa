@@ -213,7 +213,7 @@
 </template>
 
 <script setup lang="ts">
-import { Hash, Coins, Calendar, CheckCircle2, User, Mail, Phone, MapPin, Clock, Package, CheckCircle, Ticket, Loader2, Truck, ExternalLink } from 'lucide-vue-next'
+import { Hash, Coins, Calendar, CheckCircle2, User, Mail, Phone, MapPin, Clock, Package, CheckCircle, Ticket, Loader2, Truck, ExternalLink, XCircle, AlertCircle } from 'lucide-vue-next'
 import { statisticService } from '~/services/statistic-service'
 import { redemptionService } from '~/services/redemption-service'
 import { formatDateTime } from '~/utils/date'
@@ -336,21 +336,27 @@ const formatStatusDisplay = (statusValue: string) => {
         case 'pending': return 'Menunggu Verifikasi'
         case 'processing': return 'Sedang Diproses'
         case 'completed': return 'Selesai'
+        case 'cancelled': return 'Dibatalkan'
+        case 'expired': return 'Kedaluwarsa'
         default: return statusValue
     }
 }
 
-type RedeemStatus = 'pending' | 'processing' | 'completed'
+type RedeemStatus = 'pending' | 'processing' | 'completed' | 'cancelled' | 'expired'
 
 const statusStyles: Record<RedeemStatus, string> = {
   pending: 'bg-amber-50 text-amber-600 border-amber-100',
   processing: 'bg-blue-50 text-blue-600 border-blue-100',
-  completed: 'bg-green-50 text-green-600 border-green-100'
+  completed: 'bg-green-50 text-green-600 border-green-100',
+  cancelled: 'bg-red-50 text-red-600 border-red-100',
+  expired: 'bg-neutral-50 text-neutral-600 border-neutral-100'
 }
 
 const statusIcons: Record<RedeemStatus, any> = {
   pending: Clock,
   processing: Package,
-  completed: CheckCircle
+  completed: CheckCircle,
+  cancelled: XCircle,
+  expired: AlertCircle
 }
 </script>
