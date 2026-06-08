@@ -17,7 +17,7 @@
 
         <div class="space-y-8 pb-10">
             <!-- Top Action Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:px-12 md:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Katalog Produk -->
                 <NuxtLink to="/education/service" class="card bg-white border border-base-300 transition-all cursor-pointer group hover:bg-neutral-50">
                     <div class="card-body p-6 flex flex-col items-center text-center">
@@ -101,7 +101,9 @@
                     </NuxtLink>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:px-12 md:px-6">
+                <EmptyState v-if="articlesResponse?.data.length === 0" />
+
+                <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
                     <div v-for="article in articlesResponse?.data" :key="article.id" class="card h-full bg-white border border-base-300 rounded-xl overflow-hidden transition-all group">
                         <div class="relative h-52 overflow-hidden p-3">
                             <img
@@ -183,7 +185,9 @@
                     </NuxtLink>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:px-12 md:px-6">
+                <EmptyState v-if="videosResponse?.data.length === 0" />
+
+                <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div v-for="video in videosResponse?.data" :key="video.id" class="card h-full bg-white border border-base-300 rounded-2xl overflow-hidden transition-all group">
                         <div class="relative h-52 overflow-hidden p-3">
                             <img

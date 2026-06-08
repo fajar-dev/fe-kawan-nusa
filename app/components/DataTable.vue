@@ -102,11 +102,7 @@
           <tbody v-else-if="isEmpty" class="text-sm text-neutral-600">
             <tr>
               <td :colspan="visibleColumnCount" class="py-10 text-center">
-                <div class="flex flex-col items-center justify-center">
-                  <img src="/assets/no-data.png" alt="No Data" class="w-52 h-auto mb-6" />
-                  <h3 class="text-xl font-bold text-neutral-800 mb-2">Data Kosong</h3>
-                  <p class="text-neutral-500">Saat ini belum ada data yang bisa ditampilkan.</p>
-                </div>
+                <EmptyState />
               </td>           
             </tr>
           </tbody>

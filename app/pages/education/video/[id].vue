@@ -18,7 +18,7 @@
             </div>
         </AppToolbar>
 
-        <div v-if="video" class="space-y-8 pb-10 md:p-7">
+        <div v-if="video" class="space-y-8 pb-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
                 <!-- Main Content -->
                 <article class="lg:col-span-8 space-y-6">

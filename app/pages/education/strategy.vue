@@ -100,7 +100,7 @@
             </section>
 
             <!-- Template Section -->
-            <section class="space-y-6">
+            <section>
                 <div class="space-y-1">
                     <h2 class="text-lg font-medium text-neutral-800">Template Promosi</h2>
                     <p class="text-sm text-neutral-500">Download dan edit template siap pakai untuk mempromosikan layanan dan produk di berbagai platform</p>
@@ -137,11 +137,7 @@
                 </div>
 
                 <!-- Empty State -->
-                <div v-if="templates.length === 0 && !isLoading" class="flex flex-col items-center justify-center py-10">
-                    <img src="/assets/no-data.png" alt="No Data" class="w-40 h-auto mb-4 opacity-70" />
-                    <h3 class="text-lg font-bold text-neutral-800 mb-1">Template Belum Tersedia</h3>
-                    <p class="text-neutral-500 text-xs">Mohon tunggu pembaruan template promosi terbaru kami.</p>
-                </div>
+                <EmptyState v-if="templates.length === 0 && !isLoading" />
             </section>
         </div>
 

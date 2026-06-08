@@ -126,19 +126,13 @@
             </div>
 
             <!-- Sentinel for Infinite Scroll -->
-            <div ref="sentinel" class="flex justify-center p-8 w-full col-span-full">
+            <div ref="sentinel" class="flex justify-center w-full col-span-full">
                 <Loader2 v-if="isLoading" class="w-8 h-8 animate-spin text-primary" />
-                <div v-else-if="page > lastPage && videos.length > 0" class="text-neutral-400 text-sm italic">
-                    Telah mencapai akhir
-                </div>
+                <div v-else-if="page > lastPage && videos.length > 0"></div>
             </div>
 
             <!-- Empty State -->
-            <div v-if="videos.length === 0 && !isLoading" class="flex flex-col items-center justify-center">
-                <img src="/assets/no-data.png" alt="No Data" class="w-52 h-auto mb-6" />
-                <h3 class="text-xl font-bold text-neutral-800 mb-2">Data Kosong</h3>
-                <p class="text-neutral-500">Saat ini belum ada data yang bisa ditampilkan.</p>
-            </div>
+            <EmptyState v-if="videos.length === 0 && !isLoading" />
         </div>
     </div>
 </template>

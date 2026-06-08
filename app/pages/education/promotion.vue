@@ -16,7 +16,7 @@
             </div>
         </AppToolbar>
 
-        <div class="space-y-12 pb-10">
+        <div class="pb-10">
             <!-- Promo Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div 
@@ -70,11 +70,7 @@
             </div>
 
             <!-- Empty State -->
-            <div v-if="promos.length === 0 && !isLoading" class="flex flex-col items-center justify-center py-20">
-                <img src="/assets/no-data.png" alt="No Data" class="w-52 h-auto mb-6" />
-                <h3 class="text-xl font-bold text-neutral-800 mb-2">Belum Ada Promo</h3>
-                <p class="text-neutral-500 text-sm">Nantikan promo menarik dari Nusanet segera!</p>
-            </div>
+            <EmptyState v-if="promos.length === 0 && !isLoading" />
 
             <!-- CTA Banner -->
             <div class="bg-primary/10 border border-primary/20 rounded-xl p-6 md:p-10 text-center mx-auto space-y-6">

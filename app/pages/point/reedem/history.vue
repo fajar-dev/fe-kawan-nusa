@@ -42,10 +42,7 @@
 
         <!-- History List -->
         <div class="space-y-6">
-            <div v-if="redemptions.length === 0 && !isLoading" class="bg-white border border-base-200 rounded-2xl p-12 text-center">
-                <Package class="w-12 h-12 text-neutral-200 mx-auto mb-4" />
-                <p class="text-neutral-500">Belum ada riwayat penukaran</p>
-            </div>
+            <EmptyState v-if="redemptions.length === 0 && !isLoading" />
             <div v-else v-for="(item, index) in redemptions" :key="index" class="bg-white border border-base-200 rounded-2xl overflow-hidden shadow-xs hover:shadow-sm transition-shadow">
             <div class="p-5 flex flex-col md:flex-row gap-6">
                 <!-- Image -->

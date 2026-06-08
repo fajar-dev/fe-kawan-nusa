@@ -86,11 +86,7 @@
             </div>
 
             <!-- Empty State -->
-            <div v-if="products.length === 0 && !isLoading" class="flex flex-col items-center justify-center py-20">
-                <img src="/assets/no-data.png" alt="No Data" class="w-52 h-auto mb-6" />
-                <h3 class="text-xl font-bold text-neutral-800 mb-2">Produk Tidak Ditemukan</h3>
-                <p class="text-neutral-500 text-sm">Maaf, saat ini belum ada produk dalam kategori ini.</p>
-            </div>
+            <EmptyState v-if="products.length === 0 && !isLoading" />
         </div>
     </div>
 </template>
