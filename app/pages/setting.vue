@@ -182,9 +182,7 @@ const handlePreferenceUpdate = async (data: UpdatePreferenceRequest) => {
   const response = await profileService.updatePreference(data)
   if (response.success) {
       profile.value = response.data
-      toast.success({
-          message: response.message || 'Preferensi berhasil diperbarui'
-      })
+      toast.success(response.message || 'Preferensi berhasil diperbarui')
   }
 }
 

@@ -234,13 +234,9 @@ const handleCopy = () => {
   ].join('\n')
   
   navigator.clipboard.writeText(info).then(() => {
-    toast.success({
-      message: 'Informasi berhasil disalin ke clipboard'
-    })
+    toast.success('Informasi berhasil disalin ke clipboard')
   }).catch(() => {
-    toast.error({
-      message: 'Gagal menyalin informasi'
-    })
+    toast.error('Gagal menyalin informasi')
   })
 }
 
@@ -274,9 +270,7 @@ const handleSave = async () => {
   try {
     const response = await profileService.updateAccount(result.data)
     if (response.success) {
-      toast.success({
-        message: response.message || 'Profil berhasil diperbarui'
-      })
+      toast.success(response.message || 'Profil berhasil diperbarui')
       isEditing.value = false
       if (fetchProfile) await fetchProfile()
     }

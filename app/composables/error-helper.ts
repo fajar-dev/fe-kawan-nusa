@@ -12,10 +12,7 @@ export const handleServiceError = (error: any): never => {
         if (message === title) message = '' 
     }
     
-    toast.error({
-      title: title,
-      message: message,
-    })
+    toast.error(title, message)
     
     throw new Error()
 }

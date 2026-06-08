@@ -150,13 +150,9 @@ const handleCopy = () => {
   ].join('\n')
   
   navigator.clipboard.writeText(info).then(() => {
-    toast.success({
-      message: 'Informasi bank berhasil disalin ke clipboard'
-    })
+    toast.success('Informasi bank berhasil disalin ke clipboard')
   }).catch(() => {
-    toast.error({
-      message: 'Gagal menyalin informasi'
-    })
+    toast.error('Gagal menyalin informasi')
   })
 }
 
@@ -185,9 +181,7 @@ const handleSave = async () => {
   try {
     const response = await profileService.updateBank(result.data)
     if (response.success) {
-      toast.success({
-        message: response.message || 'Informasi bank berhasil diperbarui'
-      })
+      toast.success(response.message || 'Informasi bank berhasil diperbarui')
       isEditing.value = false
       if (fetchProfile) await fetchProfile()
     }

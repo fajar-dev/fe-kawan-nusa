@@ -6,8 +6,9 @@ export default defineNuxtConfig({
 
   modules: [
     "nuxt-charts",
-    "nuxt-toast",
     "@vite-pwa/nuxt",
+    'nuxt-notify',
+    '@nuxt/icon',
   ],
 
   devtools: { enabled: true },
@@ -21,13 +22,6 @@ export default defineNuxtConfig({
   },
   
   css: ['~/assets/css/main.css'],
-
-  toast: {
-    settings: {
-      position: 'topRight',
-      timeout: 3000,
-    }
-  },
 
   pwa: {
     registerType: 'autoUpdate',

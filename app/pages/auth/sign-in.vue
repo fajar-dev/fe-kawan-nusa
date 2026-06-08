@@ -144,9 +144,7 @@ const handleLogin = async () => {
 
   try {
     await authService.login(identifier.value, password.value)
-    toast.success({
-      message: 'Login berhasil! Selamat datang.',
-    })
+    toast.success( 'Login berhasil! Selamat datang.')
     navigateTo('/')
   }  finally {
     loading.value = false

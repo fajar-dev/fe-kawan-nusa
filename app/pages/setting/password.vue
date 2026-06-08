@@ -186,9 +186,7 @@ const handleSave = async () => {
     })
     
     if (response.success) {
-      toast.success({
-        message: response.message || 'Kata sandi berhasil diperbarui'
-      })
+      toast.success(response.message || 'Kata sandi berhasil diperbarui')
       resetForm()
     }
   }  finally {

@@ -112,9 +112,7 @@ const handleForgotPassword = async () => {
   loading.value = true
   try {
     const res = await authService.forgotPassword(email.value)
-    toast.success({
-      message: res.message || 'Instruksi reset password telah dikirim ke email kamu.',
-    })
+    toast.success( res.message || 'Instruksi reset password telah dikirim ke email kamu.')
     email.value = ''
   }  finally {
     loading.value = false

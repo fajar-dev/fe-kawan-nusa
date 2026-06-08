@@ -107,7 +107,7 @@ const handleSave = async () => {
   try {
     const response = await profileService.updatePhoto(selectedFile.value)
     if (response.success) {
-      toast.success({ message: response.message || 'Foto profil berhasil diperbarui' })
+      toast.success(response.message || 'Foto profil berhasil diperbarui');
       emit('success')
       isOpen.value = false
     }

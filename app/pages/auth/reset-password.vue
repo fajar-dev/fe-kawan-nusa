@@ -148,9 +148,7 @@ const resetPasswordSchema = z.object({
 // Validasi token saat load
 onMounted(async () => {
     if (!email || !token) {
-        toast.error({
-            message: 'Tautan reset tidak valid. Silakan coba lagi.'
-        })
+        toast.error('Tautan reset tidak valid. Silakan coba lagi.')
         navigateTo('/auth/forgot-password')
         return
     }
@@ -183,9 +181,7 @@ const handleResetPassword = async () => {
   loading.value = true
   try {
     const res = await authService.resetPassword(token, newPassword.value)
-    toast.success({
-      message: res.message || 'Kata sandi berhasil diperbarui.'
-    })
+    toast.success( res.message || 'Kata sandi berhasil diperbarui.')
     navigateTo('/auth/sign-in')
   }  finally {
     loading.value = false
