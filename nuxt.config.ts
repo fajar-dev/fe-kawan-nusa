@@ -9,7 +9,12 @@ export default defineNuxtConfig({
     "@vite-pwa/nuxt",
     'nuxt-notify',
     '@nuxt/icon',
+    'nuxt-vue3-google-signin',
   ],
+
+  googleSignIn: {
+    clientId: process.env.GOOGLE_CLIENT_ID || '',
+  },
 
   devtools: { enabled: true },
   

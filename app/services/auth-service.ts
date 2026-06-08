@@ -82,6 +82,16 @@ export class AuthService {
         }
     }
 
+    async google(code: string): Promise<AuthResponse> {
+        try {
+            const response = await apiService.client.post<AuthResponse>('/auth/google', { code })
+            this.setSession(response.data)
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error)
+        }
+    }
+
     async forgotPassword(email: string): Promise<ApiResponse<null>> {
         try {
             const response = await apiService.client.post<ApiResponse<null>>('/auth/forgot-password', { email })
