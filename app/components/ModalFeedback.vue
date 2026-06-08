@@ -1,9 +1,9 @@
 <template>
   <Teleport to="body">
-    <div v-if="isOpen" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-xs animate-in fade-in duration-300">
+    <div v-if="isOpen" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 animate-in fade-in duration-300">
       <div class="absolute inset-0" @click="closeModal"></div>
       
-      <div id="feedback-modal-screenshot" class="bg-white rounded-xl w-full max-w-xl shadow-xl overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-4 duration-300 relative z-10 mx-4">
+      <div id="feedback-modal-screenshot" class="bg-white rounded-lg w-full max-w-xl shadow-xl overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-4 duration-300 relative z-10 mx-4">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-5 border-b border-neutral-100">
           <div>
@@ -257,23 +257,17 @@ const onSubmit = async () => {
     try {
         const response = await feedbackService.createFeedback(state)
         if (response.success) {
-            toast.success({
-                message: response.message || 'Terima kasih atas feedback Anda!'
-            })
+            toast.success( response.message || 'Terima kasih atas feedback Anda!')
             emit('created')
             closeModal()
             // Reset local state if needed
             state.message = ''
             state.images = []
         } else {
-            toast.error({
-                message: response.message || 'Gagal mengirim feedback'
-            })
+            toast.error(response.message || 'Gagal mengirim feedback')
         }
     } catch (error) {
-        toast.error({
-            message: 'Terjadi kesalahan saat mengirim feedback'
-        })
+        toast.error('Terjadi kesalahan saat mengirim feedback')
     } finally {
         isSaving.value = false
     }

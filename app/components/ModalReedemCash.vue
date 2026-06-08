@@ -1,13 +1,13 @@
 <template>
   <Teleport to="body">
-    <div v-if="isOpen" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-xs animate-in fade-in duration-300">
+    <div v-if="isOpen" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 animate-in fade-in duration-300">
       <!-- Backdrop click to close -->
       <div class="absolute inset-0" @click="isOpen = false"></div>
       
-      <div class="bg-white rounded-xl w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-4 duration-300 relative z-10 mx-4">
+      <div class="bg-white rounded-lg w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-4 duration-300 relative z-10 mx-4">
         <!-- Header -->
-        <div class="flex items-center justify-between px-6 py-5 border-b border-base-200">
-          <h3 class="text-xl font-semibold text-neutral-800">Penarikan Tunai</h3>
+        <div class="flex items-center justify-between px-6 py-4 border-b border-base-200">
+          <h3 class="text-lg font-medium text-neutral-800">Penarikan Poin</h3>
           <button @click="isOpen = false" class="btn btn-ghost btn-sm btn-circle text-neutral-400 hover:text-neutral-800 transition-colors">
             <X class="w-5 h-5" />
           </button>
@@ -50,7 +50,7 @@
               <span class="text-neutral-800 font-medium">Rp. {{ Math.round(withdrawAmount * 1000 * 0.025).toLocaleString('id-ID') }}</span>
             </div>
             <div class="border-t border-base-200 pt-3 flex items-center justify-between">
-              <span class="font-semibold text-neutral-800">Total reedem</span>
+              <span class="font-semibold text-neutral-800">Total Withdraw</span>
               <span class="font-semibold text-neutral-900">Rp. {{ Math.round(withdrawAmount * 1000 * 0.975).toLocaleString('id-ID') }}</span>
             </div>
           </div>

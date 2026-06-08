@@ -1,10 +1,10 @@
 <template>
   <Teleport to="body">
-    <div v-if="isOpen" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-xs animate-in fade-in duration-300">
+    <div v-if="isOpen" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 animate-in fade-in duration-300">
       <!-- Backdrop click to close -->
       <div class="absolute inset-0" @click="isOpen = false"></div>
       
-      <div class="bg-white rounded-xl w-full max-w-lg shadow-2xl overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-4 duration-300 relative z-10 mx-4">
+      <div class="bg-white rounded-lg w-full max-w-lg shadow-2xl overflow-hidden animate-in zoom-in-95 slide-in-from-bottom-4 duration-300 relative z-10 mx-4">
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-5 border-b border-base-200">
           <h3 class="text-lg font-semibold text-neutral-800">Ubah Foto Profil</h3>
