@@ -101,6 +101,34 @@
             </div>
             <p v-if="errors.phone" class="text-[10px] text-red-500 mt-1">{{ errors.phone }}</p>
           </div>
+          <div class="form-control w-full">
+            <label class="label mb-1.5 p-0">
+              <span class="text-xs text-neutral-800">NIK<span class="text-red-500">*</span></span>
+            </label>
+            <input 
+              v-model="form.identityNumber"
+              :disabled="!isEditing"
+              type="text" 
+              placeholder="Masukkan 16 digit NIK"
+              class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
+              :class="{ 'border-red-500': errors.identityNumber }"
+            />
+            <p v-if="errors.identityNumber" class="text-[10px] text-red-500 mt-1">{{ errors.identityNumber }}</p>
+          </div>
+          <div class="form-control w-full">
+            <label class="label mb-1.5 p-0">
+              <span class="text-xs text-neutral-800">NPWP<span class="text-red-500">*</span></span>
+            </label>
+            <input 
+              v-model="form.taxNumber"
+              :disabled="!isEditing"
+              type="text" 
+              placeholder="Masukkan nomor NPWP"
+              class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
+              :class="{ 'border-red-500': errors.taxNumber }"
+            />
+            <p v-if="errors.taxNumber" class="text-[10px] text-red-500 mt-1">{{ errors.taxNumber }}</p>
+          </div>
         </div>
         
         <!-- Company Info -->
@@ -161,7 +189,9 @@ const accountSchema = z.object({
   email: z.string().min(1, 'Email tidak boleh kosong').email('Format email tidak valid'),
   phone: z.string().min(1, 'Nomor handphone tidak boleh kosong'),
   company: z.string().min(1, 'Nama perusahaan tidak boleh kosong'),
-  jobPosition: z.string().min(1, 'Jabatan tidak boleh kosong')
+  jobPosition: z.string().min(1, 'Jabatan tidak boleh kosong'),
+  taxNumber: z.string().min(1, 'NPWP tidak boleh kosong'),
+  identityNumber: z.coerce.number().min(1, 'NIK tidak boleh kosong'),
 })
 
 const form = reactive<UpdateAccountRequest>({
@@ -170,7 +200,9 @@ const form = reactive<UpdateAccountRequest>({
   email: '',
   phone: '',
   company: '',
-  jobPosition: ''
+  jobPosition: '',
+  taxNumber: '',
+  identityNumber: 0,
 })
 
 watch(
@@ -183,6 +215,8 @@ watch(
       form.phone = newProfile.phone || ''
       form.company = newProfile.company || ''
       form.jobPosition = newProfile.jobPosition || ''
+      form.taxNumber = newProfile.taxNumber || ''
+      form.identityNumber = newProfile.identityNumber || null
     }
   },
   { immediate: true }
@@ -193,6 +227,8 @@ const handleCopy = () => {
     `Nama: ${form.firstName} ${form.lastName}`,
     `Email: ${form.email}`,
     `Phone: ${form.phone}`,
+    `NIK: ${form.identityNumber}`,
+    `NPWP: ${form.taxNumber}`,
     `Perusahaan: ${form.company}`,
     `Jabatan: ${form.jobPosition}`
   ].join('\n')
@@ -216,6 +252,8 @@ const handleCancel = () => {
     form.phone = profile.value.phone || ''
     form.company = profile.value.company || ''
     form.jobPosition = profile.value.jobPosition || ''
+    form.taxNumber = profile.value.taxNumber || ''
+    form.identityNumber = profile.value.identityNumber || null
   }
   isEditing.value = false
   errors.value = {}

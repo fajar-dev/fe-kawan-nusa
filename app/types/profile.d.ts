@@ -10,6 +10,8 @@ export interface UpdateAccountRequest {
   phone: string;
   company: string;
   jobPosition: string;
+  taxNumber: string;
+  identityNumber: number | null;
 }
 export interface UpdateBankRequest {
   accountHolderName: string;

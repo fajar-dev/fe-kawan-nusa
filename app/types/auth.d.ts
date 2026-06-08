@@ -7,6 +7,8 @@ export interface User {
     phone: string
     company: string | null
     jobPosition: string | null
+    taxNumber: string | null
+    identityNumber: number | null
     bankDetails: BankDetails
     settings: UserSettings
     createdAt: string
