@@ -42,3 +42,8 @@
     --color-info: #3077c1 !important;
   }
 }
+
+/* Toast: vertically center icon + text */
+.fixed li.group {
+  align-items: center !important;
+}

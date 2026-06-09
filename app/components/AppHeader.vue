@@ -152,8 +152,6 @@ const handleFeedbackClick = async () => {
 
 const handleLogout = async () => {
     await authService.logout()
-    toast.success({
-        message: 'Berhasil keluar'
-    })
+    toast.success('Berhasil keluar')
 }
 </script>

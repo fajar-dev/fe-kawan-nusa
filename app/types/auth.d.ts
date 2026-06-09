@@ -3,16 +3,18 @@ export interface User {
     firstName: string
     lastName: string
     photo: string | null
-    email: string
-    phone: string
+    email: string | null
+    phone: string | null
     company: string | null
     jobPosition: string | null
     taxNumber: string | null
     identityNumber: number | null
     bankDetails: BankDetails
     settings: UserSettings
+    role: string
+    isActive: boolean
     createdAt: string
-    passwordUpdatedAt: string
+    passwordUpdatedAt: string | null
 }
 
 export interface BankDetails {

@@ -186,12 +186,12 @@ const fetchProfile = inject<() => Promise<void>>('fetchProfile')
 const accountSchema = z.object({
   firstName: z.string().min(1, 'Nama depan tidak boleh kosong'),
   lastName: z.string().min(1, 'Nama belakang tidak boleh kosong'),
-  email: z.string().min(1, 'Email tidak boleh kosong').email('Format email tidak valid'),
-  phone: z.string().min(1, 'Nomor handphone tidak boleh kosong'),
-  company: z.string().min(1, 'Nama perusahaan tidak boleh kosong'),
-  jobPosition: z.string().min(1, 'Jabatan tidak boleh kosong'),
-  taxNumber: z.string().min(1, 'NPWP tidak boleh kosong'),
-  identityNumber: z.coerce.number().min(1, 'NIK tidak boleh kosong'),
+  email: z.string().email('Format email tidak valid').optional().or(z.literal('')),
+  phone: z.string().optional().or(z.literal('')),
+  company: z.string().optional().or(z.literal('')),
+  jobPosition: z.string().optional().or(z.literal('')),
+  taxNumber: z.string().optional().or(z.literal('')),
+  identityNumber: z.coerce.number().optional().nullable(),
 })
 
 const form = reactive<UpdateAccountRequest>({
@@ -202,7 +202,7 @@ const form = reactive<UpdateAccountRequest>({
   company: '',
   jobPosition: '',
   taxNumber: '',
-  identityNumber: 0,
+  identityNumber: null,
 })
 
 watch(

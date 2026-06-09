@@ -11,17 +11,24 @@
         </div>
 
         <!-- Info Alert -->
-        <div role="alert" class="alert alert-info bg-info/10 border-info/10 text-info shadow-none flex flex-col items-start gap-1">
+        <div v-if="hasPassword" role="alert" class="alert alert-info bg-info/10 border-info/10 text-info shadow-none flex flex-col items-start gap-1">
           <div class="flex items-center gap-2">
           <Info class="w-4 h-4" />
             <span class="font-bold">Terakhir diubah {{ timeAgo(profile?.passwordUpdatedAt) }}</span>
           </div>
           <span class="text-xs ml-7 text-neutral-500 font-normal">Demi keamanan akun Anda, kami menyarankan untuk mengganti kata sandi setiap 90 hari.</span>
         </div>
+        <div v-else role="alert" class="alert alert-warning bg-warning/10 border-warning/10 text-warning shadow-none flex flex-col items-start gap-1">
+          <div class="flex items-center gap-2">
+          <Info class="w-4 h-4" />
+            <span class="font-bold">Tambahkan Kata Sandi</span>
+          </div>
+          <span class="text-xs ml-7 text-neutral-500 font-normal">Akun Anda belum memiliki kata sandi. Tambahkan kata sandi untuk meningkatkan keamanan akun.</span>
+        </div>
         
         <div class="space-y-4">
-          <!-- Current Password - Top -->
-          <div class="form-control w-full max-w-md">
+          <!-- Current Password - Only show if user has password -->
+          <div v-if="hasPassword" class="form-control w-full max-w-md">
             <label class="label mb-1.5 p-0">
               <span class="text-xs text-neutral-800">Kata Sandi Saat Ini<span class="text-red-500">*</span></span>
             </label>
@@ -112,7 +119,7 @@
               class="btn btn-primary rounded-lg"
             >
               <span v-if="loading" class="loading loading-spinner loading-xs"></span>
-              Ubah Kata Sandi
+              {{ hasPassword ? 'Ubah Kata Sandi' : 'Tambah Kata Sandi' }}
             </button>
           </div>
         </div>
@@ -132,6 +139,9 @@ const loading = ref(false)
 const errors = ref<Record<string, string>>({})
 
 const profile = inject<Ref<User | null>>('profile')
+const fetchProfile = inject<() => Promise<void>>('fetchProfile')
+
+const hasPassword = computed(() => !!profile?.value?.passwordUpdatedAt)
 
 const showOldPassword = ref(false)
 const showNewPassword = ref(false)
@@ -141,14 +151,24 @@ const oldPassword = ref('')
 const newPassword = ref('')
 const confirmPassword = ref('')
 
-const passwordSchema = z.object({
+const newPasswordValidation = z.string()
+  .min(8, 'Kata sandi minimal 8 karakter')
+  .regex(/[A-Z]/, 'Harus mengandung setidaknya satu huruf besar')
+  .regex(/[a-z]/, 'Harus mengandung setidaknya satu huruf kecil')
+  .regex(/[0-9]/, 'Harus mengandung setidaknya satu angka')
+  .regex(/[^A-Za-z0-9]/, 'Harus mengandung setidaknya satu karakter khusus')
+
+const changePasswordSchema = z.object({
   oldPassword: z.string().min(1, 'Kata sandi saat ini tidak boleh kosong'),
-  newPassword: z.string()
-    .min(8, 'Kata sandi minimal 8 karakter')
-    .regex(/[A-Z]/, 'Harus mengandung setidaknya satu huruf besar')
-    .regex(/[a-z]/, 'Harus mengandung setidaknya satu huruf kecil')
-    .regex(/[0-9]/, 'Harus mengandung setidaknya satu angka')
-    .regex(/[^A-Za-z0-9]/, 'Harus mengandung setidaknya satu karakter khusus'),
+  newPassword: newPasswordValidation,
+  confirmPassword: z.string().min(1, 'Konfirmasi kata sandi wajib diisi')
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: 'Kata sandi tidak cocok',
+  path: ['confirmPassword'],
+})
+
+const setPasswordSchema = z.object({
+  newPassword: newPasswordValidation,
   confirmPassword: z.string().min(1, 'Konfirmasi kata sandi wajib diisi')
 }).refine((data) => data.newPassword === data.confirmPassword, {
   message: 'Kata sandi tidak cocok',
@@ -165,11 +185,12 @@ const resetForm = () => {
 const handleSave = async () => {
   errors.value = {}
 
-  const result = passwordSchema.safeParse({
-    oldPassword: oldPassword.value,
-    newPassword: newPassword.value,
-    confirmPassword: confirmPassword.value
-  })
+  const parseData = hasPassword.value
+    ? { oldPassword: oldPassword.value, newPassword: newPassword.value, confirmPassword: confirmPassword.value }
+    : { newPassword: newPassword.value, confirmPassword: confirmPassword.value }
+
+  const schema = hasPassword.value ? changePasswordSchema : setPasswordSchema
+  const result = schema.safeParse(parseData)
 
   if (!result.success) {
     result.error.issues.forEach(issue => {
@@ -180,14 +201,16 @@ const handleSave = async () => {
 
   loading.value = true
   try {
-    const response = await profileService.updatePassword({
-      oldPassword: result.data.oldPassword,
-      newPassword: result.data.newPassword
-    })
+    const payload = hasPassword.value
+      ? { oldPassword: oldPassword.value, newPassword: newPassword.value }
+      : { newPassword: newPassword.value }
+
+    const response = await profileService.updatePassword(payload)
     
     if (response.success) {
       toast.success(response.message || 'Kata sandi berhasil diperbarui')
       resetForm()
+      if (fetchProfile) await fetchProfile()
     }
   }  finally {
     loading.value = false

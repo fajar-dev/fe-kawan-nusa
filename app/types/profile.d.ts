@@ -5,13 +5,12 @@ export interface ProfileResponse extends ApiResponse<User> {}
 export interface UpdateAccountRequest {
   firstName: string;
   lastName: string;
-  email: string;
-  password?: string;
-  phone: string;
-  company: string;
-  jobPosition: string;
-  taxNumber: string;
-  identityNumber: number | null;
+  email?: string;
+  phone?: string;
+  company?: string;
+  jobPosition?: string;
+  taxNumber?: string;
+  identityNumber?: number | null;
 }
 export interface UpdateBankRequest {
   accountHolderName: string;
@@ -19,7 +18,7 @@ export interface UpdateBankRequest {
   accountNumber: string;
 }
 export interface UpdatePasswordRequest {
-  oldPassword: string;
+  oldPassword?: string;
   newPassword: string;
 }
 
