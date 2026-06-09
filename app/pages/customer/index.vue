@@ -100,7 +100,10 @@
               <td v-show="isColumnVisible('name')" class="border-r border-base-200 max-w-[150px] truncate" :title="item.name">{{ item.name }}</td>
               <td v-show="isColumnVisible('company')" class="border-r border-base-200 max-w-[150px] truncate" :title="item.company">{{ item.company || '-' }}</td>
               <td v-show="isColumnVisible('isActive')" class="border-r border-base-200 text-center">
-                <div class="badge bg-accent border-none text-primary font-semibold text-xs w-full rounded-lg">
+                <div 
+                  class="badge border-none font-semibold text-xs w-full rounded-lg"
+                  :class="item.isActive ? 'bg-primary/10 text-primary' : 'bg-red-500/10 text-red-500'"
+                >
                   {{ item.isActive ? 'Aktif' : 'Tidak Aktif' }}
                 </div>
               </td>

@@ -243,7 +243,7 @@
                         <span v-if="item.endDate"> - {{ formatDate(item.endDate) }}</span>
                       </td>
                       <td v-show="isColumnVisible('address')" class="border-r border-base-200 text-neutral-500 max-w-[250px] truncate whitespace-nowrap" :title="item.address ?? '-' ">{{ item.address ?? '-' }}</td>
-                      <td v-show="isColumnVisible('status')" class="text-center max-w-[80px]">
+                      <td v-show="isColumnVisible('status')" class="text-center min-w-[140px]">
                         <div :class="['badge border-none font-semibold text-xs rounded-lg w-full', getStatusClass(item.status)]">
                           {{ item.status }}
                         </div>
