@@ -93,7 +93,9 @@
               <input 
                 v-model="form.phone"
                 :disabled="!isEditing"
-                type="text" 
+                type="text"
+                inputmode="numeric"
+                @input="form.phone = ($event.target as HTMLInputElement).value.replace(/\D/g, '')"
                 class="input input-bordered w-full h-10 pl-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
                 :class="{ 'border-red-500': errors.phone }"
               />
@@ -108,7 +110,9 @@
             <input 
               v-model="form.identityNumber"
               :disabled="!isEditing"
-              type="text" 
+              type="text"
+              inputmode="numeric"
+              @input="form.identityNumber = Number(($event.target as HTMLInputElement).value.replace(/\D/g, '')) || null"
               placeholder="Masukkan 16 digit NIK"
               class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
               :class="{ 'border-red-500': errors.identityNumber }"
