@@ -1,6 +1,38 @@
-import type { User, ApiResponse } from "./auth"
+export interface ProfileBankDetails {
+  holderName: string | null;
+  name: string | null;
+  number: string | null;
+}
 
-export interface ProfileResponse extends ApiResponse<User> {}
+export interface ProfileSettings {
+  isSubscribe: boolean;
+  isAutoWithdraw: boolean;
+}
+
+export interface Profile {
+  id: number;
+  firstName: string;
+  lastName: string;
+  photo: string | null;
+  email: string | null;
+  phone: string | null;
+  company: string | null;
+  jobPosition: string | null;
+  taxNumber: string | null;
+  identityNumber: number | null;
+  bankDetails: ProfileBankDetails;
+  settings: ProfileSettings;
+  isActive: boolean;
+  createdAt: string;
+  passwordUpdatedAt: string | null;
+}
+
+export interface ProfileResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: Profile;
+}
 
 export interface UpdateAccountRequest {
   firstName: string;

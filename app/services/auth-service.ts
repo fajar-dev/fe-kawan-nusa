@@ -1,14 +1,14 @@
 import axios from "axios"
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
-import type { AuthResponse, User, ApiResponse } from "../types/auth"
+import type { AuthResponse, AuthUser, ApiResponse } from "../types/auth"
 
 export class AuthService {
     private readonly ACCESS_TOKEN_KEY = 'accessToken'
     private readonly REFRESH_TOKEN_KEY = 'refreshToken'
     private readonly USER_KEY = 'user'
 
-    public user = ref<User | null>(null)
+    public user = ref<AuthUser | null>(null)
     public token = ref<string | null>(null)
 
     constructor() {
@@ -40,7 +40,7 @@ export class AuthService {
         if (!accessToken) return
 
         try {
-            const response = await apiService.client.get<{ success: boolean, data: User }>('/auth/me', {
+            const response = await apiService.client.get<{ success: boolean, data: AuthUser }>('/auth/me', {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -49,6 +49,24 @@ export class AuthService {
             localStorage.setItem(this.USER_KEY, JSON.stringify(this.user.value))
         } catch (error) {
             // Validation failed, let interceptor handle it
+        }
+    }
+
+    async refreshUser() {
+        if (typeof window === 'undefined') return
+        const accessToken = this.token.value
+        if (!accessToken) return
+
+        try {
+            const response = await apiService.client.get<{ success: boolean, data: AuthUser }>('/auth/me', {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+            this.user.value = response.data.data
+            localStorage.setItem(this.USER_KEY, JSON.stringify(this.user.value))
+        } catch (error) {
+            // silently fail
         }
     }
 
@@ -85,6 +103,16 @@ export class AuthService {
     async google(code: string): Promise<AuthResponse> {
         try {
             const response = await apiService.client.post<AuthResponse>('/auth/google', { code })
+            this.setSession(response.data)
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error)
+        }
+    }
+
+    async adminGoogle(code: string): Promise<AuthResponse> {
+        try {
+            const response = await apiService.client.post<AuthResponse>('/auth/admin/google', { code })
             this.setSession(response.data)
             return response.data
         } catch (error: any) {

@@ -76,11 +76,11 @@
 <script setup lang="ts">
 import { X, Camera, Upload } from 'lucide-vue-next'
 import { profileService } from '~/services/profile-service'
-import type { User } from '~/types/auth'
+import type { Profile } from '~/types/profile'
 
 const isOpen = defineModel<boolean>({ default: false })
 const props = defineProps<{
-  profile: User | null
+  profile: Profile | null
 }>()
 
 const emit = defineEmits(['success'])

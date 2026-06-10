@@ -8,6 +8,9 @@ export const useAuth = () => {
       },
       get user() {
         return authService.user.value
+      },
+      get role() {
+        return authService.user.value?.role ?? null
       }
     },
     service: authService

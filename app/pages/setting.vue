@@ -144,7 +144,7 @@
 <script setup lang="ts">
 import { Pencil, User2, Warehouse, LockKeyhole, Mail, DollarSign } from 'lucide-vue-next'
 import { profileService } from '~/services/profile-service'
-import type { User } from '~/types/auth'
+import type { Profile } from '~/types/profile'
 import type { UpdatePreferenceRequest } from '~/types/profile'
 
 const toast = useToast()
@@ -157,8 +157,9 @@ useSeoMeta({
   title: 'Kawan Nusa | Pengaturan',
 })
 
+
 const { service: authService } = useAuth()
-const profile = ref<User | null>(null)
+const profile = ref<Profile | null>(null)
 const loading = ref(true)
 const isPhotoModalOpen = ref(false)
 
@@ -167,11 +168,8 @@ const fetchProfile = async () => {
         const response = await profileService.getProfile()
         if (response.success) {
             profile.value = response.data
-            // Update global auth state
-            authService.user.value = response.data
-            if (typeof window !== 'undefined') {
-                localStorage.setItem('user', JSON.stringify(response.data))
-            }
+            // Sync auth user (name, photo) via /me
+            await authService.refreshUser()
         }
     } finally {
         loading.value = false

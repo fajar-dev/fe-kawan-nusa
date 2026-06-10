@@ -46,13 +46,13 @@
             <div class="w-8 h-8 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 transition-all group-hover:ring-primary/80">
               <img v-if="authState.user?.photo" :src="`${useRuntimeConfig().public.apiUrl}${authState.user?.photo}`" alt="Avatar" />
               <div v-else class="bg-primary text-white flex items-center justify-center font-bold text-xs h-full w-full uppercase">
-                {{ getInitials(authState.user?.firstName + ' ' + authState.user?.lastName) }}
+                {{ getInitials(authState.user?.name || '') }}
               </div>
             </div>
           </div>
           <div class="hidden lg:block text-right">
-            <p class="text-sm font-medium leading-none text-primary max-w-30 truncate" :title="authState.user?.firstName + ' ' + authState.user?.lastName">
-                {{ authState.user?.firstName }} {{ authState.user?.lastName }}
+            <p class="text-sm font-medium leading-none text-primary max-w-30 truncate" :title="authState.user?.name">
+                {{ authState.user?.name }}
             </p>
           </div>
         </div>

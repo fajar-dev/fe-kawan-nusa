@@ -176,7 +176,7 @@
 import { MoreHorizontal, Mail, Phone, Pencil, Copy } from 'lucide-vue-next'
 import { profileService } from '~/services/profile-service'
 import type { UpdateAccountRequest } from '~/types/profile'
-import type { User } from '~/types/auth'
+import type { Profile } from '~/types/profile'
 import { z } from 'zod'
 
 const toast = useToast()
@@ -184,7 +184,7 @@ const loading = ref(false)
 const isEditing = ref(false)
 const errors = ref<Record<string, string>>({})
 
-const profile = inject<Ref<User | null>>('profile')
+const profile = inject<Ref<Profile | null>>('profile')
 const fetchProfile = inject<() => Promise<void>>('fetchProfile')
 
 const accountSchema = z.object({

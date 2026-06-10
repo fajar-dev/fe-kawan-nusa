@@ -54,7 +54,7 @@ const toast = useToast()
 const handleOnSuccess = async (response: { code: string }) => {
   googleLoading.value = true
   try {
-    await authService.google(response.code);
+    await authService.adminGoogle(response.code);
     toast.success('Login berhasil! Selamat datang.')
     navigateTo('/')
   } finally {
