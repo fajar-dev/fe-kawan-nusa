@@ -1,94 +1,56 @@
 <template>
   <aside class="menu bg-base-100 h-full w-64 p-2 text-base-content flex flex-col justify-between border-r border-base-300">
     <div>
-
       <ul class="menu w-full gap-1.5 lg:mt-3 mt-18">
-        <li>
-          <NuxtLink 
-            to="/" 
-            class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
-            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': $route.path === '/' }"
-          >
-            <Home class="w-5 h-5" :class="{ 'text-white': $route.path === '/' }" />
-            Beranda
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink 
-            to="/customer" 
-            class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
-            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': $route.path.startsWith('/customer') }"
-          >
-            <Users class="w-5 h-5" :class="{ 'text-white': $route.path.startsWith('/customer') }" />
-            Customer Saya
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink 
-            to="/service" 
-            class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
-            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': $route.path.startsWith('/service') }"
-          >
-            <Package class="w-5 h-5" :class="{ 'text-white': $route.path.startsWith('/service') }" />
-            Produk dan Layanan
-          </NuxtLink>
-        </li>
-        <li>
-          <details :open="$route.path.startsWith('/point')">
+        <li v-for="item in topNav" :key="item.to">
+          <!-- With children (expandable) -->
+          <details v-if="item.children" :open="$route.path.startsWith(item.match)">
             <summary 
               class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors cursor-pointer list-none flex items-center gap-2"
-              :class="{ 'text-primary bg-primary/10': $route.path.startsWith('/point') }"
+              :class="{ 'text-primary bg-primary/10': isActive(item, $route.path) }"
             >
-              <Coins class="w-5 h-5" :class="{ 'text-primary': $route.path.startsWith('/point') }" />
+              <component :is="item.icon" class="w-5 h-5" :class="{ 'text-primary': isActive(item, $route.path) }" />
               <div class="flex items-center w-40">
-                <span>Poin Saya</span>
+                <span>{{ item.label }}</span>
               </div>
             </summary>
             <ul class="mt-1 gap-1.5 ml-4">
-              <li>
+              <li v-for="child in item.children" :key="child.to">
                 <NuxtLink 
-                  to="/point/activity/reward" 
+                  :to="child.to" 
                   class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2 font-medium transition-all"
-                  :class="{ 'text-primary active': $route.path.startsWith('/point/activity') }"
+                  :class="{ 'text-primary active': isActive(child, $route.path) }"
                 >
-                  Aktivitas Poin
-                </NuxtLink>
-              </li>
-              <li>
-                <NuxtLink 
-                  to="/point/reedem" 
-                  class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2 font-medium transition-all"
-                  :class="{ 'text-primary active': $route.path.startsWith('/point/reedem') }"
-                >
-                  Tukar Poin
+                  {{ child.label }}
                 </NuxtLink>
               </li>
             </ul>
           </details>
+
+          <!-- Simple link -->
+          <NuxtLink 
+            v-else
+            :to="item.to" 
+            class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
+            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': isActive(item, $route.path) }"
+          >
+            <component :is="item.icon" class="w-5 h-5" :class="{ 'text-white': isActive(item, $route.path) }" />
+            {{ item.label }}
+          </NuxtLink>
         </li>
       </ul>
     </div>
     
     <div class="mt-auto">
       <ul class="menu w-full gap-1">
-        <li>
+        <li v-for="item in bottomNav" :key="item.to">
           <NuxtLink 
-            to="/education" 
+            :to="item.to" 
             class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
-            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': $route.path.startsWith('/education') }"
+            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': isActive(item, $route.path) }"
           >
-            <BookOpen class="w-5 h-5" :class="{ 'text-white': $route.path.startsWith('/education') }" />
-            Edukasi
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink 
-            to="/setting" 
-            class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
-            :class="{ 'bg-primary text-primary-content active hover:bg-primary/90': $route.path.startsWith('/setting') }"
-          >
-            <Settings class="w-5 h-5" :class="{ 'text-white': $route.path.startsWith('/setting') }" />
-            Pengaturan
+            <component :is="item.icon" class="w-5 h-5" :class="{ 'text-white': isActive(item, $route.path) }" />
+            {{ item.label }}
           </NuxtLink>
         </li>
       </ul>
@@ -100,5 +62,5 @@
 </template>
 
 <script setup lang="ts">
-import { Home, Users, Package, Coins, BookOpen, Settings, History, ArrowRightLeft } from 'lucide-vue-next'
+const { topNav, bottomNav, isActive } = useNavigation()
 </script>

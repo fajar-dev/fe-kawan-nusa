@@ -5,7 +5,17 @@ export default defineNuxtRouteMiddleware((to) => {
     
     const publicPaths = ['/auth/sign-in', '/auth/forgot-password', '/auth/reset-password', '/auth/admin']
     
-    if (!state.token && !publicPaths.includes(to.path)) {
+    // Allow public pages
+    if (publicPaths.includes(to.path)) return
+
+    // Require authentication
+    if (!state.token) {
       return navigateTo('/auth/sign-in')
+    }
+
+    // Enforce role-based access (set via definePageMeta({ role: 'user' }))
+    const requiredRole = to.meta.role as string | undefined
+    if (requiredRole && state.role !== requiredRole) {
+      return navigateTo('/')
     }
 })

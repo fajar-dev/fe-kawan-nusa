@@ -11,6 +11,15 @@ export const useAuth = () => {
       },
       get role() {
         return authService.user.value?.role ?? null
+      },
+      get isUser() {
+        return authService.user.value?.role === 'user'
+      },
+      get isAdmin() {
+        return authService.user.value?.role === 'admin'
+      },
+      hasRole(role: 'user' | 'admin') {
+        return authService.user.value?.role === role
       }
     },
     service: authService
