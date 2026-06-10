@@ -74,7 +74,7 @@
                     </div>
                   </div>
                   <div class="min-w-0">
-                    <p class="font-medium text-neutral-800 truncate max-w-[180px]" :title="item.name">{{ item.name }}</p>
+                    <NuxtLink :to="`/user/${item.id}`" class="font-medium text-primary hover:underline truncate max-w-[180px] block" :title="item.name">{{ item.name }}</NuxtLink>
                     <p class="text-xs text-neutral-400 truncate max-w-[180px]" :title="item.email">{{ item.email }}</p>
                   </div>
                 </div>
