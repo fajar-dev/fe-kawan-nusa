@@ -27,7 +27,7 @@
         >
           <div>
             <div class="flex items-center justify-between mb-1">
-              <span class="text-neutral-400 text-xs font-medium">Rentang Tanggal</span>
+              <span class="text-neutral-400 text-xs font-medium">Tanggal</span>
               <span @click="startDate = ''; endDate = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -46,11 +46,21 @@
       <template #body="{ isColumnVisible }">
         <tbody class="text-xs text-neutral-600">
           <tr v-for="(item, index) in customerServices" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
+            <td v-show="isColumnVisible('accountName')" class="border-r border-base-200 text-neutral-500 max-w-[150px] truncate" :title="item.accountName || '-'">
+              {{ item.accountName || '-' }}
+            </td>
+            <td v-show="isColumnVisible('customer')" class="border-r border-base-200 max-w-[200px]">
+              <div class="min-w-0 py-1">
+                <NuxtLink :to="`/customer/${item.customer?.id}`" class="font-medium text-primary hover:underline block truncate" :title="item.customer?.name || '-'">
+                  {{ item.customer?.name || '-' }}
+                </NuxtLink>
+                <p class="text-xs text-neutral-400 truncate" :title="`${item.customer?.id || ''} · ${item.customer?.company || ''}`">
+                  {{ item.customer?.id || '-' }} <span v-if="item.customer?.company">· {{ item.customer.company }}</span>
+                </p>
+              </div>
+            </td>
             <td v-show="isColumnVisible('service.name')" class="border-r border-base-200 text-primary max-w-[250px] truncate" :title="item.service.name">
               <NuxtLink :to="`/service/${item.service.code}`" class="hover:underline">{{ item.service.name }}</NuxtLink>
-            </td>
-            <td v-show="isColumnVisible('customer')" class="border-r border-base-200 text-primary/80 font-medium" :title="item.customer?.id">
-              <NuxtLink :to="`/customer/${item.customer?.id}`" class="hover:underline">{{ item.customer?.id }}</NuxtLink>
             </td>
             <td v-show="isColumnVisible('registrationDate')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDateShort(item.registrationDate) }}</td>
             <td v-show="isColumnVisible('period')" class="border-r border-base-200 text-neutral-500 min-w-[200px] whitespace-nowrap">
@@ -124,8 +134,9 @@ const serviceMeta = computed(() => serviceResponse.value?.meta)
 const serviceLoading = computed(() => serviceStatus.value === 'pending')
 
 const serviceColumns = [
+  { label: 'Account Name', key: 'accountName', sortable: true },
+  { label: 'Pelanggan', key: 'customer', sortable: true },
   { label: 'Nama Layanan', key: 'service.name', sortable: true },
-  { label: 'ID Pelanggan', key: 'customer', sortable: true },
   { label: 'Tanggal Registrasi', key: 'registrationDate', sortable: true },
   { label: 'Periode Berlangganan', key: 'period', sortable: false },
   { label: 'Status', key: 'status', sortable: true },

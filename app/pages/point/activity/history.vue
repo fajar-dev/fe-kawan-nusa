@@ -26,10 +26,10 @@
           @cancel="cancelFilters"
         >
           <div class="space-y-4">
-            <!-- Rentang Tanggal -->
+            <!-- Tanggal -->
             <div>
               <div class="flex items-center justify-between mb-1.5">
-                <span class="text-neutral-400 text-xs font-medium">Rentang Tanggal</span>
+                <span class="text-neutral-400 text-xs font-medium">Tanggal</span>
                 <span @click="tempStartDate = ''; tempEndDate = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">

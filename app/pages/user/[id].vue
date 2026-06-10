@@ -127,7 +127,7 @@
               <div class="mb-6">
                 <span class="text-xs text-neutral-500 font-medium">Poin Aktif</span>
                 <div class="flex items-center gap-2 mt-1">
-                  <span class="text-neutral-800 font-medium text-5xl">{{ totalPoints.toLocaleString('id-ID') }}</span>
+                  <span class="text-neutral-800 font-medium text-4xl">{{ totalPoints.toLocaleString('id-ID') }}</span>
                   <div class="tooltip tooltip-bottom tooltip-neutral" data-tip="Jumlah poin komisi yang tersisa saat ini.">
                     <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
                   </div>
@@ -164,30 +164,27 @@
           </div>
 
           <!-- Tabs -->
-          <div class="flex items-center gap-8 border-b border-base-200">
+          <div class="flex border-b border-base-200 w-full mb-4">
             <NuxtLink 
               :to="`/user/${userId}/services`"
-              class="pb-3 font-medium transition-all relative"
-              :class="[ $route.path.includes('/services') ? 'text-primary' : 'text-neutral-500 hover:text-neutral-800' ]"
+              class="px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs"
+              :class="[ $route.path.includes('/services') ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600' ]"
             >
               Layanan Terdaftar
-              <div v-if="$route.path.includes('/services')" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary rounded-full"></div>
             </NuxtLink>
             <NuxtLink 
               :to="`/user/${userId}/reward`"
-              class="pb-3 font-medium transition-all relative"
-              :class="[ $route.path.includes('/reward') ? 'text-primary' : 'text-neutral-500 hover:text-neutral-800' ]"
+              class="px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs"
+              :class="[ $route.path.includes('/reward') ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600' ]"
             >
               Poin Masuk
-              <div v-if="$route.path.includes('/reward')" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary rounded-full"></div>
             </NuxtLink>
             <NuxtLink 
               :to="`/user/${userId}/redeem`"
-              class="pb-3 font-medium transition-all relative"
-              :class="[ $route.path.includes('/redeem') ? 'text-primary' : 'text-neutral-500 hover:text-neutral-800' ]"
+              class="px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs"
+              :class="[ $route.path.includes('/redeem') ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600' ]"
             >
               Poin Keluar
-              <div v-if="$route.path.includes('/redeem')" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary rounded-full"></div>
             </NuxtLink>
           </div>
 

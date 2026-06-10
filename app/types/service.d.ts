@@ -51,6 +51,7 @@ export interface ServiceQueryParams {
 
 export interface ServiceCustomer {
   id: number
+  accountName: string | null
   customer: {
     id: string
     name: string
