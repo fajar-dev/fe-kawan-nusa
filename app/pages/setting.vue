@@ -16,7 +16,7 @@
             <!-- Avatar -->
             <div class="relative inline-block mx-auto lg:mx-0">
               <div class="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-[4px] lg:border-[6px] border-white shadow-lg overflow-hidden bg-base-100">
-                <img v-if="profile?.photo" :src="`${useRuntimeConfig().public.apiUrl}${profile?.photo}`" alt="Avatar" class="w-full h-full object-cover" />
+                <img v-if="profile?.photo" :src="`${profile?.photo}`" alt="Avatar" class="w-full h-full object-cover" />
                 <div v-else class="bg-primary text-white flex items-center justify-center font-bold text-5xl h-full w-full uppercase">
                   {{ profile?.firstName?.[0] }}{{ profile?.lastName?.[0] }}
                 </div>

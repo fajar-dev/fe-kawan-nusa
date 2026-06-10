@@ -20,7 +20,7 @@
           <div class="">
             <div class="flex items-center gap-6">
               <div class="w-24 h-24 lg:w-28 lg:h-28 rounded-full border border-base-300 shadow-sm overflow-hidden bg-base-100 shrink-0">
-                <img v-if="previewUrl || profile?.photo" :src="previewUrl ? previewUrl : `${useRuntimeConfig().public.apiUrl}${profile?.photo}`" alt="Avatar" class="w-full h-full object-cover" />
+                <img v-if="previewUrl || profile?.photo" :src="previewUrl ? previewUrl : `${profile?.photo}`" alt="Avatar" class="w-full h-full object-cover" />
                 <div v-else class="bg-primary text-white flex items-center justify-center font-bold text-4xl h-full w-full uppercase">
                   {{ profile?.firstName?.[0] }}{{ profile?.lastName?.[0] }}
                 </div>
