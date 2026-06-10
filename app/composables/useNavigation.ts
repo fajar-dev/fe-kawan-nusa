@@ -1,4 +1,4 @@
-import { Home, Users, Package, Coins, BookOpen, Settings } from 'lucide-vue-next'
+import { Home, Users, UsersRound, Package, Coins, BookOpen, Settings } from 'lucide-vue-next'
 import type { Component } from 'vue'
 
 export interface NavChild {
@@ -26,6 +26,14 @@ const navItems: NavItem[] = [
     icon: Home,
     match: '/',
     exact: true,
+    position: 'top',
+  },
+  {
+    label: 'Pengguna',
+    to: '/user',
+    icon: UsersRound,
+    match: '/user',
+    role: 'admin',
     position: 'top',
   },
   {
