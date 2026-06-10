@@ -111,8 +111,8 @@
                 <template #body="{ isColumnVisible }">
                   <tbody class="text-xs text-neutral-600 border-x border-base-200">
                     <tr v-for="(item, index) in customers" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0 font-medium font-sans">
-                      <td v-show="isColumnVisible('customerId')" class="border-r border-base-200 text-primary font-semibold">
-                        <NuxtLink :to="`/customer/${item.customerId}`" class="hover:underline">{{ item.customerId }}</NuxtLink>
+                      <td v-show="isColumnVisible('customer')" class="border-r border-base-200 text-primary font-semibold">
+                        <NuxtLink :to="`/customer/${item.customer.id}`" class="hover:underline">{{ item.customer.id }}</NuxtLink>
                       </td>
                       <td v-show="isColumnVisible('registrationDate')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDateShort(item.registrationDate) }}</td>
                       <td v-show="isColumnVisible('referenceDate')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ formatDate(item.referenceDate) }}</td>
@@ -189,7 +189,7 @@ const customerMeta = computed(() => customerResponse.value?.meta)
 const customerLoading = computed(() => customerStatus.value === 'pending')
 
 const columns = [
-  { label: 'ID Pelanggan', key: 'customerId', sortable: true },
+  { label: 'ID Pelanggan', key: 'customer', sortable: true },
   { label: 'Tanggal Registrasi', key: 'registrationDate', sortable: true },
   { label: 'Referensi Terakhir', key: 'referenceDate', sortable: true },
   { label: 'Periode Berlangganan', key: 'period', sortable: false },

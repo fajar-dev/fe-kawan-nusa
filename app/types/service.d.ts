@@ -51,8 +51,11 @@ export interface ServiceQueryParams {
 
 export interface ServiceCustomer {
   id: number
-  customerId: string
-  serviceCode: string
+  customer: {
+    id: string
+    name: string
+    company: string | null
+  }
   registrationDate: string
   activationDate: string
   startDate: string
