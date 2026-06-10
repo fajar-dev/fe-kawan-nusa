@@ -113,6 +113,46 @@
             </div>
           </div>
         </div>
+
+        <!-- Statistik & Poin -->
+        <div class="lg:col-span-7 h-full">
+          <div class="card bg-white border border-base-200 h-full">
+            <div class="card-body p-6">
+              <div class="flex items-center gap-3 border-b border-base-300 pb-3 mb-4">
+                <Coins class="w-5 h-5 text-neutral-800 shrink-0" />
+                <h3 class="font-semibold text-neutral-800">Statistik Poin</h3>
+              </div>
+
+              <!-- Poin Aktif Display (Di atas chart) -->
+              <div class="mb-6">
+                <span class="text-xs text-neutral-500 font-medium">Poin Aktif</span>
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-neutral-800 font-medium text-5xl">{{ totalPoints.toLocaleString('id-ID') }}</span>
+                  <div class="tooltip tooltip-bottom tooltip-neutral" data-tip="Jumlah poin komisi yang tersisa saat ini.">
+                    <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chart -->
+              <AreaChart
+                v-if="AreaChartData.length > 0"
+                :data="AreaChartData"
+                :height="220"
+                :categories="categories"
+                :y-num-ticks="5"
+                :x-num-ticks="AreaChartData.length"
+                :y-grid-line="true"
+                :hide-legend="true"
+                :x-formatter="xFormatter"
+                :curve-type="CurveType.Linear"
+              />
+              <div v-else class="h-[220px] flex items-center justify-center text-neutral-400 text-sm">
+                Tidak ada data statistik
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Bottom Card: Detail Transaksi -->
@@ -162,7 +202,7 @@
 <script setup lang="ts">
 import { 
   CircleHelp, Calendar, UserRound as UserIcon, Mail, Phone, Hash, 
-  FileText, Building2, Briefcase, Landmark, ReceiptText
+  FileText, Building2, Briefcase, Landmark, ReceiptText, Coins
 } from 'lucide-vue-next'
 import { userService } from '~/services/user-service'
 import { getInitials } from '~/utils/initials'
@@ -185,4 +225,28 @@ const { data: userResponse } = useAsyncData(
   () => userService.getUserById(userId)
 )
 const user = computed(() => userResponse.value?.data)
+
+// Fetch User Statistic
+const { data: statisticResponse } = useAsyncData(
+  `user-statistic-${userId}`,
+  () => userService.getUserStatistic(userId)
+)
+const statistic = computed(() => statisticResponse.value?.data)
+
+const totalPoints = computed(() => statistic.value?.count?.point?.value || 0)
+
+const AreaChartData = computed(() => {
+  return (statistic.value?.pointPerMonth || []).map(item => ({
+    month: item.label,
+    growth: item.total
+  }))
+})
+
+const categories = {
+  growth: { name: 'Point', color: '#24960F' }
+}
+
+const xFormatter = (tick: number): string => {
+  return AreaChartData.value[tick]?.month || ''
+}
 </script>

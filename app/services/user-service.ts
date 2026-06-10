@@ -1,6 +1,6 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
-import type { UserListResponse, UserQueryParams, UserProfile, UserServiceQueryParams } from "../types/user"
+import type { UserListResponse, UserQueryParams, UserProfile, UserServiceQueryParams, UserStatisticResponse } from "../types/user"
 import type { ApiResponse } from "../types/auth"
 import type { ServiceCustomerResponse } from "../types/service"
 import type { CustomerRewardResponse, RewardQueryParams } from "../types/reward"
@@ -75,6 +75,20 @@ export class UserService {
             return handleServiceError(error || 'Failed to fetch user redemptions')
         }
     }
+
+    async getUserStatistic(id: string): Promise<UserStatisticResponse> {
+        try {
+            const response = await apiService.client.get<UserStatisticResponse>(`/user/${id}/statistic`, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch user statistic')
+        }
+    }
 }
 
 export const userService = new UserService()
+
