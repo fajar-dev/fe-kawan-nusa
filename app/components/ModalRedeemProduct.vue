@@ -69,7 +69,7 @@
               :class="{ 'textarea-error': error }"
             ></textarea>
             <p v-if="error" class="text-error text-xs mt-1">{{ error }}</p>
-            <p class="text-[11px] text-neutral-400 mt-2 leading-relaxed italic">
+            <p class="text-xs text-neutral-400 mt-2 leading-relaxed italic">
               Cth: Jl. Melati Indah No.25, Kel. Sukamaju, Kec. Medan Johor, Kota Medan, Sumatera Utara 20143, RT 003 RW 005
             </p>
           </div>
