@@ -58,22 +58,20 @@
 
       <div class="flex flex-col gap-6 w-full pt-10">
         <!-- Tabs Section -->
-        <div class="flex items-center gap-8 border-b border-base-200">
+        <div class="flex border-b border-base-200 w-full mb-6">
           <NuxtLink 
             to="/point/activity/reward"
-            class="pb-3 font-medium transition-all relative"
-            :class="[ $route.path === '/point/activity/reward' ? 'text-primary' : 'text-neutral-500 hover:text-neutral-800' ]"
+            class="px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs"
+            :class="[ $route.path === '/point/activity/reward' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600' ]"
           >
             Poin Masuk
-            <div v-if="$route.path === '/point/activity/reward'" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary rounded-full"></div>
           </NuxtLink>
           <NuxtLink 
             to="/point/activity/history"
-            class="pb-3 font-medium transition-all relative"
-            :class="[ $route.path === '/point/activity/history' ? 'text-primary' : 'text-neutral-500 hover:text-neutral-800' ]"
+            class="px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs"
+            :class="[ $route.path === '/point/activity/history' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600' ]"
           >
             Poin Keluar
-            <div v-if="$route.path === '/point/activity/history'" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary rounded-full"></div>
           </NuxtLink>
         </div>
 

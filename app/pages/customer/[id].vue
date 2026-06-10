@@ -25,7 +25,7 @@
                 </div>
               </div>
             </div>
-            <div class="text-xs text-neutral-400 font-medium mt-1 lg:mt-1.5">
+            <div class="text-xs text-neutral-400 font-medium mt-1 lg:mt-0">
               <NuxtLink to="/" class="text-primary hover:underline">Beranda</NuxtLink> / 
               <NuxtLink to="/customer" class="text-primary hover:underline">Customer Saya</NuxtLink> / 
               <span class="text-neutral-500">{{ customer?.id }}</span>
@@ -131,21 +131,19 @@
           </div>
 
           <!-- Tabs -->
-          <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex border-b border-base-200 w-full md:w-auto">
-              <button 
-                @click="activeTab = 'layanan'"
-                :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'layanan' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
-              >
-                Layanan Terdaftar
-              </button>
-              <button 
-                @click="activeTab = 'poin'"
-                :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'poin' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
-              >
-                Pendapatan Poin
-              </button>
-            </div>
+          <div class="flex border-b border-base-200 w-full mb-6">
+            <button 
+              @click="activeTab = 'layanan'"
+              :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'layanan' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
+            >
+              Layanan Terdaftar
+            </button>
+            <button 
+              @click="activeTab = 'poin'"
+              :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'poin' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
+            >
+              Pendapatan Poin
+            </button>
           </div>
 
           <!-- Services Table -->

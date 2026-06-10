@@ -29,7 +29,7 @@
                 </div>
               </div>
             </div>
-            <div class="text-xs text-neutral-400 font-medium mt-1 lg:mt-1.5">
+            <div class="text-xs text-neutral-400 font-medium mt-1 lg:mt-0">
               <NuxtLink to="/" class="text-primary hover:underline">Beranda</NuxtLink> / 
               <NuxtLink to="/user" class="text-primary hover:underline">Pengguna</NuxtLink> / 
               <span class="text-neutral-500">{{ userId }}</span>
@@ -164,7 +164,7 @@
           </div>
 
           <!-- Tabs -->
-          <div class="flex border-b border-base-200 w-full mb-4">
+          <div class="flex border-b border-base-200 w-full mb-6">
             <NuxtLink 
               :to="`/user/${userId}/services`"
               class="px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs"
