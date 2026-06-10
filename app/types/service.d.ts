@@ -59,7 +59,11 @@ export interface ServiceCustomer {
   endDate: string | null
   status: string
   referenceDate: string
-  salesName: string
+  sales: {
+    id: number
+    name: string
+    employeeId: string
+  } | null
   service: {
     code: string
     name: string

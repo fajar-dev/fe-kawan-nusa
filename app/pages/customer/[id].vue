@@ -48,7 +48,7 @@
               </div>
             </div>
             <div class="card-body p-6 pt-0 flex flex-col gap-5 ps-8">
-              <div v-if="customer" class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-5">
+              <div v-if="customer" class="grid grid-cols-1 md:grid-cpeols-2 gap-x-12 gap-y-5">
                 <!-- Row 1 -->
                 <div class="flex items-start gap-4">
                   <Calendar class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
@@ -248,7 +248,7 @@
                           {{ item.status }}
                         </div>
                       </td>
-                      <td v-show="isColumnVisible('salesName')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ item.salesName }}</td>
+                      <td v-show="isColumnVisible('sales.name')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">{{ item.sales?.name ?? '-' }}</td>
                     </tr>
                   </tbody>
                 </template>
@@ -496,7 +496,7 @@ const serviceColumns = [
   { label: 'Periode Berlangganan', key: 'period', sortable: false },
   { label: 'Alamat Pemasangan', key: 'address', sortable: false },
   { label: 'Status', key: 'status', sortable: true },
-  { label: 'Nama AM', key: 'salesName', sortable: true }
+  { label: 'Nama AM', key: 'sales.name', sortable: true }
 ]
 
 const pointColumns = [

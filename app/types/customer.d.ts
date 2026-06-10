@@ -71,7 +71,11 @@ export interface CustomerRegisteredService {
   endDate: string | null
   status: string
   referenceDate: string
-  salesName: string | null
+  sales: {
+    id: number
+    name: string
+    employeeId: string
+  } | null
   address: string | null
   service: {
     code: string

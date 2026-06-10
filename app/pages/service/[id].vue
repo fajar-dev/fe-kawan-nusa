@@ -125,7 +125,7 @@
                           {{ item.status }}
                         </div>
                       </td>
-                      <td v-show="isColumnVisible('salesName')" class="ps-4 max-w-[200px] truncate" :title="item.salesName">{{ item.salesName }}</td>
+                      <td v-show="isColumnVisible('sales.name')" class="ps-4 max-w-[200px] truncate" :title="item.sales?.name">{{ item.sales?.name }}</td>
                     </tr>
                   </tbody>
                 </template>
@@ -194,7 +194,7 @@ const columns = [
   { label: 'Referensi Terakhir', key: 'referenceDate', sortable: true },
   { label: 'Periode Berlangganan', key: 'period', sortable: false },
   { label: 'Status', key: 'status', sortable: true },
-  { label: 'Nama AM', key: 'salesName', sortable: true }
+  { label: 'Nama AM', key: 'sales.name', sortable: true }
 ]
 
 </script>
