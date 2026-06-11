@@ -45,6 +45,7 @@
       <AppNotificationPopover />
       
       <div class="dropdown dropdown-end">
+        
         <div tabindex="0" role="button" class="flex items-center gap-3 cursor-pointer hover:bg-base-200/50 p-2 rounded-full pl-3 lg:pl-4 pr-3 transition-colors">
           <div class="avatar online">
             <div class="w-8 h-8 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 transition-all group-hover:ring-primary/80">
@@ -61,7 +62,7 @@
           </div>
         </div>
         <ul tabindex="0" class="dropdown-content z-[200] menu p-2 shadow-xl bg-base-100 rounded-box w-56 mt-4 border border-base-200 animate-in fade-in slide-in-from-top-2 duration-200">
-          <li>
+          <li v-if="!authState.isAdmin">
             <NuxtLink to="/setting/account" class="flex items-center gap-3 py-2.5 text-neutral-600 hover:text-primary transition-colors">
               <Settings class="w-4 h-4" />
               <span class="font-medium text-sm">Pengaturan</span>
