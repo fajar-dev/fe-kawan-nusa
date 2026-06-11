@@ -25,7 +25,7 @@
     </div>
 
     <!-- Form Area -->
-    <form v-else @submit.prevent="handleSubmit" class="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full mt-4">
+    <form v-else @submit.prevent="handleSubmit" class="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full">
       <!-- Left Column (Title & Content) -->
       <div class="lg:col-span-2 space-y-6">
         <div class="card bg-white border border-base-200 shadow-xs p-6 rounded-xl space-y-4">
@@ -163,6 +163,7 @@ const submitting = ref(false)
 const form = ref({
   title: '',
   content: '',
+
   categoryId: '' as string | number
 })
 
@@ -177,6 +178,7 @@ const articleSchema = z.object({
   title: z.string().trim().min(1, 'Judul artikel tidak boleh kosong'),
   categoryId: z.union([z.number(), z.string()]).refine(val => !!val, { message: 'Kategori artikel wajib dipilih' }),
   content: z.string().trim().min(1, 'Konten artikel tidak boleh kosong').refine(val => val !== '<p><br></p>', { message: 'Konten artikel tidak boleh kosong' }),
+
 })
 
 const fetchCategories = async () => {
@@ -198,6 +200,7 @@ const fetchArticleDetail = async () => {
       form.value = {
         title: res.data.title,
         content: res.data.content,
+
         categoryId: res.data.categoryId
       }
       previewUrl.value = res.data.image
@@ -287,6 +290,7 @@ const handleSubmit = async () => {
     title: form.value.title,
     categoryId: form.value.categoryId,
     content: form.value.content,
+
   })
 
   if (!result.success) {
@@ -302,6 +306,7 @@ const handleSubmit = async () => {
     formData.append('title', form.value.title)
     formData.append('categoryId', String(form.value.categoryId))
     formData.append('content', form.value.content)
+
     
     if (coverFile.value) {
       formData.append('image', coverFile.value)
