@@ -1,6 +1,6 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
-import type { CashRedemptionRequest, CashRedemptionResponse, ProductRedemptionRequest, ProductRedemptionResponse, VoucherRedemptionRequest, VoucherRedemptionResponse, RedemptionQueryParams, RedemptionResponse } from "../types/redemption"
+import type { CashRedemptionRequest, CashRedemptionResponse, ProductRedemptionRequest, ProductRedemptionResponse, VoucherRedemptionRequest, VoucherRedemptionResponse, RedemptionQueryParams, RedemptionResponse, CashRedemptionQueryParams, CashRedemptionListResponse } from "../types/redemption"
 
 export class RedemptionService {
     async getRedemptions(params?: RedemptionQueryParams): Promise<RedemptionResponse> {
@@ -53,6 +53,20 @@ export class RedemptionService {
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Failed to redeem cash')
+        }
+    }
+
+    async getCashRedemptions(params?: CashRedemptionQueryParams): Promise<CashRedemptionListResponse> {
+        try {
+            const response = await apiService.client.get<CashRedemptionListResponse>('/redemption/cash/list', {
+                params,
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch cash redemptions')
         }
     }
 

@@ -1,4 +1,4 @@
-import { Home, Users, UsersRound, Package, Coins, BookOpen, Settings } from 'lucide-vue-next'
+import { Home, Users, UsersRound, Package, Coins, BookOpen, Settings, ArrowLeftRight } from 'lucide-vue-next'
 import type { Component } from 'vue'
 
 export interface NavChild {
@@ -35,6 +35,17 @@ const navItems: NavItem[] = [
     match: '/user',
     role: 'admin',
     position: 'top',
+  },
+  {
+    label: 'Tukar Poin',
+    to: '/redemption',
+    icon: ArrowLeftRight,
+    match: '/redemption',
+    role: 'admin',
+    position: 'top',
+    children: [
+      { label: 'Tunai', to: '/redemption/cash', match: '/redemption/cash' },
+    ],
   },
   {
     label: 'Customer Saya',

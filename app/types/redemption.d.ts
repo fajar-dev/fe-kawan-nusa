@@ -96,3 +96,46 @@ export interface CashRedemptionResponse extends ApiResponse<RedemptionData> {}
 export interface RedemptionResponse extends ApiResponse<RedemptionData[]> {
     meta: RedemptionMeta
 }
+
+// Admin - Cash Redemption List
+export interface CashRedemptionUser {
+    id: number
+    name: string
+    photo: string | null
+    email: string | null
+    phone: string | null
+    identityNumber: number | null
+    taxNumber: string | null
+}
+
+export interface CashRedemptionListItem {
+    id: number
+    redempNo: string
+    pointsUsed: number
+    status: 'pending' | 'processing' | 'completed'
+    notes: string | null
+    user: CashRedemptionUser
+    withdrawDetails: {
+        bankName: string
+        accountNumber: string
+        accountHolderName: string
+        payout: number
+        tax: number
+    } | null
+    createdAt: string
+}
+
+export interface CashRedemptionQueryParams {
+    page?: number
+    limit?: number
+    q?: string
+    sort?: string
+    order?: 'asc' | 'desc'
+    'status[]'?: string[]
+    startDate?: string
+    endDate?: string
+}
+
+export interface CashRedemptionListResponse extends ApiResponse<CashRedemptionListItem[]> {
+    meta: RedemptionMeta
+}
