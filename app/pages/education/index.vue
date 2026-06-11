@@ -142,7 +142,7 @@
                             <div class="flex items-center justify-between py-2 border-y border-base-100">
                                 <div class="flex items-center gap-1.5">
                                     <User class="w-4 h-4 text-neutral-400" />
-                                    <span class="text-xs text-neutral-400 font-medium">{{ article.author }}</span>
+                                    <span class="text-xs text-neutral-400 font-medium">{{ article.author?.name }}</span>
                                 </div>
                                 <div class="flex items-center gap-1.5">
                                     <Calendar class="w-4 h-4 text-neutral-400" />
@@ -230,7 +230,7 @@
                             <div class="flex items-center justify-between py-2 border-y border-base-100">
                                 <div class="flex items-center gap-1.5">
                                     <User class="w-4 h-4 text-neutral-400" />
-                                    <span class="text-xs text-neutral-400 font-medium">{{ video.author }}</span>
+                                    <span class="text-xs text-neutral-400 font-medium">{{ video.author?.name }}</span>
                                 </div>
                                 <div class="flex items-center gap-1.5">
                                     <Calendar class="w-4 h-4 text-neutral-400" />

@@ -92,7 +92,7 @@
               </td>
               <!-- Author Column -->
               <td v-show="isColumnVisible('author')" class="border-r border-base-200 text-neutral-600">
-                {{ item.author || '-' }}
+                {{ item.author?.name || '-' }}
               </td>
               <!-- Created Date Column -->
               <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 whitespace-nowrap">

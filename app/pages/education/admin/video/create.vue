@@ -92,18 +92,7 @@
             <p v-if="errors.categoryId" class="text-xs text-red-500 mt-1">{{ errors.categoryId }}</p>
           </div>
 
-          <div>
-            <label class="label pb-1">
-              <span class="label-text text-sm font-medium text-gray-700">Penulis / Pengunggah (Opsional)</span>
-            </label>
-            <input 
-              v-model="form.author" 
-              type="text" 
-              placeholder="Nama pengunggah..." 
-              class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary bg-white"
-              :disabled="submitting"
-            />
-          </div>
+
 
           <div>
             <label class="label pb-1">
@@ -173,7 +162,6 @@ const form = ref({
   title: '',
   url: '',
   description: '',
-  author: '',
   categoryId: '' as string | number
 })
 
@@ -188,7 +176,6 @@ const videoSchema = z.object({
   url: z.string().trim().min(1, 'URL video tidak boleh kosong').url('Format URL video tidak valid'),
   categoryId: z.union([z.number(), z.string()]).refine(val => !!val, { message: 'Kategori video wajib dipilih' }),
   description: z.string().optional(),
-  author: z.string().optional()
 })
 
 const fetchCategories = async () => {
@@ -223,7 +210,6 @@ const handleSubmit = async () => {
     url: form.value.url,
     categoryId: form.value.categoryId,
     description: form.value.description,
-    author: form.value.author
   })
 
   if (!result.success) {
@@ -240,7 +226,6 @@ const handleSubmit = async () => {
     formData.append('url', form.value.url)
     formData.append('categoryId', String(form.value.categoryId))
     formData.append('description', form.value.description || '')
-    formData.append('author', form.value.author || '')
     
     if (thumbnailFile.value) {
       formData.append('thumbnail', thumbnailFile.value)

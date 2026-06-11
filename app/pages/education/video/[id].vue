@@ -39,7 +39,7 @@
                         <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-neutral-500">
                             <div class="flex items-center gap-1.5">
                                 <User class="w-3.5 h-3.5" />
-                                <span>{{ video.author }}</span>
+                                <span>{{ video.author?.name }}</span>
                             </div>
                             <div class="flex items-center gap-1.5">
                                 <Calendar class="w-3.5 h-3.5" />

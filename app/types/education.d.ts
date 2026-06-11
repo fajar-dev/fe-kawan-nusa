@@ -3,12 +3,18 @@ export interface EducationCategory {
     name: string;
 }
 
+export interface EducationAuthor {
+    name: string;
+    employeeId: string;
+    photo: string | null;
+}
+
 export interface EducationArticle {
     id: number;
     title: string;
     content: string;
     image: string;
-    author: string;
+    author: EducationAuthor | null;
     readingTime: string;
     isView: boolean;
     categoryId: number;
@@ -22,7 +28,7 @@ export interface EducationVideo {
     url: string;
     thumbnail: string;
     description: string;
-    author: string;
+    author: EducationAuthor | null;
     isView: boolean;
     categoryId: number;
     category: EducationCategory;

@@ -88,18 +88,7 @@
             <p v-if="errors.categoryId" class="text-xs text-red-500 mt-1">{{ errors.categoryId }}</p>
           </div>
 
-          <div>
-            <label class="label pb-1">
-              <span class="label-text text-sm font-medium text-gray-700">Penulis (Opsional)</span>
-            </label>
-            <input 
-              v-model="form.author" 
-              type="text" 
-              placeholder="Nama penulis..." 
-              class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary bg-white"
-              :disabled="submitting"
-            />
-          </div>
+
 
           <div>
             <label class="label pb-1">
@@ -174,7 +163,6 @@ const submitting = ref(false)
 const form = ref({
   title: '',
   content: '',
-  author: '',
   categoryId: '' as string | number
 })
 
@@ -189,7 +177,6 @@ const articleSchema = z.object({
   title: z.string().trim().min(1, 'Judul artikel tidak boleh kosong'),
   categoryId: z.union([z.number(), z.string()]).refine(val => !!val, { message: 'Kategori artikel wajib dipilih' }),
   content: z.string().trim().min(1, 'Konten artikel tidak boleh kosong').refine(val => val !== '<p><br></p>', { message: 'Konten artikel tidak boleh kosong' }),
-  author: z.string().optional()
 })
 
 const fetchCategories = async () => {
@@ -211,7 +198,6 @@ const fetchArticleDetail = async () => {
       form.value = {
         title: res.data.title,
         content: res.data.content,
-        author: res.data.author || '',
         categoryId: res.data.categoryId
       }
       previewUrl.value = res.data.image
@@ -301,7 +287,6 @@ const handleSubmit = async () => {
     title: form.value.title,
     categoryId: form.value.categoryId,
     content: form.value.content,
-    author: form.value.author
   })
 
   if (!result.success) {
@@ -317,7 +302,6 @@ const handleSubmit = async () => {
     formData.append('title', form.value.title)
     formData.append('categoryId', String(form.value.categoryId))
     formData.append('content', form.value.content)
-    formData.append('author', form.value.author || '')
     
     if (coverFile.value) {
       formData.append('image', coverFile.value)
