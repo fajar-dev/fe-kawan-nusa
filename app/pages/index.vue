@@ -4,11 +4,68 @@
     <div class="card bg-base-100 shadow-xs border border-base-200 w-full rounded-lg">
       <div class="card-body p-6 lg:p-8">
         <h2 class="text-xl font-semibold text-neutral-800 md:text-2xl">Selamat Datang, {{ authState.user?.name }} 👋</h2>
-        <p class="text-neutral-500 mt-1">Berikut adalah ringkasan aktivitas referral Anda</p>
+        <p v-if="isAdmin" class="text-neutral-500 mt-1">Berikut adalah ringkasan aktivitas Kawan Nusa secara keseluruhan</p>
+        <p v-else class="text-neutral-500 mt-1">Berikut adalah ringkasan aktivitas referral Anda</p>
       </div>
     </div>
 
-    <!-- Stats Cards -->
+    <!-- Admin Dashboard View -->
+    <template v-if="isAdmin">
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+        <div class="card bg-base-100 shadow-xs border border-base-200 rounded-lg">
+          <div class="card-body p-6 flex flex-row items-start justify-between">
+            <div>
+              <p class="text-neutral-500 font-medium text-sm">Total Pengguna</p>
+              <h3 class="text-3xl font-semibold mt-2 text-neutral-800">{{ statisticSummary?.user?.value ?? '-' }}</h3>
+            </div>
+            <div class="p-1 text-primary">
+              <Users class="w-8 h-8" />
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-xs border border-base-200 rounded-lg">
+          <div class="card-body p-6 flex flex-row items-start justify-between">
+            <div>
+              <p class="text-neutral-500 font-medium text-sm">Total Pelanggan</p>
+              <h3 class="text-3xl font-semibold mt-2 text-neutral-800">{{ statisticSummary?.customer?.value ?? '-' }}</h3>
+            </div>
+            <div class="p-1 text-primary">
+              <UserCheck class="w-8 h-8" />
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-xs border border-base-200 rounded-lg">
+          <div class="card-body p-6 flex flex-row items-start justify-between">
+            <div>
+              <p class="text-neutral-500 font-medium text-sm">Total Layanan</p>
+              <h3 class="text-3xl font-semibold mt-2 text-neutral-800">{{ statisticSummary?.customerService?.value ?? '-' }}</h3>
+            </div>
+            <div class="p-1 text-primary">
+              <Box class="w-8 h-8" />
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-xs border border-base-200 rounded-lg">
+          <div class="card-body p-6 flex flex-row items-start justify-between">
+            <div>
+              <p class="text-neutral-500 font-medium text-sm">Total Poin Disalurkan</p>
+              <h3 class="text-3xl font-semibold mt-2 text-neutral-800">{{ statisticSummary?.point?.value?.toLocaleString('id-ID') ?? '-' }}</h3>
+            </div>
+            <div class="p-1 text-primary">
+              <HandCoins class="w-8 h-8" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- User Dashboard View -->
+    <template v-else>
+      <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
       <div class="card bg-base-100 shadow-xs border border-base-200 rounded-lg">
         <div class="card-body p-6 flex flex-row items-start justify-between">
@@ -211,11 +268,12 @@
         </tbody>
       </template>
     </DataTable>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Users, HandCoins, Box, ArrowUpRight, ArrowDownRight } from 'lucide-vue-next'
+import { Users, HandCoins, Box, ArrowUpRight, ArrowDownRight, UserCheck } from 'lucide-vue-next'
 import { useAuth } from '~/composables/useAuth'
 import { serviceService } from '~/services/service-service'
 import { statisticService } from '~/services/statistic-service'
@@ -229,18 +287,38 @@ useSeoMeta({
 })
 
 const { state: authState } = useAuth()
+const isAdmin = computed(() => authState.isAdmin)
 
-const { data: statisticCountResponse } = useAsyncData(
+// Fetch admin statistics if admin
+const { data: statisticSummaryResponse, execute: fetchAdminSummary } = useAsyncData(
+  'admin-summary',
+  () => statisticService.getAdminSummary(),
+  { immediate: false }
+)
+
+const statisticSummary = computed(() => statisticSummaryResponse.value?.data)
+
+
+const { data: statisticCountResponse, execute: fetchStatisticCount } = useAsyncData(
   'statistic-count',
-  () => statisticService.getCount()
+  () => statisticService.getCount(),
+  { immediate: false }
 )
 
 const statisticCount = computed(() => statisticCountResponse.value?.data)
 
-const { data: topServicesResponse } = useAsyncData(
+const { data: topServicesResponse, execute: fetchTopServices } = useAsyncData(
   'top-services',
-  () => serviceService.getServices({ sort: 'totalPoint', order: 'desc', limit: 5 })
+  () => serviceService.getServices({ sort: 'totalPoint', order: 'desc', limit: 5 }),
+  { immediate: false }
 )
+
+if (isAdmin.value) {
+  fetchAdminSummary()
+} else {
+  fetchStatisticCount()
+  fetchTopServices()
+}
 
 const rankClasses = [
   'bg-[#2b7c41] text-white',
@@ -346,7 +424,7 @@ const cancelFilters = () => {
 const recentSort = ref('registrationDate')
 const recentOrder = ref<'asc' | 'desc'>('desc')
 
-const { data: recentCustomerServicesResponse, status: recentStatus } = useAsyncData(
+const { data: recentCustomerServicesResponse, status: recentStatus, execute: fetchRecentCustomers } = useAsyncData(
   'recent-customer-services',
   () => serviceService.getCustomerServices({ 
     sort: recentSort.value, 
@@ -357,8 +435,12 @@ const { data: recentCustomerServicesResponse, status: recentStatus } = useAsyncD
     type: appliedFilters.value.rewardType.length > 0 ? appliedFilters.value.rewardType : undefined,
     serviceCode: appliedFilters.value.serviceCode.length > 0 ? appliedFilters.value.serviceCode : undefined
   }),
-  { watch: [recentSort, recentOrder, appliedFilters] }
+  { immediate: false, watch: [recentSort, recentOrder, appliedFilters] }
 )
+
+if (!isAdmin.value) {
+  fetchRecentCustomers()
+}
 
 const fetchOptions = async () => {
   const [servicesRes, rewardTypesRes] = await Promise.all([
@@ -374,16 +456,22 @@ const fetchOptions = async () => {
 }
 
 onMounted(() => {
-  fetchOptions()
+  if (!isAdmin.value) {
+    fetchOptions()
+  }
 })
 
 const selectedType = ref<'monthly' | 'yearly'>('yearly')
 
-const { data: customerStatisticResponse } = useAsyncData(
+const { data: customerStatisticResponse, execute: fetchCustomerStatistic } = useAsyncData(
   'customer-statistic',
   () => statisticService.getCustomerStatistic(selectedType.value),
-  { watch: [selectedType] }
+  { immediate: false, watch: [selectedType] }
 )
+
+if (!isAdmin.value) {
+  fetchCustomerStatistic()
+}
 
 const AreaChartData = computed(() => {
   return (customerStatisticResponse.value?.data || []).map(item => ({

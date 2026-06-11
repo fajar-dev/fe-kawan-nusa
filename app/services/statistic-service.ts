@@ -1,9 +1,22 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
 import type { ApiResponse } from "../types/auth"
-import type { StatisticCount, MonthPointStatistic, CustomerStatistic, RedemptionRewardStatistic } from "../types/statistic"
+import type { StatisticCount, MonthPointStatistic, CustomerStatistic, RedemptionRewardStatistic, AdminStatisticSummary } from "../types/statistic"
 
 export class StatisticService {
+    async getAdminSummary(): Promise<ApiResponse<AdminStatisticSummary>> {
+        try {
+            const response = await apiService.client.get<ApiResponse<AdminStatisticSummary>>('/statistic/admin/summary', {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch admin summary statistic')
+        }
+    }
+
     async getCount(): Promise<ApiResponse<StatisticCount>> {
         try {
             const response = await apiService.client.get<ApiResponse<StatisticCount>>('/statistic/count', {

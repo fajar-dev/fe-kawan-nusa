@@ -28,3 +28,10 @@ export interface RedemptionRewardStatistic {
     status: string
     count: number
 }
+
+export interface AdminStatisticSummary {
+    user: { value: number }
+    customer: { value: number }
+    customerService: { value: number }
+    point: { value: number }
+}
