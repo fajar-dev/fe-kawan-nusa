@@ -19,8 +19,8 @@
 
     <div class="flex flex-col gap-4 w-full">
       <!-- Tabs and Bulk Actions -->
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-0 border-b border-base-200 pb-2 w-full">
-        <div class="flex border-b-0">
+      <div class="flex flex-col md:flex-row md:items-end justify-between w-full mb-2 border-b border-transparent md:border-base-200 gap-3 md:gap-0">
+        <div class="flex border-b border-base-200 md:border-b-0 w-full md:w-auto">
           <button 
             @click="activeTab = 'pending'"
             :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'pending' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
@@ -36,7 +36,7 @@
         </div>
 
         <!-- Bulk Action Button -->
-        <div v-if="activeTab === 'pending'" class="flex items-center gap-0">
+        <div v-if="activeTab === 'pending'" class="flex items-center gap-4 pb-2.5 md:pb-2 pr-4">
           <!-- Select All Checkbox -->
           <label class="flex items-center gap-2 cursor-pointer select-none">
             <input 

@@ -12,7 +12,7 @@
       </div>
       
       <!-- Command Palette Trigger -->
-      <div class="relative w-full max-w-md hidden md:block group cursor-pointer" @click="isPaletteOpen = true">
+      <div v-if="authState.isUser" class="relative w-full max-w-md hidden md:block group cursor-pointer" @click="isPaletteOpen = true">
         <div class="flex items-center border border-base-300 rounded-lg bg-base-100 px-3 h-9 transition-all hover:border-primary/50">
           <span class="text-sm text-neutral-400 flex-1">Type a command or search...</span>
           <div class="flex items-center gap-1">
@@ -27,8 +27,12 @@
     </div>
     
     <div class="flex items-center gap-2 md:gap-2">
-      <button class="btn btn-ghost btn-circle btn-sm hover:text-neutral-900 transition-colors">
-        <HelpCircle class="w-5 h-5" />
+      <button 
+        v-if="authState.isUser"
+        @click="isPaletteOpen = true"
+        class="btn btn-ghost btn-circle btn-sm hover:text-neutral-900 transition-colors md:hidden"
+      >
+        <Search class="w-5 h-5" />
       </button>
       <button 
         @click="handleFeedbackClick"

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="authState.isUser">
     <Teleport to="body">
       <div 
         v-if="isOpen" 
@@ -134,6 +134,7 @@
 import { Home, Users, Package, Coins, BookOpen, Settings, History, ArrowRightLeft, ChevronRight, ChevronLeft, Search, Loader2, Video, Newspaper, MessageSquareWarning } from 'lucide-vue-next'
 import { Command } from 'vue-command-palette'
 import { additionalService } from '~/services/additional-service'
+import { useAuth } from '~/composables/useAuth'
 import type { SearchResult } from '~/types/additional'
 
 const props = defineProps<{
@@ -143,6 +144,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
 }>()
+
+const { state: authState } = useAuth()
 
 const isOpen = ref(props.modelValue || false)
 const currentView = ref('root')
@@ -231,6 +234,7 @@ const closePalette = () => {
 }
 
 const handleKeydown = (e: KeyboardEvent) => {
+  if (!authState.isUser) return
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
     e.preventDefault()
     isOpen.value = !isOpen.value
