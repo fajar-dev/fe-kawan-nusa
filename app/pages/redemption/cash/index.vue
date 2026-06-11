@@ -124,11 +124,8 @@
               <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateShort(item.createdAt) }}</td>
               <td v-show="isColumnVisible('actions')" class="text-center">
                 <div class="flex items-center justify-center gap-1">
-                  <a :href="redemptionService.getWithdrawPdfUrl(item.id)" target="_blank" class="btn btn-ghost btn-xs btn-circle tooltip" data-tip="Lihat Bukti">
+                  <a :href="item.withdrawDetails?.receipt || '#'" target="_blank" class="btn btn-ghost btn-xs btn-circle tooltip" data-tip="Lihat Bukti">
                     <Eye class="w-4 h-4 text-neutral-500" />
-                  </a>
-                  <a :href="redemptionService.getWithdrawDownloadUrl(item.id)" class="btn btn-ghost btn-xs btn-circle tooltip" data-tip="Unduh Bukti">
-                    <Download class="w-4 h-4 text-neutral-500" />
                   </a>
                 </div>
               </td>

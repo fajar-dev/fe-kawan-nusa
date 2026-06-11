@@ -31,6 +31,7 @@ export interface RedemptionData {
         accountHolderName: string
         payout: number
         tax: number
+        receipt: string
     } | null
     voucherDetails: {
         catalog: {
@@ -121,6 +122,7 @@ export interface CashRedemptionListItem {
         accountHolderName: string
         payout: number
         tax: number
+        receipt: string
     } | null
     createdAt: string
 }

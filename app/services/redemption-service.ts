@@ -70,16 +70,37 @@ export class RedemptionService {
         }
     }
 
-    getWithdrawPdfUrl(id: string | number): string {
-        const config = useRuntimeConfig()
-        const token = useAuth().state.token
-        return `${config.public.apiUrl}/redemption/${id}/receipt?token=${token}`
-    }
+    async downloadReceipt(url: string | null | undefined): Promise<void> {
+        if (!url) return
+        try {
+            const response = await fetch(url)
+            const blob = await response.blob()
+            const blobUrl = window.URL.createObjectURL(blob)
+            
+            let filename = 'bukti-transfer'
+            try {
+                const parsedUrl = new URL(url)
+                const pathname = parsedUrl.pathname
+                const parts = pathname.split('/')
+                const lastPart = parts[parts.length - 1]
+                if (lastPart) {
+                    filename = decodeURIComponent(lastPart)
+                }
+            } catch (e) {
+                // Ignore
+            }
 
-    getWithdrawDownloadUrl(id: string | number): string {
-        const config = useRuntimeConfig()
-        const token = useAuth().state.token
-        return `${config.public.apiUrl}/redemption/${id}/receipt/download?token=${token}`
+            const link = document.createElement('a')
+            link.href = blobUrl
+            link.setAttribute('download', filename)
+            document.body.appendChild(link)
+            link.click()
+            link.remove()
+            window.URL.revokeObjectURL(blobUrl)
+        } catch (error) {
+            console.error('Failed to download receipt:', error)
+            window.open(url, '_blank')
+        }
     }
 }
 

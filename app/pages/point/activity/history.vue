@@ -194,13 +194,13 @@
             <td v-show="isColumnVisible('action')" class="flex grow pr-4 min-w-[120px]">
               <div v-if="item.type === 'cash'" class="flex items-center justify-between gap-2 w-full">
                 <button 
-                  @click="openUrl(redemptionService.getWithdrawPdfUrl(item.id))"
+                  @click="openUrl(item.withdrawDetails?.receipt)"
                   class="text-primary hover:underline font-medium"
                 >
                   {{ item.redempNo }}
                 </button>
                 <Download 
-                  @click="openUrl(redemptionService.getWithdrawDownloadUrl(item.id))"
+                  @click="redemptionService.downloadReceipt(item.withdrawDetails?.receipt)"
                   class="w-4 h-4 text-primary shrink-0 cursor-pointer" 
                 />
               </div>
@@ -331,8 +331,10 @@ const currentColumns = [
   { label: 'Aksi', key: 'action' }
 ]
 
-const openUrl = (url: string) => {
-  window.open(url, '_blank')
+const openUrl = (url?: string | null) => {
+  if (url) {
+    window.open(url, '_blank')
+  }
 }
 
 const formatType = (type: string) => {
