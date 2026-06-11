@@ -17,9 +17,9 @@
       </div>
     </AppToolbar>
 
-    <div class="flex flex-col gap-6 w-full">
+    <div class="flex flex-col gap-4 w-full">
       <!-- Tabs and Bulk Actions -->
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-base-200 pb-2 w-full">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-0 border-b border-base-200 pb-2 w-full">
         <div class="flex border-b-0">
           <button 
             @click="activeTab = 'pending'"
@@ -36,7 +36,7 @@
         </div>
 
         <!-- Bulk Action Button -->
-        <div v-if="activeTab === 'pending'" class="flex items-center gap-4">
+        <div v-if="activeTab === 'pending'" class="flex items-center gap-0">
           <!-- Select All Checkbox -->
           <label class="flex items-center gap-2 cursor-pointer select-none">
             <input 
@@ -116,6 +116,8 @@
                   v-model="selectedIds"
                 />
               </td>
+              <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateTime(item.createdAt) }}</td>
+              <td v-show="isColumnVisible('redempNo')" class="border-r border-base-200 max-w-[180px] truncate" :title="item.redempNo">{{ item.redempNo }}</td>
               <td v-show="isColumnVisible('user')" class="border-r border-base-200">
                 <div class="flex items-center gap-3">
                   <div class="avatar">
@@ -134,7 +136,6 @@
               </td>
               <td v-show="isColumnVisible('user.identityNumber')" class="border-r border-base-200 max-w-[180px] truncate" :title="String(item.user.identityNumber || '-')">{{ item.user.identityNumber || '-' }}</td>
               <td v-show="isColumnVisible('user.taxNumber')" class="border-r border-base-200 max-w-[180px] truncate" :title="item.user.taxNumber || '-'">{{ item.user.taxNumber || '-' }}</td>
-              <td v-show="isColumnVisible('redempNo')" class="border-r border-base-200 max-w-[180px] truncate" :title="item.redempNo">{{ item.redempNo }}</td>
               <td v-show="isColumnVisible('pointsUsed')" class="border-r border-base-200 text-right">
                 <span class="font-semibold text-primary">{{ formatNumber(item.pointsUsed) }}</span>
               </td>
@@ -152,7 +153,6 @@
                 </template>
                 <span v-else>-</span>
               </td>
-              <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateShort(item.createdAt) }}</td>
               <td v-show="isColumnVisible('actions')" class="text-center">
                 <div class="flex items-center justify-center gap-1">
                   <a :href="item.withdrawDetails?.receipt || '#'" target="_blank" class="btn btn-ghost btn-xs btn-circle">
@@ -173,7 +173,7 @@ import { ArrowLeftRight, CircleHelp, Eye, Download, Check } from 'lucide-vue-nex
 import { redemptionService } from '~/services/redemption-service'
 import { getInitials } from '~/utils/initials'
 import { formatNumber } from '~/utils/string'
-import { formatDateShort } from '~/utils/date'
+import { formatDateTime } from '~/utils/date'
 import type { CashRedemptionListItem, CashRedemptionQueryParams } from '~/types/redemption'
 import type { PaginationMeta } from '~/types/customer'
 
@@ -189,14 +189,14 @@ const activeTab = ref<'pending' | 'completed'>('pending')
 
 const columns = computed(() => {
   const baseColumns = [
+    { label: 'Tanggal', key: 'createdAt', sortable: true },
+    { label: 'No. Transaksi', key: 'redempNo', sortable: true },
     { label: 'Pengguna', key: 'user', sortable: false },
     { label: 'No. Identitas', key: 'user.identityNumber', sortable: true },
     { label: 'NPWP', key: 'user.taxNumber', sortable: true },
-    { label: 'No. Transaksi', key: 'redempNo', sortable: true },
     { label: 'Poin', key: 'pointsUsed', sortable: true },
     { label: 'Informasi Bank', key: 'bank', sortable: false },
     { label: 'Nominal', key: 'payout', sortable: false },
-    { label: 'Tanggal', key: 'createdAt', sortable: true },
     { label: 'Aksi', key: 'actions', sortable: false },
   ]
 

@@ -164,7 +164,7 @@
           </div>
 
           <!-- Tabs -->
-          <div class="flex border-b border-base-200 w-full mb-6">
+          <div class="flex border-b border-base-200 w-full mb-1">
             <NuxtLink 
               :to="`/user/${userId}/services`"
               class="px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs"

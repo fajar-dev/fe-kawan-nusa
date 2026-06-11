@@ -194,8 +194,8 @@
             <td v-show="isColumnVisible('service.name')" class="border-r border-base-200 text-primary max-w-[250px] truncate" :title="item.service.name">
               <NuxtLink :to="`/service/${item.service.code}`" class="hover:underline">{{ item.service.name }}</NuxtLink>
             </td>
-            <td v-show="isColumnVisible('customerId')" class="text-primary/80 font-medium border-r border-base-200" :title="item.customerId">
-              <NuxtLink :to="`/customer/${item.customerId}`" class="hover:underline">{{ item.customerId }}</NuxtLink>
+            <td v-show="isColumnVisible('customerId')" class="text-primary/80 font-medium border-r border-base-200" :title="item.customer.id">
+              <NuxtLink :to="`/customer/${item.customer.id}`" class="hover:underline">{{ item.customer.name }} - {{ item.customer.id }}</NuxtLink>
             </td>
             <td v-show="isColumnVisible('registrationDate')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateShort(item.registrationDate) }}</td>
             <td v-show="isColumnVisible('period')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap">

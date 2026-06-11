@@ -56,7 +56,7 @@
 
       <ModalReedemCash v-model="isWithdrawModalOpen" @success="refreshData" />
 
-      <div class="flex flex-col gap-6 w-full pt-10">
+      <div class="flex flex-col w-full pt-10">
         <!-- Tabs Section -->
         <div class="flex border-b border-base-200 w-full mb-6">
           <NuxtLink 

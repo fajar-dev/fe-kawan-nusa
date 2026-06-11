@@ -17,7 +17,7 @@
       </div>
     </AppToolbar>
 
-    <div class="flex flex-col gap-6 w-full">
+    <div class="flex flex-col gap-4 w-full">
       <DataTable 
         flat 
         :columns="columns"

@@ -131,7 +131,7 @@
           </div>
 
           <!-- Tabs -->
-          <div class="flex border-b border-base-200 w-full mb-6">
+          <div class="flex border-b border-base-200 w-full mb-1">
             <button 
               @click="activeTab = 'layanan'"
               :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'layanan' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
