@@ -70,6 +70,19 @@ export class RedemptionService {
         }
     }
 
+    async completeCash(id: string | number): Promise<any> {
+        try {
+            const response = await apiService.client.put<any>(`/redemption/cash/list/${id}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to complete cash redemption')
+        }
+    }
+
     async downloadReceipt(url: string | null | undefined): Promise<void> {
         if (!url) return
         try {

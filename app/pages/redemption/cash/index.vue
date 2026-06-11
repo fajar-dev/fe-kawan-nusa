@@ -18,7 +18,52 @@
     </AppToolbar>
 
     <div class="flex flex-col gap-6 w-full">
+      <!-- Tabs and Bulk Actions -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-base-200 pb-2 w-full">
+        <div class="flex border-b-0">
+          <button 
+            @click="activeTab = 'pending'"
+            :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'pending' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
+          >
+            Pending
+          </button>
+          <button 
+            @click="activeTab = 'completed'"
+            :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'completed' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
+          >
+            Completed
+          </button>
+        </div>
+
+        <!-- Bulk Action Button -->
+        <div v-if="activeTab === 'pending'" class="flex items-center gap-4">
+          <!-- Select All Checkbox -->
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input 
+              type="checkbox" 
+              class="checkbox checkbox-primary checkbox-sm rounded"
+              :checked="isAllSelected"
+              @change="toggleSelectAll"
+            />
+            <span class="text-xs text-neutral-500 font-medium">Pilih Semua</span>
+          </label>
+
+          <div v-if="selectedIds.length > 0" class="flex items-center gap-3">
+            <span class="text-xs text-neutral-500 font-medium">{{ selectedIds.length }} terpilih</span>
+            <button 
+              @click="handleBulkComplete"
+              :disabled="completing"
+              class="btn btn-primary btn-sm rounded-lg font-medium text-white flex items-center gap-2 h-9 min-h-0"
+            >
+              <Check class="w-4 h-4" />
+              Tandai Sudah di Transfer
+            </button>
+          </div>
+        </div>
+      </div>
+
       <DataTable 
+        :key="activeTab"
         flat 
         :columns="columns"
         :loading="loading"
@@ -44,20 +89,6 @@
             @reset="resetFilters"
             @cancel="cancelFilters"
           >
-            <!-- Status -->
-            <div>
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="text-neutral-400 text-xs font-medium">Status</span>
-                <span @click="filterStatus = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
-              </div>
-              <select v-model="filterStatus" class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
-                <option value="">Semua Status</option>
-                <option value="pending">Menunggu</option>
-                <option value="processing">Diproses</option>
-                <option value="completed">Selesai</option>
-              </select>
-            </div>
-
             <!-- Date Range -->
             <div>
               <div class="flex items-center justify-between mb-1.5">
@@ -77,6 +108,14 @@
         <template #body="{ isColumnVisible }">
           <tbody class="text-sm text-neutral-600">
             <tr v-for="(item, index) in items" :key="index" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0">
+              <td v-show="isColumnVisible('selection')" class="border-r border-base-200 text-center w-10">
+                <input 
+                  type="checkbox" 
+                  class="checkbox checkbox-primary checkbox-sm rounded" 
+                  :value="item.id"
+                  v-model="selectedIds"
+                />
+              </td>
               <td v-show="isColumnVisible('user')" class="border-r border-base-200">
                 <div class="flex items-center gap-3">
                   <div class="avatar">
@@ -113,18 +152,10 @@
                 </template>
                 <span v-else>-</span>
               </td>
-              <td v-show="isColumnVisible('status')" class="border-r border-base-200 text-center px-4">
-                <div :class="[
-                  'badge border-none font-semibold text-[12px] rounded-lg w-full',
-                  statusStyles[item.status]
-                ]">
-                  {{ statusLabels[item.status] }}
-                </div>
-              </td>
               <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 whitespace-nowrap">{{ formatDateShort(item.createdAt) }}</td>
               <td v-show="isColumnVisible('actions')" class="text-center">
                 <div class="flex items-center justify-center gap-1">
-                  <a :href="item.withdrawDetails?.receipt || '#'" target="_blank" class="btn btn-ghost btn-xs btn-circle tooltip" data-tip="Lihat Bukti">
+                  <a :href="item.withdrawDetails?.receipt || '#'" target="_blank" class="btn btn-ghost btn-xs btn-circle">
                     <Eye class="w-4 h-4 text-neutral-500" />
                   </a>
                 </div>
@@ -138,7 +169,7 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowLeftRight, CircleHelp, Eye, Download } from 'lucide-vue-next'
+import { ArrowLeftRight, CircleHelp, Eye, Download, Check } from 'lucide-vue-next'
 import { redemptionService } from '~/services/redemption-service'
 import { getInitials } from '~/utils/initials'
 import { formatNumber } from '~/utils/string'
@@ -154,32 +185,30 @@ useSeoMeta({
   title: 'Kawan Nusa | Tukar Poin - Tunai',
 })
 
-const columns = [
-  { label: 'Pengguna', key: 'user', sortable: false },
-  { label: 'No. Identitas', key: 'user.identityNumber', sortable: true },
-  { label: 'NPWP', key: 'user.taxNumber', sortable: true },
-  { label: 'No. Transaksi', key: 'redempNo', sortable: true },
-  { label: 'Poin', key: 'pointsUsed', sortable: true },
-  { label: 'Informasi Bank', key: 'bank', sortable: false },
-  { label: 'Nominal', key: 'payout', sortable: false },
-  { label: 'Status', key: 'status', sortable: true },
-  { label: 'Tanggal', key: 'createdAt', sortable: true },
-  { label: 'Aksi', key: 'actions', sortable: false },
-]
+const activeTab = ref<'pending' | 'completed'>('pending')
 
-type CashStatus = 'pending' | 'processing' | 'completed'
+const columns = computed(() => {
+  const baseColumns = [
+    { label: 'Pengguna', key: 'user', sortable: false },
+    { label: 'No. Identitas', key: 'user.identityNumber', sortable: true },
+    { label: 'NPWP', key: 'user.taxNumber', sortable: true },
+    { label: 'No. Transaksi', key: 'redempNo', sortable: true },
+    { label: 'Poin', key: 'pointsUsed', sortable: true },
+    { label: 'Informasi Bank', key: 'bank', sortable: false },
+    { label: 'Nominal', key: 'payout', sortable: false },
+    { label: 'Tanggal', key: 'createdAt', sortable: true },
+    { label: 'Aksi', key: 'actions', sortable: false },
+  ]
 
-const statusStyles: Record<CashStatus, string> = {
-  pending: 'bg-amber-50 text-amber-600',
-  processing: 'bg-blue-50 text-blue-600',
-  completed: 'bg-green-50 text-green-600',
-}
+  if (activeTab.value === 'pending') {
+    return [
+      { label: '', key: 'selection', sortable: false },
+      ...baseColumns
+    ]
+  }
 
-const statusLabels: Record<CashStatus, string> = {
-  pending: 'Menunggu',
-  processing: 'Diproses',
-  completed: 'Selesai',
-}
+  return baseColumns
+})
 
 const items = ref<CashRedemptionListItem[]>([])
 const loading = ref(true)
@@ -189,16 +218,59 @@ const currentSort = ref('createdAt')
 const currentOrder = ref<'asc' | 'desc'>('desc')
 
 // Filter states
-const filterStatus = ref('')
 const filterStartDate = ref('')
 const filterEndDate = ref('')
 const isFilterActive = ref(false)
 
 const appliedFilters = ref({
-  status: '',
   startDate: '',
   endDate: ''
 })
+
+const selectedIds = ref<number[]>([])
+const completing = ref(false)
+
+const isAllSelected = computed(() => {
+  return items.value.length > 0 && selectedIds.value.length === items.value.length
+})
+
+const toggleSelectAll = () => {
+  if (isAllSelected.value) {
+    selectedIds.value = []
+  } else {
+    selectedIds.value = items.value.map(item => item.id)
+  }
+}
+
+const handleBulkComplete = async () => {
+  if (selectedIds.value.length === 0) return
+  
+  completing.value = true
+  const toast = useToast()
+  
+  try {
+    const promises = selectedIds.value.map(id => 
+      redemptionService.completeCash(id)
+        .then(() => ({ id, success: true }))
+        .catch(() => ({ id, success: false }))
+    )
+    
+    const results = await Promise.all(promises)
+    const failedCount = results.filter(res => !res.success).length
+    
+    if (failedCount === 0) {
+      toast.success('Poin ditandai sudah ditransfer.')
+    } else {
+      toast.warning(`Berhasil menyelesaikan ${results.length - failedCount} transaksi, ${failedCount} transaksi gagal`)
+    }
+  } catch (error: any) {
+    toast.error('Gagal memproses penandaan transaksi')
+  } finally {
+    completing.value = false
+    selectedIds.value = []
+    fetchData({ page: 1 })
+  }
+}
 
 const fetchData = async (queryParams: Partial<CashRedemptionQueryParams> = {}) => {
   loading.value = true
@@ -211,9 +283,12 @@ const fetchData = async (queryParams: Partial<CashRedemptionQueryParams> = {}) =
       limit: 10,
     }
 
-    if (appliedFilters.value.status) {
-      params['status[]'] = [appliedFilters.value.status]
+    if (activeTab.value === 'pending') {
+      params['status[]'] = ['pending', 'processing']
+    } else {
+      params['status[]'] = ['completed']
     }
+
     if (appliedFilters.value.startDate) {
       params.startDate = appliedFilters.value.startDate
     }
@@ -233,23 +308,20 @@ const fetchData = async (queryParams: Partial<CashRedemptionQueryParams> = {}) =
 }
 
 const cancelFilters = () => {
-  filterStatus.value = appliedFilters.value.status
   filterStartDate.value = appliedFilters.value.startDate
   filterEndDate.value = appliedFilters.value.endDate
 }
 
 const applyFilters = () => {
   appliedFilters.value = {
-    status: filterStatus.value,
     startDate: filterStartDate.value,
     endDate: filterEndDate.value
   }
-  isFilterActive.value = appliedFilters.value.status !== '' || appliedFilters.value.startDate !== '' || appliedFilters.value.endDate !== ''
+  isFilterActive.value = appliedFilters.value.startDate !== '' || appliedFilters.value.endDate !== ''
   fetchData({ page: 1 })
 }
 
 const resetFilters = () => {
-  filterStatus.value = ''
   filterStartDate.value = ''
   filterEndDate.value = ''
   applyFilters()
@@ -261,6 +333,15 @@ watch(searchQuery, () => {
   searchTimeout = setTimeout(() => {
     fetchData({ page: 1 })
   }, 500)
+})
+
+watch(activeTab, () => {
+  selectedIds.value = []
+  fetchData({ page: 1 })
+})
+
+watch(items, () => {
+  selectedIds.value = []
 })
 
 const handlePageChange = (page: number) => {
