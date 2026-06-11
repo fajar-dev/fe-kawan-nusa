@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.2.1",
     "@vite-pwa/nuxt": "1.1.1",
+    "@vueup/vue-quill": "^1.5.3",
     "axios": "^1.13.6",
     "daisyui": "^5.5.19",
     "lucide-vue-next": "^0.577.0",

@@ -1,7 +1,7 @@
 <template>
   <details :class="['dropdown dropdown-bottom', align === 'end' ? 'md:dropdown-end' : 'md:dropdown-start']" ref="detailsRef">
     <summary 
-      class="btn btn-outline border-primary text-primary btn-md h-10 px-4 gap-2 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors w-full md:w-auto list-none cursor-pointer appearance-none outline-none"
+      class="btn btn-outline border-primary text-primary btn-md h-10 px-4 gap-2 rounded-lg hover:bg-primary/10 hover:text-primary transition-colors w-auto list-none cursor-pointer appearance-none outline-none"
       :class="{ 'bg-primary/10': isFilterActive }"
     >
       <div class="indicator">
@@ -28,7 +28,7 @@
           <button @click="handleReset" type="button" class="btn btn-outline border-primary text-primary hover:bg-primary hover:text-white btn-md rounded-lg font-semibold">
             Atur Ulang
           </button>
-          <button @click="handleApply" type="button" class="btn bg-primary/10 border-primary text-primary hover:bg-primary/90 btn-md rounded-lg font-semibold">
+          <button @click="handleApply" type="button" class="btn bg-primary/10 border-primary text-primary hover:bg-primary/90 btn-md hover:text-white rounded-lg font-semibold">
             Terapkan
           </button>
         </div>

@@ -48,6 +48,19 @@ const navItems: NavItem[] = [
     ],
   },
   {
+    label: 'Edukasi',
+    to: '/education/admin/article',
+    icon: BookOpen,
+    match: '/education/admin',
+    role: 'admin',
+    position: 'top',
+    children: [
+      { label: 'Kategori', to: '/education/admin/category', match: '/education/admin/category' },
+      { label: 'Artikel', to: '/education/admin/article', match: '/education/admin/article' },
+      { label: 'Video', to: '/education/admin/video', match: '/education/admin/video' },
+    ],
+  },
+  {
     label: 'Customer Saya',
     to: '/customer',
     icon: Users,
@@ -82,6 +95,7 @@ const navItems: NavItem[] = [
     to: '/education',
     icon: BookOpen,
     match: '/education',
+    role: 'user',
     position: 'bottom',
   },
   {

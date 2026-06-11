@@ -15,9 +15,9 @@
 
       <!-- Filters & Search Section -->
       <div class="mb-6">
-        <div class="flex flex-row md:items-center justify-between gap-4 w-full">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
           <!-- Filters Slot (Left Side) -->
-          <div class="flex items-center gap-2 flex-wrap">
+          <div class="flex items-center gap-2 flex-wrap w-full md:w-auto">
             <slot name="filters" />
           </div>
 
