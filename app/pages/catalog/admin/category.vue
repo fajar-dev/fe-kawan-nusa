@@ -3,14 +3,14 @@
     <AppToolbar>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-4">
-          <BookOpen class="w-9 h-9 mt-1 text-neutral-800" />
+          <Package class="w-9 h-9 mt-1 text-neutral-800" />
           <div>
             <div class="flex items-center gap-2">
-              <h1 class="text-xl font-medium text-neutral-800">Kategori Edukasi</h1>
+              <h1 class="text-xl font-medium text-neutral-800">Kategori Katalog</h1>
               <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
             </div>
             <p class="text-xs text-neutral-400 font-medium mt-0.5">
-              <NuxtLink to="/" class="text-primary hover:underline">Home</NuxtLink> / Edukasi / Kategori
+              <NuxtLink to="/" class="text-primary hover:underline">Home</NuxtLink> / Katalog / Kategori
             </p>
           </div>
         </div>
@@ -69,7 +69,7 @@
     </div>
 
     <!-- Modals -->
-    <ModalCategoryForm 
+    <ModalCatalogCategoryForm 
       v-model="isOpenFormModal" 
       :category="formCategory" 
       :loading="submitting" 
@@ -78,8 +78,8 @@
     
     <ModalConfirmDelete 
       v-model="isOpenDeleteModal" 
-      title="Hapus Kategori" 
-      :message="`Apakah Anda yakin ingin menghapus kategori '${categoryToDelete?.name}'? Semua artikel atau video yang terhubung dengan kategori ini mungkin akan terpengaruh.`" 
+      title="Hapus Kategori Katalog" 
+      :message="`Apakah Anda yakin ingin menghapus kategori '${categoryToDelete?.name}'? Semua item katalog yang berada dalam kategori ini mungkin akan terpengaruh.`" 
       :loading="deleting" 
       @confirm="handleDelete" 
     />
@@ -87,9 +87,9 @@
 </template>
 
 <script setup lang="ts">
-import { BookOpen, CircleHelp, Plus, Edit2, Trash2 } from 'lucide-vue-next'
-import { educationService } from '~/services/education-service'
-import type { EducationCategory } from '~/types/education'
+import { Package, CircleHelp, Plus, Edit2, Trash2 } from 'lucide-vue-next'
+import { catalogService } from '~/services/catalog-service'
+import type { CatalogCategory } from '~/types/catalog'
 
 definePageMeta({
   role: 'admin',
@@ -97,7 +97,7 @@ definePageMeta({
 })
 
 useSeoMeta({
-  title: 'Kawan Nusa | Admin - Kategori Edukasi',
+  title: 'Kawan Nusa | Admin - Kategori Katalog',
 })
 
 const columns = [
@@ -106,17 +106,17 @@ const columns = [
   { label: 'Aksi', key: 'actions', sortable: false },
 ]
 
-const categories = ref<EducationCategory[]>([])
+const categories = ref<CatalogCategory[]>([])
 const loading = ref(true)
 const searchQuery = ref('')
 
-// Modal state
+// Modal states
 const isOpenFormModal = ref(false)
 const submitting = ref(false)
 const formCategory = ref<{ id: number | null, name: string } | null>(null)
 
 const isOpenDeleteModal = ref(false)
-const categoryToDelete = ref<EducationCategory | null>(null)
+const categoryToDelete = ref<CatalogCategory | null>(null)
 const deleting = ref(false)
 
 const toast = useToast()
@@ -124,7 +124,7 @@ const toast = useToast()
 const fetchCategories = async () => {
   loading.value = true
   try {
-    const response = await educationService.getCategories()
+    const response = await catalogService.getCategories()
     if (response.success) {
       categories.value = response.data
     }
@@ -176,7 +176,7 @@ const openCreateModal = () => {
   isOpenFormModal.value = true
 }
 
-const openEditModal = (category: EducationCategory) => {
+const openEditModal = (category: CatalogCategory) => {
   formCategory.value = {
     id: category.id,
     name: category.name
@@ -190,14 +190,14 @@ const handleFormSubmit = async (name: string) => {
     let response
     const id = formCategory.value?.id
     if (id) {
-      response = await educationService.updateCategory(id, name)
+      response = await catalogService.updateCategory(id, name)
       if (response.success) {
         toast.success('Kategori berhasil diperbarui')
       } else {
         toast.error(response.message || 'Gagal memperbarui kategori')
       }
     } else {
-      response = await educationService.createCategory(name)
+      response = await catalogService.createCategory(name)
       if (response.success) {
         toast.success('Kategori berhasil ditambahkan')
       } else {
@@ -213,7 +213,7 @@ const handleFormSubmit = async (name: string) => {
   }
 }
 
-const openDeleteModal = (category: EducationCategory) => {
+const openDeleteModal = (category: CatalogCategory) => {
   categoryToDelete.value = category
   isOpenDeleteModal.value = true
 }
@@ -223,7 +223,7 @@ const handleDelete = async () => {
   
   deleting.value = true
   try {
-    const response = await educationService.deleteCategory(categoryToDelete.value.id)
+    const response = await catalogService.deleteCategory(categoryToDelete.value.id)
     if (response.success) {
       toast.success('Kategori berhasil dihapus')
       isOpenDeleteModal.value = false

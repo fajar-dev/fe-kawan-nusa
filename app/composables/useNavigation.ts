@@ -61,6 +61,18 @@ const navItems: NavItem[] = [
     ],
   },
   {
+    label: 'Katalog',
+    to: '/catalog/admin/product',
+    icon: Package,
+    match: '/catalog/admin',
+    role: 'admin',
+    position: 'top',
+    children: [
+      { label: 'Produk', to: '/catalog/admin/product', match: '/catalog/admin/product' },
+      { label: 'Kategori', to: '/catalog/admin/category', match: '/catalog/admin/category' },
+    ],
+  },
+  {
     label: 'Customer Saya',
     to: '/customer',
     icon: Users,
