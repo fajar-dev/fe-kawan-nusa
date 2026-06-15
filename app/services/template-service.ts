@@ -32,8 +32,49 @@ export class TemplateService {
 
     getDownloadUrl(id: number, type: string): string {
         const token = useAuth().state.token
-        const baseUrl = useRuntimeConfig().public.apiBase
+        const baseUrl = useRuntimeConfig().public.apiUrl
         return `${baseUrl}/template/${id}/download?type=${type}&token=${token}`
+    }
+
+    async createTemplate(data: FormData): Promise<any> {
+        try {
+            const response = await apiService.client.post('/template', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to create template')
+        }
+    }
+
+    async updateTemplate(id: number, data: FormData): Promise<any> {
+        try {
+            const response = await apiService.client.put(`/template/${id}`, data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to update template')
+        }
+    }
+
+    async deleteTemplate(id: number): Promise<any> {
+        try {
+            const response = await apiService.client.delete(`/template/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to delete template')
+        }
     }
 }
 

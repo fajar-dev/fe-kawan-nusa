@@ -72,6 +72,60 @@ export class ServiceService {
             return handleServiceError(error || 'Failed to fetch promotions')
         }
     }
+
+    async getPromotionDetail(id: number): Promise<ApiResponse<Promotion>> {
+        try {
+            const response = await apiService.client.get<ApiResponse<Promotion>>(`/service/promotion/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch promotion detail')
+        }
+    }
+
+    async createPromotion(data: FormData): Promise<any> {
+        try {
+            const response = await apiService.client.post('/service/promotion', data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to create promotion')
+        }
+    }
+
+    async updatePromotion(id: number, data: FormData): Promise<any> {
+        try {
+            const response = await apiService.client.put(`/service/promotion/${id}`, data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to update promotion')
+        }
+    }
+
+    async deletePromotion(id: number): Promise<any> {
+        try {
+            const response = await apiService.client.delete(`/service/promotion/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to delete promotion')
+        }
+    }
 }
 
 export const serviceService = new ServiceService()

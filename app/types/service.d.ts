@@ -94,6 +94,7 @@ export interface Promotion {
   startPeriod: string
   endPeriod: string
   createdAt: string
+  isActive: boolean
   service: {
     code: string
     name: string

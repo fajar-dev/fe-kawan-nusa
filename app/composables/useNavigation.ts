@@ -58,6 +58,8 @@ const navItems: NavItem[] = [
       { label: 'Kategori', to: '/education/admin/category', match: '/education/admin/category' },
       { label: 'Artikel', to: '/education/admin/article', match: '/education/admin/article' },
       { label: 'Video', to: '/education/admin/video', match: '/education/admin/video' },
+      { label: 'Template', to: '/education/admin/template', match: '/education/admin/template' },
+      { label: 'Promosi', to: '/education/admin/promotion', match: '/education/admin/promotion' },
     ],
   },
   {
