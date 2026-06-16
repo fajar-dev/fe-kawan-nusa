@@ -1,6 +1,6 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
-import type { CashRedemptionRequest, CashRedemptionResponse, ProductRedemptionRequest, ProductRedemptionResponse, VoucherRedemptionRequest, VoucherRedemptionResponse, RedemptionQueryParams, RedemptionResponse, CashRedemptionQueryParams, CashRedemptionListResponse } from "../types/redemption"
+import type { CashRedemptionRequest, CashRedemptionResponse, ProductRedemptionRequest, ProductRedemptionResponse, VoucherRedemptionRequest, VoucherRedemptionResponse, RedemptionQueryParams, RedemptionResponse, CashRedemptionQueryParams, CashRedemptionListResponse, ProductRedemptionQueryParams, ProductRedemptionListResponse, ProcessProductRequest, VoucherRedemptionQueryParams, VoucherRedemptionListResponse, ProcessVoucherRequest } from "../types/redemption"
 
 export class RedemptionService {
     async getRedemptions(params?: RedemptionQueryParams): Promise<RedemptionResponse> {
@@ -80,6 +80,88 @@ export class RedemptionService {
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Failed to complete cash redemption')
+        }
+    }
+
+    // Admin - Product Redemption
+    async getProductRedemptions(params?: ProductRedemptionQueryParams): Promise<ProductRedemptionListResponse> {
+        try {
+            const response = await apiService.client.get<ProductRedemptionListResponse>('/redemption/product/list', {
+                params,
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch product redemptions')
+        }
+    }
+
+    async processProduct(id: string | number, data: ProcessProductRequest): Promise<any> {
+        try {
+            const response = await apiService.client.post<any>(`/redemption/product/list/${id}`, data, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to process product redemption')
+        }
+    }
+
+    async completeProduct(id: string | number): Promise<any> {
+        try {
+            const response = await apiService.client.put<any>(`/redemption/product/list/${id}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to complete product redemption')
+        }
+    }
+
+    // Admin - Voucher Redemption
+    async getVoucherRedemptions(params?: VoucherRedemptionQueryParams): Promise<VoucherRedemptionListResponse> {
+        try {
+            const response = await apiService.client.get<VoucherRedemptionListResponse>('/redemption/voucher/list', {
+                params,
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch voucher redemptions')
+        }
+    }
+
+    async processVoucher(id: string | number, data: ProcessVoucherRequest): Promise<any> {
+        try {
+            const response = await apiService.client.post<any>(`/redemption/voucher/list/${id}`, data, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to process voucher redemption')
+        }
+    }
+
+    async completeVoucher(id: string | number): Promise<any> {
+        try {
+            const response = await apiService.client.put<any>(`/redemption/voucher/list/${id}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to complete voucher redemption')
         }
     }
 

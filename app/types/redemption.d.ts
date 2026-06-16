@@ -141,3 +141,120 @@ export interface CashRedemptionQueryParams {
 export interface CashRedemptionListResponse extends ApiResponse<CashRedemptionListItem[]> {
     meta: RedemptionMeta
 }
+
+// Admin - Product Redemption List
+export interface ProductRedemptionUser {
+    id: number
+    name: string
+    photo: string | null
+    email: string | null
+    phone: string | null
+}
+
+export interface ProductRedemptionListItem {
+    id: number
+    redempNo: string
+    pointsUsed: number
+    status: 'pending' | 'processing' | 'completed'
+    notes: string | null
+    user: ProductRedemptionUser
+    productDetails: {
+        catalog: {
+            id: number
+            name: string
+            image: string
+            category: {
+                id: number
+                name: string
+            }
+        }
+        name: string
+        email: string
+        phone: string
+        address: string
+        shipping: {
+            id: number
+            shipper: string
+            trackingNumber: string
+            shippedAt: string
+        } | null
+    }
+    createdAt: string
+}
+
+export interface ProductRedemptionQueryParams {
+    page?: number
+    limit?: number
+    q?: string
+    sort?: string
+    order?: 'asc' | 'desc'
+    'status[]'?: string[]
+    startDate?: string
+    endDate?: string
+}
+
+export interface ProductRedemptionListResponse extends ApiResponse<ProductRedemptionListItem[]> {
+    meta: RedemptionMeta
+}
+
+export interface ProcessProductRequest {
+    shipper: string
+    trackingNumber: string
+}
+
+// Admin - Voucher Redemption List
+export interface VoucherRedemptionUser {
+    id: number
+    name: string
+    photo: string | null
+    email: string | null
+    phone: string | null
+}
+
+export interface VoucherRedemptionListItem {
+    id: number
+    redempNo: string
+    pointsUsed: number
+    status: 'pending' | 'processing' | 'completed'
+    notes: string | null
+    user: VoucherRedemptionUser
+    voucherDetails: {
+        catalog: {
+            id: number
+            name: string
+            image: string
+            category: {
+                id: number
+                name: string
+            }
+        }
+        name: string
+        email: string
+        detail: {
+            id: number
+            code: string
+            expiredDate: string
+        } | null
+    }
+    createdAt: string
+}
+
+export interface VoucherRedemptionQueryParams {
+    page?: number
+    limit?: number
+    q?: string
+    sort?: string
+    order?: 'asc' | 'desc'
+    'status[]'?: string[]
+    startDate?: string
+    endDate?: string
+}
+
+export interface VoucherRedemptionListResponse extends ApiResponse<VoucherRedemptionListItem[]> {
+    meta: RedemptionMeta
+}
+
+export interface ProcessVoucherRequest {
+    code: string
+    expiredDate?: string
+}

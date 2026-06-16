@@ -45,6 +45,8 @@ const navItems: NavItem[] = [
     position: 'top',
     children: [
       { label: 'Tunai', to: '/redemption/cash', match: '/redemption/cash' },
+      { label: 'Produk', to: '/redemption/product', match: '/redemption/product' },
+      { label: 'Voucher', to: '/redemption/voucher', match: '/redemption/voucher' },
     ],
   },
   {
