@@ -8,6 +8,7 @@ export interface UserBankInfo {
   holderName: string | null
   name: string | null
   number: string | null
+  accountPath: string | null
 }
 
 export interface UserListItem {
@@ -35,6 +36,11 @@ export interface UserProfile {
   taxNumber: string | null
   company: string | null
   jobPosition: string | null
+  birthDate: string | null
+  birthPlace: string | null
+  address: string | null
+  companyAddress: string | null
+  identityPath: string | null
   bankDetails: UserBankInfo | null
   settings: {
     isSubscribe: boolean

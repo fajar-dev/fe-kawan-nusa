@@ -103,6 +103,34 @@
             </div>
             <p v-if="errors.phone" class="text-xs text-red-500 mt-1">{{ errors.phone }}</p>
           </div>
+          <!-- Tempat dan Tanggal Lahir -->
+          <div class="form-control w-full">
+            <label class="label mb-1.5 p-0">
+              <span class="text-xs text-neutral-800">Tempat dan Tanggal Lahir<span class="text-red-500">*</span></span>
+            </label>
+            <div 
+              class="flex items-center border border-base-200 rounded-lg h-10 overflow-hidden transition-all"
+              :class="{ 'border-red-500': errors.birthPlace || errors.birthDate, 'bg-neutral-50': !isEditing }"
+            >
+              <input 
+                v-model="form.birthPlace"
+                :disabled="!isEditing"
+                type="text" 
+                placeholder="Tempat Lahir"
+                class="flex-1 h-full px-3 text-sm border-none outline-none bg-transparent disabled:text-neutral-500"
+              />
+              <div class="w-px h-5 bg-base-200"></div>
+              <input 
+                v-model="form.birthDate"
+                :disabled="!isEditing"
+                type="date"
+                class="flex-1 h-full px-3 text-sm border-none outline-none bg-transparent disabled:text-neutral-500"
+              />
+            </div>
+            <p v-if="errors.birthPlace" class="text-xs text-red-500 mt-1">{{ errors.birthPlace }}</p>
+            <p v-if="errors.birthDate" class="text-xs text-red-500 mt-1">{{ errors.birthDate }}</p>
+          </div>
+          <!-- NIK -->
           <div class="form-control w-full">
             <label class="label mb-1.5 p-0">
               <span class="text-xs text-neutral-800">NIK<span class="text-red-500">*</span></span>
@@ -119,6 +147,7 @@
             />
             <p v-if="errors.identityNumber" class="text-xs text-red-500 mt-1">{{ errors.identityNumber }}</p>
           </div>
+          <!-- NPWP -->
           <div class="form-control w-full">
             <label class="label mb-1.5 p-0">
               <span class="text-xs text-neutral-800">NPWP<span class="text-red-500">*</span></span>
@@ -133,6 +162,25 @@
             />
             <p v-if="errors.taxNumber" class="text-xs text-red-500 mt-1">{{ errors.taxNumber }}</p>
           </div>
+          <!-- Alamat Rumah -->
+          <div class="form-control w-full md:col-span-2">
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="label p-0">
+                <span class="text-xs text-neutral-800">Alamat Rumah<span class="text-red-500">*</span></span>
+              </label>
+              <span v-if="isEditing" class="text-xs text-neutral-400">{{ (form.address || '').length }}/110</span>
+            </div>
+            <textarea 
+              v-model="form.address"
+              :disabled="!isEditing"
+              placeholder="Isi Alamat Rumah"
+              maxlength="110"
+              rows="3"
+              class="textarea textarea-bordered w-full border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none resize-none disabled:bg-neutral-50 disabled:text-neutral-500"
+              :class="{ 'border-red-500': errors.address }"
+            ></textarea>
+            <p v-if="errors.address" class="text-xs text-red-500 mt-1">{{ errors.address }}</p>
+          </div>
         </div>
         
         <!-- Company Info -->
@@ -141,7 +189,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
             <div class="form-control w-full">
               <label class="label mb-1.5 p-0">
-                <span class="text-xs text-neutral-800">Nama Perusahaan<span class="text-red-500">*</span></span>
+                <span class="text-xs text-neutral-800">Nama Perusahaan</span>
               </label>
               <input 
                 v-model="form.company"
@@ -154,7 +202,7 @@
             </div>
             <div class="form-control w-full">
               <label class="label mb-1.5 p-0">
-                <span class="text-xs text-neutral-800">Jabatan<span class="text-red-500">*</span></span>
+                <span class="text-xs text-neutral-800">Jabatan</span>
               </label>
               <input 
                 v-model="form.jobPosition"
@@ -164,6 +212,25 @@
                 :class="{ 'border-red-500': errors.jobPosition }"
               />
               <p v-if="errors.jobPosition" class="text-xs text-red-500 mt-1">{{ errors.jobPosition }}</p>
+            </div>
+            <!-- Alamat Perusahaan -->
+            <div class="form-control w-full md:col-span-2">
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="label p-0">
+                  <span class="text-xs text-neutral-800">Alamat Perusahaan</span>
+                </label>
+                <span v-if="isEditing" class="text-xs text-neutral-400">{{ (form.companyAddress || '').length }}/110</span>
+              </div>
+              <textarea 
+                v-model="form.companyAddress"
+                :disabled="!isEditing"
+                placeholder="Isi Alamat Perusahaan"
+                maxlength="110"
+                rows="3"
+                class="textarea textarea-bordered w-full border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none resize-none disabled:bg-neutral-50 disabled:text-neutral-500"
+                :class="{ 'border-red-500': errors.companyAddress }"
+              ></textarea>
+              <p v-if="errors.companyAddress" class="text-xs text-red-500 mt-1">{{ errors.companyAddress }}</p>
             </div>
           </div>
         </div>
@@ -190,12 +257,16 @@ const fetchProfile = inject<() => Promise<void>>('fetchProfile')
 const accountSchema = z.object({
   firstName: z.string().min(1, 'Nama depan tidak boleh kosong'),
   lastName: z.string().min(1, 'Nama belakang tidak boleh kosong'),
-  email: z.string().email('Format email tidak valid').optional().or(z.literal('')),
-  phone: z.string().optional().or(z.literal('')),
+  email: z.string().min(1, 'Email tidak boleh kosong').email('Format email tidak valid'),
+  phone: z.string().min(1, 'Nomor handphone tidak boleh kosong'),
   company: z.string().optional().or(z.literal('')),
   jobPosition: z.string().optional().or(z.literal('')),
-  taxNumber: z.string().optional().or(z.literal('')),
-  identityNumber: z.coerce.number().optional().nullable(),
+  taxNumber: z.string().min(1, 'NPWP tidak boleh kosong'),
+  identityNumber: z.coerce.number().min(1, 'NIK tidak boleh kosong'),
+  birthDate: z.string().min(1, 'Tanggal lahir tidak boleh kosong'),
+  birthPlace: z.string().min(1, 'Tempat lahir tidak boleh kosong'),
+  address: z.string().min(1, 'Alamat tidak boleh kosong').max(110, 'Alamat maksimal 110 karakter'),
+  companyAddress: z.string().max(110, 'Alamat perusahaan maksimal 110 karakter').optional().or(z.literal('')),
 })
 
 const form = reactive<UpdateAccountRequest>({
@@ -207,6 +278,10 @@ const form = reactive<UpdateAccountRequest>({
   jobPosition: '',
   taxNumber: '',
   identityNumber: null,
+  birthDate: '',
+  birthPlace: '',
+  address: '',
+  companyAddress: '',
 })
 
 watch(
@@ -221,6 +296,10 @@ watch(
       form.jobPosition = newProfile.jobPosition || ''
       form.taxNumber = newProfile.taxNumber || ''
       form.identityNumber = newProfile.identityNumber || null
+      form.birthDate = newProfile.birthDate || ''
+      form.birthPlace = newProfile.birthPlace || ''
+      form.address = newProfile.address || ''
+      form.companyAddress = newProfile.companyAddress || ''
     }
   },
   { immediate: true }
@@ -231,10 +310,13 @@ const handleCopy = () => {
     `Nama: ${form.firstName} ${form.lastName}`,
     `Email: ${form.email}`,
     `Phone: ${form.phone}`,
+    `Tempat/Tgl Lahir: ${form.birthPlace}, ${form.birthDate}`,
     `NIK: ${form.identityNumber}`,
     `NPWP: ${form.taxNumber}`,
+    `Alamat: ${form.address}`,
     `Perusahaan: ${form.company}`,
-    `Jabatan: ${form.jobPosition}`
+    `Jabatan: ${form.jobPosition}`,
+    `Alamat Perusahaan: ${form.companyAddress}`
   ].join('\n')
   
   navigator.clipboard.writeText(info).then(() => {
@@ -254,6 +336,10 @@ const handleCancel = () => {
     form.jobPosition = profile.value.jobPosition || ''
     form.taxNumber = profile.value.taxNumber || ''
     form.identityNumber = profile.value.identityNumber || null
+    form.birthDate = profile.value.birthDate || ''
+    form.birthPlace = profile.value.birthPlace || ''
+    form.address = profile.value.address || ''
+    form.companyAddress = profile.value.companyAddress || ''
   }
   isEditing.value = false
   errors.value = {}

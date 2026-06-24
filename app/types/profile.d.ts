@@ -2,6 +2,7 @@ export interface ProfileBankDetails {
   holderName: string | null;
   name: string | null;
   number: string | null;
+  accountPath: string | null;
 }
 
 export interface ProfileSettings {
@@ -20,6 +21,11 @@ export interface Profile {
   jobPosition: string | null;
   taxNumber: string | null;
   identityNumber: number | null;
+  birthDate: string | null;
+  birthPlace: string | null;
+  address: string | null;
+  companyAddress: string | null;
+  identityPath: string | null;
   bankDetails: ProfileBankDetails;
   settings: ProfileSettings;
   isActive: boolean;
@@ -43,6 +49,10 @@ export interface UpdateAccountRequest {
   jobPosition?: string;
   taxNumber?: string;
   identityNumber?: number | null;
+  birthDate?: string;
+  birthPlace?: string;
+  address?: string;
+  companyAddress?: string;
 }
 export interface UpdateBankRequest {
   accountHolderName: string;

@@ -68,6 +68,15 @@
                   </div>
                 </div>
                 <div class="flex items-start gap-4">
+                  <Cake class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                  <div class="flex flex-col">
+                    <span class="text-xs text-neutral-900">Tempat / Tgl Lahir</span>
+                    <span class="text-xs text-neutral-800 font-medium">
+                      {{ user.birthPlace || '-' }}, {{ user.birthDate || '-' }}
+                    </span>
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
                   <Hash class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
                   <div class="flex flex-col">
                     <span class="text-xs text-neutral-900">No. Identitas</span>
@@ -82,6 +91,13 @@
                   </div>
                 </div>
                 <div class="flex items-start gap-4">
+                  <MapPin class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                  <div class="flex flex-col">
+                    <span class="text-xs text-neutral-900">Alamat</span>
+                    <span class="text-xs text-neutral-800 font-medium">{{ user.address || '-' }}</span>
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
                   <Building2 class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
                   <div class="flex flex-col">
                     <span class="text-xs text-neutral-900">Perusahaan</span>
@@ -93,6 +109,13 @@
                   <div class="flex flex-col">
                     <span class="text-xs text-neutral-900">Jabatan</span>
                     <span class="text-xs text-neutral-800 font-medium">{{ user.jobPosition || '-' }}</span>
+                  </div>
+                </div>
+                <div v-if="user.companyAddress" class="flex items-start gap-4">
+                  <MapPin class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                  <div class="flex flex-col">
+                    <span class="text-xs text-neutral-900">Alamat Perusahaan</span>
+                    <span class="text-xs text-neutral-800 font-medium">{{ user.companyAddress }}</span>
                   </div>
                 </div>
                 <div class="flex items-start gap-4">
@@ -199,7 +222,7 @@
 <script setup lang="ts">
 import { 
   CircleHelp, Calendar, UserRound as UserIcon, Mail, Phone, Hash, 
-  FileText, Building2, Briefcase, Landmark, ReceiptText, Coins
+  FileText, Building2, Briefcase, Landmark, ReceiptText, Coins, Cake, MapPin
 } from 'lucide-vue-next'
 import { userService } from '~/services/user-service'
 import { getInitials } from '~/utils/initials'
