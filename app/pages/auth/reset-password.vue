@@ -121,7 +121,6 @@ useSeoMeta({
 const route = useRoute()
 const toast = useToast()
 
-const email = route.query.email as string
 const token = route.query.token as string
 
 const newPassword = ref('')
@@ -147,14 +146,14 @@ const resetPasswordSchema = z.object({
 
 // Validasi token saat load
 onMounted(async () => {
-    if (!email || !token) {
+    if (!token) {
         toast.error('Tautan reset tidak valid. Silakan coba lagi.')
         navigateTo('/auth/forgot-password')
         return
     }
 
     try {
-        await authService.validateResetPassword(email, token)
+        await authService.validateResetPassword(token)
     } catch (error) {
         navigateTo('/auth/forgot-password')
     }
