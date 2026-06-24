@@ -3,7 +3,7 @@
   <div class="card bg-white border border-base-200 rounded-2xl shadow-sm">
     <form @submit.prevent="handleSubmit">
       <!-- Informasi Pribadi -->
-      <div class="px-8 py-6">
+      <div class="px-4 md:px-8 py-6">
         <h3 class="text-base font-semibold text-neutral-800 mb-5">Informasi Pribadi</h3>
 
         <div class="space-y-4">
@@ -173,7 +173,7 @@
       </div>
 
       <!-- Informasi Bank -->
-      <div class="px-8 py-6 border-t border-base-200">
+      <div class="px-4 md:px-8 py-6 border-t border-base-200">
         <h3 class="text-base font-semibold text-neutral-800 mb-5">Informasi Bank</h3>
 
         <div class="space-y-4">
@@ -255,7 +255,7 @@
       </div>
 
       <!-- Perusahaan Toggle & Info -->
-      <div class="px-8 py-6 border-t border-base-200">
+      <div class="px-4 md:px-8 py-6 border-t border-base-200">
         <div class="flex items-center gap-3 mb-5">
           <label class="label cursor-pointer gap-2 p-0">
             <input type="checkbox" v-model="hasCompany" class="checkbox checkbox-sm checkbox-primary border-base-300 rounded" />
@@ -323,7 +323,7 @@
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex items-center justify-end gap-3 px-8 py-6 border-t border-base-200">
+      <div class="flex items-center justify-end gap-3 px-4 md:px-8 py-6 border-t border-base-200">
         <NuxtLink 
           to="/auth/sign-in"
           class="btn btn-outline border-primary text-primary hover:bg-primary hover:border-primary hover:text-white rounded-lg font-semibold"
