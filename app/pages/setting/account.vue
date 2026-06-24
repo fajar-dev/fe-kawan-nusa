@@ -102,6 +102,15 @@
               <Phone class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 z-10 pointer-events-none" />
             </div>
             <p v-if="errors.phone" class="text-xs text-red-500 mt-1">{{ errors.phone }}</p>
+            <label class="flex items-center gap-2 mt-1.5 cursor-pointer">
+              <input 
+                v-model="form.hasWhatsapp"
+                :disabled="!isEditing"
+                type="checkbox"
+                class="checkbox checkbox-primary checkbox-xs rounded"
+              />
+              <span class="text-xs text-neutral-600">Nomor ini terhubung dengan WhatsApp</span>
+            </label>
           </div>
           <!-- Tempat dan Tanggal Lahir -->
           <div class="form-control w-full">
@@ -274,6 +283,7 @@ const form = reactive<UpdateAccountRequest>({
   lastName: '',
   email: '',
   phone: '',
+  hasWhatsapp: false,
   company: '',
   jobPosition: '',
   taxNumber: '',
@@ -292,6 +302,7 @@ watch(
       form.lastName = newProfile.lastName || ''
       form.email = newProfile.email || ''
       form.phone = newProfile.phone || ''
+      form.hasWhatsapp = newProfile.hasWhatsapp || false
       form.company = newProfile.company || ''
       form.jobPosition = newProfile.jobPosition || ''
       form.taxNumber = newProfile.taxNumber || ''
@@ -332,6 +343,7 @@ const handleCancel = () => {
     form.lastName = profile.value.lastName || ''
     form.email = profile.value.email || ''
     form.phone = profile.value.phone || ''
+    form.hasWhatsapp = profile.value.hasWhatsapp || false
     form.company = profile.value.company || ''
     form.jobPosition = profile.value.jobPosition || ''
     form.taxNumber = profile.value.taxNumber || ''

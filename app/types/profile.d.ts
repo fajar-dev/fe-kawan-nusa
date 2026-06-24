@@ -17,6 +17,7 @@ export interface Profile {
   photo: string | null;
   email: string | null;
   phone: string | null;
+  hasWhatsapp: boolean;
   company: string | null;
   jobPosition: string | null;
   taxNumber: string | null;
@@ -45,6 +46,7 @@ export interface UpdateAccountRequest {
   lastName: string;
   email?: string;
   phone?: string;
+  hasWhatsapp?: boolean;
   company?: string;
   jobPosition?: string;
   taxNumber?: string;
