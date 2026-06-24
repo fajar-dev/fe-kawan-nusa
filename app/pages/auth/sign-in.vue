@@ -15,6 +15,27 @@
       </div>
     </div>
 
+    <!-- Unverified Email Alert -->
+    <div v-if="showVerificationAlert" class="mb-5 rounded-lg border border-amber-200 bg-amber-50 p-4">
+      <div class="flex items-start gap-3">
+        <MailX class="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+        <div class="flex-1">
+          <p class="text-sm font-medium text-amber-800">Email belum diverifikasi</p>
+          <p class="text-xs text-amber-600 mt-1">Silakan cek email kamu untuk verifikasi akun terlebih dahulu.</p>
+          <button
+            type="button"
+            @click="handleResendVerification"
+            :disabled="resendLoading || resendCooldown > 0"
+            class="mt-3 btn btn-sm bg-amber-600 hover:bg-amber-700 border-none text-white rounded-lg text-xs font-medium flex items-center gap-1.5"
+          >
+            <span v-if="resendLoading" class="loading loading-spinner loading-xs"></span>
+            <RefreshCw v-else-if="resendCooldown <= 0" class="w-3.5 h-3.5" />
+            {{ resendLoading ? 'Mengirim...' : resendCooldown > 0 ? `Kirim Ulang (${resendCooldown}s)` : 'Kirim Ulang Email Verifikasi' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Form -->
     <form @submit.prevent="handleLogin" class="space-y-5">
       <!-- Email -->
@@ -112,9 +133,11 @@
 </template>
 
 <script setup lang="ts">
-import { Eye, EyeOff } from 'lucide-vue-next'
+import { Eye, EyeOff, MailX, RefreshCw } from 'lucide-vue-next'
 import { authService } from '~/services/auth-service'
+import { apiService } from '~/services/api-service'
 import { z } from 'zod'
+import type { AuthResponse } from '~/types/auth'
 
 definePageMeta({
   layout: 'auth',
@@ -139,6 +162,12 @@ const loading = ref(false)
 const googleLoading = ref(false)
 const errors = ref<Record<string, string>>({})
 const toast = useToast()
+
+// Verification alert state
+const showVerificationAlert = ref(false)
+const resendLoading = ref(false)
+const resendCooldown = ref(0)
+let cooldownTimer: ReturnType<typeof setInterval> | null = null
 
 const handleOnSuccess = async (response: { code: string }) => {
   googleLoading.value = true
@@ -166,10 +195,41 @@ const handleGoogleLogin = () => {
   login()
 }
 
+const startResendCooldown = () => {
+  resendCooldown.value = 60
+  cooldownTimer = setInterval(() => {
+    resendCooldown.value--
+    if (resendCooldown.value <= 0 && cooldownTimer) {
+      clearInterval(cooldownTimer)
+      cooldownTimer = null
+    }
+  }, 1000)
+}
+
+const handleResendVerification = async () => {
+  if (resendLoading.value || resendCooldown.value > 0) return
+
+  const email = identifier.value
+  if (!email) {
+    toast.error('Masukkan email terlebih dahulu.')
+    return
+  }
+
+  resendLoading.value = true
+  try {
+    const res = await authService.resendVerification(email)
+    toast.success(res.message || 'Email verifikasi berhasil dikirim ulang.')
+    startResendCooldown()
+  } finally {
+    resendLoading.value = false
+  }
+}
+
 const handleLogin = async () => {
   if (loading.value) return
   
   errors.value = {}
+  showVerificationAlert.value = false
 
   // Validasi input
   const result = loginSchema.safeParse({
@@ -187,11 +247,44 @@ const handleLogin = async () => {
   loading.value = true
 
   try {
-    await authService.login(identifier.value, password.value)
-    toast.success( 'Login berhasil! Selamat datang.')
+    const response = await apiService.client.post<AuthResponse>('/auth/login', {
+      identifier: identifier.value,
+      password: password.value
+    })
+    // Set session manually (same as authService internals)
+    const { user, accessToken, refreshToken } = response.data.data
+    localStorage.setItem('accessToken', accessToken)
+    localStorage.setItem('refreshToken', refreshToken)
+    localStorage.setItem('user', JSON.stringify(user))
+    authService.token.value = accessToken
+    authService.user.value = user
+
+    toast.success('Login berhasil! Selamat datang.')
     navigateTo('/')
-  }  finally {
+  } catch (error: any) {
+    const responseData = error?.response?.data
+    const message = responseData?.message || ''
+
+    if (message.toLowerCase().includes('verify') || message.toLowerCase().includes('verifikasi')) {
+      showVerificationAlert.value = true
+      toast.error(message)
+    } else {
+      // Show general error toast
+      let errorMessage = ''
+      if (error?.response?.status === 422 && responseData?.errors) {
+        errorMessage = responseData.errors.map((err: any) => err.message).join(', ')
+      } else {
+        errorMessage = message || error?.message || 'Terjadi kesalahan'
+      }
+      toast.error(message || 'Gagal', errorMessage !== message ? errorMessage : '')
+    }
+  } finally {
     loading.value = false
   }
 }
+
+onUnmounted(() => {
+  if (cooldownTimer) clearInterval(cooldownTimer)
+})
 </script>
+

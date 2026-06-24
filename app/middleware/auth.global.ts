@@ -3,7 +3,7 @@ import { useAuth } from "~/composables/useAuth"
 export default defineNuxtRouteMiddleware((to) => {
     const { state } = useAuth()
     
-    const publicPaths = ['/auth/sign-in', '/auth/forgot-password', '/auth/reset-password', '/auth/admin']
+    const publicPaths = ['/auth/sign-in', '/auth/forgot-password', '/auth/reset-password', '/auth/admin', '/auth/verify-email']
     
     // Allow public pages
     if (publicPaths.includes(to.path) || to.path.startsWith('/auth/register')) return

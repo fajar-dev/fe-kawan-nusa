@@ -527,7 +527,7 @@ const handleSubmit = async () => {
     const response = await authService.register(formData)
     if (response.success) {
       toast.success(response.message || 'Pendaftaran berhasil dikirim!')
-      navigateTo('/auth/register/success')
+      navigateTo(`/auth/register/success?email=${encodeURIComponent(form.email)}`)
     }
   } finally {
     loading.value = false

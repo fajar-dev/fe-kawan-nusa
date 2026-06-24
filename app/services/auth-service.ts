@@ -158,6 +158,33 @@ export class AuthService {
         }
     }
 
+    async resendVerification(email: string): Promise<ApiResponse<null>> {
+        try {
+            const response = await apiService.client.post<ApiResponse<null>>('/auth/resend-verification', { email })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error)
+        }
+    }
+
+    async verifyEmail(token: string): Promise<ApiResponse<null>> {
+        try {
+            const response = await apiService.client.get<ApiResponse<null>>('/auth/verify-email?token=' + token)
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error)
+        }
+    }
+
+    async checkEmailStatus(email: string): Promise<ApiResponse<any>> {
+        try {
+            const response = await apiService.client.get<ApiResponse<any>>('/auth/check-email-status?email=' + encodeURIComponent(email))
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error)
+        }
+    }
+
     async logout() {
         if (typeof window === 'undefined') return
             const accessToken = localStorage.getItem(this.ACCESS_TOKEN_KEY)

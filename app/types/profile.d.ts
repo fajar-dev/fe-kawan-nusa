@@ -30,6 +30,7 @@ export interface Profile {
   bankDetails: ProfileBankDetails;
   settings: ProfileSettings;
   isActive: boolean;
+  isVerified: boolean;
   createdAt: string;
   passwordUpdatedAt: string | null;
 }
