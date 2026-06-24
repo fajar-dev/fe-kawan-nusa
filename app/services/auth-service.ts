@@ -100,6 +100,17 @@ export class AuthService {
         }
     }
 
+    async register(formData: FormData): Promise<ApiResponse<null>> {
+        try {
+            const response = await apiService.client.post<ApiResponse<null>>('/auth/register', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error)
+        }
+    }
+
     async google(code: string): Promise<AuthResponse> {
         try {
             const response = await apiService.client.post<AuthResponse>('/auth/google', { code })

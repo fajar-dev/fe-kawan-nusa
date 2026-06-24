@@ -370,6 +370,7 @@
 <script setup lang="ts">
 import { Upload, X, Mail, Phone, Info } from 'lucide-vue-next'
 import { z } from 'zod'
+import { authService } from '~/services/auth-service'
 
 definePageMeta({
   layout: 'onboarding',
@@ -495,9 +496,39 @@ const handleSubmit = async () => {
 
   loading.value = true
   try {
-    // TODO: Implement register API call
-    toast.success('Pendaftaran berhasil dikirim!')
-    navigateTo('/auth/sign-in')
+    const formData = new FormData()
+    
+    // Text fields
+    formData.append('firstName', form.firstName)
+    formData.append('lastName', form.lastName)
+    formData.append('birthPlace', form.birthPlace)
+    formData.append('birthDate', form.birthDate)
+    formData.append('identityNumber', form.identityNumber)
+    formData.append('taxNumber', form.taxNumber)
+    formData.append('email', form.email)
+    formData.append('phone', form.phone)
+    formData.append('address', form.address)
+    formData.append('bankName', form.bankName)
+    formData.append('accountNumber', form.accountNumber)
+    formData.append('accountHolderName', form.accountHolderName)
+    formData.append('isWhatsapp', String(form.isWhatsapp))
+    
+    // Optional company fields
+    if (hasCompany.value) {
+      if (form.company) formData.append('company', form.company)
+      if (form.jobPosition) formData.append('jobPosition', form.jobPosition)
+      if (form.companyAddress) formData.append('companyAddress', form.companyAddress)
+    }
+    
+    // File uploads
+    if (ktpFile.value) formData.append('identity', ktpFile.value)
+    if (bankBookFile.value) formData.append('account', bankBookFile.value)
+
+    const response = await authService.register(formData)
+    if (response.success) {
+      toast.success(response.message || 'Pendaftaran berhasil dikirim!')
+      navigateTo('/auth/register/success')
+    }
   } finally {
     loading.value = false
   }
