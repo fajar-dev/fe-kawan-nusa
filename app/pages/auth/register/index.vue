@@ -107,6 +107,23 @@
             </div>
           </div>
 
+          <!-- NPWP -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+            <div class="form-control w-full">
+              <label class="label mb-1.5 p-0">
+                <span class="text-xs text-neutral-800 font-medium">NPWP<span class="text-red-500">*</span></span>
+              </label>
+              <input 
+                v-model="form.taxNumber"
+                type="text"
+                placeholder="Masukkan nomor NPWP"
+                class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none"
+                :class="{ 'border-red-500': errors.taxNumber }"
+              />
+              <p v-if="errors.taxNumber" class="text-xs text-red-500 mt-1">{{ errors.taxNumber }}</p>
+            </div>
+          </div>
+
           <!-- Email & Nomor Handphone -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
             <div class="form-control w-full">
@@ -392,6 +409,7 @@ const form = reactive({
   company: '',
   jobPosition: '',
   companyAddress: '',
+  taxNumber: '',
 })
 
 // Validation schema
@@ -401,6 +419,7 @@ const registerSchema = z.object({
   birthPlace: z.string().min(1, 'Tempat lahir tidak boleh kosong'),
   birthDate: z.string().min(1, 'Tanggal lahir tidak boleh kosong'),
   identityNumber: z.string().min(16, 'NIK harus 16 digit').max(16, 'NIK harus 16 digit'),
+  taxNumber: z.string().min(1, 'NPWP tidak boleh kosong'),
   email: z.string().min(1, 'Email tidak boleh kosong').email('Format email tidak valid'),
   phone: z.string().min(1, 'Nomor handphone tidak boleh kosong'),
   address: z.string().min(1, 'Alamat tidak boleh kosong').max(110, 'Alamat maksimal 110 karakter'),
