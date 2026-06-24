@@ -100,9 +100,13 @@
     </div>
     
     <!-- Footer -->
-    <p class="text-center text-sm text-gray-500 mt-auto pt-10">
+    <p class="text-center text-sm text-gray-600 mt-auto pt-10">
       Belum jadi kawan nusa?
-      <NuxtLink to="#" class="text-primary font-semibold hover:underline">Hubungi kami</NuxtLink>
+      <NuxtLink to="#" class="text-primary font-semibold hover:underline">Daftar Disini</NuxtLink>
+      <br>
+      Atau
+      <NuxtLink to="#" class="text-primary font-semibold hover:underline">Hubungi Kami</NuxtLink>
+      untuk bantuan lebih lanjut
     </p>
   </div>
 </template>
