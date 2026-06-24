@@ -84,6 +84,36 @@ export class ProfileService {
             return handleServiceError(error || 'Failed to upload photo')
         }
     }
+
+    async completeBoarding(): Promise<ProfileResponse> {
+        try {
+            const response = await apiService.client.post<ProfileResponse>('/profile/complete-boarding', {}, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to complete boarding')
+        }
+    }
+
+    async updateDocuments(identityFile?: File, accountFile?: File): Promise<ProfileResponse> {
+        try {
+            const formData = new FormData()
+            if (identityFile) formData.append('identity', identityFile)
+            if (accountFile) formData.append('account', accountFile)
+            const response = await apiService.client.post<ProfileResponse>('/profile/documents', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to upload documents')
+        }
+    }
 }
 
 export const profileService = new ProfileService()

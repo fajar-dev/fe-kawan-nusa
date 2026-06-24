@@ -368,9 +368,17 @@ const handleSave = async () => {
     return
   }
 
+  // Convert empty company fields to null
+  const payload = {
+    ...result.data,
+    company: result.data.company || null,
+    jobPosition: result.data.jobPosition || null,
+    companyAddress: result.data.companyAddress || null,
+  }
+
   loading.value = true
   try {
-    const response = await profileService.updateAccount(result.data)
+    const response = await profileService.updateAccount(payload)
     if (response.success) {
       toast.success(response.message || 'Profil berhasil diperbarui')
       isEditing.value = false

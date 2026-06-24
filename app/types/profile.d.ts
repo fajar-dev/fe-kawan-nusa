@@ -31,6 +31,7 @@ export interface Profile {
   settings: ProfileSettings;
   isActive: boolean;
   isVerified: boolean;
+  isBoarding: boolean;
   createdAt: string;
   passwordUpdatedAt: string | null;
 }

@@ -13,6 +13,19 @@ export default defineNuxtRouteMiddleware((to) => {
       return navigateTo('/auth/sign-in')
     }
 
+    // Boarding flow: if not boarded, force to boarding pages
+    if (state.user && state.user.role === 'user' && !state.user.isBoarding) {
+      if (!to.path.startsWith('/boarding')) {
+        return navigateTo('/boarding')
+      }
+      return
+    }
+
+    // Already boarded: block access to boarding pages
+    if (state.user && state.user.isBoarding && to.path.startsWith('/boarding')) {
+      return navigateTo('/')
+    }
+
     // Enforce role-based access (set via definePageMeta({ role: 'user' }))
     const requiredRole = to.meta.role as string | undefined
     if (requiredRole && state.role !== requiredRole) {

@@ -14,7 +14,7 @@
               Portal Referal PT Media Antar Nusa
             </p>
           </div>
-          <h1 class="text-base md:text-xl font-semibold text-neutral-800">Pendaftaran Referal Baru</h1>
+          <h1 class="text-base md:text-xl font-semibold" :class="titleClass">{{ title }}</h1>
         </div>
       </div>
 
@@ -22,3 +22,10 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+const route = useRoute()
+
+const title = computed(() => (route.meta.layoutTitle as string) || 'Pendaftaran Referal Baru')
+const titleClass = computed(() => route.meta.layoutTitle ? 'text-primary' : 'text-neutral-800')
+</script>
