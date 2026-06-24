@@ -104,18 +104,18 @@
                     <!-- fallback generator placeholder -->
                     <div v-else class="w-full h-full bg-gradient-to-br from-primary/10 to-purple-100/50 rounded-xl flex flex-col justify-center items-center p-4 text-center border border-primary/5">
                         <Coins class="w-12 h-12 text-primary/30 mb-2" />
-                        <span class="text-[10px] uppercase font-bold tracking-widest text-primary/40">{{ reward.type }}</span>
+                        <span class="text-xs uppercase font-bold tracking-widest text-primary/40">{{ reward.type }}</span>
                     </div>
                 </div>
 
                 <div class="card-body p-4 flex flex-col gap-3">
                     <!-- Badges -->
                     <div class="flex flex-wrap items-center gap-1.5">
-                        <span class="px-2.5 py-0.5 bg-primary/10 text-primary font-medium text-[10px] rounded-full border border-primary/0">
+                        <span class="px-2.5 py-0.5 bg-primary/10 text-primary font-medium text-xs rounded-full border border-primary/0">
                             {{ reward.category?.name || 'Kategori' }}
                         </span>
                         <span 
-                            class="px-2.5 py-0.5 font-medium text-[10px] rounded-full border uppercase tracking-wider"
+                            class="px-2.5 py-0.5 font-medium text-xs rounded-full border uppercase tracking-wider"
                             :class="reward.type === 'voucher' ? 'bg-amber-50 text-amber-600 border-amber-200/50' : 'bg-blue-50 text-blue-600 border-blue-200/50'"
                         >
                             {{ reward.type }}
@@ -146,7 +146,7 @@
                                 S&K <CircleHelp class="w-3.5 h-3.5 ml-0.5" />
                             </button>
                         </div>
-                        <div v-if="reward.expiredDate" class="text-[10px] text-red-500 font-medium">
+                        <div v-if="reward.expiredDate" class="text-xs text-red-500 font-medium">
                             Berakhir: {{ reward.expiredDate }}
                         </div>
                     </div>

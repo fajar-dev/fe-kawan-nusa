@@ -29,7 +29,7 @@
           class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary bg-white"
           :class="{ 'border-red-500': errors.identifier }"
         />
-        <p v-if="errors.identifier" class="text-[10px] text-red-500 mt-1">{{ errors.identifier }}</p>
+        <p v-if="errors.identifier" class="text-xs text-red-500 mt-1">{{ errors.identifier }}</p>
       </div>
 
       <!-- Password -->
@@ -55,7 +55,7 @@
             <EyeOff v-else class="h-4 w-4" />
           </button>
         </div>
-        <p v-if="errors.password" class="text-[10px] text-red-500 mt-1">{{ errors.password }}</p>
+        <p v-if="errors.password" class="text-xs text-red-500 mt-1">{{ errors.password }}</p>
       </div>
 
       <!-- Remember + Forgot -->

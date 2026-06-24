@@ -60,7 +60,7 @@
               class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
               :class="{ 'border-red-500': errors.accountHolderName }"
             />
-            <p v-if="errors.accountHolderName" class="text-[10px] text-red-500 mt-1">{{ errors.accountHolderName }}</p>
+            <p v-if="errors.accountHolderName" class="text-xs text-red-500 mt-1">{{ errors.accountHolderName }}</p>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
@@ -80,7 +80,7 @@
                 <option value="BNI">BNI</option>
                 <option value="BRI">BRI</option>
               </select>
-              <p v-if="errors.bankName" class="text-[10px] text-red-500 mt-1">{{ errors.bankName }}</p>
+              <p v-if="errors.bankName" class="text-xs text-red-500 mt-1">{{ errors.bankName }}</p>
             </div>
             <div class="form-control w-full">
               <label class="label mb-1.5 p-0">
@@ -93,7 +93,7 @@
                 class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
                 :class="{ 'border-red-500': errors.accountNumber }"
               />
-              <p v-if="errors.accountNumber" class="text-[10px] text-red-500 mt-1">{{ errors.accountNumber }}</p>
+              <p v-if="errors.accountNumber" class="text-xs text-red-500 mt-1">{{ errors.accountNumber }}</p>
             </div>
           </div>
         </div>

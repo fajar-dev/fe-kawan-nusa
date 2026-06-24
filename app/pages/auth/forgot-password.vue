@@ -33,7 +33,7 @@
           class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary bg-white"
           :class="{ 'border-red-500': errors.email }"
         />
-        <p v-if="errors.email" class="text-[10px] text-red-500 mt-1">{{ errors.email }}</p>
+        <p v-if="errors.email" class="text-xs text-red-500 mt-1">{{ errors.email }}</p>
       </div>
 
       <!-- Submit -->

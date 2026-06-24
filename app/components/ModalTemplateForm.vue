@@ -101,7 +101,7 @@
                   <template v-else>
                     <Upload class="w-8 h-8 text-neutral-400 mb-2 group-hover:text-primary transition-colors" />
                     <span class="text-xs font-semibold text-neutral-600 text-center">Pilih / Drag & Drop Thumbnail</span>
-                    <span class="text-[10px] text-neutral-400 mt-0.5 text-center">Format JPG/PNG/WebP, maks. 2MB</span>
+                    <span class="text-xs text-neutral-400 mt-0.5 text-center">Format JPG/PNG/WebP, maks. 2MB</span>
                   </template>
                 </div>
                 <p v-if="errors.thumbnail" class="text-xs text-red-500 mt-1">{{ errors.thumbnail }}</p>
@@ -119,7 +119,7 @@
                       <CheckCircle2 class="w-5 h-5 text-emerald-500 shrink-0" />
                       <div class="truncate">
                         <p class="font-semibold text-emerald-800 truncate">{{ assetFiles.png.name }}</p>
-                        <p class="text-[10px] text-emerald-600 font-medium">Baru • {{ (assetFiles.png.size / 1024 / 1024).toFixed(2) }} MB</p>
+                        <p class="text-xs text-emerald-600 font-medium">Baru • {{ (assetFiles.png.size / 1024 / 1024).toFixed(2) }} MB</p>
                       </div>
                     </div>
                     <button type="button" @click.stop="removeAssetFile('png')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg z-20 transition-colors">
@@ -140,7 +140,7 @@
                       <FileImage class="w-5 h-5 text-blue-500 shrink-0" />
                       <div class="truncate">
                         <p class="font-semibold text-neutral-800 truncate">Aset PNG Tersedia</p>
-                        <p class="text-[10px] text-blue-500 font-medium">Klik untuk ganti file</p>
+                        <p class="text-xs text-blue-500 font-medium">Klik untuk ganti file</p>
                       </div>
                     </div>
                     <span class="badge badge-sm border-none bg-blue-100/70 text-blue-700 font-bold px-2 py-0.5 rounded">Tersedia</span>
@@ -177,7 +177,7 @@
                       <CheckCircle2 class="w-5 h-5 text-emerald-500 shrink-0" />
                       <div class="truncate">
                         <p class="font-semibold text-emerald-800 truncate">{{ assetFiles.jpg.name }}</p>
-                        <p class="text-[10px] text-emerald-600 font-medium">Baru • {{ (assetFiles.jpg.size / 1024 / 1024).toFixed(2) }} MB</p>
+                        <p class="text-xs text-emerald-600 font-medium">Baru • {{ (assetFiles.jpg.size / 1024 / 1024).toFixed(2) }} MB</p>
                       </div>
                     </div>
                     <button type="button" @click.stop="removeAssetFile('jpg')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg z-20 transition-colors">
@@ -198,7 +198,7 @@
                       <FileImage class="w-5 h-5 text-green-500 shrink-0" />
                       <div class="truncate">
                         <p class="font-semibold text-neutral-800 truncate">Aset JPG Tersedia</p>
-                        <p class="text-[10px] text-blue-500 font-medium">Klik untuk ganti file</p>
+                        <p class="text-xs text-blue-500 font-medium">Klik untuk ganti file</p>
                       </div>
                     </div>
                     <span class="badge badge-sm border-none bg-blue-100/70 text-blue-700 font-bold px-2 py-0.5 rounded">Tersedia</span>
@@ -235,7 +235,7 @@
                       <CheckCircle2 class="w-5 h-5 text-emerald-500 shrink-0" />
                       <div class="truncate">
                         <p class="font-semibold text-emerald-800 truncate">{{ assetFiles.psd.name }}</p>
-                        <p class="text-[10px] text-emerald-600 font-medium">Baru • {{ (assetFiles.psd.size / 1024 / 1024).toFixed(2) }} MB</p>
+                        <p class="text-xs text-emerald-600 font-medium">Baru • {{ (assetFiles.psd.size / 1024 / 1024).toFixed(2) }} MB</p>
                       </div>
                     </div>
                     <button type="button" @click.stop="removeAssetFile('psd')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg z-20 transition-colors">
@@ -256,7 +256,7 @@
                       <FileBox class="w-5 h-5 text-indigo-500 shrink-0" />
                       <div class="truncate">
                         <p class="font-semibold text-neutral-800 truncate">Aset PSD Tersedia</p>
-                        <p class="text-[10px] text-blue-500 font-medium">Klik untuk ganti file</p>
+                        <p class="text-xs text-blue-500 font-medium">Klik untuk ganti file</p>
                       </div>
                     </div>
                     <span class="badge badge-sm border-none bg-blue-100/70 text-blue-700 font-bold px-2 py-0.5 rounded">Tersedia</span>
@@ -293,7 +293,7 @@
                       <CheckCircle2 class="w-5 h-5 text-emerald-500 shrink-0" />
                       <div class="truncate">
                         <p class="font-semibold text-emerald-800 truncate">{{ assetFiles.mp4.name }}</p>
-                        <p class="text-[10px] text-emerald-600 font-medium">Baru • {{ (assetFiles.mp4.size / 1024 / 1024).toFixed(2) }} MB</p>
+                        <p class="text-xs text-emerald-600 font-medium">Baru • {{ (assetFiles.mp4.size / 1024 / 1024).toFixed(2) }} MB</p>
                       </div>
                     </div>
                     <button type="button" @click.stop="removeAssetFile('mp4')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg z-20 transition-colors">
@@ -314,7 +314,7 @@
                       <FileVideo class="w-5 h-5 text-red-500 shrink-0" />
                       <div class="truncate">
                         <p class="font-semibold text-neutral-800 truncate">Aset Video MP4 Tersedia</p>
-                        <p class="text-[10px] text-blue-500 font-medium">Klik untuk ganti file</p>
+                        <p class="text-xs text-blue-500 font-medium">Klik untuk ganti file</p>
                       </div>
                     </div>
                     <span class="badge badge-sm border-none bg-blue-100/70 text-blue-700 font-bold px-2 py-0.5 rounded">Tersedia</span>

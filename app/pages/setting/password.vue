@@ -50,7 +50,7 @@
                 <EyeOff v-else class="w-4 h-4" />
               </button>
             </div>
-            <p v-if="errors.oldPassword" class="text-[10px] text-red-500 mt-1">{{ errors.oldPassword }}</p>
+            <p v-if="errors.oldPassword" class="text-xs text-red-500 mt-1">{{ errors.oldPassword }}</p>
           </div>
 
           <!-- New Passwords - Bottom Row -->
@@ -77,7 +77,7 @@
                   <EyeOff v-else class="w-4 h-4" />
                 </button>
               </div>
-              <p v-if="errors.newPassword" class="text-[10px] text-red-500 mt-1">{{ errors.newPassword }}</p>
+              <p v-if="errors.newPassword" class="text-xs text-red-500 mt-1">{{ errors.newPassword }}</p>
             </div>
             <div class="form-control w-full">
               <label class="label mb-1.5 p-0">
@@ -101,7 +101,7 @@
                   <EyeOff v-else class="w-4 h-4" />
                 </button>
               </div>
-              <p v-if="errors.confirmPassword" class="text-[10px] text-red-500 mt-1">{{ errors.confirmPassword }}</p>
+              <p v-if="errors.confirmPassword" class="text-xs text-red-500 mt-1">{{ errors.confirmPassword }}</p>
             </div>
           </div>
 

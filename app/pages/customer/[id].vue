@@ -14,12 +14,12 @@
                 <CircleHelp class="w-5 h-5 text-neutral-400 cursor-pointer hover:text-primary transition-colors shrink-0" />
               </div>
               <div class="flex flex-wrap items-center gap-2">
-                <div class="flex items-center gap-1.5 px-3 py-1 bg-neutral-100 rounded-full text-[10px] text-neutral-600">
+                <div class="flex items-center gap-1.5 px-3 py-1 bg-neutral-100 rounded-full text-xs text-neutral-600">
                   <History class="w-3.5 h-3.5 shrink-0" />
                   <span class="whitespace-nowrap">Terakhir Direferensikan: <span class="font-semibold">{{ formatDate(customer?.latestCustomerService?.referenceDate) }}</span></span>
                 </div>
                 <!-- This could be dynamic if we had service count in the main response -->
-                <div class="flex items-center gap-1.5 px-3 py-1 bg-primary/10 rounded-full text-[10px] text-primary font-semibold">
+                <div class="flex items-center gap-1.5 px-3 py-1 bg-primary/10 rounded-full text-xs text-primary font-semibold">
                   <Package class="w-3.5 h-3.5 shrink-0" />
                   <span class="whitespace-nowrap">{{ customer?.totalCustomerServices }} Layanan Aktif</span>
                 </div>
@@ -65,7 +65,7 @@
                     <div class="flex items-center justify-between w-full gap-2 min-w-0">
                       <span class="text-xs text-neutral-800 font-medium truncate" :title="customer.emails?.[0]?.email">{{ customer.emails?.[0]?.email || '-' }}</span>
                       <div v-if="customer.emails && customer.emails.length > 1" class="dropdown dropdown-end">
-                        <div tabindex="0" role="button" class="badge bg-accent border-none text-primary font-medium text-[10px] rounded px-1.5 py-0.5 flex items-center gap-1 cursor-pointer">
+                        <div tabindex="0" role="button" class="badge bg-accent border-none text-primary font-medium text-xs rounded px-1.5 py-0.5 flex items-center gap-1 cursor-pointer">
                           +{{ customer.emails.length - 1 }} <ChevronDown class="w-3 h-3" />
                         </div>
                         <ul tabindex="0" class="dropdown-content z-[10] menu bg-base-100 rounded-box shadow-lg border border-base-200 p-2 w-56 mt-1">
@@ -93,7 +93,7 @@
                     <div class="flex items-center justify-between w-full gap-2 min-w-0">
                       <span class="text-xs text-neutral-800 font-medium truncate" :title="customer.phones?.[0]?.phone">{{ customer.phones?.[0]?.phone || '-' }}</span>
                       <div v-if="customer.phones && customer.phones.length > 1" class="dropdown dropdown-end">
-                        <div tabindex="0" role="button" class="badge bg-accent border-none text-primary font-medium text-[10px] rounded px-1.5 py-0.5 flex items-center gap-1 cursor-pointer">
+                        <div tabindex="0" role="button" class="badge bg-accent border-none text-primary font-medium text-xs rounded px-1.5 py-0.5 flex items-center gap-1 cursor-pointer">
                           +{{ customer.phones.length - 1 }} <ChevronDown class="w-3 h-3" />
                         </div>
                         <ul tabindex="0" class="dropdown-content z-[10] menu bg-base-100 rounded-box shadow-lg border border-base-200 p-2 w-48 mt-1">

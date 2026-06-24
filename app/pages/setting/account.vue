@@ -54,7 +54,7 @@
               class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
               :class="{ 'border-red-500': errors.firstName }"
             />
-            <p v-if="errors.firstName" class="text-[10px] text-red-500 mt-1">{{ errors.firstName }}</p>
+            <p v-if="errors.firstName" class="text-xs text-red-500 mt-1">{{ errors.firstName }}</p>
           </div>
           <div class="form-control w-full">
             <label class="label mb-1.5 p-0">
@@ -67,7 +67,7 @@
               class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
               :class="{ 'border-red-500': errors.lastName }"
             />
-            <p v-if="errors.lastName" class="text-[10px] text-red-500 mt-1">{{ errors.lastName }}</p>
+            <p v-if="errors.lastName" class="text-xs text-red-500 mt-1">{{ errors.lastName }}</p>
           </div>
           <div class="form-control w-full">
             <label class="label mb-1.5 p-0">
@@ -83,7 +83,7 @@
               />
               <Mail class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 z-10 pointer-events-none" />
             </div>
-            <p v-if="errors.email" class="text-[10px] text-red-500 mt-1">{{ errors.email }}</p>
+            <p v-if="errors.email" class="text-xs text-red-500 mt-1">{{ errors.email }}</p>
           </div>
           <div class="form-control w-full">
             <label class="label mb-1.5 p-0">
@@ -101,7 +101,7 @@
               />
               <Phone class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 z-10 pointer-events-none" />
             </div>
-            <p v-if="errors.phone" class="text-[10px] text-red-500 mt-1">{{ errors.phone }}</p>
+            <p v-if="errors.phone" class="text-xs text-red-500 mt-1">{{ errors.phone }}</p>
           </div>
           <div class="form-control w-full">
             <label class="label mb-1.5 p-0">
@@ -117,7 +117,7 @@
               class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
               :class="{ 'border-red-500': errors.identityNumber }"
             />
-            <p v-if="errors.identityNumber" class="text-[10px] text-red-500 mt-1">{{ errors.identityNumber }}</p>
+            <p v-if="errors.identityNumber" class="text-xs text-red-500 mt-1">{{ errors.identityNumber }}</p>
           </div>
           <div class="form-control w-full">
             <label class="label mb-1.5 p-0">
@@ -131,7 +131,7 @@
               class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
               :class="{ 'border-red-500': errors.taxNumber }"
             />
-            <p v-if="errors.taxNumber" class="text-[10px] text-red-500 mt-1">{{ errors.taxNumber }}</p>
+            <p v-if="errors.taxNumber" class="text-xs text-red-500 mt-1">{{ errors.taxNumber }}</p>
           </div>
         </div>
         
@@ -150,7 +150,7 @@
                 class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
                 :class="{ 'border-red-500': errors.company }"
               />
-              <p v-if="errors.company" class="text-[10px] text-red-500 mt-1">{{ errors.company }}</p>
+              <p v-if="errors.company" class="text-xs text-red-500 mt-1">{{ errors.company }}</p>
             </div>
             <div class="form-control w-full">
               <label class="label mb-1.5 p-0">
@@ -163,7 +163,7 @@
                 class="input input-bordered w-full h-10 border-base-200 rounded-lg text-sm transition-all focus:border-primary focus:outline-none disabled:bg-neutral-50 disabled:text-neutral-500" 
                 :class="{ 'border-red-500': errors.jobPosition }"
               />
-              <p v-if="errors.jobPosition" class="text-[10px] text-red-500 mt-1">{{ errors.jobPosition }}</p>
+              <p v-if="errors.jobPosition" class="text-xs text-red-500 mt-1">{{ errors.jobPosition }}</p>
             </div>
           </div>
         </div>

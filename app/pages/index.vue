@@ -171,7 +171,7 @@
               <div class="text-right">
                 <p class="font-semibold text-primary text-sm">{{ svc.points.toLocaleString('id-ID') }}</p>
 
-                <p class="text-[10px] text-neutral-400 leading-none">Poin</p>
+                <p class="text-xs text-neutral-400 leading-none">Poin</p>
               </div>
             </div>
           </div>

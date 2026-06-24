@@ -62,7 +62,7 @@
                                 <h3 class="text-neutral-900 font-medium text-sm lg:text-base truncate">
                                     {{ (item.voucherDetails || item.productDetails)?.catalog.name || 'Reward' }}
                                 </h3>
-                                <span class="shrink-0 px-2 py-0.5 bg-primary/10 text-primary text-[10px] lg:text-xs font-medium rounded-md capitalize">
+                                <span class="shrink-0 px-2 py-0.5 bg-primary/10 text-primary text-xs lg:text-xs font-medium rounded-md capitalize">
                                     {{ (item.voucherDetails || item.productDetails)?.catalog.category.name }}
                                 </span>
                             </div>

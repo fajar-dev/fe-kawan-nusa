@@ -162,7 +162,7 @@
               <template v-else>
                 <Upload class="w-8 h-8 text-neutral-400 mb-2 group-hover:text-primary transition-colors" />
                 <span class="text-xs font-semibold text-neutral-600">Pilih / Drag & Drop Gambar Poster</span>
-                <span class="text-[10px] text-neutral-400 mt-0.5">Format JPG/PNG/WebP, maks. 2MB</span>
+                <span class="text-xs text-neutral-400 mt-0.5">Format JPG/PNG/WebP, maks. 2MB</span>
               </template>
             </div>
             <p v-if="errors.image" class="text-xs text-red-500 mt-1">{{ errors.image }}</p>

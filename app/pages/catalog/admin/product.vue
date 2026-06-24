@@ -105,7 +105,7 @@
               <!-- Type Column -->
               <td v-show="isColumnVisible('type')" class="border-r border-base-200 text-center w-28">
                 <span 
-                  class="badge border font-medium text-[10px] rounded-md uppercase tracking-wider"
+                  class="badge border font-medium text-xs rounded-md uppercase tracking-wider"
                   :class="item.type === 'voucher' ? 'bg-amber-50 text-amber-600 border-amber-200/50' : 'bg-blue-50 text-blue-600 border-blue-200/50'"
                 >
                   {{ item.type }}

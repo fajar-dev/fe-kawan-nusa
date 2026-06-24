@@ -45,7 +45,7 @@
             <EyeOff v-else class="h-4 w-4" />
           </button>
         </div>
-        <p v-if="errors.newPassword" class="text-[10px] text-red-500 mt-1">{{ errors.newPassword }}</p>
+        <p v-if="errors.newPassword" class="text-xs text-red-500 mt-1">{{ errors.newPassword }}</p>
       </div>
 
       <!-- Confirm Password -->
@@ -71,7 +71,7 @@
             <EyeOff v-else class="h-4 w-4" />
           </button>
         </div>
-        <p v-if="errors.confirmPassword" class="text-[10px] text-red-500 mt-1">{{ errors.confirmPassword }}</p>
+        <p v-if="errors.confirmPassword" class="text-xs text-red-500 mt-1">{{ errors.confirmPassword }}</p>
       </div>
 
       <!-- Submit -->

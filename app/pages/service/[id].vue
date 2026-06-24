@@ -11,11 +11,11 @@
                 <CircleHelp class="w-5 h-5 text-neutral-400 cursor-pointer hover:text-primary transition-colors shrink-0" />
               </div>
               <div class="flex flex-wrap items-center gap-2">
-                <div class="flex items-center gap-1.5 px-3 py-1 bg-neutral-100 rounded-full text-[10px] text-neutral-600">
+                <div class="flex items-center gap-1.5 px-3 py-1 bg-neutral-100 rounded-full text-xs text-neutral-600">
                   <History class="w-3.5 h-3.5 shrink-0" />
                   <span class="whitespace-nowrap">Terakhir Direferensikan: <span class="font-semibold">{{ formatDate(service?.lastReferanceDate) }}</span></span>
                 </div>
-                <div class="flex items-center gap-1.5 px-3 py-1 bg-primary/10 rounded-full text-[10px] text-primary font-semibold">
+                <div class="flex items-center gap-1.5 px-3 py-1 bg-primary/10 rounded-full text-xs text-primary font-semibold">
                   <Users class="w-3.5 h-3.5 shrink-0" />
                   <span class="whitespace-nowrap">{{ service?.totalCustomerServices }} Customer Aktif</span>
                 </div>
