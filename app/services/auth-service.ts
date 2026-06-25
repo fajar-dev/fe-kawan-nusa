@@ -167,9 +167,10 @@ export class AuthService {
         }
     }
 
-    async verifyEmail(token: string): Promise<ApiResponse<null>> {
+    async verifyEmail(token: string): Promise<AuthResponse> {
         try {
-            const response = await apiService.client.get<ApiResponse<null>>('/auth/verify-email?token=' + token)
+            const response = await apiService.client.get<AuthResponse>('/auth/verify-email?token=' + token)
+            this.setSession(response.data)
             return response.data
         } catch (error: any) {
             return handleServiceError(error)
