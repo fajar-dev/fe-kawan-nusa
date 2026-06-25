@@ -59,7 +59,7 @@
       <!-- Step 2: Enter OTP Code -->
       <form v-else @submit.prevent="handleVerifyOtp" class="space-y-5">
         <div class="mb-6">
-          <h2 class="text-xl font-bold text-gray-800">Verifikasi Kode OTP</h2>
+          <h2 class="text-xl font-semibold text-gray-800">Verifikasi Kode OTP</h2>
           <p class="text-sm text-gray-600 mt-2">
             Masukkan 6 digit kode OTP yang telah dikirim ke email atau nomor ponsel Anda.
           </p>
@@ -107,13 +107,6 @@
           <p v-if="resendCooldown > 0" class="text-primary font-medium mt-2">
             {{ String(Math.floor(resendCooldown / 60)).padStart(2, '0') }}:{{ String(resendCooldown % 60).padStart(2, '0') }}
           </p>
-        </div>
-
-        <!-- Back -->
-        <div class="text-center">
-          <button type="button" @click="step = 'identifier'" class="text-sm text-gray-500 hover:text-gray-700">
-            ← Ubah email/nomor ponsel
-          </button>
         </div>
       </form>
     </div>
