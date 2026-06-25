@@ -222,11 +222,7 @@ const handleSendOtp = async () => {
       step.value = 'otp'
       startCooldown()
       nextTick(() => otpInputs.value[0]?.focus())
-    } else {
-      toast.error(res.message || 'Gagal mengirim OTP')
     }
-  } catch {
-    toast.error('Terjadi kesalahan saat mengirim OTP')
   } finally {
     sendLoading.value = false
   }
@@ -243,8 +239,6 @@ const handleResendOtp = async () => {
       // Clear OTP inputs
       otpInputs.value.forEach(input => { if (input) input.value = '' })
       otpInputs.value[0]?.focus()
-    } else {
-      toast.error(res.message || 'Gagal mengirim ulang OTP')
     }
   } finally {
     sendLoading.value = false
@@ -265,14 +259,7 @@ const handleVerifyOtp = async () => {
     if (res.success) {
       toast.success('Login berhasil! Selamat datang.')
       navigateTo('/')
-    } else {
-      toast.error(res.message || 'Kode OTP tidak valid')
-      // Clear OTP inputs on error
-      otpInputs.value.forEach(input => { if (input) input.value = '' })
-      otpInputs.value[0]?.focus()
     }
-  } catch {
-    toast.error('Terjadi kesalahan saat verifikasi OTP')
   } finally {
     verifyLoading.value = false
   }
