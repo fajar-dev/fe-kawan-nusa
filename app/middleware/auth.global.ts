@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware((to) => {
     const publicPaths = ['/auth/sign-in', '/auth/forgot-password', '/auth/reset-password', '/auth/admin', '/auth/verify-email']
     
     // Allow public pages
-    if (publicPaths.includes(to.path) || to.path.startsWith('/auth/register')) return
+    if (publicPaths.includes(to.path) || to.path.startsWith('/auth/register') || to.path.startsWith('/auth/otp')) return
 
     // Require authentication
     if (!state.token) {

@@ -186,6 +186,25 @@ export class AuthService {
         }
     }
 
+    async sendOtp(identifier: string): Promise<ApiResponse<{ type: string }>> {
+        try {
+            const response = await apiService.client.post<ApiResponse<{ type: string }>>('/auth/otp/send', { identifier })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error)
+        }
+    }
+
+    async verifyOtp(identifier: string, code: string): Promise<AuthResponse> {
+        try {
+            const response = await apiService.client.post<AuthResponse>('/auth/otp/verify', { identifier, code })
+            this.setSession(response.data)
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error)
+        }
+    }
+
     async logout() {
         if (typeof window === 'undefined') return
             const accessToken = localStorage.getItem(this.ACCESS_TOKEN_KEY)
