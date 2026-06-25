@@ -24,16 +24,11 @@
     <form @submit.prevent="handleSave">
       <div class="px-4 md:px-8 py-6">
         <!-- Info Alert -->
-        <div v-if="hasExistingPassword" role="alert" class="alert alert-info bg-info/10 border-info/10 text-info shadow-none mb-6">
+        <div role="alert" class="alert alert-info bg-white border border-info text-info shadow-none mb-6">
           <div class="flex items-center gap-2">
             <Info class="w-4 h-4 shrink-0" />
-            <span class="text-sm">Kamu sudah memiliki kata sandi. Masukkan kata sandi lama untuk menggantinya, atau langsung klik Selesai.</span>
-          </div>
-        </div>
-        <div v-else role="alert" class="alert alert-warning bg-warning/10 border-warning/10 text-warning shadow-none mb-6">
-          <div class="flex items-center gap-2">
-            <Info class="w-4 h-4 shrink-0" />
-            <span class="text-sm">Akun kamu belum memiliki kata sandi. Silahkan buat kata sandi baru.</span>
+            <span v-if="hasExistingPassword" class="text-sm font-semibold">Kamu sudah memiliki kata sandi. Masukkan kata sandi lama untuk menggantinya, atau langsung klik Selesai.</span>
+            <span v-else class="text-sm font-semibold">Silahkan buat kata sandi untuk mengakses portal referal kawannusa.</span>
           </div>
         </div>
 
