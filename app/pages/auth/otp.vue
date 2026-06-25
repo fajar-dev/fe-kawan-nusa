@@ -211,7 +211,7 @@ const handleSendOtp = async () => {
     const res = await authService.sendOtp(identifier.value)
     if (res.success) {
       const target = res.data.type === 'email' ? 'email' : 'nomor ponsel'
-      toast.success(`Kode OTP telah dikirim ke ${target} kamu.`)
+      toast.success(`Kode OTP berhasil dikirim ke ${target} kamu.`)
       step.value = 'otp'
       startCooldown()
       nextTick(() => otpInputs.value[0]?.focus())
