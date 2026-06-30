@@ -2,7 +2,7 @@
   <div class="dropdown dropdown-end">
     <div tabindex="0" role="button" class="btn btn-ghost btn-circle btn-sm hover:text-neutral-900 transition-colors">
       <div class="indicator">
-        <Bell class="w-5 h-5" />
+        <Bell class="w-4.5 h-4.5" />
         <span v-if="unreadCount > 0" class="indicator-item w-2.5 h-2.5 bg-primary rounded-full"></span>
       </div>
     </div>

@@ -52,8 +52,8 @@
             @click="copyToClipboard"
             class="btn w-full btn-primary rounded-lg"
           >
-            <Copy v-if="!isCopied" class="w-4 h-4" />
-            <Check v-else class="w-4 h-4" />
+            <Copy v-if="!isCopied" class="w-4.5 h-4.5" />
+            <Check v-else class="w-4.5 h-4.5" />
             {{ isCopied ? 'Tersalin!' : 'Salin Kode Voucher' }}
           </button>
         </div>

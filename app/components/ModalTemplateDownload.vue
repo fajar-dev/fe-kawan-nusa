@@ -9,7 +9,7 @@
         <div class="flex items-center justify-between px-6 py-5 border-b border-neutral-100">
           <h3 class="text-lg font-semibold text-neutral-800 line-clamp-1">{{ template?.name || 'Loading Template...' }}</h3>
           <button @click="isOpen = false" class="p-2 hover:bg-neutral-100 rounded-lg text-neutral-400 hover:text-neutral-800 transition-all">
-            <X class="w-5 h-5" />
+            <X class="w-4.5 h-4.5" />
           </button>
         </div>
 
@@ -88,7 +88,7 @@
             :disabled="!selectedType || isDownloading || !template"
             class="btn btn-primary rounded-lg font-medium"
           >
-            <Download class="w-4 h-4" />
+            <Download class="w-4.5 h-4.5" />
             Download {{ selectedType?.toUpperCase() }}
           </button>
         </div>

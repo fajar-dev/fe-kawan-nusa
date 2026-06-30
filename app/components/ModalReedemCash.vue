@@ -9,7 +9,7 @@
         <div class="flex items-center justify-between px-6 py-4 border-b border-base-200">
           <h3 class="text-lg font-medium text-neutral-800">Penarikan Poin</h3>
           <button @click="isOpen = false" class="btn btn-ghost btn-sm btn-circle text-neutral-400 hover:text-neutral-800 transition-colors">
-            <X class="w-5 h-5" />
+            <X class="w-4.5 h-4.5" />
           </button>
         </div>
 

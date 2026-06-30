@@ -9,7 +9,7 @@
         <div class="flex items-center justify-between px-6 py-5 border-b border-neutral-100">
           <h3 class="text-lg font-semibold text-neutral-800">Syarat & Ketentuan Penukaran Poin</h3>
           <button @click="isOpen = false" class="text-neutral-400 hover:text-neutral-800 transition-colors">
-            <X class="w-5 h-5" />
+            <X class="w-4.5 h-4.5" />
           </button>
         </div>
 

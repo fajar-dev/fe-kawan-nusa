@@ -12,7 +12,7 @@
             <p class="text-xs text-neutral-500 mt-0.5">Tindakan ini tidak dapat dibatalkan</p>
           </div>
           <button @click="isOpen = false" class="text-neutral-400 hover:text-neutral-800 transition-colors self-start mt-1">
-            <X class="w-5 h-5" />
+            <X class="w-4.5 h-4.5" />
           </button>
         </div>
 

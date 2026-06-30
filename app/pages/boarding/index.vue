@@ -374,7 +374,7 @@
         >
           <span v-if="loading" class="loading loading-spinner loading-sm"></span>
           <span v-else>Selanjutnya</span>
-          <ArrowRight class="w-4 h-4" />
+          <ArrowRight class="w-4.5 h-4.5" />
         </button>
       </div>
     </form>

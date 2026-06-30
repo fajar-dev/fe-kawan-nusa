@@ -12,7 +12,7 @@
             <p class="text-xs text-neutral-500 mt-0.5">Pastikan detail reward Anda sudah benar</p>
           </div>
           <button @click="isOpen = false" class="text-neutral-400 hover:text-neutral-800 transition-colors self-start mt-1">
-            <X class="w-5 h-5" />
+            <X class="w-4.5 h-4.5" />
           </button>
         </div>
 
@@ -47,7 +47,7 @@
               <div class="flex items-center justify-between text-sm">
                   <span class="text-neutral-500">Poin yang ditukarkan</span>
                   <div class="flex items-center gap-1.5 text-purple-600 font-medium font-semibold">
-                      <Coins class="w-4 h-4" />
+                      <Coins class="w-4.5 h-4.5" />
                       <span>{{ (reward?.point || 0).toLocaleString('id-ID') }}</span>
                   </div>
               </div>

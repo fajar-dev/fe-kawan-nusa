@@ -37,7 +37,7 @@
             <!-- Column Toggle -->
             <div v-if="showColumnToggle" class="dropdown dropdown-bottom dropdown-end">
               <button tabindex="0" role="button" class="btn btn-ghost btn-sm h-10 w-10 p-0 text-primary hover:bg-base-200">
-                <Columns3Cog class="w-5 h-5" />
+                <Columns3Cog class="w-4.5 h-4.5" />
               </button>
               <div tabindex="0" class="dropdown-content z-[101] card card-compact bg-base-100 w-56 shadow-xl border border-base-200 mt-2">
                 <div class="card-body p-4">
@@ -122,7 +122,7 @@
             :disabled="currentPage === 1 || isEmpty || loading"
             @click="$emit('update:page', 1)"
           >
-            <ChevronFirst class="w-4 h-4" />
+            <ChevronFirst class="w-4.5 h-4.5" />
           </button>
           
           <button 
@@ -130,7 +130,7 @@
             :disabled="currentPage === 1 || isEmpty || loading"
             @click="$emit('update:page', currentPage - 1)"
           >
-            <ChevronLeft class="w-4 h-4" />
+            <ChevronLeft class="w-4.5 h-4.5" />
           </button>
 
           <template v-for="page in visiblePages" :key="page">
@@ -159,7 +159,7 @@
             :disabled="currentPage === lastPage || isEmpty || loading"
             @click="$emit('update:page', currentPage + 1)"
           >
-            <ChevronRight class="w-4 h-4" />
+            <ChevronRight class="w-4.5 h-4.5" />
           </button>
 
           <button 
@@ -167,7 +167,7 @@
             :disabled="currentPage === lastPage || isEmpty || loading"
             @click="$emit('update:page', lastPage)"
           >
-            <ChevronLast class="w-4 h-4" />
+            <ChevronLast class="w-4.5 h-4.5" />
           </button>
         </div>
       </div>

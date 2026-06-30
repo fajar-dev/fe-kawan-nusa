@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <NuxtLink to="/point/reedem/history" class="btn btn-primary font-medium rounded-lg mt-4 md:mt-0">
-                    <History class="w-5 h-5" />
+                    <History class="w-4.5 h-4.5" />
                     Riwayat Penukaran
                 </NuxtLink>
             </div>
@@ -179,7 +179,7 @@
                     :disabled="page === 1 || isLoading"
                     @click="handlePageChange(1)"
                 >
-                    <ChevronFirst class="w-4 h-4" />
+                    <ChevronFirst class="w-4.5 h-4.5" />
                 </button>
                 
                 <button 
@@ -187,7 +187,7 @@
                     :disabled="page === 1 || isLoading"
                     @click="handlePageChange(page - 1)"
                 >
-                    <ChevronLeft class="w-4 h-4" />
+                    <ChevronLeft class="w-4.5 h-4.5" />
                 </button>
 
                 <template v-for="p in visiblePages" :key="p">
@@ -216,7 +216,7 @@
                     :disabled="page === lastPage || isLoading"
                     @click="handlePageChange(page + 1)"
                 >
-                    <ChevronRight class="w-4 h-4" />
+                    <ChevronRight class="w-4.5 h-4.5" />
                 </button>
 
                 <button 
@@ -224,7 +224,7 @@
                     :disabled="page === lastPage || isLoading"
                     @click="handlePageChange(lastPage)"
                 >
-                    <ChevronLast class="w-4 h-4" />
+                    <ChevronLast class="w-4.5 h-4.5" />
                 </button>
             </div>
         </div>

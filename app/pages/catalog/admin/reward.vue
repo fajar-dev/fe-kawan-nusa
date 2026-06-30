@@ -3,18 +3,25 @@
     <AppToolbar>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-4">
-          <Package class="w-9 h-9 mt-1 text-neutral-800" />
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-xl font-medium text-neutral-800">Manajemen Produk & Voucher</h1>
               <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
             </div>
             <p class="text-xs text-neutral-400 font-medium mt-0.5">
-              <NuxtLink to="/" class="text-primary hover:underline">Home</NuxtLink> / Katalog / Produk
+                This is a clever description about Poin Saya            
             </p>
           </div>
         </div>
       </div>
+      <template #right>
+        <button 
+          @click="openCreateModal" 
+          class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-5 flex items-center gap-2"
+        >
+          Tambah Reward
+        </button>
+      </template>
     </AppToolbar>
 
     <div class="flex flex-col gap-4 w-full">
@@ -72,13 +79,6 @@
               </select>
             </div>
           </DataFilter>
-          <button 
-            @click="openCreateModal" 
-            class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-5 flex items-center gap-2"
-          >
-            <Plus class="w-4 h-4" />
-            Tambah Item Baru
-          </button>
         </template>
 
         <!-- Body Slot -->
@@ -121,12 +121,12 @@
               </td>
               <!-- Action Column -->
               <td v-show="isColumnVisible('actions')" class="text-center px-4 w-32">
-                <div class="flex items-center justify-center gap-2">
-                  <button @click="openEditModal(item)" class="btn btn-ghost btn-xs text-primary hover:bg-primary/10 rounded" title="Edit">
-                    <Edit2 class="w-4 h-4" />
+                <div class="flex items-center justify-center gap-0">
+                  <button @click="openEditModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Edit">
+                    <SquarePen class="w-4.5 h-4.5" />
                   </button>
                   <button @click="openDeleteModal(item)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hapus">
-                    <Trash2 class="w-4 h-4" />
+                    <Trash2 class="w-4.5 h-4.5" />
                   </button>
                 </div>
               </td>
@@ -156,7 +156,7 @@
 </template>
 
 <script setup lang="ts">
-import { Package, CircleHelp, Plus, Edit2, Trash2, Search, Coins } from 'lucide-vue-next'
+import { Package, CircleHelp, Plus, SquarePen, Trash2, Search, Coins } from 'lucide-vue-next'
 import { catalogService } from '~/services/catalog-service'
 import type { CatalogItem, CatalogCategory, CatalogMeta } from '~/types/catalog'
 

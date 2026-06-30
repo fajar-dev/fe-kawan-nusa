@@ -1,4 +1,4 @@
-import { Home, Users, UsersRound, Package, Coins, BookOpen, Settings, ArrowLeftRight } from 'lucide-vue-next'
+import { Home, Users, UsersRound, Package, Coins, BookOpen, Settings, ArrowLeftRight, Gift, PackageSearch, Shapes } from 'lucide-vue-next'
 import type { Component } from 'vue'
 
 export interface NavChild {
@@ -29,7 +29,7 @@ const navItems: NavItem[] = [
     position: 'top',
   },
   {
-    label: 'Pengguna',
+    label: 'Referral',
     to: '/user',
     icon: UsersRound,
     match: '/user',
@@ -37,9 +37,17 @@ const navItems: NavItem[] = [
     position: 'top',
   },
   {
+    label: 'Input Poin Referral',
+    to: '/user',
+    icon: Coins,
+    match: '/user',
+    role: 'admin',
+    position: 'top',
+  },
+  {
     label: 'Tukar Poin',
     to: '/redemption',
-    icon: ArrowLeftRight,
+    icon: Gift,
     match: '/redemption',
     role: 'admin',
     position: 'top',
@@ -50,9 +58,17 @@ const navItems: NavItem[] = [
     ],
   },
   {
-    label: 'Edukasi',
+    label: 'Katalog Reward',
+    to: '/catalog/admin/reward',
+    icon: PackageSearch,
+    match: '/catalog/admin',
+    role: 'admin',
+    position: 'top'
+  },
+  {
+    label: 'Konten Edukasi',
     to: '/education/admin/article',
-    icon: BookOpen,
+    icon: Shapes,
     match: '/education/admin',
     role: 'admin',
     position: 'top',
@@ -62,18 +78,6 @@ const navItems: NavItem[] = [
       { label: 'Video', to: '/education/admin/video', match: '/education/admin/video' },
       { label: 'Template', to: '/education/admin/template', match: '/education/admin/template' },
       { label: 'Promosi', to: '/education/admin/promotion', match: '/education/admin/promotion' },
-    ],
-  },
-  {
-    label: 'Katalog',
-    to: '/catalog/admin/product',
-    icon: Package,
-    match: '/catalog/admin',
-    role: 'admin',
-    position: 'top',
-    children: [
-      { label: 'Produk', to: '/catalog/admin/product', match: '/catalog/admin/product' },
-      { label: 'Kategori', to: '/catalog/admin/category', match: '/catalog/admin/category' },
     ],
   },
   {

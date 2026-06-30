@@ -15,6 +15,14 @@
           </div>
         </div>
       </div>
+      <template #right>
+          <button 
+            @click="openCreateModal" 
+            class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-5 flex items-center gap-2"
+          >
+            Tambah Template
+          </button>
+        </template>
     </AppToolbar>
 
     <div class="flex flex-col gap-4 w-full">
@@ -35,17 +43,7 @@
         @update:page="handlePageChange"
         @update:sort="handleSort"
         @update:order="handleOrderChange"
-      >
-        <!-- Filters Slot -->
-        <template #filters>
-          <button 
-            @click="openCreateModal" 
-            class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-5 flex items-center gap-2"
-          >
-            <Plus class="w-4 h-4" />
-            Tambah Template
-          </button>
-        </template>
+      >        
 
         <!-- Body Slot -->
         <template #body="{ isColumnVisible }">
@@ -56,7 +54,7 @@
                 <div class="w-16 h-12 rounded-lg overflow-hidden bg-neutral-100 mx-auto border border-base-200 flex items-center justify-center">
                   <img v-if="item.thumbnail" :src="item.thumbnail" :alt="item.name" class="w-full h-full object-cover" />
                   <div v-else class="w-full h-full flex items-center justify-center text-neutral-300">
-                    <FileText class="w-5 h-5" />
+                    <FileText class="w-4.5 h-4.5" />
                   </div>
                 </div>
               </td>
@@ -131,12 +129,12 @@
               </td>
               <!-- Action Column -->
               <td v-show="isColumnVisible('actions')" class="text-center px-4 w-32">
-                <div class="flex items-center justify-center gap-2">
-                  <button @click="openEditModal(item)" class="btn btn-ghost btn-xs text-primary hover:bg-primary/10 rounded" title="Edit">
-                    <Edit2 class="w-4 h-4" />
+                <div class="flex items-center justify-center gap-0">
+                  <button @click="openEditModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Edit">
+                    <SquarePen class="w-4.5 h-4.5" />
                   </button>
                   <button @click="openDeleteModal(item)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hapus">
-                    <Trash2 class="w-4 h-4" />
+                    <Trash2 class="w-4.5 h-4.5" />
                   </button>
                 </div>
               </td>
@@ -165,7 +163,7 @@
 </template>
 
 <script setup lang="ts">
-import { BookOpen, CircleHelp, Plus, Edit2, Trash2, FileText, Download } from 'lucide-vue-next'
+import { BookOpen, CircleHelp, Plus, SquarePen, Trash2, FileText, Download } from 'lucide-vue-next'
 import { templateService } from '~/services/template-service'
 import type { MarketingTemplate } from '~/types/template'
 import type { PaginationMeta } from '~/types/service'

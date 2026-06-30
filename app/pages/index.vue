@@ -155,7 +155,7 @@
               <p class="text-neutral-500 text-sm">Berdasarkan total poin yang diperoleh</p>
             </div>
             <NuxtLink to="/service" class="btn btn-ghost btn-circle btn-sm text-primary transition-colors hover:bg-primary/10">
-              <ArrowUpRight class="w-5 h-5" />
+              <ArrowUpRight class="w-4.5 h-4.5" />
             </NuxtLink>
           </div>
           

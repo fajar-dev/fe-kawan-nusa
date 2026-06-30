@@ -49,7 +49,7 @@
         </button>
         <div class="text-center">
           <NuxtLink to="/auth/sign-in" class="text-primary text-sm font-medium hover:underline flex items-center justify-center gap-2">
-            <ArrowLeft class="w-4 h-4" />
+            <ArrowLeft class="w-4.5 h-4.5" />
             Kembali ke Login
           </NuxtLink>
         </div>

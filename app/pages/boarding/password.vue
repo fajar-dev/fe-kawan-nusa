@@ -54,8 +54,8 @@
                 class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors"
                 tabindex="-1"
               >
-                <Eye v-if="!showOldPassword" class="w-4 h-4" />
-                <EyeOff v-else class="w-4 h-4" />
+                <Eye v-if="!showOldPassword" class="w-4.5 h-4.5" />
+                <EyeOff v-else class="w-4.5 h-4.5" />
               </button>
             </div>
             <p v-if="errors.oldPassword" class="text-xs text-red-500 mt-1">{{ errors.oldPassword }}</p>
@@ -81,8 +81,8 @@
                   class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors"
                   tabindex="-1"
                 >
-                  <Eye v-if="!showNewPassword" class="w-4 h-4" />
-                  <EyeOff v-else class="w-4 h-4" />
+                  <Eye v-if="!showNewPassword" class="w-4.5 h-4.5" />
+                  <EyeOff v-else class="w-4.5 h-4.5" />
                 </button>
               </div>
               <p v-if="errors.newPassword" class="text-xs text-red-500 mt-1">{{ errors.newPassword }}</p>
@@ -106,8 +106,8 @@
                   class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors"
                   tabindex="-1"
                 >
-                  <Eye v-if="!showConfirmPassword" class="w-4 h-4" />
-                  <EyeOff v-else class="w-4 h-4" />
+                  <Eye v-if="!showConfirmPassword" class="w-4.5 h-4.5" />
+                  <EyeOff v-else class="w-4.5 h-4.5" />
                 </button>
               </div>
               <p v-if="errors.confirmPassword" class="text-xs text-red-500 mt-1">{{ errors.confirmPassword }}</p>
@@ -122,7 +122,7 @@
           to="/boarding"
           class="btn btn-outline border-primary text-primary hover:bg-primary hover:border-primary hover:text-white rounded-lg font-semibold flex items-center gap-2"
         >
-          <ArrowLeft class="w-4 h-4" />
+          <ArrowLeft class="w-4.5 h-4.5" />
           Sebelumnya
         </NuxtLink>
         <button
@@ -132,7 +132,7 @@
         >
           <span v-if="loading" class="loading loading-spinner loading-sm"></span>
           <span>Selesai</span>
-          <Check class="w-4 h-4" />
+          <Check class="w-4.5 h-4.5" />
         </button>
       </div>
     </form>

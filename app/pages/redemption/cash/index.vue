@@ -55,7 +55,7 @@
               :disabled="completing"
               class="btn btn-primary btn-sm rounded-lg font-medium text-white flex items-center gap-2 h-9 min-h-0"
             >
-              <Check class="w-4 h-4" />
+              <Check class="w-4.5 h-4.5" />
               Tandai Sudah di Transfer
             </button>
           </div>

@@ -14,7 +14,7 @@
             <p class="text-xs text-neutral-500 mt-0.5">Kelola data template pemasaran dan aset file unduhan</p>
           </div>
           <button @click="isOpen = false" class="text-neutral-400 hover:text-neutral-800 transition-colors self-start mt-1">
-            <X class="w-5 h-5" />
+            <X class="w-4.5 h-4.5" />
           </button>
         </div>
 
@@ -123,7 +123,7 @@
                       </div>
                     </div>
                     <button type="button" @click.stop="removeAssetFile('png')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg z-20 transition-colors">
-                      <Trash2 class="w-4 h-4" />
+                      <Trash2 class="w-4.5 h-4.5" />
                     </button>
                   </div>
                   
@@ -181,7 +181,7 @@
                       </div>
                     </div>
                     <button type="button" @click.stop="removeAssetFile('jpg')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg z-20 transition-colors">
-                      <Trash2 class="w-4 h-4" />
+                      <Trash2 class="w-4.5 h-4.5" />
                     </button>
                   </div>
                   
@@ -239,7 +239,7 @@
                       </div>
                     </div>
                     <button type="button" @click.stop="removeAssetFile('psd')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg z-20 transition-colors">
-                      <Trash2 class="w-4 h-4" />
+                      <Trash2 class="w-4.5 h-4.5" />
                     </button>
                   </div>
                   
@@ -297,7 +297,7 @@
                       </div>
                     </div>
                     <button type="button" @click.stop="removeAssetFile('mp4')" class="text-rose-500 hover:bg-rose-50 p-1.5 rounded-lg z-20 transition-colors">
-                      <Trash2 class="w-4 h-4" />
+                      <Trash2 class="w-4.5 h-4.5" />
                     </button>
                   </div>
                   
