@@ -92,7 +92,7 @@
                 
                 <div class="dropdown dropdown-end shrink-0">
                   <div tabindex="0" role="button" class="p-1 hover:bg-base-200 rounded-full transition-colors cursor-pointer text-neutral-400 hover:text-primary">
-                    <Maximize2 class="w-4 h-4" />
+                    <Maximize2 class="w-4.5 h-4.5" />
                   </div>
                   <div tabindex="0" class="dropdown-content z-[200] card card-compact bg-base-100 w-64 shadow-xl border border-base-200 mt-2">
                     <div class="card-body">
@@ -123,7 +123,7 @@
                 
                 <div class="dropdown dropdown-end shrink-0">
                   <div tabindex="0" role="button" class="p-1 hover:bg-base-200 rounded-full transition-colors cursor-pointer text-neutral-400 hover:text-primary">
-                    <Maximize2 class="w-4 h-4" />
+                    <Maximize2 class="w-4.5 h-4.5" />
                   </div>
                   <div tabindex="0" class="dropdown-content z-[200] card card-compact bg-base-100 w-64 shadow-xl border border-base-200 mt-2">
                     <div class="card-body">
@@ -150,7 +150,7 @@
 
                 <div class="dropdown dropdown-end shrink-0">
                   <div tabindex="0" role="button" class="p-1 hover:bg-base-200 rounded-full transition-colors cursor-pointer text-neutral-400 hover:text-primary">
-                    <Maximize2 class="w-4 h-4" />
+                    <Maximize2 class="w-4.5 h-4.5" />
                   </div>
                   <div tabindex="0" class="dropdown-content z-[200] card card-compact bg-base-100 w-64 shadow-xl border border-base-200 mt-2">
                     <div class="card-body">

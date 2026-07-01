@@ -15,6 +15,11 @@
           </div>
         </div>
       </div>
+      <template #right>
+        <NuxtLink to="/education/admin/video/create" class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-5 flex items-center gap-2">
+          Tambah Video
+        </NuxtLink>
+      </template>
     </AppToolbar>
 
     <div class="flex flex-col gap-4 w-full">
@@ -58,13 +63,6 @@
               </select>
             </div>
           </DataFilter>
-          <NuxtLink 
-            to="/education/admin/video/create" 
-            class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-5 flex items-center gap-2"
-          >
-            <Plus class="w-4 h-4" />
-            Tambah Video
-          </NuxtLink>
         </template>
 
         <!-- Body Slot -->
@@ -76,7 +74,7 @@
                 <div class="relative w-20 h-12 rounded-lg overflow-hidden bg-neutral-100 mx-auto border border-base-200">
                   <img v-if="item.thumbnail" :src="item.thumbnail" :alt="item.title" class="w-full h-full object-cover" />
                   <div v-else class="w-full h-full flex items-center justify-center text-neutral-300">
-                    <Video class="w-5 h-5" />
+                    <Video class="w-4.5 h-4.5" />
                   </div>
                   <div class="absolute inset-0 bg-black/25 flex items-center justify-center pointer-events-none">
                     <Play class="w-4 h-4 text-white" />
@@ -110,12 +108,12 @@
               </td>
               <!-- Action Column -->
               <td v-show="isColumnVisible('actions')" class="text-center px-4 w-32">
-                <div class="flex items-center justify-center gap-2">
-                  <NuxtLink :to="`/education/admin/video/${item.id}`" class="btn btn-ghost btn-xs text-primary hover:bg-primary/10 rounded" title="Edit">
-                    <Edit2 class="w-4 h-4" />
+                <div class="flex items-center justify-center gap-0">
+                  <NuxtLink :to="`/education/admin/video/${item.id}`" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Edit">
+                    <SquarePen class="w-4.5 h-4.5" />
                   </NuxtLink>
                   <button @click="openDeleteModal(item)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hapus">
-                    <Trash2 class="w-4 h-4" />
+                    <Trash2 class="w-4.5 h-4.5" />
                   </button>
                 </div>
               </td>
@@ -137,7 +135,7 @@
 </template>
 
 <script setup lang="ts">
-import { BookOpen, CircleHelp, Plus, Edit2, Trash2, Video, Play, ExternalLink } from 'lucide-vue-next'
+import { BookOpen, CircleHelp, Plus, SquarePen, Trash2, Video, Play, ExternalLink } from 'lucide-vue-next'
 import { educationService } from '~/services/education-service'
 import { formatDateShort } from '~/utils/date'
 import type { EducationVideo, EducationCategory } from '~/types/education'

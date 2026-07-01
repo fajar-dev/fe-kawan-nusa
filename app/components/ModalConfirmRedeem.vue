@@ -12,7 +12,7 @@
             <p class="text-xs text-neutral-500 mt-0.5">Pastikan detail reward Anda sudah benar</p>
           </div>
           <button @click="isOpen = false" class="text-neutral-400 hover:text-neutral-800 transition-colors self-start mt-1">
-            <X class="w-5 h-5" />
+            <X class="w-4.5 h-4.5" />
           </button>
         </div>
 
@@ -47,14 +47,24 @@
               <div class="flex items-center justify-between text-sm">
                   <span class="text-neutral-500">Poin yang ditukarkan</span>
                   <div class="flex items-center gap-1.5 text-purple-600 font-medium font-semibold">
-                      <Coins class="w-4 h-4" />
+                      <Coins class="w-4.5 h-4.5" />
                       <span>{{ (reward?.point || 0).toLocaleString('id-ID') }}</span>
                   </div>
+              </div>
+              <div class="flex items-center justify-between text-sm">
+                  <span class="text-neutral-500">Ketersediaan Stock</span>
+                  <span v-if="reward?.stock === 0" class="badge bg-red-50 text-red-600 border-red-200/50 font-medium text-xs rounded-md">Habis</span>
+                  <span v-else class="font-medium text-neutral-800">{{ reward?.stock }}</span>
               </div>
               <div class="border-t border-dashed border-neutral-200 pt-3 flex items-center justify-between">
                   <span class="font-semibold text-neutral-800">Sisa Poin</span>
                   <span class="font-semibold text-neutral-900 border-neutral-100">{{ (userPoints - (reward?.point || 0)).toLocaleString('id-ID') }}</span>
               </div>
+            </div>
+
+            <!-- Out of Stock Warning -->
+            <div v-if="reward?.stock === 0" class="flex items-center gap-2 p-3 bg-red-50 rounded-xl border border-red-100">
+              <span class="text-xs text-red-600 font-medium">Item ini sedang tidak tersedia (stok habis).</span>
             </div>
           </div>
         </div>
@@ -71,7 +81,7 @@
           <button 
             @click="$emit('confirm')"
             class="btn btn-primary rounded-lg font-medium"
-            :disabled="isLoading || (userPoints < (reward?.point || 0))"
+            :disabled="isLoading || (userPoints < (reward?.point || 0)) || reward?.stock === 0"
           >
             Lanjutkan
           </button>

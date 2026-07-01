@@ -5,6 +5,12 @@ export interface CatalogCategory {
     name: string
 }
 
+export interface CatalogCreatedBy {
+    id: number
+    name: string
+    employeeId: string
+}
+
 export interface CatalogItem {
     id: number
     categoryId: number
@@ -13,8 +19,11 @@ export interface CatalogItem {
     description: string
     point: number
     image: string
+    stock: number
+    stockUsed: number
     expiredDate: string
     category: CatalogCategory
+    createdBy: CatalogCreatedBy | null
 }
 
 export interface CatalogMeta {

@@ -25,7 +25,7 @@
 
       <!-- Email Badge -->
       <div v-if="email" class="mt-3 inline-flex items-center gap-2 bg-primary/10 text-primary rounded-lg px-4 py-2">
-        <Mail class="w-4 h-4" />
+        <Mail class="w-4.5 h-4.5" />
         <span class="text-sm font-medium">{{ email }}</span>
       </div>
 
@@ -40,7 +40,7 @@
         class="btn bg-primary hover:bg-primary/80 border-none text-white rounded-lg font-semibold mt-8 px-8 flex items-center gap-2"
       >
         <span v-if="resendLoading" class="loading loading-spinner loading-xs"></span>
-        <RefreshCw v-else-if="cooldown <= 0" class="w-4 h-4" />
+        <RefreshCw v-else-if="cooldown <= 0" class="w-4.5 h-4.5" />
         {{ resendLoading ? 'Mengirim...' : cooldown > 0 ? `Kirim Ulang Email (${cooldown}s)` : 'Kirim Ulang Email' }}
       </button>
 
@@ -49,7 +49,7 @@
         to="/auth/sign-in"
         class="text-primary text-sm font-medium hover:underline flex items-center gap-2 mt-5"
       >
-        <ArrowLeft class="w-4 h-4" />
+        <ArrowLeft class="w-4.5 h-4.5" />
         Kembali ke Login
       </NuxtLink>
     </div>

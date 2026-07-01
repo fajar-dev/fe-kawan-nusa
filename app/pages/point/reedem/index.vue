@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <NuxtLink to="/point/reedem/history" class="btn btn-primary font-medium rounded-lg mt-4 md:mt-0">
-                    <History class="w-5 h-5" />
+                    <History class="w-4.5 h-4.5" />
                     Riwayat Penukaran
                 </NuxtLink>
             </div>
@@ -120,6 +120,12 @@
                         >
                             {{ reward.type }}
                         </span>
+                        <span v-if="reward.stock === 0" class="px-2.5 py-0.5 bg-red-50 text-red-600 font-medium text-xs rounded-full border border-red-200/50">
+                            Habis
+                        </span>
+                        <span v-else class="px-2.5 py-0.5 bg-emerald-50 text-emerald-600 font-medium text-xs rounded-full border border-emerald-200/50">
+                            Sisa: {{ reward.stock }}
+                        </span>
                     </div>
 
                     <!-- Content -->
@@ -153,16 +159,18 @@
 
                     <!-- CTA Button -->
                     <button
-                        :disabled="reward.point > userPoints"
+                        :disabled="reward.point > userPoints || reward.stock === 0"
                         @click="handleSelectReward(reward)"
                         class="btn w-full font-medium rounded-lg btn-sm h-10 mt-1"
                         :class="[
-                            reward.point <= userPoints
-                                ? 'btn-primary text-white hover:opacity-90'
-                                : 'bg-neutral-100 text-neutral-400 border-neutral-200/60 cursor-not-allowed shadow-none'
+                            reward.stock === 0
+                                ? 'bg-neutral-100 text-neutral-400 border-neutral-200/60 cursor-not-allowed shadow-none'
+                                : reward.point <= userPoints
+                                    ? 'btn-primary text-white hover:opacity-90'
+                                    : 'bg-neutral-100 text-neutral-400 border-neutral-200/60 cursor-not-allowed shadow-none'
                         ]"
                     >
-                        {{ reward.point <= userPoints ? 'Tukar Sekarang' : 'Poin Tidak Cukup' }}
+                        {{ reward.stock === 0 ? 'Stok Habis' : reward.point <= userPoints ? 'Tukar Sekarang' : 'Poin Tidak Cukup' }}
                     </button>
                 </div>
             </div>
@@ -179,7 +187,7 @@
                     :disabled="page === 1 || isLoading"
                     @click="handlePageChange(1)"
                 >
-                    <ChevronFirst class="w-4 h-4" />
+                    <ChevronFirst class="w-4.5 h-4.5" />
                 </button>
                 
                 <button 
@@ -187,7 +195,7 @@
                     :disabled="page === 1 || isLoading"
                     @click="handlePageChange(page - 1)"
                 >
-                    <ChevronLeft class="w-4 h-4" />
+                    <ChevronLeft class="w-4.5 h-4.5" />
                 </button>
 
                 <template v-for="p in visiblePages" :key="p">
@@ -216,7 +224,7 @@
                     :disabled="page === lastPage || isLoading"
                     @click="handlePageChange(page + 1)"
                 >
-                    <ChevronRight class="w-4 h-4" />
+                    <ChevronRight class="w-4.5 h-4.5" />
                 </button>
 
                 <button 
@@ -224,7 +232,7 @@
                     :disabled="page === lastPage || isLoading"
                     @click="handlePageChange(lastPage)"
                 >
-                    <ChevronLast class="w-4 h-4" />
+                    <ChevronLast class="w-4.5 h-4.5" />
                 </button>
             </div>
         </div>

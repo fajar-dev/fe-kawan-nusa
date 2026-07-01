@@ -54,10 +54,10 @@
                             target="_blank"
                             class="btn btn-primary btn-sm w-full font-medium rounded-lg text-white"
                         >
-                            Lihat Detail <ChevronRight class="w-4 h-4" />
+                            Lihat Detail <ChevronRight class="w-4.5 h-4.5" />
                         </a>
                         <button v-else class="btn btn-primary btn-sm w-full font-medium rounded-lg text-white">
-                            Lihat Detail <ChevronRight class="w-4 h-4" />
+                            Lihat Detail <ChevronRight class="w-4.5 h-4.5" />
                         </button>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                 </div>
 
                 <NuxtLink to="/education/strategy" class="btn btn-primary font-medium rounded-lg text-white px-8">
-                    Akses Template <ChevronRight class="w-4 h-4" />
+                    Akses Template <ChevronRight class="w-4.5 h-4.5" />
                 </NuxtLink>
             </div>
         </div>

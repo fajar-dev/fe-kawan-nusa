@@ -61,7 +61,7 @@
               :disabled="completing"
               class="btn btn-primary btn-sm rounded-lg font-medium text-white flex items-center gap-2 h-9 min-h-0"
             >
-              <Check class="w-4 h-4" />
+              <Check class="w-4.5 h-4.5" />
               Selesaikan Semua
             </button>
           </div>
@@ -216,7 +216,7 @@
         <div class="flex items-center justify-between mb-6">
           <h3 class="font-bold text-lg text-neutral-800">Detail Voucher</h3>
           <button @click="detailDialogRef?.close()" class="btn btn-ghost btn-sm btn-circle">
-            <X class="w-4 h-4" />
+            <X class="w-4.5 h-4.5" />
           </button>
         </div>
         <div v-if="detailItem" class="space-y-4">

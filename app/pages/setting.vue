@@ -38,7 +38,7 @@
           
           <div class="mb-2 flex justify-center lg:justify-end">
             <button @click="isPhotoModalOpen = true" class="btn btn-primary">
-              <Pencil class="w-4 h-4" />
+              <Pencil class="w-4.5 h-4.5" />
               Ubah Foto
             </button>
             <ModalProfilePhoto v-model="isPhotoModalOpen" :profile="profile" @success="fetchProfile" />
@@ -53,7 +53,7 @@
               class="pb-3 text-xs lg:text-sm transition-all relative inline-flex items-center gap-2 shrink-0"
               :class="[ $route.path === '/setting/account' ? 'text-primary' : 'text-neutral-600 hover:text-neutral-800' ]"
             >
-              <User2 class="w-4 h-4" />
+              <User2 class="w-4.5 h-4.5" />
               Akun
               <div v-if="$route.path === '/setting/account'" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary"></div>
             </NuxtLink>
@@ -62,7 +62,7 @@
               class="pb-3 text-xs lg:text-sm transition-all relative inline-flex items-center gap-2 shrink-0"
               :class="[ $route.path === '/setting/bank' ? 'text-primary' : 'text-neutral-600 hover:text-neutral-800' ]"
             >
-              <Warehouse class="w-4 h-4" />
+              <Warehouse class="w-4.5 h-4.5" />
               Bank dan Komisi
               <div v-if="$route.path === '/setting/bank'" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary"></div>
             </NuxtLink>
@@ -71,7 +71,7 @@
               class="pb-3 text-xs lg:text-sm transition-all relative inline-flex items-center gap-2 shrink-0"
               :class="[ $route.path === '/setting/password' ? 'text-primary' : 'text-neutral-600 hover:text-neutral-800' ]"
             >
-              <LockKeyhole class="w-4 h-4" />
+              <LockKeyhole class="w-4.5 h-4.5" />
               Password
               <div v-if="$route.path === '/setting/password'" class="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-primary"></div>
             </NuxtLink>

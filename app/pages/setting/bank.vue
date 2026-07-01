@@ -23,18 +23,18 @@
           </div>
           <div v-else class="dropdown dropdown-end">
             <label tabindex="0" class="btn btn-ghost btn-sm btn-circle text-neutral-400 hover:text-neutral-800 transition-colors">
-              <MoreHorizontal class="w-5 h-5" />
+              <MoreHorizontal class="w-4.5 h-4.5" />
             </label>
             <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-sm border border-base-200">
               <li @click="handleCopy">
                 <a>
-                  <Copy class="w-4 h-4" />
+                  <Copy class="w-4.5 h-4.5" />
                   Salin Informasi
                 </a>
               </li>
               <li @click="isEditing = true">
                 <a>
-                  <Pencil class="w-4 h-4" />
+                  <Pencil class="w-4.5 h-4.5" />
                   Ubah Data
                 </a>
               </li>
@@ -44,7 +44,7 @@
 
         <!-- Info Alert -->
         <div role="alert" class="alert alert-info bg-info/10 border-info/10 text-info shadow-none">
-          <Info class="w-4 h-4" />
+          <Info class="w-4.5 h-4.5" />
           <span>Pastikan nama pemilik rekening sesuai dengan nama akun Anda.</span>
         </div>
         

@@ -15,6 +15,14 @@
           </div>
         </div>
       </div>
+      <template #right>
+        <button 
+          @click="openCreateModal" 
+          class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-5 flex items-center gap-2"
+        >
+          Tambah Kategori
+        </button>
+      </template>
     </AppToolbar>
 
     <div class="flex flex-col gap-4 w-full">
@@ -35,16 +43,6 @@
         @update:sort="handleSort"
         @update:order="handleOrderChange"
       >
-        <!-- Filters Slot -->
-        <template #filters>
-          <button 
-            @click="openCreateModal" 
-            class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-5 flex items-center gap-2"
-          >
-            <Plus class="w-4 h-4" />
-            Tambah Kategori
-          </button>
-        </template>
 
         <!-- Body Slot -->
         <template #body="{ isColumnVisible }">
@@ -53,12 +51,12 @@
               <td v-show="isColumnVisible('id')" class="border-r border-base-200 text-center w-24 font-mono">{{ item.id }}</td>
               <td v-show="isColumnVisible('name')" class="border-r border-base-200 font-medium text-neutral-800">{{ item.name }}</td>
               <td v-show="isColumnVisible('actions')" class="text-center px-4 w-32">
-                <div class="flex items-center justify-center gap-2">
-                  <button @click="openEditModal(item)" class="btn btn-ghost btn-xs text-primary hover:bg-primary/10 rounded" title="Edit">
-                    <Edit2 class="w-4 h-4" />
+                <div class="flex items-center justify-center gap-0">
+                  <button @click="openEditModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Edit">
+                    <SquarePen class="w-4.5 h-4.5" />
                   </button>
                   <button @click="openDeleteModal(item)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hapus">
-                    <Trash2 class="w-4 h-4" />
+                    <Trash2 class="w-4.5 h-4.5" />
                   </button>
                 </div>
               </td>
@@ -87,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { BookOpen, CircleHelp, Plus, Edit2, Trash2 } from 'lucide-vue-next'
+import { BookOpen, CircleHelp, Plus, SquarePen, Trash2 } from 'lucide-vue-next'
 import { educationService } from '~/services/education-service'
 import type { EducationCategory } from '~/types/education'
 

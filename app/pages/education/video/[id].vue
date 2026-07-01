@@ -127,7 +127,7 @@
                         </div>
 
                         <NuxtLink to="/education/video" class="flex items-center justify-end gap-1 text-xs font-medium text-primary hover:underline">
-                            Lainnya <ChevronRight class="w-4 h-4" />
+                            Lainnya <ChevronRight class="w-4.5 h-4.5" />
                         </NuxtLink>
                     </div>
                 </aside>

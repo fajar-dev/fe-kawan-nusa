@@ -11,7 +11,7 @@
             <p class="text-xs text-neutral-400">Masukan Anda sangat berharga bagi kami</p>
           </div>
           <button @click="closeModal" class="p-2 hover:bg-neutral-100 rounded-lg text-neutral-400 hover:text-neutral-800 transition-all">
-            <X class="w-5 h-5" />
+            <X class="w-4.5 h-4.5" />
           </button>
         </div>
 
@@ -117,7 +117,7 @@
         <!-- Footer -->
         <div class="px-6 py-5 border-t border-neutral-100 bg-neutral-50/30 flex items-center justify-between">
           <NuxtLink to="/feedback" @click="closeModal" class="text-primary text-sm font-medium flex items-center gap-2">
-            <History class="w-5 h-5" />
+            <History class="w-4.5 h-4.5" />
             <span class="md:block hidden" >Riwayat Feedback</span>
           </NuxtLink>
           

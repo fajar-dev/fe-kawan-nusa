@@ -6,21 +6,21 @@
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-lg font-semibold text-neutral-800">Perubahan Kata Sandi</h3>
           <button class="btn btn-ghost btn-sm btn-circle text-neutral-400 hover:text-neutral-800 transition-colors">
-            <MoreHorizontal class="w-5 h-5" />
+            <MoreHorizontal class="w-4.5 h-4.5" />
           </button>
         </div>
 
         <!-- Info Alert -->
         <div v-if="hasPassword" role="alert" class="alert alert-info bg-info/10 border-info/10 text-info shadow-none flex flex-col items-start gap-1">
           <div class="flex items-center gap-2">
-          <Info class="w-4 h-4" />
+          <Info class="w-4.5 h-4.5" />
             <span class="font-bold">Terakhir diubah {{ timeAgo(profile?.passwordUpdatedAt) }}</span>
           </div>
           <span class="text-xs ml-7 text-neutral-500 font-normal">Demi keamanan akun Anda, kami menyarankan untuk mengganti kata sandi setiap 90 hari.</span>
         </div>
         <div v-else role="alert" class="alert alert-warning bg-warning/10 border-warning/10 text-warning shadow-none flex flex-col items-start gap-1">
           <div class="flex items-center gap-2">
-          <Info class="w-4 h-4" />
+          <Info class="w-4.5 h-4.5" />
             <span class="font-bold">Tambahkan Kata Sandi</span>
           </div>
           <span class="text-xs ml-7 text-neutral-500 font-normal">Akun Anda belum memiliki kata sandi. Tambahkan kata sandi untuk meningkatkan keamanan akun.</span>
@@ -46,8 +46,8 @@
                 class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors"
                 tabindex="-1"
               >
-                <Eye v-if="!showOldPassword" class="w-4 h-4" />
-                <EyeOff v-else class="w-4 h-4" />
+                <Eye v-if="!showOldPassword" class="w-4.5 h-4.5" />
+                <EyeOff v-else class="w-4.5 h-4.5" />
               </button>
             </div>
             <p v-if="errors.oldPassword" class="text-xs text-red-500 mt-1">{{ errors.oldPassword }}</p>
@@ -73,8 +73,8 @@
                   class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors"
                   tabindex="-1"
                 >
-                  <Eye v-if="!showNewPassword" class="w-4 h-4" />
-                  <EyeOff v-else class="w-4 h-4" />
+                  <Eye v-if="!showNewPassword" class="w-4.5 h-4.5" />
+                  <EyeOff v-else class="w-4.5 h-4.5" />
                 </button>
               </div>
               <p v-if="errors.newPassword" class="text-xs text-red-500 mt-1">{{ errors.newPassword }}</p>
@@ -97,8 +97,8 @@
                   class="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors"
                   tabindex="-1"
                 >
-                  <Eye v-if="!showConfirmPassword" class="w-4 h-4" />
-                  <EyeOff v-else class="w-4 h-4" />
+                  <Eye v-if="!showConfirmPassword" class="w-4.5 h-4.5" />
+                  <EyeOff v-else class="w-4.5 h-4.5" />
                 </button>
               </div>
               <p v-if="errors.confirmPassword" class="text-xs text-red-500 mt-1">{{ errors.confirmPassword }}</p>

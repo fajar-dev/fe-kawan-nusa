@@ -5,7 +5,7 @@
       <div class="flex items-center justify-between mb-6">
         <h3 class="font-bold text-lg text-neutral-800">Proses Voucher</h3>
         <button @click="close" class="btn btn-ghost btn-sm btn-circle">
-          <X class="w-4 h-4" />
+          <X class="w-4.5 h-4.5" />
         </button>
       </div>
 

@@ -32,7 +32,7 @@
         @click="isPaletteOpen = true"
         class="btn btn-ghost btn-circle btn-sm hover:text-neutral-900 transition-colors md:hidden"
       >
-        <Search class="w-5 h-5" />
+        <Search class="w-4.5 h-4.5" />
       </button>
       <button 
         @click="handleFeedbackClick"
@@ -40,7 +40,7 @@
         :disabled="isCapturingFeedback"
       >
         <Loader2 v-if="isCapturingFeedback" class="w-5 h-5 animate-spin text-primary" />
-        <MessageSquareWarning v-else class="w-5 h-5" />
+        <MessageSquareWarning v-else class="w-4.5 h-4.5" />
       </button>
       <AppNotificationPopover />
       
@@ -64,20 +64,20 @@
         <ul tabindex="0" class="dropdown-content z-[200] menu p-2 shadow-xl bg-base-100 rounded-box w-56 mt-4 border border-base-200 animate-in fade-in slide-in-from-top-2 duration-200">
           <li v-if="!authState.isAdmin">
             <NuxtLink to="/setting/account" class="flex items-center gap-3 py-2.5 text-neutral-600 hover:text-primary transition-colors">
-              <Settings class="w-4 h-4" />
+              <Settings class="w-4.5 h-4.5" />
               <span class="font-medium text-sm">Pengaturan</span>
             </NuxtLink>
           </li>
           <li>
             <NuxtLink to="/feedback" class="flex items-center gap-3 py-2.5 text-neutral-600 hover:text-primary transition-colors">
-              <MessageSquareWarning class="w-4 h-4" />
+              <MessageSquareWarning class="w-4.5 h-4.5" />
               <span class="font-medium text-sm">Riwayat Feedback</span>
             </NuxtLink>
           </li>
           <div class="divider my-1 opacity-50 mx-2"></div>
           <li>
             <button @click="handleLogout" class="flex items-center gap-3 py-2.5 text-red-500 hover:bg-red-50 hover:text-red-600 transition-colors w-full">
-              <LogOut class="w-4 h-4" />
+              <LogOut class="w-4.5 h-4.5" />
               <span class="font-medium text-sm">Keluar</span>
             </button>
           </li>

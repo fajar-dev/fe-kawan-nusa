@@ -97,7 +97,7 @@
                         class="inline-flex items-center gap-1 self-start text-sm font-semibold text-primary hover:underline md:self-auto md:shrink-0"
                     >
                         <span>Lihat Semua</span>
-                        <ChevronRight class="w-4 h-4" />
+                        <ChevronRight class="w-4.5 h-4.5" />
                     </NuxtLink>
                 </div>
 
@@ -126,7 +126,7 @@
                                     </span>
                                 </div>
                                 <div class="flex items-center gap-1 text-xs text-neutral-400 font-medium shrink-0">
-                                    <Clock class="w-4 h-4" /> {{ article.readingTime }}
+                                    <Clock class="w-4.5 h-4.5" /> {{ article.readingTime }}
                                 </div>
                             </div>
 
@@ -181,7 +181,7 @@
                         class="inline-flex items-center gap-1 self-start text-sm font-semibold text-primary hover:underline md:self-auto md:shrink-0"
                     >
                         <span>Lihat Semua</span>
-                        <ChevronRight class="w-4 h-4" />
+                        <ChevronRight class="w-4.5 h-4.5" />
                     </NuxtLink>
                 </div>
 
