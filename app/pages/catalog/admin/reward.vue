@@ -106,18 +106,30 @@
               <td v-show="isColumnVisible('type')" class="border-r border-base-200 text-center w-28">
                 <span 
                   class="badge border font-medium text-xs rounded-md uppercase tracking-wider"
-                  :class="item.type === 'voucher' ? 'bg-amber-50 text-amber-600 border-amber-200/50' : 'bg-blue-50 text-blue-600 border-blue-200/50'"
+                  :class="item.type === 'voucher' ? 'bg-rose-50 text-rose-600' : 'bg-purple-50 text-purple-600'"
                 >
                   {{ item.type }}
                 </span>
               </td>
               <!-- Points Cost Column -->
-              <td v-show="isColumnVisible('point')" class="border-r border-base-200 font-semibold text-purple-600 whitespace-nowrap">
-                {{ (item.point || 0).toLocaleString('id-ID') }} Poin
+              <td v-show="isColumnVisible('point')" class="border-r border-base-200 whitespace-nowrap">
+                {{ (item.point || 0).toLocaleString('id-ID') }}
+              </td>
+              <!-- Sisa Stock Column -->
+              <td v-show="isColumnVisible('stock')" class="border-r border-base-200 text-center whitespace-nowrap">
+                <span class="font-medium text-neutral-800">{{ item.stock.toLocaleString('id-ID') }}</span>
+              </td>
+              <!-- Ditukar Column -->
+              <td v-show="isColumnVisible('stockUsed')" class="border-r border-base-200 text-center whitespace-nowrap">
+                <span class="font-medium text-neutral-800">{{ (item.stockUsed || 0).toLocaleString('id-ID') }}</span>
               </td>
               <!-- Expired Date Column -->
-              <td v-show="isColumnVisible('expiredDate')" class="border-r border-base-200 text-neutral-500 whitespace-nowrap text-center">
+              <td v-show="isColumnVisible('expiredDate')" class="border-r border-base-200 whitespace-nowrap">
                 {{ item.expiredDate ? item.expiredDate : '-' }}
+              </td>
+              <!-- Created By Column -->
+              <td v-show="isColumnVisible('createdBy')" class="border-r border-base-200 whitespace-nowrap">
+                {{ item.createdBy?.name || '-' }}
               </td>
               <!-- Action Column -->
               <td v-show="isColumnVisible('actions')" class="text-center px-4 w-32">
@@ -156,7 +168,7 @@
 </template>
 
 <script setup lang="ts">
-import { Package, CircleHelp, Plus, SquarePen, Trash2, Search, Coins } from 'lucide-vue-next'
+import { Package, CircleHelp,  SquarePen, Trash2} from 'lucide-vue-next'
 import { catalogService } from '~/services/catalog-service'
 import type { CatalogItem, CatalogCategory, CatalogMeta } from '~/types/catalog'
 
@@ -175,7 +187,10 @@ const columns = [
   { label: 'Kategori', key: 'category', sortable: true },
   { label: 'Tipe', key: 'type', sortable: true },
   { label: 'Biaya Poin', key: 'point', sortable: true },
-  { label: 'Expired Date', key: 'expiredDate', sortable: true },
+  { label: 'Stock', key: 'stock', sortable: true },
+  { label: 'Ditukar', key: 'stockUsed', sortable: true },
+  { label: 'Kadaluarsa', key: 'expiredDate', sortable: true },
+  { label: 'Dibuat Oleh', key: 'createdBy', sortable: false },
   { label: 'Aksi', key: 'actions', sortable: false },
 ]
 
@@ -249,11 +264,6 @@ const fetchCatalogs = async () => {
       meta.value = null
       lastPage.value = 1
     }
-  } catch (error) {
-    toast.error('Gagal mengambil daftar catalog')
-    catalogs.value = []
-    meta.value = null
-    lastPage.value = 1
   } finally {
     loading.value = false
   }
@@ -328,6 +338,8 @@ const handleFormSubmit = async (formDataFields: any) => {
     formData.append('type', formDataFields.type)
     formData.append('point', String(formDataFields.point))
     
+    formData.append('stock', String(formDataFields.stock || 0))
+    
     if (formDataFields.description) {
       formData.append('description', formDataFields.description)
     }
@@ -359,9 +371,7 @@ const handleFormSubmit = async (formDataFields: any) => {
     }
     isOpenFormModal.value = false
     fetchCatalogs()
-  } catch (error) {
-    toast.error('Terjadi kesalahan saat memproses data')
-  } finally {
+  }  finally {
     submitting.value = false
   }
 }
@@ -383,8 +393,6 @@ const handleDelete = async () => {
     } else {
       toast.error(res.message || 'Gagal menghapus item katalog')
     }
-  } catch (error) {
-    toast.error('Terjadi kesalahan saat menghapus item katalog')
   } finally {
     deleting.value = false
   }

@@ -120,6 +120,12 @@
                         >
                             {{ reward.type }}
                         </span>
+                        <span v-if="reward.stock === 0" class="px-2.5 py-0.5 bg-red-50 text-red-600 font-medium text-xs rounded-full border border-red-200/50">
+                            Habis
+                        </span>
+                        <span v-else class="px-2.5 py-0.5 bg-emerald-50 text-emerald-600 font-medium text-xs rounded-full border border-emerald-200/50">
+                            Sisa: {{ reward.stock }}
+                        </span>
                     </div>
 
                     <!-- Content -->
@@ -153,16 +159,18 @@
 
                     <!-- CTA Button -->
                     <button
-                        :disabled="reward.point > userPoints"
+                        :disabled="reward.point > userPoints || reward.stock === 0"
                         @click="handleSelectReward(reward)"
                         class="btn w-full font-medium rounded-lg btn-sm h-10 mt-1"
                         :class="[
-                            reward.point <= userPoints
-                                ? 'btn-primary text-white hover:opacity-90'
-                                : 'bg-neutral-100 text-neutral-400 border-neutral-200/60 cursor-not-allowed shadow-none'
+                            reward.stock === 0
+                                ? 'bg-neutral-100 text-neutral-400 border-neutral-200/60 cursor-not-allowed shadow-none'
+                                : reward.point <= userPoints
+                                    ? 'btn-primary text-white hover:opacity-90'
+                                    : 'bg-neutral-100 text-neutral-400 border-neutral-200/60 cursor-not-allowed shadow-none'
                         ]"
                     >
-                        {{ reward.point <= userPoints ? 'Tukar Sekarang' : 'Poin Tidak Cukup' }}
+                        {{ reward.stock === 0 ? 'Stok Habis' : reward.point <= userPoints ? 'Tukar Sekarang' : 'Poin Tidak Cukup' }}
                     </button>
                 </div>
             </div>

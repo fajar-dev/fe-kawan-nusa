@@ -9,9 +9,8 @@
         <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-100 shrink-0">
           <div>
             <h3 class="text-lg font-semibold text-neutral-800 leading-tight">
-              {{ catalog?.id ? 'Edit Item Katalog' : 'Tambah Item Katalog Baru' }}
+              {{ catalog?.id ? 'Edit Reward' : 'Tambah Reward' }}
             </h3>
-            <p class="text-xs text-neutral-500 mt-0.5">Kelola item produk atau voucher</p>
           </div>
           <button @click="isOpen = false" class="text-neutral-400 hover:text-neutral-800 transition-colors self-start mt-1">
             <X class="w-4.5 h-4.5" />
@@ -20,15 +19,45 @@
 
         <!-- Scrollable Content Area -->
         <form @submit.prevent="handleSubmit" class="p-6 space-y-4 overflow-y-auto flex-1">
-          <!-- Nama Item -->
+          <!-- Tipe -->
           <div>
             <label class="label pb-1">
-              <span class="label-text text-sm font-medium text-gray-700">Nama Item <span class="text-red-500">*</span></span>
+              <span class="label-text text-sm font-medium text-gray-700">Tipe <span class="text-red-500">*</span></span>
+            </label>
+            <div class="flex items-center gap-4 mt-1">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input 
+                  type="radio" 
+                  v-model="form.type" 
+                  value="product" 
+                  class="radio radio-primary radio-sm"
+                  :disabled="loading"
+                />
+                <span class="text-sm text-neutral-600">Product</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input 
+                  type="radio" 
+                  v-model="form.type" 
+                  value="voucher" 
+                  class="radio radio-primary radio-sm"
+                  :disabled="loading"
+                />
+                <span class="text-sm text-neutral-600">Voucher</span>
+              </label>
+            </div>
+            <p v-if="errors.type" class="text-xs text-red-500 mt-1">{{ errors.type }}</p>
+          </div>
+
+          <!-- Nama Reward -->
+          <div>
+            <label class="label pb-1">
+              <span class="label-text text-sm font-medium text-gray-700">Nama Reward <span class="text-red-500">*</span></span>
             </label>
             <input 
               v-model="form.name" 
               type="text" 
-              placeholder="Masukkan nama item..." 
+              placeholder="Masukkan nama reward" 
               class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary bg-white"
               :class="{ 'border-red-500': errors.name }"
               :disabled="loading"
@@ -36,7 +65,7 @@
             <p v-if="errors.name" class="text-xs text-red-500 mt-1">{{ errors.name }}</p>
           </div>
 
-          <!-- Kategori & Tipe -->
+          <!-- Kategori & Jumlah Item -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label class="label pb-1">
@@ -58,45 +87,32 @@
 
             <div>
               <label class="label pb-1">
-                <span class="label-text text-sm font-medium text-gray-700">Tipe <span class="text-red-500">*</span></span>
+                <span class="label-text text-sm font-medium text-gray-700">{{ catalog ? 'Stock' : 'Stock' }} <span class="text-red-500">*</span></span>
               </label>
-              <div class="flex items-center gap-4 mt-2">
-                <label class="flex items-center gap-2 cursor-pointer">
-                  <input 
-                    type="radio" 
-                    v-model="form.type" 
-                    value="product" 
-                    class="radio radio-primary radio-sm"
-                    :disabled="loading"
-                  />
-                  <span class="text-sm text-neutral-600">Product</span>
-                </label>
-                <label class="flex items-center gap-2 cursor-pointer">
-                  <input 
-                    type="radio" 
-                    v-model="form.type" 
-                    value="voucher" 
-                    class="radio radio-primary radio-sm"
-                    :disabled="loading"
-                  />
-                  <span class="text-sm text-neutral-600">Voucher</span>
-                </label>
-              </div>
-              <p v-if="errors.type" class="text-xs text-red-500 mt-1">{{ errors.type }}</p>
+              <input 
+                v-model.number="form.stock" 
+                type="number" 
+                min="0"
+                :placeholder="catalog ? 'Masukkan sisa stock' : 'Masukkan jumlah stock'" 
+                class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary bg-white"
+                :class="{ 'border-red-500': errors.stock }"
+                :disabled="loading"
+              />
+              <p v-if="errors.stock" class="text-xs text-red-500 mt-1">{{ errors.stock }}</p>
             </div>
           </div>
 
-          <!-- Poin & Tanggal Kedaluwarsa -->
+          <!-- Biaya Tukar Poin & Kadaluarsa -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label class="label pb-1">
-                <span class="label-text text-sm font-medium text-gray-700">Poin <span class="text-red-500">*</span></span>
+                <span class="label-text text-sm font-medium text-gray-700">Biaya Tukar Poin <span class="text-red-500">*</span></span>
               </label>
               <input 
                 v-model.number="form.point" 
                 type="number" 
                 min="0"
-                placeholder="0" 
+                placeholder="Jumlah Poin" 
                 class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary bg-white"
                 :class="{ 'border-red-500': errors.point }"
                 :disabled="loading"
@@ -106,7 +122,7 @@
 
             <div>
               <label class="label pb-1">
-                <span class="label-text text-sm font-medium text-gray-700">Tanggal Kedaluwarsa</span>
+                <span class="label-text text-sm font-medium text-gray-700">Kadaluarsa</span>
               </label>
               <input 
                 v-model="form.expiredDate" 
@@ -210,6 +226,7 @@ const form = ref({
   categoryId: '' as string | number,
   type: 'product' as 'product' | 'voucher',
   point: 0,
+  stock: 0,
   description: '',
   expiredDate: ''
 })
@@ -222,7 +239,8 @@ const catalogSchema = z.object({
   name: z.string().trim().min(1, 'Nama item tidak boleh kosong'),
   categoryId: z.union([z.number(), z.string()]).refine(val => !!val, { message: 'Kategori wajib dipilih' }),
   type: z.enum(['product', 'voucher']),
-  point: z.number({ invalid_type_error: 'Poin harus berupa angka' }).min(0, 'Poin minimal adalah 0'),
+  point: z.number('Poin harus berupa angka' ).min(0, 'Poin minimal adalah 0'),
+  stock: z.number('Stock harus berupa angka' ).int().min(0, 'Stock minimal adalah 0'),
   description: z.string().optional(),
   expiredDate: z.string().optional()
 })
@@ -241,6 +259,7 @@ watch(isOpen, (val) => {
         categoryId: props.catalog.categoryId || '',
         type: (props.catalog.type as 'product' | 'voucher') || 'product',
         point: props.catalog.point || 0,
+        stock: props.catalog.stock || 0,
         description: props.catalog.description || '',
         expiredDate: props.catalog.expiredDate || ''
       }
@@ -251,6 +270,7 @@ watch(isOpen, (val) => {
         categoryId: '',
         type: 'product',
         point: 0,
+        stock: 0,
         description: '',
         expiredDate: ''
       }
