@@ -468,7 +468,7 @@ const pointOrder = ref<'asc' | 'desc'>('desc')
 
 const { data: pointResponse, status: pointStatus } = useAsyncData(
   `customer-rewards-${customerId}`,
-  () => customerService.getCustomerRewards(customerId, {
+  () => customerService.getCustomerPoints(customerId, {
     page: pointPage.value,
     sort: pointSort.value,
     order: pointOrder.value,
@@ -508,7 +508,7 @@ const pointColumns = [
 const fetchFilterOptions = async () => {
   const [statusRes, typeRes] = await Promise.all([
     additionalService.getCustomerServiceStatuses(),
-    additionalService.getRewardPointTypes()
+    additionalService.getPointTypes()
   ])
   if (statusRes.success) {
     statusOptions.value = statusRes.data

@@ -222,8 +222,8 @@ const statusTabs = ['Semua', 'Menunggu', 'Diproses', 'Selesai']
 
 // Stats fetching
 const { data: statsResponse } = await useAsyncData(
-    'redemption-reward-statistic',
-    () => statisticService.getRedemptionRewardStatistic()
+    'redemption-point-statistic',
+    () => statisticService.getRedemptionPointStatistic()
 )
 
 const stats = computed(() => {

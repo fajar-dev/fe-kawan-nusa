@@ -24,7 +24,7 @@ export interface CustomerStatistic {
     count: number
 }
 
-export interface RedemptionRewardStatistic {
+export interface RedemptionPointStatistic {
     status: string
     count: number
 }

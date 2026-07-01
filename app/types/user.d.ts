@@ -2,7 +2,7 @@ import type { ApiResponse } from "./auth"
 import type { PaginationMeta } from "./customer"
 import type { CustomerRewardResponse, RewardQueryParams } from "./reward"
 import type { RedemptionResponse, RedemptionQueryParams } from "./redemption"
-import type { StatisticCount, MonthPointStatistic, CustomerStatistic, RedemptionRewardStatistic } from "./statistic"
+import type { StatisticCount, MonthPointStatistic, CustomerStatistic, RedemptionPointStatistic } from "./statistic"
 
 export interface UserBankInfo {
   holderName: string | null
@@ -78,7 +78,7 @@ export interface UserStatisticData {
   count: StatisticCount
   pointPerMonth: MonthPointStatistic[]
   customerStats: CustomerStatistic[]
-  redemptionRewardStats: RedemptionRewardStatistic[]
+  redemptionPointStats: RedemptionPointStatistic[]
 }
 
 export type UserStatisticResponse = ApiResponse<UserStatisticData>

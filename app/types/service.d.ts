@@ -74,7 +74,7 @@ export interface ServiceCustomer {
     type: string
   }
   totalPoint: number
-  latestReward: {
+  latestPoint: {
     point: number
     type: string
     createdAt: string

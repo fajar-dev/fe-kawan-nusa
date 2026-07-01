@@ -88,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { rewardService } from '~/services/reward-service'
+import { pointRewardService } from '~/services/reward-service'
 import { additionalService } from '~/services/additional-service'
 import { formatDate, formatDateTime } from '~/utils/date'
 import type { AdditionalItem } from '~/types/additional'
@@ -151,7 +151,7 @@ const queryParams = computed(() => ({
 
 const { data: rewardResponse, status: rewardStatus, refresh: refreshRewards } = useAsyncData(
   'rewards',
-  () => rewardService.getRewards(queryParams.value)
+  () => pointRewardService.getPointRewards(queryParams.value)
 )
 
 watch(queryParams, () => {
@@ -173,7 +173,7 @@ const currentColumns = [
 ]
 
 const fetchFilterOptions = async () => {
-  const res = await additionalService.getRewardPointTypes()
+  const res = await additionalService.getPointTypes()
   if (res.success) {
     rewardTypeOptions.value = res.data
   }

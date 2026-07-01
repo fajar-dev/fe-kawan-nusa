@@ -154,7 +154,7 @@ const queryParams = computed(() => ({
 
 const { data: rewardResponse, status: rewardStatus, refresh: refreshRewards } = useAsyncData(
   `user-rewards-${userId}`,
-  () => userService.getUserRewards(userId, queryParams.value)
+  () => userService.getUserPoints(userId, queryParams.value)
 )
 
 watch(queryParams, () => {
@@ -176,7 +176,7 @@ const currentColumns = [
 ]
 
 const fetchFilterOptions = async () => {
-  const res = await additionalService.getRewardPointTypes()
+  const res = await additionalService.getPointTypes()
   if (res.success) {
     rewardTypeOptions.value = res.data
   }

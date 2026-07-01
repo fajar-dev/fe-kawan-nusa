@@ -1,7 +1,7 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
 import type { ApiResponse } from "../types/auth"
-import type { StatisticCount, MonthPointStatistic, CustomerStatistic, RedemptionRewardStatistic, AdminStatisticSummary } from "../types/statistic"
+import type { StatisticCount, MonthPointStatistic, CustomerStatistic, RedemptionPointStatistic, AdminStatisticSummary } from "../types/statistic"
 
 export class StatisticService {
     async getAdminSummary(): Promise<ApiResponse<AdminStatisticSummary>> {
@@ -57,9 +57,9 @@ export class StatisticService {
         }
     }
 
-    async getRedemptionRewardStatistic(): Promise<ApiResponse<RedemptionRewardStatistic[]>> {
+    async getRedemptionPointStatistic(): Promise<ApiResponse<RedemptionPointStatistic[]>> {
         try {
-            const response = await apiService.client.get<ApiResponse<RedemptionRewardStatistic[]>>('/statistic/redemption-reward', {
+            const response = await apiService.client.get<ApiResponse<RedemptionPointStatistic[]>>('/statistic/redemption-point', {
                 headers: {
                     Authorization: `Bearer ${useAuth().state.token}`
                 }

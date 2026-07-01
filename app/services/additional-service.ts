@@ -44,9 +44,9 @@ export class AdditionalService {
         }
     }
 
-    async getRewardPointTypes(): Promise<AdditionalResponse> {
+    async getPointTypes(): Promise<AdditionalResponse> {
         try {
-            const response = await apiService.client.get<AdditionalResponse>('/additional/reward-point-type', {
+            const response = await apiService.client.get<AdditionalResponse>('/additional/point-type', {
                 headers: {
                     Authorization: `Bearer ${useAuth().state.token}`
                 }

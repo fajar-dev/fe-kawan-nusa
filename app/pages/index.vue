@@ -262,8 +262,8 @@
             <td v-show="isColumnVisible('status')" class=" border-r border-base-200">
               <div :class="['badge border-none font-medium text-xs rounded-full', getStatusClass(item.status)]">{{ item.status }}</div>
             </td>
-            <td v-show="isColumnVisible('latestReward.type')" >{{ item.latestReward?.type ?? '-' }}</td>
-            <td v-show="isColumnVisible('latestReward.point')" >{{ item.latestReward?.point ?? '-' }}</td>
+            <td v-show="isColumnVisible('latestPoint.type')" >{{ item.latestPoint?.type ?? '-' }}</td>
+            <td v-show="isColumnVisible('latestPoint.point')" >{{ item.latestPoint?.point ?? '-' }}</td>
           </tr>
         </tbody>
       </template>
@@ -343,8 +343,8 @@ const recentCustomerColumns = [
   { label: 'ID Pelanggan', key: 'customerId', sortable: true },
   { label: 'Tanggal Registarasi', key: 'registrationDate', sortable: true },
   { label: 'Periode Berlangganan', key: 'period', sortable: false },
-  { label: 'Tipe Poin', key: 'latestReward.type', sortable: true },
-  { label: 'Poin Didapatkan', key: 'latestReward.point', sortable: true },
+  { label: 'Tipe Poin', key: 'latestPoint.type', sortable: true },
+  { label: 'Poin Didapatkan', key: 'latestPoint.point', sortable: true },
 ]
 
 const recentCustomers = computed(() => recentCustomerServicesResponse.value?.data || [])
@@ -445,7 +445,7 @@ if (!isAdmin.value) {
 const fetchOptions = async () => {
   const [servicesRes, rewardTypesRes] = await Promise.all([
     additionalService.getServices(),
-    additionalService.getRewardPointTypes()
+    additionalService.getPointTypes()
   ])
   if (servicesRes.success) {
     serviceOptions.value = servicesRes.data
