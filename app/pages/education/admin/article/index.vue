@@ -3,7 +3,6 @@
     <AppToolbar>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-4">
-          <BookOpen class="w-9 h-9 mt-1 text-neutral-800" />
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-xl font-medium text-neutral-800">Artikel Edukasi</h1>

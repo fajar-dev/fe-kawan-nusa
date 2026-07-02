@@ -19,10 +19,13 @@ export interface UserListItem {
   phone: string | null
   identityNumber: number | null
   taxNumber: string | null
-  isActive: boolean
+  status: 'pending' | 'active' | 'inactive' | 'reject' | 'revision' | null
+  statusNote: string | null
+  statusUpdatedAt: string | null
   lastReferanceDate: string | null
   point: number
   bank: UserBankInfo | null
+  createdAt: string
 }
 
 export interface UserProfile {
@@ -46,7 +49,10 @@ export interface UserProfile {
     isSubscribe: boolean
     isAutoWithdraw: boolean
   } | null
-  isActive: boolean
+  status: 'pending' | 'active' | 'inactive' | 'reject' | 'revision' | null
+  statusNote: string | null
+  statusUpdatedAt: string | null
+  hasWhatsapp: boolean
   passwordUpdatedAt: string | null
   createdAt: string
 }
@@ -57,7 +63,7 @@ export interface UserQueryParams {
   order?: 'asc' | 'desc'
   page?: number
   limit?: number
-  isActive?: number
+  status?: string
 }
 
 export interface UserServiceQueryParams {

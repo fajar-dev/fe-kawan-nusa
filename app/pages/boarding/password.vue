@@ -236,8 +236,8 @@ const handleSave = async () => {
     if (!boardingRes.success) return
 
     await authService.refreshUser()
-    toast.success('Persiapan akun selesai! Selamat datang di Kawan Nusa.')
-    navigateTo('/')
+    toast.success('Persiapan akun selesai!')
+    navigateTo('/boarding/success')
   } finally {
     loading.value = false
   }

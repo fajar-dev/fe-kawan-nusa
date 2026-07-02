@@ -9,7 +9,7 @@
                         <h1 class="text-xl font-medium text-neutral-800">Update Promo</h1>
                         </div>
                         <p class="text-xs text-neutral-400 font-medium mt-0.5">
-                            <NuxtLink to="/education" class="text-primary hover:underline">Edukasi</NuxtLink> / Update Promo
+                            <NuxtLink to="/education" class="text-primary hover:underline">Konten Edukasi</NuxtLink> / Update Promo
                         </p>
                     </div>
                 </div>

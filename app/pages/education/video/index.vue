@@ -3,13 +3,12 @@
         <AppToolbar>
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <Video class="w-8 h-8 text-neutral-800" />
                     <div>
                         <div class="flex items-center gap-2">
                         <h1 class="text-xl font-medium text-neutral-800">Video Edukasi</h1>
                         </div>
                         <p class="text-xs text-neutral-400 font-medium mt-0.5">
-                            <NuxtLink to="/education" class="text-primary hover:underline">Edukasi</NuxtLink> / Video Edukasi
+                            <NuxtLink to="/education" class="text-primary hover:underline">Konten Edukasi</NuxtLink> / Video Edukasi
                         </p>
                     </div>
                 </div>

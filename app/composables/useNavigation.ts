@@ -29,12 +29,16 @@ const navItems: NavItem[] = [
     position: 'top',
   },
   {
-    label: 'Referral',
+    label: 'Referal',
     to: '/user',
     icon: UsersRound,
     match: '/user',
     role: 'admin',
     position: 'top',
+    children: [
+      { label: 'Data Referal', to: '/user', match: '/user' },
+      { label: 'Persetujuan Registrasi', to: '/user/approval', match: '/user/approval' },
+    ],
   },
   {
     label: 'Input Poin Referral',

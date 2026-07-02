@@ -1,6 +1,6 @@
 <template>
-  <!-- Stepper -->
-  <div class="flex items-start justify-center px-4">
+  <!-- Stepper (hidden for revision users) -->
+  <div v-if="!isRevision" class="flex items-start justify-center px-4">
     <div class="flex items-start w-full max-w-xs mx-auto">
       <div class="flex flex-col items-center">
         <div class="w-3 h-3 rounded-full bg-primary"></div>
@@ -24,11 +24,20 @@
     <form @submit.prevent="handleNext">
       <!-- Informasi Pribadi -->
       <div class="px-4 md:px-8 py-6">
+        <!-- Revision Banner -->
+        <div v-if="isRevision && revisionNote" class="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
+          <AlertCircle class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+          <div>
+            <p class="text-sm font-semibold text-amber-700">Perlu Revisi</p>
+            <p class="text-xs text-amber-600 mt-0.5">{{ revisionNote }}</p>
+          </div>
+        </div>
+
         <!-- Info Alert -->
         <div role="alert" class="alert alert-info bg-info/10 border-info/10 text-info shadow-none mb-6">
           <div class="flex items-center gap-2">
             <Info class="w-4 h-4 shrink-0" />
-            <span class="text-sm">Silahkan lengkapi data berikut untuk melanjutkan ke langkah selanjutnya.</span>
+            <span class="text-sm">{{ isRevision ? 'Silahkan perbaiki data berikut sesuai catatan revisi.' : 'Silahkan lengkapi data berikut untuk melanjutkan ke langkah selanjutnya.' }}</span>
           </div>
         </div>
 
@@ -382,7 +391,7 @@
 </template>
 
 <script setup lang="ts">
-import { Upload, X, Mail, Phone, Info, ArrowRight } from 'lucide-vue-next'
+import { Upload, X, Mail, Phone, Info, ArrowRight, AlertCircle } from 'lucide-vue-next'
 import { profileService } from '~/services/profile-service'
 import { authService } from '~/services/auth-service'
 import type { Profile } from '~/types/profile'
@@ -396,6 +405,10 @@ definePageMeta({
 useSeoMeta({
   title: 'Kawan Nusa | Lengkapi Data',
 })
+
+const { state } = useAuth()
+const isRevision = computed(() => state.user?.status === 'revision')
+const revisionNote = computed(() => state.user?.statusNote || '')
 
 const toast = useToast()
 const loading = ref(false)
@@ -596,8 +609,17 @@ const handleNext = async () => {
     }
 
     await authService.refreshUser()
-    toast.success('Data berhasil disimpan')
-    navigateTo('/boarding/password')
+
+    // Revision flow: skip password, directly complete boarding
+    if (isRevision.value) {
+      await profileService.completeBoarding()
+      await authService.refreshUser()
+      toast.success('Data revisi berhasil dikirim')
+      navigateTo('/boarding/success')
+    } else {
+      toast.success('Data berhasil disimpan')
+      navigateTo('/boarding/password')
+    }
   } finally {
     loading.value = false
   }

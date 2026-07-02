@@ -3,14 +3,13 @@
     <AppToolbar>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-4">
-          <BookOpen class="w-9 h-9 mt-1 text-neutral-800" />
           <div>
             <div class="flex items-center gap-2">
               <h1 class="text-xl font-medium text-neutral-800">Tambah Artikel Baru</h1>
             </div>
             <p class="text-xs text-neutral-400 font-medium mt-0.5">
               <NuxtLink to="/" class="text-primary hover:underline">Home</NuxtLink> / 
-              <NuxtLink to="/education/admin/article" class="text-primary hover:underline">Edukasi</NuxtLink> / 
+              <NuxtLink to="/education/admin/article" class="text-primary hover:underline">Konten Edukasi</NuxtLink> / 
               Tambah
             </p>
           </div>

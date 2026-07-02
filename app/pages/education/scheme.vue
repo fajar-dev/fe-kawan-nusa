@@ -9,7 +9,7 @@
                         <h1 class="text-xl font-medium text-neutral-800">Skema Poin</h1>
                         </div>
                         <p class="text-xs text-neutral-400 font-medium mt-0.5">
-                            <NuxtLink to="/education" class="text-primary hover:underline">Edukasi</NuxtLink> / Skema Poin
+                            <NuxtLink to="/education" class="text-primary hover:underline">Konten Edukasi</NuxtLink> / Skema Poin
                         </p>
                     </div>
                 </div>
