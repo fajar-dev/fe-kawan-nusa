@@ -9,7 +9,7 @@
               <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
             </div>
             <p class="text-xs text-neutral-400 font-medium mt-0.5">
-                This is a clever description about Poin Saya            
+              <NuxtLink to="/" class="text-primary hover:underline">Home</NuxtLink> / Katalog Reward
             </p>
           </div>
         </div>

@@ -9,7 +9,7 @@
                         <h1 class="text-xl font-medium text-neutral-800">Strategi Penawaran</h1>
                         </div>
                         <p class="text-xs text-neutral-400 font-medium mt-0.5">
-                            <NuxtLink to="/education" class="text-primary hover:underline">Edukasi</NuxtLink> / Strategi Penawaran
+                            <NuxtLink to="/education" class="text-primary hover:underline">Konten Edukasi</NuxtLink> / Strategi Penawaran
                         </p>
                     </div>
                 </div>

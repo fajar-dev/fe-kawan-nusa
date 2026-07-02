@@ -13,20 +13,65 @@ export default defineNuxtRouteMiddleware((to) => {
       return navigateTo('/auth/sign-in')
     }
 
-    // Boarding flow: if not boarded, force to boarding pages
-    if (state.user && state.user.role === 'user' && !state.user.isBoarding) {
-      if (!to.path.startsWith('/boarding')) {
+    const user = state.user
+    if (!user) return
+
+    // Admin: no boarding flow, just role check
+    if (user.role === 'admin') {
+      if (to.path.startsWith('/boarding')) return navigateTo('/')
+      const requiredRole = to.meta.role as string | undefined
+      if (requiredRole && state.role !== requiredRole) return navigateTo('/')
+      return
+    }
+
+    // === User Role Flow ===
+
+    // 1. Not verified → only allow boarding/success (show "cek email" or status)
+    if (!user.isVerified) {
+      if (to.path !== '/boarding/success') return navigateTo('/boarding/success')
+      return
+    }
+
+    // 2. Status reject → show rejection page
+    if (user.status === 'reject') {
+      if (to.path !== '/boarding/success') return navigateTo('/boarding/success')
+      return
+    }
+
+    // 3. Status inactive → show inactive page
+    if (user.status === 'inactive') {
+      if (to.path !== '/boarding/success') return navigateTo('/boarding/success')
+      return
+    }
+
+    // 4. Status pending → waiting approval
+    if (user.status === 'pending') {
+      if (to.path !== '/boarding/success') return navigateTo('/boarding/success')
+      return
+    }
+
+    // 5. Status null + not boarded → must complete boarding
+    if (!user.status && !user.isBoarding) {
+      if (!to.path.startsWith('/boarding') || to.path === '/boarding/success') {
         return navigateTo('/boarding')
       }
       return
     }
 
-    // Already boarded: block access to boarding pages
-    if (state.user && state.user.isBoarding && to.path.startsWith('/boarding')) {
-      return navigateTo('/')
+    // 6. Status revision → back to boarding (re-fill data)
+    if (user.status === 'revision') {
+      if (!to.path.startsWith('/boarding') || to.path === '/boarding/success') {
+        return navigateTo('/boarding')
+      }
+      return
     }
 
-    // Enforce role-based access (set via definePageMeta({ role: 'user' }))
+    // 7. Status active → normal access, block boarding pages
+    if (user.status === 'active') {
+      if (to.path.startsWith('/boarding')) return navigateTo('/')
+    }
+
+    // Enforce role-based access
     const requiredRole = to.meta.role as string | undefined
     if (requiredRole && state.role !== requiredRole) {
       return navigateTo('/')

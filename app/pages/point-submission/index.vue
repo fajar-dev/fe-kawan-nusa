@@ -8,8 +8,8 @@
               <h1 class="text-xl font-medium text-neutral-800">Input Poin Referral</h1>
               <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
             </div>
-            <p class="text-xs text-neutral-400 font-medium mt-0.5">
-                Kelola dan setujui poin referral untuk pengguna
+           <p class="text-xs text-neutral-400 font-medium mt-0.5">
+              <NuxtLink to="/" class="text-primary hover:underline">Home</NuxtLink> / Input Poin Referral
             </p>
           </div>
         </div>

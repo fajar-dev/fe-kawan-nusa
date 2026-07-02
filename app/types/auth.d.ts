@@ -5,6 +5,8 @@ export interface AuthUser {
     email: string | null
     phone: string | null
     status: 'pending' | 'active' | 'inactive' | 'reject' | 'revision' | null
+    statusNote: string | null
+    isVerified: boolean
     isBoarding: boolean
     role: 'user' | 'admin'
 }

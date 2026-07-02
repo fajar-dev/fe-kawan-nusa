@@ -3,13 +3,12 @@
         <AppToolbar>
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <Newspaper class="w-9 h-9 mt-1 text-neutral-800" />
                     <div>
                         <div class="flex items-center gap-2">
                         <h1 class="text-xl font-medium text-neutral-800">Artikel Edukasi</h1>
                         </div>
                         <p class="text-xs text-neutral-400 font-medium mt-0.5">
-                            <NuxtLink to="/education" class="text-primary hover:underline">Edukasi</NuxtLink> / 
+                            <NuxtLink to="/education" class="text-primary hover:underline">Konten Edukasi</NuxtLink> / 
                             <NuxtLink to="/education/article" class="text-primary hover:underline">Artikel Edukasi</NuxtLink> / 
                             {{ article?.title }}
                         </p>

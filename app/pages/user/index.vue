@@ -3,10 +3,9 @@
     <AppToolbar>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-4">
-          <Users class="w-9 h-9 mt-1 text-neutral-800" />
           <div>
             <div class="flex items-center gap-2">
-              <h1 class="text-xl font-medium text-neutral-800">Pengguna</h1>
+              <h1 class="text-xl font-medium text-neutral-800">Data Referral</h1>
               <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
             </div>
             <p class="text-xs text-neutral-400 font-medium mt-0.5">
