@@ -38,9 +38,9 @@ const navItems: NavItem[] = [
   },
   {
     label: 'Input Poin Referral',
-    to: '/user',
+    to: '/point-submission',
     icon: Coins,
-    match: '/user',
+    match: '/point-submission',
     role: 'admin',
     position: 'top',
   },

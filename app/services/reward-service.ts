@@ -5,7 +5,7 @@ import type { CustomerRewardResponse, RewardQueryParams } from "../types/reward"
 export class RewardService {
     async getRewards(params?: RewardQueryParams): Promise<CustomerRewardResponse> {
         try {
-            const response = await apiService.client.get<CustomerRewardResponse>('/reward', {
+            const response = await apiService.client.get<CustomerRewardResponse>('/point/reward', {
                 params,
                 headers: {
                     Authorization: `Bearer ${useAuth().state.token}`

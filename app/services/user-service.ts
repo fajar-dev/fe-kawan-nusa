@@ -50,7 +50,7 @@ export class UserService {
 
     async getUserRewards(id: string, params?: RewardQueryParams): Promise<CustomerRewardResponse> {
         try {
-            const response = await apiService.client.get<CustomerRewardResponse>(`/user/${id}/reward`, {
+            const response = await apiService.client.get<CustomerRewardResponse>(`/user/${id}/point`, {
                 params,
                 headers: {
                     Authorization: `Bearer ${useAuth().state.token}`

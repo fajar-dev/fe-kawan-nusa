@@ -48,11 +48,11 @@
             <span class="text-xs text-neutral-500 font-medium">Pilih Semua</span>
           </label>
 
-          <div v-if="selectedIds.length > 0" class="flex items-center gap-3">
-            <span class="text-xs text-neutral-500 font-medium">{{ selectedIds.length }} terpilih</span>
+          <div class="flex items-center gap-3">
+            <span v-if="selectedIds.length > 0" class="text-xs text-neutral-500 font-medium">{{ selectedIds.length }} terpilih</span>
             <button 
               @click="handleBulkComplete"
-              :disabled="completing"
+              :disabled="completing || selectedIds.length === 0"
               class="btn btn-primary btn-sm rounded-lg font-medium text-white flex items-center gap-2 h-9 min-h-0"
             >
               <Check class="w-4.5 h-4.5" />
