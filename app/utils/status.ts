@@ -31,7 +31,7 @@ export const getStatusClass = (status: string): string => {
 /**
  * Get CSS classes for a user status badge
  */
-export const getUserStatusClass = (status: string | null): string => {
+export const getUserStatusClass = (status: string | null | undefined): string => {
   if (!status) return 'bg-neutral-100 text-neutral-500'
   
   const map: Record<string, string> = {
@@ -47,7 +47,7 @@ export const getUserStatusClass = (status: string | null): string => {
 /**
  * Get human-readable label for a user status
  */
-export const getUserStatusLabel = (status: string | null): string => {
+export const getUserStatusLabel = (status: string | null | undefined): string => {
   if (!status) return '-'
 
   const map: Record<string, string> = {
