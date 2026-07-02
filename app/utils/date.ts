@@ -126,3 +126,29 @@ export const formatPeriod = (start?: string | null, end?: string | null): string
   if (!start && !end) return '-'
   return `${formatDate(start)} - ${formatDate(end)}`
 }
+
+/**
+ * Format a date string into a short date-time format (e.g., 19 Mar 2026, 15:30)
+ */
+export const formatDateTimeShort = (dateString?: string | null): string => {
+  if (!dateString) return '-'
+  const date = new Date(dateString)
+  if (isNaN(date.getTime())) return '-'
+
+  return date.toLocaleDateString('id-ID', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+/**
+ * Get the expiration date (1 year from the given date)
+ */
+export const getExpiredDate = (dateString: string): string => {
+  const date = new Date(dateString)
+  date.setFullYear(date.getFullYear() + 1)
+  return date.toISOString()
+}
