@@ -4,7 +4,7 @@ export interface AuthUser {
     photo: string | null
     email: string | null
     phone: string | null
-    isActive: boolean
+    status: 'pending' | 'active' | 'inactive' | 'reject' | 'revision' | null
     isBoarding: boolean
     role: 'user' | 'admin'
 }

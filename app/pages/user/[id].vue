@@ -19,9 +19,9 @@
               <div class="flex flex-wrap items-center gap-2">
                 <div :class="[
                   'flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold',
-                  user?.isActive ? 'bg-primary/10 text-primary' : 'bg-red-50 text-red-500'
+                  user?.status === 'active' ? 'bg-primary/10 text-primary' : user?.status === 'pending' ? 'bg-amber-50 text-amber-600' : user?.status === 'revision' ? 'bg-blue-50 text-blue-600' : user?.status === 'reject' ? 'bg-red-50 text-red-500' : 'bg-neutral-100 text-neutral-500'
                 ]">
-                  {{ user?.isActive ? 'Aktif' : 'Tidak Aktif' }}
+                  {{ user?.status === 'active' ? 'Aktif' : user?.status === 'pending' ? 'Pending' : user?.status === 'revision' ? 'Revisi' : user?.status === 'reject' ? 'Ditolak' : 'Tidak Aktif' }}
                 </div>
                 <div class="flex items-center gap-1.5 px-3 py-1 bg-neutral-100 rounded-full text-xs text-neutral-600">
                   <Calendar class="w-3.5 h-3.5 shrink-0" />
@@ -245,6 +245,13 @@ const { data: userResponse } = useAsyncData(
   () => userService.getUserById(userId)
 )
 const user = computed(() => userResponse.value?.data)
+
+// Guard: redirect if user is not active or inactive
+watch(user, (val) => {
+  if (val && val.status !== 'active' && val.status !== 'inactive') {
+    navigateTo('/user')
+  }
+}, { immediate: true })
 
 // Fetch User Statistic
 const { data: statisticResponse } = useAsyncData(

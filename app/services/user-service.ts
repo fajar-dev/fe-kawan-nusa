@@ -7,6 +7,7 @@ import type { CustomerRewardResponse, RewardQueryParams } from "../types/reward"
 import type { RedemptionResponse, RedemptionQueryParams } from "../types/redemption"
 
 export class UserService {
+
     async getUsers(params?: UserQueryParams): Promise<UserListResponse> {
         try {
             const response = await apiService.client.get<UserListResponse>('/user', {
@@ -87,6 +88,15 @@ export class UserService {
         } catch (error: any) {
             return handleServiceError(error || 'Failed to fetch user statistic')
         }
+    }
+
+    async updateUserStatus(id: string | number, data: { status: string; note: string }): Promise<ApiResponse<any>> {
+        const response = await apiService.client.patch<ApiResponse<any>>(`/user/${id}/status`, data, {
+            headers: {
+                Authorization: `Bearer ${useAuth().state.token}`
+            }
+        })
+        return response.data
     }
 }
 

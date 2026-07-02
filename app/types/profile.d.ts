@@ -29,7 +29,7 @@ export interface Profile {
   identityPath: string | null;
   bankDetails: ProfileBankDetails;
   settings: ProfileSettings;
-  isActive: boolean;
+  status: 'pending' | 'active' | 'inactive' | 'reject' | 'revision' | null;
   isVerified: boolean;
   isBoarding: boolean;
   createdAt: string;

@@ -48,12 +48,12 @@
             <div>
               <div class="flex items-center justify-between mb-1.5">
                 <span class="text-neutral-400 text-xs font-medium">Status</span>
-                <span @click="isActive = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+                <span @click="statusFilter = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
               </div>
-              <select v-model="isActive" class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
-                <option value="">Semua Status</option>
-                <option value="1">Aktif</option>
-                <option value="0">Tidak Aktif</option>
+              <select v-model="statusFilter" class="select select-bordered w-full rounded-lg text-sm h-10 font-medium">
+                <option value="">Semua</option>
+                <option value="active">Aktif</option>
+                <option value="inactive">Tidak Aktif</option>
               </select>
             </div>
           </DataFilter>
@@ -89,12 +89,12 @@
                 </template>
                 <span v-else>-</span>
               </td>
-              <td v-show="isColumnVisible('isActive')" class="border-r border-base-200 text-center px-4">
+              <td v-show="isColumnVisible('status')" class="border-r border-base-200 text-center px-4">
                 <div :class="[
                   'badge border-none font-semibold text-[12px] rounded-lg w-full',
-                  item.isActive ? 'bg-primary/10 text-primary' : 'bg-red-50 text-red-500'
+                  getUserStatusClass(item.status)
                 ]">
-                  {{ item.isActive ? 'Aktif' : 'Tidak Aktif' }}
+                  {{ getUserStatusLabel(item.status) }}
                 </div>
               </td>
               <td v-show="isColumnVisible('lastReferanceDate')" class="border-r border-base-200 whitespace-nowrap">{{ item.lastReferanceDate ? formatDateShort(item.lastReferanceDate) : '-' }}</td>
@@ -115,6 +115,7 @@ import { userService } from '~/services/user-service'
 import { getInitials } from '~/utils/initials'
 import { formatNumber } from '~/utils/string'
 import { formatDateShort } from '~/utils/date'
+import { getUserStatusClass, getUserStatusLabel } from '~/utils/status'
 import type { UserListItem, UserQueryParams } from '~/types/user'
 import type { PaginationMeta } from '~/types/customer'
 
@@ -132,7 +133,7 @@ const columns = [
   { label: 'No. Identitas', key: 'identityNumber', sortable: true },
   { label: 'NPWP', key: 'taxNumber', sortable: true },
   { label: 'Informasi Bank', key: 'bank', sortable: false },
-  { label: 'Status', key: 'isActive', sortable: true },
+  { label: 'Status', key: 'status', sortable: true },
   { label: 'Referensi Terakhir', key: 'lastReferanceDate', sortable: true },
   { label: 'Poin', key: 'point', sortable: true },
 ]
@@ -144,11 +145,11 @@ const meta = ref<PaginationMeta | null>(null)
 const currentSort = ref('point')
 const currentOrder = ref<'asc' | 'desc'>('desc')
 
-const isActive = ref('')
+const statusFilter = ref('')
 const isFilterActive = ref(false)
 
 const appliedFilters = ref({
-  isActive: ''
+  status: ''
 })
 
 const fetchUsers = async (queryParams: UserQueryParams = {}) => {
@@ -158,7 +159,7 @@ const fetchUsers = async (queryParams: UserQueryParams = {}) => {
       sort: currentSort.value,
       order: currentOrder.value,
       q: searchQuery.value,
-      isActive: appliedFilters.value.isActive === '' ? undefined : Number(appliedFilters.value.isActive),
+      status: appliedFilters.value.status || 'active,inactive',
       ...queryParams,
       page: queryParams.page || 1,
       limit: 10
@@ -174,21 +175,23 @@ const fetchUsers = async (queryParams: UserQueryParams = {}) => {
 }
 
 const cancelFilters = () => {
-  isActive.value = appliedFilters.value.isActive
+  statusFilter.value = appliedFilters.value.status
 }
 
 const applyFilters = () => {
   appliedFilters.value = {
-    isActive: isActive.value
+    status: statusFilter.value
   }
-  isFilterActive.value = appliedFilters.value.isActive !== ''
+  isFilterActive.value = appliedFilters.value.status !== ''
   fetchUsers({ page: 1 })
 }
 
 const resetFilters = () => {
-  isActive.value = ''
+  statusFilter.value = ''
   applyFilters()
 }
+
+
 
 let searchTimeout: any = null
 watch(searchQuery, () => {
