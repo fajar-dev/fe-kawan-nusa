@@ -377,7 +377,7 @@ watch(isOpen, (val) => {
   if (val) {
     if (props.submission) {
       form.value = {
-        userId: props.submission.userId,
+        userId: props.submission.user?.id || 0,
         type: props.submission.type,
         point: props.submission.point,
         price: props.submission.price,

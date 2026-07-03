@@ -256,7 +256,7 @@ watch(isOpen, (val) => {
     if (props.catalog) {
       form.value = {
         name: props.catalog.name || '',
-        categoryId: props.catalog.categoryId || '',
+        categoryId: props.catalog.category?.id || '',
         type: (props.catalog.type as 'product' | 'voucher') || 'product',
         point: props.catalog.point || 0,
         stock: props.catalog.stock || 0,

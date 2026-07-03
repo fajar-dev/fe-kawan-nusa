@@ -208,7 +208,7 @@ const fetchVideoDetail = async () => {
         title: res.data.title,
         url: res.data.url,
         description: res.data.description || '',
-        categoryId: res.data.categoryId
+        categoryId: res.data.category?.id || ''
       }
       previewUrl.value = res.data.thumbnail
     } else {

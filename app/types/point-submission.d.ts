@@ -13,7 +13,6 @@ export interface NisAccount {
 
 export interface PointSubmission {
     id: number
-    userId: number
     type: 'OTC' | 'Bulanan'
     point: number
     price: number

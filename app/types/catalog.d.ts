@@ -13,7 +13,6 @@ export interface CatalogCreatedBy {
 
 export interface CatalogItem {
     id: number
-    categoryId: number
     name: string
     type: string
     description: string

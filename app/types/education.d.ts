@@ -17,7 +17,6 @@ export interface EducationArticle {
     author: EducationAuthor | null;
     readingTime: string;
     isView: boolean;
-    categoryId: number;
     category: EducationCategory;
     createdAt: string;
 }
@@ -30,7 +29,6 @@ export interface EducationVideo {
     description: string;
     author: EducationAuthor | null;
     isView: boolean;
-    categoryId: number;
     category: EducationCategory;
     createdAt: string;
 }

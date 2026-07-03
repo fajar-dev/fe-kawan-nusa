@@ -129,7 +129,7 @@
               </td>
               <!-- Nama Referral Column -->
               <td v-show="isColumnVisible('user')" class="border-r border-base-200 max-w-xs truncate" :title="item.user?.name">
-                <NuxtLink :to="`/user/${item.userId}`" class="font-medium text-primary hover:underline">{{ item.user?.name || '-' }}</NuxtLink>
+                <NuxtLink :to="`/user/${item.user?.id}`" class="font-medium text-primary hover:underline">{{ item.user?.name || '-' }}</NuxtLink>
               </td>
               <!-- Jumlah Poin Column -->
               <td v-show="isColumnVisible('point')" class="border-r border-base-200 whitespace-nowrap">

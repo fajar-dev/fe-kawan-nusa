@@ -200,7 +200,7 @@ const fetchArticleDetail = async () => {
         title: res.data.title,
         content: res.data.content,
 
-        categoryId: res.data.categoryId
+        categoryId: res.data.category?.id || ''
       }
       previewUrl.value = res.data.image
     } else {

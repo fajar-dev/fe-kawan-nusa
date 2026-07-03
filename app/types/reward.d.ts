@@ -3,7 +3,6 @@ import type { PaginationMeta } from "./customer"
 
 export interface CustomerReward {
   id: number
-  customerServiceId: number
   price: number
   expiredDate: string
   point: number
