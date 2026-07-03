@@ -96,17 +96,17 @@ export class PointSubmissionService {
         }
     }
 
-    async checkAccount(custServId: number, excludeId?: number): Promise<{ exists: boolean }> {
+    async checkAccount(custServId: number, userId: number, excludeId?: number): Promise<{ existsForUser: boolean; existsForOthers: boolean }> {
         try {
-            const response = await apiService.client.get<ApiResponse<{ exists: boolean }>>('/point-submission/check-account', {
-                params: { custServId, excludeId },
+            const response = await apiService.client.get<ApiResponse<{ existsForUser: boolean; existsForOthers: boolean }>>('/point-submission/check-account', {
+                params: { custServId, userId, excludeId },
                 headers: {
                     Authorization: `Bearer ${useAuth().state.token}`
                 }
             })
             return response.data.data
         } catch (error: any) {
-            return { exists: false }
+            return { existsForUser: false, existsForOthers: false }
         }
     }
 }

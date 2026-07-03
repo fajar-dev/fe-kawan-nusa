@@ -116,6 +116,7 @@
               </div>
             </div>
             <p v-if="errors.nisData" class="text-xs text-red-500 mt-1">{{ errors.nisData }}</p>
+            <p v-else-if="accountWarning" class="text-xs text-amber-600 mt-1">⚠ {{ accountWarning }}</p>
           </div>
 
           <!-- Account Manager (readonly) -->
@@ -339,6 +340,8 @@ const onNisSearch = () => {
   }, 300)
 }
 
+const accountWarning = ref('')
+
 const selectNisAccount = async (account: NisAccount) => {
   form.value.nisData = account
   form.value.accountManager = account.accountManager || '-'
@@ -348,10 +351,14 @@ const selectNisAccount = async (account: NisAccount) => {
 
   // Check if account already exists
   errors.value.nisData = ''
+  accountWarning.value = ''
+  if (!form.value.userId) return
   const excludeId = props.submission?.id
-  const result = await pointSubmissionService.checkAccount(account.custServId, excludeId)
-  if (result.exists) {
-    errors.value.nisData = 'Akun layanan ini sudah pernah diinput'
+  const result = await pointSubmissionService.checkAccount(account.custServId, form.value.userId, excludeId)
+  if (result.existsForUser) {
+    errors.value.nisData = 'Referral ini sudah pernah menginput akun layanan yang sama'
+  } else if (result.existsForOthers) {
+    accountWarning.value = 'Akun layanan ini sudah diinput oleh referral lain'
   }
 }
 
@@ -434,12 +441,12 @@ const handleSubmit = async () => {
     return
   }
 
-  // Re-check account existence
-  if (form.value.nisData) {
+  // Re-check: block if same user already submitted this account
+  if (form.value.nisData && form.value.userId) {
     const excludeId = props.submission?.id
-    const check = await pointSubmissionService.checkAccount(form.value.nisData.custServId, excludeId)
-    if (check.exists) {
-      errors.value.nisData = 'Akun layanan ini sudah pernah diinput'
+    const check = await pointSubmissionService.checkAccount(form.value.nisData.custServId, form.value.userId, excludeId)
+    if (check.existsForUser) {
+      errors.value.nisData = 'Referral ini sudah pernah menginput akun layanan yang sama'
       return
     }
   }
