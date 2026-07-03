@@ -24,13 +24,13 @@
             @click="activeTab = 'pending'"
             :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'pending' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
           >
-            Pending
+            Belum di Transfer
           </button>
           <button 
             @click="activeTab = 'completed'"
             :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'completed' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
           >
-            Completed
+            Sudah di Transfer
           </button>
         </div>
 

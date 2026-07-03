@@ -107,6 +107,19 @@
                 <option value="Bulanan">Bulanan</option>
               </select>
             </div>
+
+            <!-- Date Range -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-neutral-400 text-xs font-medium">Tanggal Dibuat</span>
+                <span @click="filterStartDate = ''; filterEndDate = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input v-model="filterStartDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10 font-medium" />
+                <span class="text-neutral-400 text-sm shrink-0">s/d</span>
+                <input v-model="filterEndDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10 font-medium" />
+              </div>
+            </div>
           </DataFilter>
         </template>
 
@@ -261,9 +274,13 @@ const loading = ref(true)
 // Filter & Search states
 const searchQuery = ref('')
 const filterType = ref('')
+const filterStartDate = ref('')
+const filterEndDate = ref('')
 const isFilterActive = ref(false)
 const appliedFilters = ref({
-  type: ''
+  type: '',
+  startDate: '',
+  endDate: ''
 })
 
 const page = ref(1)
@@ -317,7 +334,9 @@ const fetchSubmissions = async () => {
       type: appliedFilters.value.type || undefined,
       q: searchQuery.value || undefined,
       sort: currentSort.value,
-      order: currentOrder.value
+      order: currentOrder.value,
+      startDate: appliedFilters.value.startDate || undefined,
+      endDate: appliedFilters.value.endDate || undefined
     })
     
     if (res.success && res.data) {
@@ -377,19 +396,25 @@ watch(submissions, () => {
 // DataFilter triggers
 const applyFilters = () => {
   appliedFilters.value = {
-    type: filterType.value
+    type: filterType.value,
+    startDate: filterStartDate.value,
+    endDate: filterEndDate.value
   }
-  isFilterActive.value = appliedFilters.value.type !== ''
+  isFilterActive.value = appliedFilters.value.type !== '' || appliedFilters.value.startDate !== '' || appliedFilters.value.endDate !== ''
   page.value = 1
   fetchSubmissions()
 }
 
 const cancelFilters = () => {
   filterType.value = appliedFilters.value.type
+  filterStartDate.value = appliedFilters.value.startDate
+  filterEndDate.value = appliedFilters.value.endDate
 }
 
 const resetFilters = () => {
   filterType.value = ''
+  filterStartDate.value = ''
+  filterEndDate.value = ''
   applyFilters()
 }
 

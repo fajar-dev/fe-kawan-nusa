@@ -61,6 +61,19 @@
                 </option>
               </select>
             </div>
+
+            <!-- Date Range -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-neutral-400 text-xs font-medium">Tanggal Dibuat</span>
+                <span @click="filterStartDate = ''; filterEndDate = ''" class="text-primary text-xs font-medium cursor-pointer hover:underline">Hapus Terpilih</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <input v-model="filterStartDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10 font-medium" />
+                <span class="text-neutral-400 text-sm shrink-0">s/d</span>
+                <input v-model="filterEndDate" type="date" class="input input-bordered w-full rounded-lg text-sm h-10 font-medium" />
+              </div>
+            </div>
           </DataFilter>
         </template>
 
@@ -168,9 +181,13 @@ const currentSort = ref('createdAt')
 const currentOrder = ref<'asc' | 'desc'>('desc')
 
 const filterCategoryId = ref('')
+const filterStartDate = ref('')
+const filterEndDate = ref('')
 const isFilterActive = ref(false)
 const appliedFilters = ref({
-  categoryId: ''
+  categoryId: '',
+  startDate: '',
+  endDate: ''
 })
 
 const isOpenDeleteModal = ref(false)
@@ -204,6 +221,12 @@ const fetchVideos = async (queryParams: { page?: number } = {}) => {
     if (appliedFilters.value.categoryId) {
       params.categoryId = Number(appliedFilters.value.categoryId)
     }
+    if (appliedFilters.value.startDate) {
+      params.startDate = appliedFilters.value.startDate
+    }
+    if (appliedFilters.value.endDate) {
+      params.endDate = appliedFilters.value.endDate
+    }
 
     const response = await educationService.getVideos(params)
     if (response.success) {
@@ -219,18 +242,24 @@ const fetchVideos = async (queryParams: { page?: number } = {}) => {
 
 const cancelFilters = () => {
   filterCategoryId.value = appliedFilters.value.categoryId
+  filterStartDate.value = appliedFilters.value.startDate
+  filterEndDate.value = appliedFilters.value.endDate
 }
 
 const applyFilters = () => {
   appliedFilters.value = {
-    categoryId: filterCategoryId.value
+    categoryId: filterCategoryId.value,
+    startDate: filterStartDate.value,
+    endDate: filterEndDate.value
   }
-  isFilterActive.value = appliedFilters.value.categoryId !== ''
+  isFilterActive.value = appliedFilters.value.categoryId !== '' || appliedFilters.value.startDate !== '' || appliedFilters.value.endDate !== ''
   fetchVideos({ page: 1 })
 }
 
 const resetFilters = () => {
   filterCategoryId.value = ''
+  filterStartDate.value = ''
+  filterEndDate.value = ''
   applyFilters()
 }
 

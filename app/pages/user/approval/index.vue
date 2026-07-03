@@ -97,8 +97,8 @@
               <td v-show="isColumnVisible('taxNumber')" class="border-r border-base-200 max-w-[180px] truncate" :title="item.taxNumber || '-'">
                 {{ item.taxNumber || '-' }}
               </td>
-              <td v-show="isColumnVisible('company')" class="border-r border-base-200 max-w-[180px] truncate">
-                -
+              <td v-show="isColumnVisible('company')" class="border-r border-base-200 max-w-[180px] truncate" :title="item.company || '-'">
+                {{ item.company || '-' }}
               </td>
               <td v-show="isColumnVisible('bankName')" class="border-r border-base-200 max-w-[150px] truncate" :title="item.bank?.name || '-'">
                 {{ item.bank?.name || '-' }}

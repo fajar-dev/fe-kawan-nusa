@@ -19,6 +19,7 @@ export interface UserListItem {
   phone: string | null
   identityNumber: number | null
   taxNumber: string | null
+  company: string | null
   status: 'pending' | 'active' | 'inactive' | 'reject' | 'revision' | null
   statusNote: string | null
   statusUpdatedAt: string | null
