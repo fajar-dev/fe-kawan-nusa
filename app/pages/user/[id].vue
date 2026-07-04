@@ -312,17 +312,6 @@
                 <h3 class="font-semibold text-neutral-800">Statistik Poin</h3>
               </div>
 
-              <!-- Poin Aktif Display -->
-              <div class="mb-6">
-                <span class="text-xs text-neutral-500 font-medium">Poin Aktif</span>
-                <div class="flex items-center gap-2 mt-1">
-                  <span class="text-neutral-800 font-medium text-4xl">{{ totalPoints.toLocaleString('id-ID') }}</span>
-                  <div class="tooltip tooltip-bottom tooltip-neutral" data-tip="Jumlah poin komisi yang tersisa saat ini.">
-                    <CircleHelp class="w-4 h-4 text-neutral-400 cursor-pointer hover:text-primary transition-colors" />
-                  </div>
-                </div>
-              </div>
-
               <!-- Chart -->
               <AreaChart
                 v-if="AreaChartData.length > 0"
@@ -338,6 +327,53 @@
               />
               <div v-else class="h-[220px] flex items-center justify-center text-neutral-400 text-sm">
                 Tidak ada data statistik
+              </div>
+            </div>
+          </div>
+
+          <!-- Riwayat Status -->
+          <div class="card bg-white border border-base-200">
+            <div class="card-body p-6">
+              <div class="flex items-center gap-3 border-b border-base-300 pb-3 mb-4">
+                <History class="w-5 h-5 text-neutral-800 shrink-0" />
+                <h3 class="font-semibold text-neutral-800">Riwayat Status</h3>
+              </div>
+
+              <div v-if="statusHistoriesLoading" class="flex justify-center py-6">
+                <span class="loading loading-spinner loading-md text-primary"></span>
+              </div>
+
+              <div v-else-if="statusHistories.length === 0" class="text-center py-6">
+                <div class="w-10 h-10 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                  <History class="w-4 h-4 text-neutral-400" />
+                </div>
+                <p class="text-neutral-400 text-sm">Belum ada riwayat perubahan status</p>
+              </div>
+
+              <div v-else class="relative pl-6">
+                <div class="absolute left-[9px] top-2 bottom-2 w-px bg-neutral-200"></div>
+
+                <div v-for="history in statusHistories" :key="history.id" class="relative mb-5 last:mb-0">
+                  <div class="absolute -left-6 top-1 w-[18px] h-[18px] rounded-full border-2 border-white shadow-sm flex items-center justify-center"
+                    :class="userStatusDotColor(history.toStatus)"
+                  >
+                    <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+                  </div>
+
+                  <div class="bg-neutral-50 rounded-lg p-3 border border-neutral-100">
+                    <div class="flex items-center gap-2 flex-wrap mb-1">
+                      <span v-if="history.fromStatus" class="badge badge-sm font-medium rounded-md" :class="getUserStatusClass(history.fromStatus)">{{ getUserStatusLabel(history.fromStatus) }}</span>
+                      <span v-if="history.fromStatus" class="text-neutral-400 text-xs">→</span>
+                      <span class="badge badge-sm font-medium rounded-md" :class="getUserStatusClass(history.toStatus)">{{ getUserStatusLabel(history.toStatus) }}</span>
+                    </div>
+                    <p v-if="history.note" class="text-sm text-neutral-600 mt-1">{{ history.note }}</p>
+                    <div class="flex items-center gap-2 mt-1.5 text-xs text-neutral-400">
+                      <span v-if="history.changedBy">oleh <span class="font-medium text-neutral-500">{{ history.changedBy.name }}</span></span>
+                      <span>·</span>
+                      <span>{{ formatDateTime(history.createdAt) }}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -397,7 +433,7 @@ import {
   CircleHelp, Calendar, UserRound as UserIcon, Mail, Phone, Hash, 
   FileText, Building2, Briefcase, Landmark, ReceiptText, Coins, Cake, MapPin,
   CreditCard, Image, FileImage, IdCard, MessageCircle, Settings, Bell, ArrowDownUp,
-  ShieldCheck, Users, Wifi, TrendingUp, TrendingDown, AlertCircle
+  ShieldCheck, Users, Wifi, TrendingUp, TrendingDown, AlertCircle, History
 } from 'lucide-vue-next'
 import { userService } from '~/services/user-service'
 import { getInitials } from '~/utils/initials'
@@ -461,4 +497,39 @@ const previewImage = (url: string) => {
   previewImageUrl.value = url
   showImagePreview.value = true
 }
+
+// Status History
+import type { UserStatusHistory } from '~/types/user'
+
+const statusHistories = ref<UserStatusHistory[]>([])
+const statusHistoriesLoading = ref(true)
+
+const fetchStatusHistories = async () => {
+  statusHistoriesLoading.value = true
+  try {
+    const res = await userService.getUserStatusHistories(userId)
+    if (res.success) {
+      statusHistories.value = res.data
+    }
+  } catch (error) {
+    // silently ignore
+  } finally {
+    statusHistoriesLoading.value = false
+  }
+}
+
+const userStatusDotColor = (status: string) => {
+  const map: Record<string, string> = {
+    active: 'bg-emerald-500',
+    pending: 'bg-amber-500',
+    revision: 'bg-blue-500',
+    reject: 'bg-red-500',
+    inactive: 'bg-neutral-400',
+  }
+  return map[status] || 'bg-neutral-400'
+}
+
+onMounted(() => {
+  fetchStatusHistories()
+})
 </script>
