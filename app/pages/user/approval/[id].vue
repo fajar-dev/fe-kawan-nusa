@@ -218,6 +218,63 @@
             </div>
           </template>
         </div>
+
+        <!-- Riwayat Status -->
+        <div v-if="statusHistories.length > 0" class="card bg-white border border-base-200 rounded-2xl shadow-sm">
+          <div class="px-4 md:px-8 py-6">
+            <h3 class="text-base font-semibold text-neutral-800 mb-5">Riwayat Perubahan Status</h3>
+            <div class="relative pl-6">
+              <!-- Timeline line -->
+              <div class="absolute left-[9px] top-2 bottom-2 w-px bg-base-200"></div>
+              
+              <div v-for="(history, index) in statusHistories" :key="history.id" class="relative mb-6 last:mb-0">
+                <!-- Timeline dot -->
+                <div class="absolute -left-6 top-1 w-[18px] h-[18px] rounded-full border-2 border-white shadow-sm flex items-center justify-center"
+                  :class="[
+                    history.toStatus === 'active' ? 'bg-emerald-500' :
+                    history.toStatus === 'reject' ? 'bg-red-500' :
+                    history.toStatus === 'revision' ? 'bg-amber-500' :
+                    history.toStatus === 'pending' ? 'bg-blue-500' :
+                    'bg-neutral-400'
+                  ]"
+                >
+                  <div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+                </div>
+
+                <!-- Content -->
+                <div class="bg-base-50 rounded-xl p-4 border border-base-200">
+                  <div class="flex items-center gap-2 flex-wrap mb-1">
+                    <span v-if="history.fromStatus" class="badge badge-sm font-medium rounded-md"
+                      :class="[
+                        history.fromStatus === 'active' ? 'bg-emerald-100 text-emerald-700' :
+                        history.fromStatus === 'reject' ? 'bg-red-100 text-red-700' :
+                        history.fromStatus === 'revision' ? 'bg-amber-100 text-amber-700' :
+                        history.fromStatus === 'pending' ? 'bg-blue-100 text-blue-700' :
+                        'bg-neutral-100 text-neutral-600'
+                      ]"
+                    >{{ statusLabel(history.fromStatus) }}</span>
+                    <span v-if="history.fromStatus" class="text-neutral-400 text-xs">→</span>
+                    <span class="badge badge-sm font-medium rounded-md"
+                      :class="[
+                        history.toStatus === 'active' ? 'bg-emerald-100 text-emerald-700' :
+                        history.toStatus === 'reject' ? 'bg-red-100 text-red-700' :
+                        history.toStatus === 'revision' ? 'bg-amber-100 text-amber-700' :
+                        history.toStatus === 'pending' ? 'bg-blue-100 text-blue-700' :
+                        'bg-neutral-100 text-neutral-600'
+                      ]"
+                    >{{ statusLabel(history.toStatus) }}</span>
+                  </div>
+                  <p v-if="history.note" class="text-sm text-neutral-600 mt-1.5">{{ history.note }}</p>
+                  <div class="flex items-center gap-2 mt-2 text-xs text-neutral-400">
+                    <span v-if="history.changedBy">oleh <span class="font-medium text-neutral-500">{{ history.changedBy.name }}</span></span>
+                    <span>·</span>
+                    <span>{{ formatDateTime(history.createdAt) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -292,7 +349,7 @@ import {
 } from 'lucide-vue-next'
 import { userService } from '~/services/user-service'
 import { formatDate, formatDateTime } from '~/utils/date'
-import type { UserProfile } from '~/types/user'
+import type { UserProfile, UserStatusHistory } from '~/types/user'
 
 definePageMeta({
   bgColor: 'bg-white'
@@ -320,6 +377,31 @@ const fetchUser = async () => {
   } finally {
     loading.value = false
   }
+}
+
+// Status histories
+const statusHistories = ref<UserStatusHistory[]>([])
+
+const fetchStatusHistories = async () => {
+  try {
+    const response = await userService.getUserStatusHistories(userId)
+    if (response.success) {
+      statusHistories.value = response.data
+    }
+  } catch (error) {
+    // Silently ignore
+  }
+}
+
+const statusLabel = (status: string) => {
+  const labels: Record<string, string> = {
+    pending: 'Menunggu',
+    active: 'Disetujui',
+    reject: 'Ditolak',
+    revision: 'Perlu Revisi',
+    inactive: 'Tidak Aktif',
+  }
+  return labels[status] || status
 }
 
 // Can perform approve/reject actions
@@ -380,5 +462,6 @@ const handleReject = async (note: string, status: string) => {
 
 onMounted(() => {
   fetchUser()
+  fetchStatusHistories()
 })
 </script>

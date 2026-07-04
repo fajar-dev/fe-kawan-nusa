@@ -90,3 +90,15 @@ export interface UserStatisticData {
 
 export type UserStatisticResponse = ApiResponse<UserStatisticData>
 
+export interface UserStatusHistory {
+  id: number
+  fromStatus: string | null
+  toStatus: string
+  note: string | null
+  changedBy: {
+    id: number
+    name: string
+  } | null
+  createdAt: string
+}
+

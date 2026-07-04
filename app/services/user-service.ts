@@ -1,6 +1,6 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
-import type { UserListResponse, UserQueryParams, UserProfile, UserServiceQueryParams, UserStatisticResponse } from "../types/user"
+import type { UserListResponse, UserQueryParams, UserProfile, UserServiceQueryParams, UserStatisticResponse, UserStatusHistory } from "../types/user"
 import type { ApiResponse } from "../types/auth"
 import type { ServiceCustomerResponse } from "../types/service"
 import type { CustomerRewardResponse, RewardQueryParams } from "../types/reward"
@@ -97,6 +97,19 @@ export class UserService {
             }
         })
         return response.data
+    }
+
+    async getUserStatusHistories(id: string | number): Promise<ApiResponse<UserStatusHistory[]>> {
+        try {
+            const response = await apiService.client.get<ApiResponse<UserStatusHistory[]>>(`/user/${id}/status-histories`, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch status histories')
+        }
     }
 }
 
