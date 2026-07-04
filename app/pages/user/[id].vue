@@ -62,222 +62,177 @@
         </div>
       </div>
 
-      <!-- Ringkasan Statistik Cards -->
-      <div v-if="statistic" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="card bg-white border border-base-200 p-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <span class="text-xs text-neutral-500 font-medium">Pelanggan</span>
-              <p class="text-2xl font-bold text-neutral-800 mt-0.5">{{ statistic.count?.customer?.value?.toLocaleString('id-ID') || 0 }}</p>
-            </div>
-            <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-              <Users class="w-5 h-5 text-primary" />
-            </div>
-          </div>
-          <div v-if="statistic.count?.customer?.achievement" class="flex items-center gap-1 mt-2">
-            <TrendingUp v-if="statistic.count.customer.achievement.isUp" class="w-3.5 h-3.5 text-primary" />
-            <TrendingDown v-else class="w-3.5 h-3.5 text-red-500" />
-            <span :class="['text-xs font-medium', statistic.count.customer.achievement.isUp ? 'text-primary' : 'text-red-500']">
-              {{ statistic.count.customer.achievement.percentage }}%
-            </span>
-            <span class="text-xs text-neutral-400">dari bulan lalu</span>
-          </div>
-        </div>
-
-        <div class="card bg-white border border-base-200 p-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <span class="text-xs text-neutral-500 font-medium">Layanan</span>
-              <p class="text-2xl font-bold text-neutral-800 mt-0.5">{{ statistic.count?.customerService?.value?.toLocaleString('id-ID') || 0 }}</p>
-            </div>
-            <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-              <Wifi class="w-5 h-5 text-blue-500" />
-            </div>
-          </div>
-          <div v-if="statistic.count?.customerService?.achievement" class="flex items-center gap-1 mt-2">
-            <TrendingUp v-if="statistic.count.customerService.achievement.isUp" class="w-3.5 h-3.5 text-primary" />
-            <TrendingDown v-else class="w-3.5 h-3.5 text-red-500" />
-            <span :class="['text-xs font-medium', statistic.count.customerService.achievement.isUp ? 'text-primary' : 'text-red-500']">
-              {{ statistic.count.customerService.achievement.percentage }}%
-            </span>
-            <span class="text-xs text-neutral-400">dari bulan lalu</span>
-          </div>
-        </div>
-
-        <div class="card bg-white border border-base-200 p-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <span class="text-xs text-neutral-500 font-medium">Poin Aktif</span>
-              <p class="text-2xl font-bold text-neutral-800 mt-0.5">{{ totalPoints.toLocaleString('id-ID') }}</p>
-            </div>
-            <div class="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center">
-              <Coins class="w-5 h-5 text-amber-500" />
-            </div>
-          </div>
-          <div v-if="statistic.count?.point?.achievement" class="flex items-center gap-1 mt-2">
-            <TrendingUp v-if="statistic.count.point.achievement.isUp" class="w-3.5 h-3.5 text-primary" />
-            <TrendingDown v-else class="w-3.5 h-3.5 text-red-500" />
-            <span :class="['text-xs font-medium', statistic.count.point.achievement.isUp ? 'text-primary' : 'text-red-500']">
-              {{ statistic.count.point.achievement.percentage }}%
-            </span>
-            <span class="text-xs text-neutral-400">dari bulan lalu</span>
-          </div>
-        </div>
-      </div>
-
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <!-- Detail Pengguna -->
-        <div class="lg:col-span-5 space-y-6">
-          <!-- Informasi Pribadi -->
+        <div class="lg:col-span-5">
           <div class="card bg-white border border-base-200">
-            <div class="card-header p-6">
-              <div class="flex items-center gap-3 border-b border-base-300 pb-3">
-                <UserIcon class="w-5 h-5 text-neutral-800" />
-                <h3 class="font-semibold text-neutral-800 ps-2">Detail Pengguna</h3>
-              </div>
-            </div>
-            <div class="card-body p-6 pt-0 flex flex-col gap-5 ps-8">
-              <div v-if="user" class="grid grid-cols-1 gap-y-5">
-                <div class="flex items-start gap-4">
-                  <Mail class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
-                  <div class="flex flex-col">
-                    <span class="text-xs text-neutral-900">Email</span>
-                    <span class="text-xs text-neutral-800 font-medium">{{ user.email || '-' }}</span>
-                  </div>
+            <div class="card-body p-6 flex flex-col gap-6">
+              <!-- Informasi Pribadi -->
+              <div>
+                <div class="flex items-center gap-3 border-b border-base-300 pb-3 mb-5">
+                  <UserIcon class="w-5 h-5 text-neutral-800" />
+                  <h3 class="font-semibold text-neutral-800 ps-2">Detail Pengguna</h3>
                 </div>
-                <div class="flex items-start gap-4">
-                  <Phone class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
-                  <div class="flex flex-col">
-                    <span class="text-xs text-neutral-900">No. Telepon</span>
-                    <div class="flex items-center gap-2">
-                      <span class="text-xs text-neutral-800 font-medium">{{ user.phone || '-' }}</span>
-                      <span v-if="user.hasWhatsapp" class="inline-flex items-center gap-1 px-1.5 py-0.5 bg-green-50 text-green-600 text-[10px] font-medium rounded">
-                        <MessageCircle class="w-2.5 h-2.5" /> WA
+                <div v-if="user" class="grid grid-cols-1 gap-y-5 ps-2">
+                  <div class="flex items-start gap-4">
+                    <Mail class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                    <div class="flex flex-col">
+                      <span class="text-xs text-neutral-900">Email</span>
+                      <span class="text-xs text-neutral-800 font-medium">{{ user.email || '-' }}</span>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4">
+                    <Phone class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                    <div class="flex flex-col">
+                      <span class="text-xs text-neutral-900">No. Telepon</span>
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs text-neutral-800 font-medium">{{ user.phone || '-' }}</span>
+                        <span v-if="user.hasWhatsapp" class="inline-flex items-center gap-1 px-1.5 py-0.5 bg-green-50 text-green-600 text-[10px] font-medium rounded">
+                          <MessageCircle class="w-2.5 h-2.5" /> WA
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4">
+                    <Cake class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                    <div class="flex flex-col">
+                      <span class="text-xs text-neutral-900">Tempat / Tgl Lahir</span>
+                      <span class="text-xs text-neutral-800 font-medium">
+                        {{ user.birthPlace || '-' }}, {{ user.birthDate ? formatDate(user.birthDate) : '-' }}
                       </span>
                     </div>
                   </div>
-                </div>
-                <div class="flex items-start gap-4">
-                  <Cake class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
-                  <div class="flex flex-col">
-                    <span class="text-xs text-neutral-900">Tempat / Tgl Lahir</span>
-                    <span class="text-xs text-neutral-800 font-medium">
-                      {{ user.birthPlace || '-' }}, {{ user.birthDate ? formatDate(user.birthDate) : '-' }}
-                    </span>
+                  <div class="flex items-start gap-4">
+                    <Hash class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                    <div class="flex flex-col">
+                      <span class="text-xs text-neutral-900">NIK</span>
+                      <span class="text-xs text-neutral-800 font-medium">{{ user.identityNumber || '-' }}</span>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4">
+                    <FileText class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                    <div class="flex flex-col">
+                      <span class="text-xs text-neutral-900">NPWP</span>
+                      <span class="text-xs text-neutral-800 font-medium">{{ user.taxNumber || '-' }}</span>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4">
+                    <MapPin class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                    <div class="flex flex-col">
+                      <span class="text-xs text-neutral-900">Alamat</span>
+                      <span class="text-xs text-neutral-800 font-medium">{{ user.address || '-' }}</span>
+                    </div>
                   </div>
                 </div>
-                <div class="flex items-start gap-4">
-                  <Hash class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
-                  <div class="flex flex-col">
-                    <span class="text-xs text-neutral-900">NIK</span>
-                    <span class="text-xs text-neutral-800 font-medium">{{ user.identityNumber || '-' }}</span>
-                  </div>
-                </div>
-                <div class="flex items-start gap-4">
-                  <FileText class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
-                  <div class="flex flex-col">
-                    <span class="text-xs text-neutral-900">NPWP</span>
-                    <span class="text-xs text-neutral-800 font-medium">{{ user.taxNumber || '-' }}</span>
-                  </div>
-                </div>
-                <div class="flex items-start gap-4">
-                  <MapPin class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
-                  <div class="flex flex-col">
-                    <span class="text-xs text-neutral-900">Alamat</span>
-                    <span class="text-xs text-neutral-800 font-medium">{{ user.address || '-' }}</span>
-                  </div>
+                <div v-else class="space-y-4 animate-pulse ps-2">
+                  <div v-for="i in 6" :key="i" class="h-10 bg-base-200 rounded-lg"></div>
                 </div>
               </div>
-              <div v-else class="space-y-4 animate-pulse">
-                <div v-for="i in 6" :key="i" class="h-10 bg-base-200 rounded-lg"></div>
-              </div>
-            </div>
-          </div>
 
-          <!-- Informasi Bank -->
-          <div v-if="user" class="card bg-white border border-base-200">
-            <div class="card-header p-6">
-              <div class="flex items-center gap-3 border-b border-base-300 pb-3">
-                <Landmark class="w-5 h-5 text-neutral-800" />
-                <h3 class="font-semibold text-neutral-800 ps-2">Informasi Bank</h3>
-              </div>
-            </div>
-            <div class="card-body p-6 pt-0 flex flex-col gap-5 ps-8">
-              <div class="grid grid-cols-1 gap-y-5">
-                <div class="flex items-start gap-4">
-                  <CreditCard class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
-                  <div class="flex flex-col">
-                    <span class="text-xs text-neutral-900">Rekening Bank</span>
-                    <template v-if="user.bankDetails?.name">
-                      <span class="text-xs text-neutral-800 font-medium">{{ user.bankDetails.name }} - {{ user.bankDetails.number || '-' }}</span>
-                      <span class="text-xs text-neutral-400">a.n {{ user.bankDetails.holderName || '-' }}</span>
-                    </template>
-                    <span v-else class="text-xs text-neutral-800 font-medium">-</span>
-                  </div>
+              <!-- Informasi Bank -->
+              <div v-if="user">
+                <div class="flex items-center gap-3 border-b border-base-300 pb-3 mb-5">
+                  <Landmark class="w-5 h-5 text-neutral-800" />
+                  <h3 class="font-semibold text-neutral-800 ps-2">Informasi Bank</h3>
                 </div>
-                <div v-if="user.bankDetails?.accountPath" class="flex items-start gap-4">
-                  <Image class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
-                  <div class="flex flex-col">
-                    <span class="text-xs text-neutral-900 mb-1.5">Foto Buku Rekening</span>
-                    <div class="w-36 h-24 rounded-lg border border-base-200 overflow-hidden bg-base-100 cursor-pointer" @click="previewImage(user.bankDetails!.accountPath!)">
-                      <img :src="user.bankDetails.accountPath" alt="Buku Rekening" class="w-full h-full object-cover" />
+                <div class="grid grid-cols-1 gap-y-5 ps-2">
+                  <div class="flex items-start gap-4">
+                    <CreditCard class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                    <div class="flex flex-col">
+                      <span class="text-xs text-neutral-900">Rekening Bank</span>
+                      <template v-if="user.bankDetails?.name">
+                        <span class="text-xs text-neutral-800 font-medium">{{ user.bankDetails.name }} - {{ user.bankDetails.number || '-' }}</span>
+                        <span class="text-xs text-neutral-400">a.n {{ user.bankDetails.holderName || '-' }}</span>
+                      </template>
+                      <span v-else class="text-xs text-neutral-800 font-medium">-</span>
+                    </div>
+                  </div>
+                  <div v-if="user.bankDetails?.accountPath" class="flex items-start gap-4">
+                    <Image class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                    <div class="flex flex-col">
+                      <span class="text-xs text-neutral-900 mb-1.5">Foto Buku Rekening</span>
+                      <div class="w-36 h-24 rounded-lg border border-base-200 overflow-hidden bg-base-100 cursor-pointer" @click="previewImage(user.bankDetails!.accountPath!)">
+                        <img :src="user.bankDetails.accountPath" alt="Buku Rekening" class="w-full h-full object-cover" />
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <!-- Informasi Perusahaan -->
-          <div v-if="user && (user.company || user.jobPosition)" class="card bg-white border border-base-200">
-            <div class="card-header p-6">
-              <div class="flex items-center gap-3 border-b border-base-300 pb-3">
-                <Building2 class="w-5 h-5 text-neutral-800" />
-                <h3 class="font-semibold text-neutral-800 ps-2">Informasi Perusahaan</h3>
-              </div>
-            </div>
-            <div class="card-body p-6 pt-0 flex flex-col gap-5 ps-8">
-              <div class="grid grid-cols-1 gap-y-5">
-                <div class="flex items-start gap-4">
-                  <Building2 class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
-                  <div class="flex flex-col">
-                    <span class="text-xs text-neutral-900">Nama Perusahaan</span>
-                    <span class="text-xs text-neutral-800 font-medium">{{ user.company || '-' }}</span>
-                  </div>
+              <!-- Informasi Perusahaan -->
+              <div v-if="user && (user.company || user.jobPosition)">
+                <div class="flex items-center gap-3 border-b border-base-300 pb-3 mb-5">
+                  <Building2 class="w-5 h-5 text-neutral-800" />
+                  <h3 class="font-semibold text-neutral-800 ps-2">Informasi Perusahaan</h3>
                 </div>
-                <div class="flex items-start gap-4">
-                  <Briefcase class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
-                  <div class="flex flex-col">
-                    <span class="text-xs text-neutral-900">Jabatan</span>
-                    <span class="text-xs text-neutral-800 font-medium">{{ user.jobPosition || '-' }}</span>
+                <div class="grid grid-cols-1 gap-y-5 ps-2">
+                  <div class="flex items-start gap-4">
+                    <Building2 class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                    <div class="flex flex-col">
+                      <span class="text-xs text-neutral-900">Nama Perusahaan</span>
+                      <span class="text-xs text-neutral-800 font-medium">{{ user.company || '-' }}</span>
+                    </div>
                   </div>
-                </div>
-                <div v-if="user.companyAddress" class="flex items-start gap-4">
-                  <MapPin class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
-                  <div class="flex flex-col">
-                    <span class="text-xs text-neutral-900">Alamat Perusahaan</span>
-                    <span class="text-xs text-neutral-800 font-medium">{{ user.companyAddress }}</span>
+                  <div class="flex items-start gap-4">
+                    <Briefcase class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                    <div class="flex flex-col">
+                      <span class="text-xs text-neutral-900">Jabatan</span>
+                      <span class="text-xs text-neutral-800 font-medium">{{ user.jobPosition || '-' }}</span>
+                    </div>
+                  </div>
+                  <div v-if="user.companyAddress" class="flex items-start gap-4">
+                    <MapPin class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                    <div class="flex flex-col">
+                      <span class="text-xs text-neutral-900">Alamat Perusahaan</span>
+                      <span class="text-xs text-neutral-800 font-medium">{{ user.companyAddress }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <!-- Dokumen -->
-          <div v-if="user?.identityPath" class="card bg-white border border-base-200">
-            <div class="card-header p-6">
-              <div class="flex items-center gap-3 border-b border-base-300 pb-3">
-                <FileImage class="w-5 h-5 text-neutral-800" />
-                <h3 class="font-semibold text-neutral-800 ps-2">Dokumen</h3>
+              <!-- Dokumen -->
+              <div v-if="user?.identityPath">
+                <div class="flex items-center gap-3 border-b border-base-300 pb-3 mb-5">
+                  <FileImage class="w-5 h-5 text-neutral-800" />
+                  <h3 class="font-semibold text-neutral-800 ps-2">Dokumen</h3>
+                </div>
+                <div class="ps-2">
+                  <div class="flex items-start gap-4">
+                    <IdCard class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
+                    <div class="flex flex-col">
+                      <span class="text-xs text-neutral-900 mb-1.5">Foto KTP</span>
+                      <div class="w-36 h-24 rounded-lg border border-base-200 overflow-hidden bg-base-100 cursor-pointer" @click="previewImage(user.identityPath!)">
+                        <img :src="user.identityPath" alt="KTP" class="w-full h-full object-cover" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="card-body p-6 pt-0 flex flex-col gap-5 ps-8">
-              <div class="flex items-start gap-4">
-                <IdCard class="w-5 h-5 text-neutral-400 mt-0.5 shrink-0" />
-                <div class="flex flex-col">
-                  <span class="text-xs text-neutral-900 mb-1.5">Foto KTP</span>
-                  <div class="w-36 h-24 rounded-lg border border-base-200 overflow-hidden bg-base-100 cursor-pointer" @click="previewImage(user.identityPath!)">
-                    <img :src="user.identityPath" alt="KTP" class="w-full h-full object-cover" />
+
+              <!-- Pengaturan Akun -->
+              <div v-if="user">
+                <div class="flex items-center gap-3 border-b border-base-300 pb-3 mb-5">
+                  <Settings class="w-5 h-5 text-neutral-800" />
+                  <h3 class="font-semibold text-neutral-800 ps-2">Pengaturan Akun</h3>
+                </div>
+                <div class="flex flex-col ps-2">
+                  <div class="flex items-center justify-between p-3 bg-base-50 rounded-lg">
+                    <div class="flex items-center gap-3">
+                      <Bell class="w-4 h-4 text-neutral-500" />
+                      <span class="text-sm text-neutral-700 font-medium">Langganan Notifikasi</span>
+                    </div>
+                    <span :class="['text-xs font-semibold px-2 py-0.5 rounded', user.settings?.isSubscribe ? 'bg-primary/10 text-primary' : 'bg-neutral-100 text-neutral-500']">
+                      {{ user.settings?.isSubscribe ? 'Aktif' : 'Nonaktif' }}
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between p-3 bg-base-50 rounded-lg">
+                    <div class="flex items-center gap-3">
+                      <ArrowDownUp class="w-4 h-4 text-neutral-500" />
+                      <span class="text-sm text-neutral-700 font-medium">Auto Withdraw</span>
+                    </div>
+                    <span :class="['text-xs font-semibold px-2 py-0.5 rounded', user.settings?.isAutoWithdraw ? 'bg-primary/10 text-primary' : 'bg-neutral-100 text-neutral-500']">
+                      {{ user.settings?.isAutoWithdraw ? 'Aktif' : 'Nonaktif' }}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -286,7 +241,69 @@
         </div>
 
         <!-- Statistik & Poin -->
-        <div class="lg:col-span-7 space-y-6">
+        <div class="lg:col-span-7 flex flex-col gap-4">
+          <!-- Ringkasan Statistik -->
+          <div v-if="statistic" class="flex flex-col gap-4">
+            <div class="card bg-white border border-base-200 p-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-xs text-neutral-500 font-medium">Pelanggan</span>
+                  <p class="text-2xl font-bold text-neutral-800 mt-0.5">{{ statistic.count?.customer?.value?.toLocaleString('id-ID') || 0 }}</p>
+                </div>
+                <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                  <Users class="w-5 h-5 text-primary" />
+                </div>
+              </div>
+              <div v-if="statistic.count?.customer?.achievement" class="flex items-center gap-1 mt-2">
+                <TrendingUp v-if="statistic.count.customer.achievement.isUp" class="w-3.5 h-3.5 text-primary" />
+                <TrendingDown v-else class="w-3.5 h-3.5 text-red-500" />
+                <span :class="['text-xs font-medium', statistic.count.customer.achievement.isUp ? 'text-primary' : 'text-red-500']">
+                  {{ statistic.count.customer.achievement.percentage }}%
+                </span>
+                <span class="text-xs text-neutral-400">dari bulan lalu</span>
+              </div>
+            </div>
+
+            <div class="card bg-white border border-base-200 p-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-xs text-neutral-500 font-medium">Layanan</span>
+                  <p class="text-2xl font-bold text-neutral-800 mt-0.5">{{ statistic.count?.customerService?.value?.toLocaleString('id-ID') || 0 }}</p>
+                </div>
+                <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                  <Wifi class="w-5 h-5 text-blue-500" />
+                </div>
+              </div>
+              <div v-if="statistic.count?.customerService?.achievement" class="flex items-center gap-1 mt-2">
+                <TrendingUp v-if="statistic.count.customerService.achievement.isUp" class="w-3.5 h-3.5 text-primary" />
+                <TrendingDown v-else class="w-3.5 h-3.5 text-red-500" />
+                <span :class="['text-xs font-medium', statistic.count.customerService.achievement.isUp ? 'text-primary' : 'text-red-500']">
+                  {{ statistic.count.customerService.achievement.percentage }}%
+                </span>
+                <span class="text-xs text-neutral-400">dari bulan lalu</span>
+              </div>
+            </div>
+
+            <div class="card bg-white border border-base-200 p-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-xs text-neutral-500 font-medium">Poin Aktif</span>
+                  <p class="text-2xl font-bold text-neutral-800 mt-0.5">{{ totalPoints.toLocaleString('id-ID') }}</p>
+                </div>
+                <div class="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center">
+                  <Coins class="w-5 h-5 text-amber-500" />
+                </div>
+              </div>
+              <div v-if="statistic.count?.point?.achievement" class="flex items-center gap-1 mt-2">
+                <TrendingUp v-if="statistic.count.point.achievement.isUp" class="w-3.5 h-3.5 text-primary" />
+                <TrendingDown v-else class="w-3.5 h-3.5 text-red-500" />
+                <span :class="['text-xs font-medium', statistic.count.point.achievement.isUp ? 'text-primary' : 'text-red-500']">
+                  {{ statistic.count.point.achievement.percentage }}%
+                </span>
+                <span class="text-xs text-neutral-400">dari bulan lalu</span>
+              </div>
+            </div>
+          </div>
           <!-- Grafik Poin -->
           <div class="card bg-white border border-base-200">
             <div class="card-body p-6">
@@ -321,46 +338,6 @@
               />
               <div v-else class="h-[220px] flex items-center justify-center text-neutral-400 text-sm">
                 Tidak ada data statistik
-              </div>
-            </div>
-          </div>
-
-          <!-- Pengaturan Akun -->
-          <div v-if="user" class="card bg-white border border-base-200">
-            <div class="card-body p-6">
-              <div class="flex items-center gap-3 border-b border-base-300 pb-3 mb-4">
-                <Settings class="w-5 h-5 text-neutral-800 shrink-0" />
-                <h3 class="font-semibold text-neutral-800">Pengaturan Akun</h3>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div class="flex items-center justify-between p-3 bg-base-50 rounded-lg">
-                  <div class="flex items-center gap-3">
-                    <Bell class="w-4 h-4 text-neutral-500" />
-                    <span class="text-sm text-neutral-700 font-medium">Langganan Notifikasi</span>
-                  </div>
-                  <span :class="['text-xs font-semibold px-2 py-0.5 rounded', user.settings?.isSubscribe ? 'bg-primary/10 text-primary' : 'bg-neutral-100 text-neutral-500']">
-                    {{ user.settings?.isSubscribe ? 'Aktif' : 'Nonaktif' }}
-                  </span>
-                </div>
-                <div class="flex items-center justify-between p-3 bg-base-50 rounded-lg">
-                  <div class="flex items-center gap-3">
-                    <ArrowDownUp class="w-4 h-4 text-neutral-500" />
-                    <span class="text-sm text-neutral-700 font-medium">Auto Withdraw</span>
-                  </div>
-                  <span :class="['text-xs font-semibold px-2 py-0.5 rounded', user.settings?.isAutoWithdraw ? 'bg-primary/10 text-primary' : 'bg-neutral-100 text-neutral-500']">
-                    {{ user.settings?.isAutoWithdraw ? 'Aktif' : 'Nonaktif' }}
-                  </span>
-                </div>
-                <div class="flex items-center justify-between p-3 bg-base-50 rounded-lg">
-                  <div class="flex items-center gap-3">
-                    <ShieldCheck class="w-4 h-4 text-neutral-500" />
-                    <span class="text-sm text-neutral-700 font-medium">Password Terakhir</span>
-                  </div>
-                  <span class="text-xs text-neutral-500 font-medium">
-                    {{ user.passwordUpdatedAt ? formatDate(user.passwordUpdatedAt) : 'Belum diubah' }}
-                  </span>
-                </div>
               </div>
             </div>
           </div>
