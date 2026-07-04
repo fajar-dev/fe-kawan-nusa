@@ -154,6 +154,9 @@
               </td>
               <td v-show="isColumnVisible('actions')" class="text-center">
                 <div class="flex items-center justify-center gap-1">
+                  <button @click="openHistoryModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Riwayat Status">
+                    <History class="w-4.5 h-4.5" />
+                  </button>
                   <a :href="item.withdrawDetails?.receipt || '#'" target="_blank" class="btn btn-ghost btn-xs btn-circle">
                     <Eye class="w-4 h-4 text-neutral-500" />
                   </a>
@@ -164,11 +167,16 @@
         </template>
       </DataTable>
     </div>
+
+    <ModalRedemptionHistory
+      v-model="showHistoryModal"
+      :redemption-id="selectedHistoryId"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ArrowLeftRight, CircleHelp, Eye, Download, Check } from 'lucide-vue-next'
+import { ArrowLeftRight, CircleHelp, Eye, Download, Check, History } from 'lucide-vue-next'
 import { redemptionService } from '~/services/redemption-service'
 import { getInitials } from '~/utils/initials'
 import { formatNumber } from '~/utils/string'
@@ -228,6 +236,14 @@ const appliedFilters = ref({
 
 const selectedIds = ref<number[]>([])
 const completing = ref(false)
+
+const showHistoryModal = ref(false)
+const selectedHistoryId = ref<number | null>(null)
+
+const openHistoryModal = (item: CashRedemptionListItem) => {
+  selectedHistoryId.value = item.id
+  showHistoryModal.value = true
+}
 
 const isAllSelected = computed(() => {
   return items.value.length > 0 && selectedIds.value.length === items.value.length

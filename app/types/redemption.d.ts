@@ -258,3 +258,15 @@ export interface ProcessVoucherRequest {
     code: string
     expiredDate?: string
 }
+
+export interface RedemptionStatusHistory {
+    id: number
+    fromStatus: string | null
+    toStatus: string
+    note: string | null
+    changedBy: {
+        id: number
+        name: string
+    } | null
+    createdAt: string
+}

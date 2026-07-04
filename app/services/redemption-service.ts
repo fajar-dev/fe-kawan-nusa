@@ -1,6 +1,7 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
-import type { CashRedemptionRequest, CashRedemptionResponse, ProductRedemptionRequest, ProductRedemptionResponse, VoucherRedemptionRequest, VoucherRedemptionResponse, RedemptionQueryParams, RedemptionResponse, CashRedemptionQueryParams, CashRedemptionListResponse, ProductRedemptionQueryParams, ProductRedemptionListResponse, ProcessProductRequest, VoucherRedemptionQueryParams, VoucherRedemptionListResponse, ProcessVoucherRequest } from "../types/redemption"
+import type { CashRedemptionRequest, CashRedemptionResponse, ProductRedemptionRequest, ProductRedemptionResponse, VoucherRedemptionRequest, VoucherRedemptionResponse, RedemptionQueryParams, RedemptionResponse, CashRedemptionQueryParams, CashRedemptionListResponse, ProductRedemptionQueryParams, ProductRedemptionListResponse, ProcessProductRequest, VoucherRedemptionQueryParams, VoucherRedemptionListResponse, ProcessVoucherRequest, RedemptionStatusHistory } from "../types/redemption"
+import type { ApiResponse } from "../types/auth"
 
 export class RedemptionService {
     async getRedemptions(params?: RedemptionQueryParams): Promise<RedemptionResponse> {
@@ -162,6 +163,19 @@ export class RedemptionService {
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Failed to complete voucher redemption')
+        }
+    }
+
+    async getStatusHistories(id: number): Promise<ApiResponse<RedemptionStatusHistory[]>> {
+        try {
+            const response = await apiService.client.get<ApiResponse<RedemptionStatusHistory[]>>(`/redemption/${id}/status-histories`, {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch status histories')
         }
     }
 

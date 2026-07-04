@@ -174,6 +174,9 @@
               </td>
               <td v-show="isColumnVisible('actions')" class="text-center">
                 <div class="flex items-center justify-center gap-1">
+                  <button @click="openHistoryModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Riwayat Status">
+                    <History class="w-4.5 h-4.5" />
+                  </button>
                   <template v-if="activeTab === 'pending'">
                     <button 
                       @click="openVoucherModal(item)"
@@ -208,6 +211,11 @@
 
     <!-- Modals -->
     <ModalProcessVoucher ref="voucherModalRef" @success="fetchData({ page: 1 })" />
+
+    <ModalRedemptionHistory
+      v-model="showHistoryModal"
+      :redemption-id="selectedHistoryId"
+    />
 
     <!-- Voucher Detail Modal -->
     <dialog ref="detailDialogRef" class="modal modal-bottom sm:modal-middle">
@@ -254,7 +262,7 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowLeftRight, CircleHelp, Eye, Check, Ticket, X } from 'lucide-vue-next'
+import { ArrowLeftRight, CircleHelp, Eye, Check, Ticket, X, History } from 'lucide-vue-next'
 import ModalProcessVoucher from '~/components/ModalProcessVoucher.vue'
 import { redemptionService } from '~/services/redemption-service'
 import { getInitials } from '~/utils/initials'
@@ -335,6 +343,14 @@ const appliedFilters = ref({
 
 const selectedIds = ref<number[]>([])
 const completing = ref(false)
+
+const showHistoryModal = ref(false)
+const selectedHistoryId = ref<number | null>(null)
+
+const openHistoryModal = (item: VoucherRedemptionListItem) => {
+  selectedHistoryId.value = item.id
+  showHistoryModal.value = true
+}
 
 const isAllSelected = computed(() => {
   return items.value.length > 0 && selectedIds.value.length === items.value.length
