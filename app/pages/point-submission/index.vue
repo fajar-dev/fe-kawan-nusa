@@ -16,6 +16,7 @@
       </div>
       <template #right>
         <button 
+          v-if="canCreate('point-submission')"
           @click="openCreateModal" 
           class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-5 flex items-center gap-2"
         >
@@ -43,7 +44,7 @@
         </div>
 
         <!-- Bulk Action Button -->
-        <div v-if="activeTab === 'pending'" class="flex items-center gap-4 pb-2.5 md:pb-2 pr-4">
+        <div v-if="activeTab === 'pending' && canEdit('point-submission')" class="flex items-center gap-4 pb-2.5 md:pb-2 pr-4">
           <!-- Select All Checkbox -->
           <label class="flex items-center gap-2 cursor-pointer select-none">
             <input 
@@ -180,10 +181,10 @@
               <td v-show="isColumnVisible('actions')" class="text-center px-4 w-32">
                 <div class="flex items-center justify-center gap-0">
                   <template v-if="activeTab === 'pending'">
-                    <button @click="openEditModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Edit">
+                    <button v-if="canEdit('point-submission')" @click="openEditModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Edit">
                       <SquarePen class="w-4.5 h-4.5" />
                     </button>
-                    <button @click="openDeleteModal(item)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hapus">
+                    <button v-if="canDelete('point-submission')" @click="openDeleteModal(item)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hapus">
                       <Trash2 class="w-4.5 h-4.5" />
                     </button>
                   </template>
@@ -323,6 +324,7 @@ const currentSort = ref('createdAt')
 const currentOrder = ref<'asc' | 'desc'>('desc')
 
 const toast = useToast()
+const { canCreate, canEdit, canDelete } = usePermission()
 
 const fetchSubmissions = async () => {
   loading.value = true

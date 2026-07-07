@@ -35,7 +35,7 @@
         </div>
 
         <!-- Bulk Action Button -->
-        <div v-if="activeTab === 'pending'" class="flex items-center gap-4 pb-2.5 md:pb-2 pr-4">
+        <div v-if="activeTab === 'pending' && canEdit('redemption.cash')" class="flex items-center gap-4 pb-2.5 md:pb-2 pr-4">
           <!-- Select All Checkbox -->
           <label class="flex items-center gap-2 cursor-pointer select-none">
             <input 
@@ -185,6 +185,7 @@ import type { CashRedemptionListItem, CashRedemptionQueryParams } from '~/types/
 import type { PaginationMeta } from '~/types/customer'
 
 definePageMeta({
+  role: 'admin',
   bgColor: 'bg-white'
 })
 
@@ -192,6 +193,7 @@ useSeoMeta({
   title: 'Kawan Nusa | Tukar Poin - Tunai',
 })
 
+const { canEdit } = usePermission()
 const activeTab = ref<'pending' | 'completed'>('pending')
 
 const columns = computed(() => {

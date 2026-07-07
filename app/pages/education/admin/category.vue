@@ -16,6 +16,7 @@
       </div>
       <template #right>
         <button 
+          v-if="canCreate('education')"
           @click="openCreateModal" 
           class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-5 flex items-center gap-2"
         >
@@ -51,10 +52,10 @@
               <td v-show="isColumnVisible('name')" class="border-r border-base-200 font-medium text-neutral-800">{{ item.name }}</td>
               <td v-show="isColumnVisible('actions')" class="text-center px-4 w-32">
                 <div class="flex items-center justify-center gap-0">
-                  <button @click="openEditModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Edit">
+                  <button v-if="canEdit('education')" @click="openEditModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Edit">
                     <SquarePen class="w-4.5 h-4.5" />
                   </button>
-                  <button @click="openDeleteModal(item)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hapus">
+                  <button v-if="canDelete('education')" @click="openDeleteModal(item)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hapus">
                     <Trash2 class="w-4.5 h-4.5" />
                   </button>
                 </div>
@@ -117,6 +118,7 @@ const categoryToDelete = ref<EducationCategory | null>(null)
 const deleting = ref(false)
 
 const toast = useToast()
+const { canCreate, canEdit, canDelete } = usePermission()
 
 const fetchCategories = async () => {
   loading.value = true

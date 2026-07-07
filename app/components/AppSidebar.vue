@@ -2,7 +2,7 @@
   <aside class="menu bg-base-100 h-full w-64 p-2 text-base-content flex flex-col justify-between border-r border-base-300">
     <div>
       <ul class="menu w-full gap-1.5 lg:mt-3 mt-18">
-        <li v-for="item in topNav" :key="item.to">
+        <li v-for="item in topNav" :key="item.to" v-show="isNavVisible(item)">
           <!-- With children (expandable) -->
           <details v-if="item.children" :open="$route.path.startsWith(item.match)">
             <summary 
@@ -15,7 +15,7 @@
               </div>
             </summary>
             <ul class="mt-1 gap-1.5 ml-4">
-              <li v-for="child in item.children" :key="child.to">
+              <li v-for="child in item.children" :key="child.to" v-show="isChildVisible(child)">
                 <NuxtLink 
                   :to="child.to" 
                   class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2 font-medium transition-all"
@@ -43,7 +43,7 @@
     
     <div class="mt-auto">
       <ul class="menu w-full gap-1">
-        <li v-for="item in bottomNav" :key="item.to">
+        <li v-for="item in bottomNav" :key="item.to" v-show="isNavVisible(item)">
           <NuxtLink 
             :to="item.to" 
             class="text-neutral-600 hover:bg-base-200 rounded-lg px-3 py-2.5 font-medium transition-colors"
@@ -62,5 +62,30 @@
 </template>
 
 <script setup lang="ts">
+import type { NavItem, NavChild } from '~/composables/useNavigation'
+
 const { topNav, bottomNav, isActive } = useNavigation()
+const { canView } = usePermission()
+const { state } = useAuth()
+
+const isNavVisible = (item: NavItem) => {
+  if (state.role !== 'admin') return true
+  
+  // If item has permissionKey, check permission
+  if (item.permissionKey) return canView(item.permissionKey)
+  
+  // If item has children, show if any child is visible
+  if (item.children) {
+    return item.children.some(child => !child.permissionKey || canView(child.permissionKey))
+  }
+  
+  return true
+}
+
+const isChildVisible = (child: NavChild) => {
+  if (state.role !== 'admin') return true
+  if (child.permissionKey) return canView(child.permissionKey)
+  return true
+}
 </script>
+

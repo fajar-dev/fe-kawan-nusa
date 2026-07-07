@@ -9,6 +9,12 @@ export interface AuthUser {
     isVerified: boolean
     isBoarding: boolean
     role: 'user' | 'admin'
+    employeeRole?: {
+        id: number
+        name: string
+        color: string | null
+    } | null
+    permissions?: Record<string, string[]>
 }
 
 export interface AuthData {

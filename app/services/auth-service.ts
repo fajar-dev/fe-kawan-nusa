@@ -7,6 +7,8 @@ export class AuthService {
     private readonly ACCESS_TOKEN_KEY = 'accessToken'
     private readonly REFRESH_TOKEN_KEY = 'refreshToken'
     private readonly USER_KEY = 'user'
+    private readonly PERMISSIONS_KEY = 'auth_permissions'
+    private readonly EMPLOYEE_ROLE_KEY = 'auth_employee_role'
 
     public user = ref<AuthUser | null>(null)
     public token = ref<string | null>(null)
@@ -47,6 +49,14 @@ export class AuthService {
             })
             this.user.value = response.data.data
             localStorage.setItem(this.USER_KEY, JSON.stringify(this.user.value))
+
+            // Update permissions for admin users
+            if (this.user.value?.permissions) {
+                localStorage.setItem(this.PERMISSIONS_KEY, JSON.stringify(this.user.value.permissions))
+            }
+            if (this.user.value?.employeeRole) {
+                localStorage.setItem(this.EMPLOYEE_ROLE_KEY, JSON.stringify(this.user.value.employeeRole))
+            }
         } catch (error) {
             // Validation failed, let interceptor handle it
         }
@@ -65,6 +75,14 @@ export class AuthService {
             })
             this.user.value = response.data.data
             localStorage.setItem(this.USER_KEY, JSON.stringify(this.user.value))
+
+            // Update permissions for admin users
+            if (this.user.value?.permissions) {
+                localStorage.setItem(this.PERMISSIONS_KEY, JSON.stringify(this.user.value.permissions))
+            }
+            if (this.user.value?.employeeRole) {
+                localStorage.setItem(this.EMPLOYEE_ROLE_KEY, JSON.stringify(this.user.value.employeeRole))
+            }
         } catch (error) {
             // silently fail
         }
@@ -224,6 +242,8 @@ export class AuthService {
             localStorage.removeItem(this.ACCESS_TOKEN_KEY)
             localStorage.removeItem(this.REFRESH_TOKEN_KEY)
             localStorage.removeItem(this.USER_KEY)
+            localStorage.removeItem(this.PERMISSIONS_KEY)
+            localStorage.removeItem(this.EMPLOYEE_ROLE_KEY)
 
             this.token.value = null
             this.user.value = null
@@ -243,6 +263,14 @@ export class AuthService {
         localStorage.setItem(this.ACCESS_TOKEN_KEY, accessToken)
         localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken)
         localStorage.setItem(this.USER_KEY, JSON.stringify(user))
+
+        // Store permissions and employee role for admin users
+        if (user.permissions) {
+            localStorage.setItem(this.PERMISSIONS_KEY, JSON.stringify(user.permissions))
+        }
+        if (user.employeeRole) {
+            localStorage.setItem(this.EMPLOYEE_ROLE_KEY, JSON.stringify(user.employeeRole))
+        }
 
         this.token.value = accessToken
         this.user.value = user
