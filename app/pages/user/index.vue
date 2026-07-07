@@ -119,6 +119,7 @@ import type { UserListItem, UserQueryParams } from '~/types/user'
 import type { PaginationMeta } from '~/types/customer'
 
 definePageMeta({
+  role: 'admin',
   bgColor: 'bg-white'
 })
 

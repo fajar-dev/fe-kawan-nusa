@@ -1,10 +1,11 @@
-import { Home, Users, UsersRound, Package, Coins, BookOpen, Settings, ArrowLeftRight, Gift, PackageSearch, Shapes } from 'lucide-vue-next'
+import { Home, Users, UsersRound, Package, Coins, BookOpen, Settings, ArrowLeftRight, Gift, PackageSearch, Shapes, Shield } from 'lucide-vue-next'
 import type { Component } from 'vue'
 
 export interface NavChild {
   label: string
   to: string
   match: string
+  permissionKey?: string
 }
 
 export interface NavItem {
@@ -16,6 +17,7 @@ export interface NavItem {
   role?: 'user' | 'admin'
   position?: 'top' | 'bottom'
   children?: NavChild[]
+  permissionKey?: string
 }
 
 const navItems: NavItem[] = [
@@ -27,6 +29,7 @@ const navItems: NavItem[] = [
     match: '/',
     exact: true,
     position: 'top',
+    permissionKey: 'dashboard',
   },
   {
     label: 'Referal',
@@ -35,9 +38,10 @@ const navItems: NavItem[] = [
     match: '/user',
     role: 'admin',
     position: 'top',
+    permissionKey: 'user',
     children: [
-      { label: 'Data Referal', to: '/user', match: '/user' },
-      { label: 'Persetujuan Registrasi', to: '/user/approval', match: '/user/approval' },
+      { label: 'Data Referal', to: '/user', match: '/user', permissionKey: 'user' },
+      { label: 'Persetujuan Registrasi', to: '/user/approval', match: '/user/approval', permissionKey: 'user.approval' },
     ],
   },
   {
@@ -47,6 +51,7 @@ const navItems: NavItem[] = [
     match: '/point-submission',
     role: 'admin',
     position: 'top',
+    permissionKey: 'point-submission',
   },
   {
     label: 'Tukar Poin',
@@ -56,9 +61,9 @@ const navItems: NavItem[] = [
     role: 'admin',
     position: 'top',
     children: [
-      { label: 'Tunai', to: '/redemption/cash', match: '/redemption/cash' },
-      { label: 'Produk', to: '/redemption/product', match: '/redemption/product' },
-      { label: 'Voucher', to: '/redemption/voucher', match: '/redemption/voucher' },
+      { label: 'Tunai', to: '/redemption/cash', match: '/redemption/cash', permissionKey: 'redemption.cash' },
+      { label: 'Produk', to: '/redemption/product', match: '/redemption/product', permissionKey: 'redemption.product' },
+      { label: 'Voucher', to: '/redemption/voucher', match: '/redemption/voucher', permissionKey: 'redemption.voucher' },
     ],
   },
   {
@@ -67,7 +72,8 @@ const navItems: NavItem[] = [
     icon: PackageSearch,
     match: '/catalog/admin',
     role: 'admin',
-    position: 'top'
+    position: 'top',
+    permissionKey: 'catalog',
   },
   {
     label: 'Konten Edukasi',
@@ -76,12 +82,13 @@ const navItems: NavItem[] = [
     match: '/education/admin',
     role: 'admin',
     position: 'top',
+    permissionKey: 'education',
     children: [
-      { label: 'Kategori', to: '/education/admin/category', match: '/education/admin/category' },
-      { label: 'Artikel', to: '/education/admin/article', match: '/education/admin/article' },
-      { label: 'Video', to: '/education/admin/video', match: '/education/admin/video' },
-      { label: 'Template', to: '/education/admin/template', match: '/education/admin/template' },
-      { label: 'Promosi', to: '/education/admin/promotion', match: '/education/admin/promotion' },
+      { label: 'Kategori', to: '/education/admin/category', match: '/education/admin/category', permissionKey: 'education' },
+      { label: 'Artikel', to: '/education/admin/article', match: '/education/admin/article', permissionKey: 'education' },
+      { label: 'Video', to: '/education/admin/video', match: '/education/admin/video', permissionKey: 'education' },
+      { label: 'Template', to: '/education/admin/template', match: '/education/admin/template', permissionKey: 'education' },
+      { label: 'Promosi', to: '/education/admin/promotion', match: '/education/admin/promotion', permissionKey: 'education' },
     ],
   },
   {
@@ -114,6 +121,15 @@ const navItems: NavItem[] = [
   },
 
   // ── Bottom section ──
+  {
+    label: 'Pengaturan Akses',
+    to: '/role-permission',
+    icon: Shield,
+    match: '/role-permission',
+    role: 'admin',
+    position: 'bottom',
+    permissionKey: 'role',
+  },
   {
     label: 'Edukasi',
     to: '/education',

@@ -441,6 +441,7 @@ import { formatDate, formatDateTime } from '~/utils/date'
 import { getUserStatusClass, getUserStatusLabel } from '~/utils/status'
 
 definePageMeta({
+  role: 'admin',
   bgColor: 'bg-[#F7FDF9]'
 })
 

@@ -16,6 +16,7 @@
       </div>
       <template #right>
         <NuxtLink 
+          v-if="canCreate('education')"
           to="/education/admin/article/create" 
           class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-5 flex items-center gap-2"
         >
@@ -114,10 +115,10 @@
               <!-- Action Column -->
               <td v-show="isColumnVisible('actions')" class="text-center px-4 w-32">
                 <div class="flex items-center justify-center gap-0">
-                  <NuxtLink :to="`/education/admin/article/${item.id}`" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Edit">
+                  <NuxtLink v-if="canEdit('education')" :to="`/education/admin/article/${item.id}`" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Edit">
                     <SquarePen class="w-4.5 h-4.5" />
                   </NuxtLink>
-                  <button @click="openDeleteModal(item)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hapus">
+                  <button v-if="canDelete('education')" @click="openDeleteModal(item)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hapus">
                     <Trash2 class="w-4.5 h-4.5" />
                   </button>
                 </div>
@@ -187,6 +188,7 @@ const articleToDelete = ref<EducationArticle | null>(null)
 const deleting = ref(false)
 
 const toast = useToast()
+const { canCreate, canEdit, canDelete } = usePermission()
 
 const fetchCategories = async () => {
   try {

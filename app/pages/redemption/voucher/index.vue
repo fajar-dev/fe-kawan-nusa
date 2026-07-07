@@ -41,7 +41,7 @@
         </div>
 
         <!-- Bulk Action Button -->
-        <div v-if="activeTab === 'processing'" class="flex items-center gap-4 pb-2.5 md:pb-2 pr-4">
+        <div v-if="activeTab === 'processing' && canEdit('redemption.voucher')" class="flex items-center gap-4 pb-2.5 md:pb-2 pr-4">
           <!-- Select All Checkbox -->
           <label class="flex items-center gap-2 cursor-pointer select-none">
             <input 
@@ -177,7 +177,7 @@
                   <button @click="openHistoryModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Riwayat Status">
                     <History class="w-4.5 h-4.5" />
                   </button>
-                  <template v-if="activeTab === 'pending'">
+                  <template v-if="activeTab === 'pending' && canEdit('redemption.voucher')">
                     <button 
                       @click="openVoucherModal(item)"
                       class="btn btn-ghost btn-xs text-primary hover:bg-primary/10 font-medium gap-1"
@@ -186,7 +186,7 @@
                       Proses
                     </button>
                   </template>
-                  <template v-else-if="activeTab === 'processing'">
+                  <template v-else-if="activeTab === 'processing' && canEdit('redemption.voucher')">
                     <button 
                       @click="handleComplete(item.id)"
                       :disabled="completing"
@@ -272,6 +272,7 @@ import type { VoucherRedemptionListItem, VoucherRedemptionQueryParams } from '~/
 import type { PaginationMeta } from '~/types/customer'
 
 definePageMeta({
+  role: 'admin',
   bgColor: 'bg-white'
 })
 
@@ -299,6 +300,7 @@ const getRedemptionStatusLabel = (status: string) => {
   }
 }
 
+const { canEdit } = usePermission()
 const activeTab = ref<'pending' | 'processing' | 'completed'>('pending')
 
 const columns = computed(() => {

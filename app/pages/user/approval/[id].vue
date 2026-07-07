@@ -352,6 +352,7 @@ import { formatDate, formatDateTime } from '~/utils/date'
 import type { UserProfile, UserStatusHistory } from '~/types/user'
 
 definePageMeta({
+  role: 'admin',
   bgColor: 'bg-white'
 })
 
@@ -405,8 +406,10 @@ const statusLabel = (status: string) => {
 }
 
 // Can perform approve/reject actions
+const { canEdit: canEditPermission } = usePermission()
 const canAction = computed(() => {
-  return user.value?.status === 'pending' || user.value?.status === 'revision'
+  const statusOk = user.value?.status === 'pending' || user.value?.status === 'revision'
+  return statusOk && canEditPermission('user.approval')
 })
 
 // Modal state

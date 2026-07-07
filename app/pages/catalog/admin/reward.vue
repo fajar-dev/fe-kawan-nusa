@@ -16,6 +16,7 @@
       </div>
       <template #right>
         <button 
+          v-if="canCreate('catalog')"
           @click="openCreateModal" 
           class="btn btn-primary btn-sm h-10 rounded-lg text-sm font-medium px-5 flex items-center gap-2"
         >
@@ -134,10 +135,10 @@
               <!-- Action Column -->
               <td v-show="isColumnVisible('actions')" class="text-center px-4 w-32">
                 <div class="flex items-center justify-center gap-0">
-                  <button @click="openEditModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Edit">
+                  <button v-if="canEdit('catalog')" @click="openEditModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Edit">
                     <SquarePen class="w-4.5 h-4.5" />
                   </button>
-                  <button @click="openDeleteModal(item)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hapus">
+                  <button v-if="canDelete('catalog')" @click="openDeleteModal(item)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hapus">
                     <Trash2 class="w-4.5 h-4.5" />
                   </button>
                 </div>
@@ -230,6 +231,7 @@ const currentSort = ref('name')
 const currentOrder = ref<'asc' | 'desc'>('asc')
 
 const toast = useToast()
+const { canCreate, canEdit, canDelete } = usePermission()
 
 const fetchCategories = async () => {
   try {
