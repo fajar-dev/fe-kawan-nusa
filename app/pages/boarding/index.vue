@@ -1,6 +1,6 @@
 <template>
-  <!-- Stepper (hidden for revision users) -->
-  <div v-if="!isRevision" class="flex items-start justify-center px-4">
+  <!-- Stepper (hidden for revision users or users who already have password) -->
+  <div v-if="!isRevision && !hasExistingPassword" class="flex items-start justify-center px-4">
     <div class="flex items-start w-full max-w-xs mx-auto">
       <div class="flex flex-col items-center">
         <div class="w-3 h-3 rounded-full bg-primary"></div>
@@ -382,8 +382,9 @@
           class="btn bg-primary hover:bg-primary/80 border-none text-white rounded-lg font-semibold flex items-center gap-2"
         >
           <span v-if="loading" class="loading loading-spinner loading-sm"></span>
-          <span v-else>Selanjutnya</span>
-          <ArrowRight class="w-4.5 h-4.5" />
+          <span v-else>{{ (isRevision || hasExistingPassword) ? 'Selesai' : 'Selanjutnya' }}</span>
+          <Check v-if="isRevision || hasExistingPassword" class="w-4.5 h-4.5" />
+          <ArrowRight v-else class="w-4.5 h-4.5" />
         </button>
       </div>
     </form>
@@ -391,7 +392,7 @@
 </template>
 
 <script setup lang="ts">
-import { Upload, X, Mail, Phone, Info, ArrowRight, AlertCircle } from 'lucide-vue-next'
+import { Upload, X, Mail, Phone, Info, ArrowRight, AlertCircle, Check } from 'lucide-vue-next'
 import { profileService } from '~/services/profile-service'
 import { authService } from '~/services/auth-service'
 import type { Profile } from '~/types/profile'
@@ -414,6 +415,7 @@ const toast = useToast()
 const loading = ref(false)
 const pageLoading = ref(true)
 const hasCompany = ref(true)
+const hasExistingPassword = ref(false)
 const errors = ref<Record<string, string>>({})
 
 // File refs
@@ -477,6 +479,9 @@ onMounted(async () => {
         bankBookPreview.value = p.bankDetails.accountPath
         hasExistingBankBook.value = true
       }
+
+      // Check existing password
+      hasExistingPassword.value = !!p.passwordUpdatedAt
 
       // Auto-detect company
       hasCompany.value = !!(p.company || p.jobPosition || p.companyAddress)
@@ -610,11 +615,11 @@ const handleNext = async () => {
 
     await authService.refreshUser()
 
-    // Revision flow: skip password, directly complete boarding
-    if (isRevision.value) {
+    // Revision flow or password already set: skip password, directly complete boarding
+    if (isRevision.value || hasExistingPassword.value) {
       await profileService.completeBoarding()
       await authService.refreshUser()
-      toast.success('Data revisi berhasil dikirim')
+      toast.success(isRevision.value ? 'Data revisi berhasil dikirim' : 'Persiapan akun selesai!')
       navigateTo('/boarding/success')
     } else {
       toast.success('Data berhasil disimpan')

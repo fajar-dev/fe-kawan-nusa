@@ -1,63 +1,75 @@
 <template>
-  <!-- Loading Check -->
-  <div v-if="checking" class="card bg-white border border-base-200 rounded-2xl shadow-sm">
-    <div class="flex flex-col items-center justify-center text-center px-4 md:px-8 py-16 min-h-[650px]">
-      <span class="loading loading-spinner loading-lg text-primary"></span>
-      <p class="text-sm text-neutral-500 mt-4">Memverifikasi...</p>
-    </div>
-  </div>
-
-  <!-- Success Card -->
-  <div v-else class="card bg-white border border-base-200 rounded-2xl shadow-sm">
-    <div class="flex flex-col items-center justify-center text-center px-4 md:px-8 py-16 min-h-[650px]">
-      <!-- Illustration -->
-      <img src="/assets/sucess.svg" alt="Pendaftaran Berhasil" class="w-52 h-52 mb-8" />
-
-      <!-- Title -->
-      <h2 class="text-lg font-semibold text-neutral-800 mb-3">Pendaftaran Berhasil!</h2>
-
-      <!-- Description -->
-      <p class="text-sm text-neutral-500 max-w-md leading-relaxed">
-        Silakan cek email kamu untuk verifikasi akun.
-        <br />
-        Email verifikasi telah dikirim ke:
-      </p>
-
-      <!-- Email Badge -->
-      <div v-if="email" class="mt-3 inline-flex items-center gap-2 bg-primary/10 text-primary rounded-lg px-4 py-2">
-        <Mail class="w-4.5 h-4.5" />
-        <span class="text-sm font-medium">{{ email }}</span>
+  <div class="flex-1 flex flex-col">
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col justify-center">
+      <!-- Logo -->
+      <div class="mb-8 flex flex-col items-center">
+        <div class="inline-flex flex-col">
+          <div class="font-display gap-0 flex flex-col leading-none">
+            <span class="text-gray-800 font-medium text-6xl">kawan</span>
+            <span class="text-primary font-semibold text-5xl -mt-3">nusa</span>
+          </div>
+          <p class="text-[8px] text-gray-900 tracking-widest uppercase mt-2 font-body">
+            Portal Referal PT Media Antar Nusa
+          </p>
+        </div>
       </div>
 
-      <p class="text-xs text-neutral-400 mt-3 max-w-sm">
-        Periksa folder Inbox atau Spam untuk menemukan email verifikasi.
-      </p>
+      <!-- Loading State -->
+      <div v-if="checking" class="flex flex-col items-center justify-center py-12">
+        <span class="loading loading-spinner loading-lg text-primary"></span>
+        <p class="text-sm text-neutral-500 mt-4">Memverifikasi...</p>
+      </div>
 
-      <!-- Resend Button -->
-      <button
-        @click="handleResend"
-        :disabled="resendLoading || cooldown > 0"
-        class="btn bg-primary hover:bg-primary/80 border-none text-white rounded-lg font-semibold mt-8 px-8 flex items-center gap-2"
-      >
-        <span v-if="resendLoading" class="loading loading-spinner loading-xs"></span>
-        <RefreshCw v-else-if="cooldown <= 0" class="w-4.5 h-4.5" />
-        {{ resendLoading ? 'Mengirim...' : cooldown > 0 ? `Kirim Ulang Email (${cooldown}s)` : 'Kirim Ulang Email' }}
-      </button>
+      <!-- Success View -->
+      <div v-else class="flex flex-col items-center text-center">
+        <!-- Icon Badge -->
+        <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-5">
+          <MailCheck class="w-8 h-8 text-primary" />
+        </div>
 
-      <!-- Back to Login -->
-      <NuxtLink
-        to="/auth/sign-in"
-        class="text-primary text-sm font-medium hover:underline flex items-center gap-2 mt-5"
-      >
-        <ArrowLeft class="w-4.5 h-4.5" />
-        Kembali ke Login
-      </NuxtLink>
+        <h1 class="text-xl font-semibold text-gray-800 mb-2">Pendaftaran Berhasil!</h1>
+        <p class="text-sm text-gray-600 max-w-sm leading-relaxed">
+          Silakan cek email kamu untuk memverifikasi akun.
+        </p>
+
+        <!-- Email Badge -->
+        <!-- <div v-if="email" class="mt-4 inline-flex items-center gap-2 text-primary rounded-lg px-4 py-1">
+          <span class="text-sm font-semibold">{{ email }}</span>
+        </div> -->
+
+        <p class="text-xs text-gray-400 mt-3 max-w-xs">
+          Periksa folder Inbox atau Spam untuk menemukan email verifikasi.
+        </p>
+
+        <!-- Actions -->
+        <div class="space-y-4 mt-8">
+          <button
+            @click="handleResend"
+            :disabled="resendLoading || cooldown > 0"
+            class="btn btn-primary h-10 rounded-lg text-white text-sm font-semibold border-none
+                   hover:opacity-90 active:scale-[.98] transition-all shadow-sm flex items-center justify-center gap-2"
+          >
+            <span v-if="resendLoading" class="loading loading-spinner loading-xs"></span>
+            <RefreshCw v-else-if="cooldown <= 0" class="w-4 h-4" />
+            {{ resendLoading ? 'Mengirim...' : cooldown > 0 ? `Kirim Ulang (${cooldown}s)` : 'Kirim Ulang Email Verifikasi' }}
+          </button>
+
+          <div class="text-center">
+            <NuxtLink
+              to="/auth/sign-in"
+              class="text-primary text-sm font-medium hover:underline flex items-center justify-center gap-2"
+            >
+              <ArrowLeft class="w-4 h-4" />
+              Kembali ke Login
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- Footer -->
-  <div class="py-6">
-    <p class="text-center text-sm text-gray-500">
+    <!-- Footer -->
+    <p class="text-center text-sm text-gray-600 mt-auto pt-8">
       Butuh bantuan?
       <NuxtLink to="#" class="text-primary font-semibold hover:underline">Hubungi kami</NuxtLink>
     </p>
@@ -65,11 +77,11 @@
 </template>
 
 <script setup lang="ts">
-import { Mail, ArrowLeft, RefreshCw } from 'lucide-vue-next'
+import { Mail, MailCheck, ArrowLeft, RefreshCw } from 'lucide-vue-next'
 import { authService } from '~/services/auth-service'
 
 definePageMeta({
-  layout: 'onboarding',
+  layout: 'auth',
   middleware: 'guest',
 })
 

@@ -118,10 +118,11 @@ export class AuthService {
         }
     }
 
-    async register(formData: FormData): Promise<ApiResponse<null>> {
+    async register(data: FormData | { name?: string; firstName?: string; lastName?: string; email: string; password?: string }): Promise<ApiResponse<null>> {
         try {
-            const response = await apiService.client.post<ApiResponse<null>>('/auth/register', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
+            const isFormData = typeof FormData !== 'undefined' && data instanceof FormData
+            const response = await apiService.client.post<ApiResponse<null>>('/auth/register', data, {
+                headers: isFormData ? { 'Content-Type': 'multipart/form-data' } : { 'Content-Type': 'application/json' }
             })
             return response.data
         } catch (error: any) {

@@ -33,12 +33,6 @@
 
     <!-- Permission Matrix -->
     <div v-else class="w-full">
-      <!-- Section Title -->
-      <div class="mb-3">
-        <h2 class="text-sm font-semibold text-neutral-800">Tabel Izin Akses</h2>
-        <p class="text-xs text-neutral-400 mt-0.5">Peran ditampilkan sebagai baris agar tetap nyaman saat jumlah jabatan bertambah. Izin bersifat berjenjang dan tersimpan otomatis.</p>
-      </div>
-
       <div class="overflow-x-auto border border-neutral-200 rounded-lg bg-white">
         <table class="w-full min-w-max border-collapse text-sm">
           <thead>

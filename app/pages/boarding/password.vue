@@ -176,6 +176,12 @@ onMounted(async () => {
     if (response.success && response.data) {
       const p = response.data as Profile
       hasExistingPassword.value = !!p.passwordUpdatedAt
+      if (hasExistingPassword.value) {
+        await profileService.completeBoarding()
+        await authService.refreshUser()
+        navigateTo('/boarding/success')
+        return
+      }
     }
   } finally {
     pageLoading.value = false
