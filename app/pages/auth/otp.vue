@@ -9,7 +9,7 @@
             <span class="text-primary font-semibold text-5xl -mt-3">nusa</span>
           </div>
           <p class="text-[8px] text-gray-900 tracking-widest uppercase mt-2 font-body">
-            Portal Referal PT Media Antar Nusa
+            Portal Referral PT Media Antar Nusa
           </p>
         </div>
       </div>

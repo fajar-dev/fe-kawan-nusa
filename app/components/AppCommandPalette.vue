@@ -206,7 +206,7 @@ const rootNavigationItems = [
 
 const pointItems = [
   { label: 'Aktivitas Poin', value: 'point-activity', path: '/point/activity/reward', icon: History },
-  { label: 'Tukar Poin', value: 'point-redeem', path: '/point/reedem', icon: ArrowRightLeft },
+  { label: 'Tukar Poin', value: 'point-redeem', path: '/point/redeem', icon: ArrowRightLeft },
 ]
 
 const otherItems = [

@@ -37,7 +37,7 @@
         <div role="alert" class="alert alert-info bg-info/10 border-info/10 text-info shadow-none mb-6">
           <div class="flex items-center gap-2">
             <Info class="w-4 h-4 shrink-0" />
-            <span class="text-sm">{{ isRevision ? 'Silahkan perbaiki data berikut sesuai catatan revisi.' : 'Silahkan lengkapi data berikut untuk melanjutkan ke langkah selanjutnya.' }}</span>
+            <span class="text-sm">{{ isRevision ? 'Silakan perbaiki data berikut sesuai catatan revisi.' : 'Silakan lengkapi data berikut untuk melanjutkan ke langkah selanjutnya.' }}</span>
           </div>
         </div>
 

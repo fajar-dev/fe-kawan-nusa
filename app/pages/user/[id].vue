@@ -31,7 +31,7 @@
             </div>
             <div class="text-xs text-neutral-400 font-medium mt-1 lg:mt-0">
               <NuxtLink to="/" class="text-primary hover:underline">Beranda</NuxtLink> / 
-              <NuxtLink to="/user" class="text-primary hover:underline">Referal</NuxtLink> / 
+              <NuxtLink to="/user" class="text-primary hover:underline">Referral</NuxtLink> / 
               <span class="text-neutral-500">{{ user?.firstName }} {{ user?.lastName }}</span>
             </div>
           </div>

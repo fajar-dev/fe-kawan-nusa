@@ -209,7 +209,7 @@
               </div>
               <div v-else class="w-full flex justify-between">
                 <NuxtLink 
-                  to="/point/reedem/history"
+                  to="/point/redeem/history"
                   class="text-primary hover:underline font-medium flex justify-between w-full"
                 >
                 Riwayat Penukaran

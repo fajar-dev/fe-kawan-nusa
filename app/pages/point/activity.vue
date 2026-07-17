@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <ModalReedemCash v-model="isWithdrawModalOpen" @success="refreshData" />
+      <ModalRedeemCash v-model="isWithdrawModalOpen" @success="refreshData" />
 
       <div class="flex flex-col w-full pt-10">
         <!-- Tabs Section -->

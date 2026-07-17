@@ -23,7 +23,6 @@ export interface Customer {
   latestCustomerService?: CustomerRegisteredService
   phones: CustomerPhone[]
   emails: CustomerEmail[]
-  addresses: CustomerAddress[]
 }
 
 export interface PaginationMeta {
@@ -36,10 +35,6 @@ export interface PaginationMeta {
 }
 
 export interface CustomerListResponse extends ApiResponse<Customer[]> {
-  meta: PaginationMeta
-}
-
-export interface CustomerAddressResponse extends ApiResponse<CustomerAddress[]> {
   meta: PaginationMeta
 }
 

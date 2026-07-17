@@ -32,7 +32,7 @@ const navItems: NavItem[] = [
     permissionKey: 'dashboard',
   },
   {
-    label: 'Referal',
+    label: 'Referral',
     to: '/user',
     icon: UsersRound,
     match: '/user',
@@ -40,7 +40,7 @@ const navItems: NavItem[] = [
     position: 'top',
     permissionKey: 'user',
     children: [
-      { label: 'Data Referal', to: '/user', match: '/user', permissionKey: 'user' },
+      { label: 'Data Referral', to: '/user', match: '/user', permissionKey: 'user' },
       { label: 'Persetujuan Registrasi', to: '/user/approval', match: '/user/approval', permissionKey: 'user.approval' },
     ],
   },
@@ -116,7 +116,7 @@ const navItems: NavItem[] = [
     position: 'top',
     children: [
       { label: 'Aktivitas Poin', to: '/point/activity/reward', match: '/point/activity' },
-      { label: 'Tukar Poin', to: '/point/reedem', match: '/point/reedem' },
+      { label: 'Tukar Poin', to: '/point/redeem', match: '/point/redeem' },
     ],
   },
 

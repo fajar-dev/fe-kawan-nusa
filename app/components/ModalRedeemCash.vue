@@ -87,7 +87,7 @@
     :redemption="redemptionData" 
     :reward-name="`Penarikan Tunai Rp ${ (withdrawAmount * 1000).toLocaleString('id-ID') }`"
     title="tarik Poin Berhasil!"
-    message="Silahkan cek rekening anda secara berkala."
+    message="Silakan cek rekening anda secara berkala."
     hide-details
     button-label="OK"
   />

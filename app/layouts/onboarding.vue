@@ -11,7 +11,7 @@
               <span class="text-primary font-semibold text-2xl md:text-3xl -mt-1 md:-mt-2">nusa</span>
             </div>
             <p class="text-[4px] text-gray-900 tracking-widest uppercase mt-1 font-body">
-              Portal Referal PT Media Antar Nusa
+              Portal Referral PT Media Antar Nusa
             </p>
           </div>
           <h1 class="text-base md:text-xl font-semibold" :class="titleClass">{{ title }}</h1>
@@ -26,6 +26,6 @@
 <script setup lang="ts">
 const route = useRoute()
 
-const title = computed(() => (route.meta.layoutTitle as string) || 'Pendaftaran Referal Baru')
+const title = computed(() => (route.meta.layoutTitle as string) || 'Pendaftaran Referral Baru')
 const titleClass = computed(() => route.meta.layoutTitle ? 'text-primary' : 'text-neutral-800')
 </script>

@@ -22,10 +22,10 @@
             <Info class="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
             <p class="text-xs text-blue-700 font-medium">
               <template v-if="type === 'approve'">
-                Calon Referal akan menerima konfirmasi persetujuan pendaftaran dengan deskripsi yang anda isikan di bawah ini.
+                Calon Referral akan menerima konfirmasi persetujuan pendaftaran dengan deskripsi yang anda isikan di bawah ini.
               </template>
               <template v-else>
-                Calon Referal akan menerima konfirmasi {{ selectedRejectStatus === 'reject' ? 'penolakan' : 'permintaan revisi' }} pendaftaran dengan deskripsi yang anda isikan di bawah ini.
+                Calon Referral akan menerima konfirmasi {{ selectedRejectStatus === 'reject' ? 'penolakan' : 'permintaan revisi' }} pendaftaran dengan deskripsi yang anda isikan di bawah ini.
               </template>
             </p>
           </div>

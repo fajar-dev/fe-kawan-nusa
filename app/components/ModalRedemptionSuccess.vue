@@ -43,7 +43,7 @@
 
           <NuxtLink 
             v-if="!hideDetails"
-            to="/point/reedem/history"
+            to="/point/redeem/history"
             class="btn w-full btn-primary rounded-lg"
           >
             {{ buttonLabel || 'Lihat Riwayat' }}

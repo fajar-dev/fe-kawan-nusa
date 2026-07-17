@@ -24,7 +24,7 @@
 
       <!-- Pending: Menunggu Approval -->
       <template v-else-if="user?.status === 'pending'">
-        <img src="/assets/sucess.svg" alt="Pendaftaran Sedang Ditinjau" class="w-52 h-52 mb-8" />
+        <img src="/assets/success.svg" alt="Pendaftaran Sedang Ditinjau" class="w-52 h-52 mb-8" />
         <h2 class="text-lg font-semibold text-neutral-800 mb-3">Pendaftaran Sedang Ditinjau</h2>
         <p class="text-sm text-neutral-500 max-w-md leading-relaxed">
           Terima kasih! Pendaftaran Anda telah kami terima dan saat ini sedang dalam proses peninjauan oleh tim kami. Mohon tunggu informasi selanjutnya yang akan kami kirimkan melalui email.

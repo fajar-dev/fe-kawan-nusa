@@ -27,7 +27,7 @@
                         <span class="text-neutral-800 font-semibold text-4xl">{{ userPoints.toLocaleString('id-ID') }}</span>
                     </div>
                 </div>
-                <NuxtLink to="/point/reedem/history" class="btn btn-primary font-medium rounded-lg mt-4 md:mt-0">
+                <NuxtLink to="/point/redeem/history" class="btn btn-primary font-medium rounded-lg mt-4 md:mt-0">
                     <History class="w-4.5 h-4.5" />
                     Riwayat Penukaran
                 </NuxtLink>
@@ -255,7 +255,7 @@
         />
 
         <!-- Voucher Redeem Modal -->
-        <ModalReedemVoucher
+        <ModalRedeemVoucher
             v-model="showRedeemVoucherModal"
             :catalogId="selectedReward?.id || null"
             @success="onSuccessRedeem"

@@ -59,7 +59,7 @@ export class StatisticService {
 
     async getRedemptionRewardStatistic(): Promise<ApiResponse<RedemptionRewardStatistic[]>> {
         try {
-            const response = await apiService.client.get<ApiResponse<RedemptionRewardStatistic[]>>('/statistic/redemption-reward', {
+            const response = await apiService.client.get<ApiResponse<RedemptionRewardStatistic[]>>('/statistic/redemption-point', {
                 headers: {
                     Authorization: `Bearer ${useAuth().state.token}`
                 }

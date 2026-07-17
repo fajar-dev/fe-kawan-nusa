@@ -10,7 +10,7 @@
           </div>
           <p class="text-xs text-neutral-400 font-medium mt-0.5">
             <NuxtLink to="/" class="text-primary hover:underline">Beranda</NuxtLink> / 
-            <NuxtLink to="/user" class="text-primary hover:underline">Referal</NuxtLink> / 
+            <NuxtLink to="/user" class="text-primary hover:underline">Referral</NuxtLink> / 
             <NuxtLink to="/user/approval" class="text-primary hover:underline">Persetujuan Registrasi</NuxtLink> / 
             <span class="text-neutral-500">{{ user?.firstName }} {{ user?.lastName }}</span>
           </p>

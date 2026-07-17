@@ -1,6 +1,6 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
-import type { Customer, CustomerListResponse, CustomerQueryParams, CustomerAddressResponse, CustomerServiceResponse } from "../types/customer"
+import type { Customer, CustomerListResponse, CustomerQueryParams, CustomerServiceResponse } from "../types/customer"
 import type { CustomerRewardResponse, RewardQueryParams } from "../types/reward"
 import type { ApiResponse } from "../types/auth"
 
@@ -29,20 +29,6 @@ export class CustomerService {
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Failed to fetch customer detail')
-        }
-    }
-
-    async getCustomerAddresses(id: string, params?: CustomerQueryParams): Promise<CustomerAddressResponse> {
-        try {
-            const response = await apiService.client.get<CustomerAddressResponse>(`/customer/${id}/address`, {
-                params,
-                headers: {
-                    Authorization: `Bearer ${useAuth().state.token}`
-                }
-            })
-            return response.data
-        } catch (error: any) {
-            return handleServiceError(error || 'Failed to fetch customer addresses')
         }
     }
 

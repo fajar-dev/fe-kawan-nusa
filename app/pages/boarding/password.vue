@@ -28,7 +28,7 @@
           <div class="flex items-center gap-2">
             <Info class="w-4 h-4 shrink-0" />
             <span v-if="hasExistingPassword" class="text-sm font-semibold">Kamu sudah memiliki kata sandi. Masukkan kata sandi lama untuk menggantinya, atau langsung klik Selesai.</span>
-            <span v-else class="text-sm font-semibold">Silahkan buat kata sandi untuk mengakses portal referal kawannusa.</span>
+            <span v-else class="text-sm font-semibold">Silakan buat kata sandi untuk mengakses portal referral kawannusa.</span>
           </div>
         </div>
 
