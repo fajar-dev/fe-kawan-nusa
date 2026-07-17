@@ -26,7 +26,7 @@ Parameter list yang umum: `q`, `sort`, `order`, `page`, `limit`, `startDate`, `e
 | `adminGoogle(code)` | `POST /auth/admin/google` | Login Google admin |
 | `sendOtp(identifier)` / `verifyOtp(identifier, code)` | `POST /auth/otp/send` / `POST /auth/otp/verify` | Login OTP |
 | `register(data)` | `POST /auth/register` | JSON atau FormData |
-| `verifyEmail(token)` | `GET /auth/verify-email?token=` | Sekaligus login (simpan sesi) |
+| `verifyEmail(token)` | `GET /auth/verify-email?token=` | Verifikasi saja — **tidak** membuat sesi; halaman lalu redirect ke `/auth/sign-in` |
 | `resendVerification(email)` | `POST /auth/resend-verification` | |
 | `checkEmailStatus(email)` | `GET /auth/check-email-status?email=` | Cek kondisi email saat register/login |
 | `forgotPassword(email)` | `POST /auth/forgot-password` | |

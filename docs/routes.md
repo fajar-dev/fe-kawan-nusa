@@ -17,7 +17,7 @@ konten), `layoutTitle` (judul di layout onboarding).
 | `/auth/otp` | `pages/auth/otp.vue` | Login OTP (kirim + verifikasi kode) |
 | `/auth/register` | `pages/auth/register/index.vue` | Form pendaftaran mitra baru |
 | `/auth/register/success` | `pages/auth/register/success.vue` | Konfirmasi pendaftaran (cek email) |
-| `/auth/verify-email` | `pages/auth/verify-email.vue` | Landing tautan verifikasi (`?token=`), auto-login |
+| `/auth/verify-email` | `pages/auth/verify-email.vue` | Landing tautan verifikasi (`?token=`); setelah sukses **tidak** auto-login — diarahkan ke `/auth/sign-in` untuk login manual |
 | `/auth/forgot-password` | `pages/auth/forgot-password.vue` | Kirim email reset |
 | `/auth/reset-password` | `pages/auth/reset-password.vue` | Form kata sandi baru (`?token=`) |
 

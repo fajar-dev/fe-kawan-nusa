@@ -31,8 +31,8 @@ onMounted(async () => {
   try {
     const res = await authService.verifyEmail(token)
     if (res.success) {
-      toast.success('Email berhasil diverifikasi!')
-      return navigateTo('/')
+      toast.success('Email berhasil diverifikasi! Silakan masuk untuk melanjutkan.')
+      return navigateTo('/auth/sign-in')
     }
   } catch {}
 

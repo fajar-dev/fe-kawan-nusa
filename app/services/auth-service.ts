@@ -188,8 +188,9 @@ export class AuthService {
 
     async verifyEmail(token: string): Promise<AuthResponse> {
         try {
+            // Verify only — do NOT establish a session here.
+            // User must log in manually afterwards (redirected to /auth/sign-in).
             const response = await apiService.client.get<AuthResponse>('/auth/verify-email?token=' + token)
-            this.setSession(response.data)
             return response.data
         } catch (error: any) {
             return handleServiceError(error)
