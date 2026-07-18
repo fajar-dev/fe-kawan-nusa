@@ -32,29 +32,29 @@ export default defineNuxtRouteMiddleware((to) => {
       return
     }
 
-    // 2. Status reject → show rejection page
+    // 2. Not boarded → must complete boarding (regardless of status)
+    if (!user.isBoarding) {
+      if (!to.path.startsWith('/boarding') || to.path === '/boarding/success') {
+        return navigateTo('/boarding')
+      }
+      return
+    }
+
+    // 3. Status reject → show rejection page
     if (user.status === 'reject') {
       if (to.path !== '/boarding/success') return navigateTo('/boarding/success')
       return
     }
 
-    // 3. Status inactive → show inactive page
+    // 4. Status inactive → show inactive page
     if (user.status === 'inactive') {
       if (to.path !== '/boarding/success') return navigateTo('/boarding/success')
       return
     }
 
-    // 4. Status pending → waiting approval
+    // 5. Status pending → waiting approval
     if (user.status === 'pending') {
       if (to.path !== '/boarding/success') return navigateTo('/boarding/success')
-      return
-    }
-
-    // 5. Status null + not boarded → must complete boarding
-    if (!user.status && !user.isBoarding) {
-      if (!to.path.startsWith('/boarding') || to.path === '/boarding/success') {
-        return navigateTo('/boarding')
-      }
       return
     }
 
