@@ -137,9 +137,13 @@
                   class="checkbox checkbox-primary checkbox-sm"
                 />
               </td>
-              <!-- Waktu Input Column -->
+              <!-- Waktu Input Column (pending only) -->
               <td v-show="isColumnVisible('createdAt')" class="border-r border-base-200 whitespace-nowrap">
                 {{ formatDate(item.createdAt) }}
+              </td>
+              <!-- Waktu Disetujui Column (approved only) -->
+              <td v-show="isColumnVisible('approvedAt')" class="border-r border-base-200 whitespace-nowrap">
+                {{ item.approvedAt ? formatDate(item.approvedAt) : '-' }}
               </td>
               <!-- Nama Referral Column -->
               <td v-show="isColumnVisible('user')" class="border-r border-base-200 max-w-xs truncate" :title="item.user?.name">
@@ -172,10 +176,6 @@
               <!-- Deskripsi Column (approved only) -->
               <td v-show="isColumnVisible('notes')" class="border-r border-base-200 max-w-[150px] truncate" :title="item.notes || ''">
                 {{ item.notes || '-' }}
-              </td>
-              <!-- Waktu Disetujui Column (approved only, same key as approvedAt) -->
-              <td v-show="isColumnVisible('approvedAt')" class="border-r border-base-200 whitespace-nowrap">
-                {{ item.approvedAt ? formatDate(item.approvedAt) : '-' }}
               </td>
               <!-- Action Column -->
               <td v-show="isColumnVisible('actions')" class="text-center px-4 w-32">
