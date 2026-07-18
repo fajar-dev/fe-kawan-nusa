@@ -155,7 +155,12 @@
               </td>
               <!-- Tipe Komisi Column -->
               <td v-show="isColumnVisible('type')" class="border-r border-base-200 whitespace-nowrap">
-                {{ item.type }}
+                <div class="flex items-center gap-1.5">
+                  <span>{{ item.type }}</span>
+                  <span v-if="item.isAuto" class="badge badge-sm bg-amber-50 text-amber-600 border-amber-200 font-medium gap-1" title="Dibuat otomatis oleh jadwal bulanan">
+                    <RefreshCw class="w-3 h-3" /> Otomatis
+                  </span>
+                </div>
               </td>
               <!-- Nama Akun Column -->
               <td v-show="isColumnVisible('accountName')" class="border-r border-base-200 max-w-xs truncate" :title="item.nisData?.accountName">
@@ -164,6 +169,10 @@
               <!-- Account Manager Column -->
               <td v-show="isColumnVisible('accountManager')" class="border-r border-base-200 whitespace-nowrap max-w-[150px] truncate" :title="item.nisData?.accountManager">
                 {{ item.nisData?.accountManager || '-' }}
+              </td>
+              <!-- Dibuat Oleh Column (pending only) -->
+              <td v-show="isColumnVisible('createdBy')" class="border-r border-base-200 whitespace-nowrap max-w-[150px] truncate" :title="item.createdBy?.name">
+                {{ item.createdBy?.name || '-' }}
               </td>
               <!-- Kadaluarsa Column (approved only) -->
               <td v-show="isColumnVisible('expiredAt')" class="border-r border-base-200 whitespace-nowrap max-w-[150px] truncate" :title="item.approvedAt ? formatDate(getExpiredDate(item.approvedAt)) : '-'">
@@ -227,7 +236,7 @@
 </template>
 
 <script setup lang="ts">
-import { CircleHelp, SquarePen, Trash2, Eye } from 'lucide-vue-next'
+import { CircleHelp, SquarePen, Trash2, Eye, RefreshCw } from 'lucide-vue-next'
 import { pointSubmissionService } from '~/services/point-submission-service'
 import type { PointSubmission } from '~/types/point-submission'
 import { formatDateTimeShort as formatDate, getExpiredDate } from '~/utils/date'
@@ -252,6 +261,7 @@ const pendingColumns = [
   { label: 'Tipe Komisi', key: 'type', sortable: true },
   { label: 'Nama Akun', key: 'accountName', sortable: false },
   { label: 'Account Manager', key: 'accountManager', sortable: false },
+  { label: 'Dibuat Oleh', key: 'createdBy', sortable: false },
   { label: 'Aksi', key: 'actions', sortable: false },
 ]
 

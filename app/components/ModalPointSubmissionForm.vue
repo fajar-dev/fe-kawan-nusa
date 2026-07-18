@@ -177,34 +177,13 @@
             </div>
           </div>
 
-          <!-- Recurring (only for Bulanan) -->
-          <template v-if="form.type === 'Bulanan'">
-            <div>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  v-model="form.isRecurring" 
-                  class="checkbox checkbox-primary checkbox-sm"
-                  :disabled="loading"
-                />
-                <span class="text-sm text-neutral-600">Masukkan poin otomatis sampai waktu yang ditentukan</span>
-              </label>
-            </div>
-
-            <div v-if="form.isRecurring">
-              <label class="label pb-1">
-                <span class="label-text text-sm font-medium text-gray-700">Bulan Berakhir <span class="text-red-500">*</span></span>
-              </label>
-              <input 
-                v-model="form.recurringEndDate" 
-                type="month" 
-                class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary bg-white"
-                :class="{ 'border-red-500': errors.recurringEndDate }"
-                :disabled="loading"
-              />
-              <p v-if="errors.recurringEndDate" class="text-xs text-red-500 mt-1">{{ errors.recurringEndDate }}</p>
-            </div>
-          </template>
+          <!-- Recurring info (Bulanan auto-generates a pending submission every month) -->
+          <div v-if="form.type === 'Bulanan'" class="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-lg p-3">
+            <Info class="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+            <p class="text-xs text-amber-700 font-medium">
+              Setelah disetujui, sistem otomatis membuat submission baru setiap bulan yang perlu disetujui ulang. Jadwal berjalan tanpa batas sampai dihentikan.
+            </p>
+          </div>
 
           <!-- Footer -->
           <div class="px-6 py-5 bg-neutral-50/30 flex items-center justify-end gap-3 border-t border-base-200 -mx-6 -mb-6 mt-6 shrink-0">
@@ -254,8 +233,6 @@ const form = ref({
   price: 0,
   nisData: null as NisAccount | null,
   accountManager: '',
-  isRecurring: false,
-  recurringEndDate: ''
 })
 
 const errors = ref<Record<string, string>>({})
@@ -313,6 +290,7 @@ const selectUser = (user: UserListItem) => {
   userSearchQuery.value = user.name
   showUserDropdown.value = false
   userResults.value = []
+  runAccountCheck()
 }
 
 const onNisSearch = () => {
@@ -342,24 +320,28 @@ const onNisSearch = () => {
 
 const accountWarning = ref('')
 
+// Duplicate account submissions are ALLOWED — this only surfaces a non-blocking
+// warning. Runs whenever both the referral and the account are chosen (in any order).
+const runAccountCheck = async () => {
+  accountWarning.value = ''
+  if (!form.value.nisData || !form.value.userId) return
+  const excludeId = props.submission?.id
+  const result = await pointSubmissionService.checkAccount(form.value.nisData.custServId, form.value.userId, excludeId)
+  if (result.existsForUser) {
+    accountWarning.value = 'Referral ini sudah pernah menginput akun layanan yang sama'
+  } else if (result.existsForOthers) {
+    accountWarning.value = 'Akun layanan ini sudah diinput oleh referral lain'
+  }
+}
+
 const selectNisAccount = async (account: NisAccount) => {
   form.value.nisData = account
   form.value.accountManager = account.accountManager || '-'
   nisSearchQuery.value = account.accountName
   showNisDropdown.value = false
   nisResults.value = []
-
-  // Check if account already exists
   errors.value.nisData = ''
-  accountWarning.value = ''
-  if (!form.value.userId) return
-  const excludeId = props.submission?.id
-  const result = await pointSubmissionService.checkAccount(account.custServId, form.value.userId, excludeId)
-  if (result.existsForUser) {
-    errors.value.nisData = 'Referral ini sudah pernah menginput akun layanan yang sama'
-  } else if (result.existsForOthers) {
-    accountWarning.value = 'Akun layanan ini sudah diinput oleh referral lain'
-  }
+  await runAccountCheck()
 }
 
 // Close dropdowns on click outside
@@ -383,8 +365,6 @@ watch(isOpen, (val) => {
         price: props.submission.price,
         nisData: props.submission.nisData as any,
         accountManager: props.submission.nisData?.accountManager || '',
-        isRecurring: props.submission.isRecurring,
-        recurringEndDate: props.submission.recurringEndDate || ''
       }
       userSearchQuery.value = props.submission.user?.name || ''
       nisSearchQuery.value = props.submission.nisData?.accountName || ''
@@ -396,8 +376,6 @@ watch(isOpen, (val) => {
         price: 0,
         nisData: null,
         accountManager: '',
-        isRecurring: false,
-        recurringEndDate: ''
       }
       userSearchQuery.value = ''
       nisSearchQuery.value = ''
@@ -412,14 +390,6 @@ watch(isOpen, (val) => {
       document.body.style.overflow = ''
       document.removeEventListener('click', handleClickOutside)
     }
-  }
-})
-
-// Reset recurring fields when type changes
-watch(() => form.value.type, (newType) => {
-  if (newType === 'OTC') {
-    form.value.isRecurring = false
-    form.value.recurringEndDate = ''
   }
 })
 
@@ -441,29 +411,11 @@ const handleSubmit = async () => {
     return
   }
 
-  // Re-check: block if same user already submitted this account
-  if (form.value.nisData && form.value.userId) {
-    const excludeId = props.submission?.id
-    const check = await pointSubmissionService.checkAccount(form.value.nisData.custServId, form.value.userId, excludeId)
-    if (check.existsForUser) {
-      errors.value.nisData = 'Referral ini sudah pernah menginput akun layanan yang sama'
-      return
-    }
-  }
-
-  // Validate recurring end date if recurring is enabled
-  if (form.value.type === 'Bulanan' && form.value.isRecurring && !form.value.recurringEndDate) {
-    errors.value.recurringEndDate = 'Bulan berakhir wajib diisi'
-    return
-  }
-
   emit('submit', {
     userId: form.value.userId,
     type: form.value.type,
     price: form.value.price,
     nisData: form.value.nisData,
-    isRecurring: form.value.type === 'Bulanan' ? form.value.isRecurring : false,
-    recurringEndDate: form.value.type === 'Bulanan' && form.value.isRecurring ? form.value.recurringEndDate : null
   })
 }
 </script>

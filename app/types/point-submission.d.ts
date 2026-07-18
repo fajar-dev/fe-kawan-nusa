@@ -26,14 +26,38 @@ export interface PointSubmission {
         salesEmployeeId: string | null
     }
     status: 'pending' | 'approved' | 'rejected'
-    isRecurring: boolean
-    recurringEndDate: string | null
+    scheduleId: number | null
+    isAuto: boolean
+    period: string | null
     notes: string | null
     user: { id: number; name: string } | null
     createdBy: { id: number; name: string } | null
     approvedBy: { id: number; name: string } | null
     approvedAt: string | null
     createdAt: string
+}
+
+export interface PointSubmissionSchedule {
+    id: number
+    price: number
+    point: number
+    anchorDay: number
+    lastGeneratedPeriod: string
+    isActive: boolean
+    nisData: {
+        custServId: number
+        accountName: string
+        [key: string]: any
+    }
+    user: { id: number; name: string } | null
+    createdBy: { id: number; name: string } | null
+    stoppedBy: { id: number; name: string } | null
+    stoppedAt: string | null
+    createdAt: string
+}
+
+export interface PointSubmissionScheduleResponse extends ApiResponse<PointSubmissionSchedule[]> {
+    meta: PaginationMeta
 }
 
 export interface PointSubmissionResponse extends ApiResponse<PointSubmission[]> {
