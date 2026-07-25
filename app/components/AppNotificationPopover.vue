@@ -157,7 +157,20 @@ const handleMarkAll = async () => {
   try { await notificationService.markAllRead() } catch { /* handled */ }
 }
 
+// Load the first page eagerly so the dropdown always has data ready — the
+// DaisyUI focus-dropdown doesn't reliably fire a click handler to lazy-load.
 onMounted(() => {
-  if (isUser.value) fetchUnread()
+  if (isUser.value) {
+    fetchUnread()
+    loadInitial()
+  }
+})
+
+// If auth resolves after mount (session restore), load once it becomes a user.
+watch(isUser, (val, prev) => {
+  if (val && !prev) {
+    fetchUnread()
+    loadInitial()
+  }
 })
 </script>
