@@ -149,7 +149,7 @@
                 <span class="label-text text-sm font-medium text-gray-700">Besar Komisi Referral <span class="text-red-500">*</span></span>
               </label>
               <div class="relative">
-                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-500 font-medium">Rp.</span>
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-neutral-500 font-medium z-10 pointer-events-none">Rp.</span>
                 <input 
                   v-model.number="form.price" 
                   type="number" 

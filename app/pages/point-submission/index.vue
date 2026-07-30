@@ -35,11 +35,17 @@
           >
             Belum Disetujui
           </button>
-          <button 
+          <button
             @click="switchTab('approved')"
             :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'approved' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
           >
             Sudah Disetujui
+          </button>
+          <button
+            @click="switchTab('monthly')"
+            :class="['px-6 py-2.5 md:text-sm font-semibold transition-all border-b-2 text-xs', activeTab === 'monthly' ? 'border-primary text-primary' : 'border-transparent text-neutral-400 hover:text-neutral-600']"
+          >
+            Komisi Bulanan
           </button>
         </div>
 
@@ -69,9 +75,10 @@
         </div>
       </div>
 
-      <DataTable 
+      <DataTable
+        v-if="activeTab !== 'monthly'"
         :key="activeTab"
-        flat 
+        flat
         :columns="visibleColumns"
         :loading="loading"
         :is-empty="!loading && submissions.length === 0"
@@ -208,6 +215,61 @@
           </tbody>
         </template>
       </DataTable>
+
+      <!-- Monthly commission schedules tab -->
+      <DataTable
+        v-else
+        key="monthly"
+        flat
+        :columns="scheduleColumns"
+        :loading="loading"
+        :is-empty="!loading && schedules.length === 0"
+        :total-from="totalFrom"
+        :total-to="totalTo"
+        :total-entries="totalEntries"
+        :current-page="page"
+        :last-page="lastPage"
+        :show-search="false"
+        @update:page="handlePageChange"
+      >
+        <template #body="{ isColumnVisible }">
+          <tbody class="text-sm text-neutral-600">
+            <tr v-for="(s, i) in schedules" :key="i" class="hover:bg-base-200/30 transition-colors border-b border-base-100 last:border-0">
+              <td v-show="isColumnVisible('user')" class="border-r border-base-200 max-w-xs truncate" :title="s.user?.name">
+                <NuxtLink :to="`/user/${s.user?.id}`" class="font-medium text-primary hover:underline">{{ s.user?.name || '-' }}</NuxtLink>
+              </td>
+              <td v-show="isColumnVisible('account')" class="border-r border-base-200 max-w-xs truncate" :title="s.nisData?.accountName">
+                {{ s.nisData?.accountName || '-' }}
+              </td>
+              <td v-show="isColumnVisible('price')" class="border-r border-base-200 whitespace-nowrap">
+                Rp {{ (s.price || 0).toLocaleString('id-ID') }}
+              </td>
+              <td v-show="isColumnVisible('point')" class="border-r border-base-200 whitespace-nowrap">
+                {{ (s.point || 0).toLocaleString('id-ID') }}
+              </td>
+              <td v-show="isColumnVisible('anchorDay')" class="border-r border-base-200 whitespace-nowrap">
+                Tiap tanggal {{ s.anchorDay }}
+              </td>
+              <td v-show="isColumnVisible('status')" class="border-r border-base-200 whitespace-nowrap">
+                <span :class="['badge badge-sm font-medium', s.isActive ? 'bg-success/10 text-success border-success/20' : 'bg-neutral-100 text-neutral-500 border-neutral-200']">
+                  {{ s.isActive ? 'Aktif' : 'Berhenti' }}
+                </span>
+              </td>
+              <td v-show="isColumnVisible('actions')" class="text-center px-4 w-32">
+                <div v-if="s.isActive && canEdit('point-submission')" class="flex items-center justify-center gap-0">
+                  <button @click="openAdjustModal(s)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Adjust Komisi">
+                    <SquarePen class="w-4.5 h-4.5" />
+                  </button>
+                  <button @click="openStopModal(s)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hentikan Jadwal">
+                    <Ban class="w-4.5 h-4.5" />
+                  </button>
+                </div>
+                <span v-else class="text-neutral-300">-</span>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </DataTable>
     </div>
 
     <!-- Modals -->
@@ -232,13 +294,28 @@
       :loading="approving"
       @confirm="handleApprove"
     />
+
+    <ModalAdjustCommission
+      v-model="isOpenAdjustModal"
+      :schedule="scheduleToAdjust"
+      :loading="adjusting"
+      @submit="handleAdjust"
+    />
+
+    <ModalConfirmDelete
+      v-model="isOpenStopModal"
+      title="Hentikan Jadwal Bulanan"
+      :message="`Hentikan komisi bulanan otomatis untuk '${scheduleToStop?.user?.name || ''}' (${scheduleToStop?.nisData?.accountName || ''})? Submission bulanan tidak akan dibuat lagi.`"
+      :loading="stopping"
+      @confirm="handleStop"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { CircleHelp, SquarePen, Trash2, Eye, RefreshCw } from 'lucide-vue-next'
+import { CircleHelp, SquarePen, Trash2, Eye, RefreshCw, Ban } from 'lucide-vue-next'
 import { pointSubmissionService } from '~/services/point-submission-service'
-import type { PointSubmission } from '~/types/point-submission'
+import type { PointSubmission, PointSubmissionSchedule } from '~/types/point-submission'
 import { formatDateTimeShort as formatDate, getExpiredDate } from '~/utils/date'
 import type { PaginationMeta } from '~/types/customer'
 
@@ -251,7 +328,7 @@ useSeoMeta({
   title: 'Kawan Nusa | Admin - Input Poin Referral',
 })
 
-const activeTab = ref<'pending' | 'approved'>('pending')
+const activeTab = ref<'pending' | 'approved' | 'monthly'>('pending')
 
 const pendingColumns = [
   { label: '', key: 'checkbox', sortable: false },
@@ -277,9 +354,20 @@ const approvedColumns = [
   { label: 'Deskripsi', key: 'notes', sortable: false },
 ]
 
+const scheduleColumns = [
+  { label: 'Nama Referral', key: 'user', sortable: false },
+  { label: 'Nama Akun', key: 'account', sortable: false },
+  { label: 'Komisi / Bulan', key: 'price', sortable: false },
+  { label: 'Poin / Bulan', key: 'point', sortable: false },
+  { label: 'Jadwal', key: 'anchorDay', sortable: false },
+  { label: 'Status', key: 'status', sortable: false },
+  { label: 'Aksi', key: 'actions', sortable: false },
+]
+
 const visibleColumns = computed(() => activeTab.value === 'pending' ? pendingColumns : approvedColumns)
 
 const submissions = ref<PointSubmission[]>([])
+const schedules = ref<PointSubmissionSchedule[]>([])
 const loading = ref(true)
 
 // Filter & Search states
@@ -365,6 +453,26 @@ const fetchSubmissions = async () => {
   }
 }
 
+const fetchSchedules = async () => {
+  loading.value = true
+  try {
+    const res = await pointSubmissionService.getSchedules({ page: page.value, limit: 10 })
+    if (res.success && res.data) {
+      schedules.value = res.data
+      meta.value = res.meta
+      lastPage.value = res.meta.lastPage
+    } else {
+      schedules.value = []
+      meta.value = null
+      lastPage.value = 1
+    }
+  } finally {
+    loading.value = false
+  }
+}
+
+const refetch = () => (activeTab.value === 'monthly' ? fetchSchedules() : fetchSubmissions())
+
 // Watchers for filtering and searching
 let searchTimeout: any = null
 watch(searchQuery, () => {
@@ -377,7 +485,7 @@ watch(searchQuery, () => {
 
 const handlePageChange = (newPage: number) => {
   page.value = newPage
-  fetchSubmissions()
+  refetch()
 }
 
 const handleSort = (key: string) => {
@@ -393,12 +501,12 @@ const handleOrderChange = (order: 'asc' | 'desc') => {
 }
 
 // Tab switching
-const switchTab = (tab: 'pending' | 'approved') => {
+const switchTab = (tab: 'pending' | 'approved' | 'monthly') => {
   if (activeTab.value === tab) return
   activeTab.value = tab
   selectedIds.value = []
   page.value = 1
-  fetchSubmissions()
+  refetch()
 }
 
 watch(submissions, () => {
@@ -533,7 +641,58 @@ const handleApprove = async (payload: { notes: string }) => {
   }
 }
 
+// Monthly schedule: adjust commission + stop
+const isOpenAdjustModal = ref(false)
+const scheduleToAdjust = ref<PointSubmissionSchedule | null>(null)
+const adjusting = ref(false)
 
+const openAdjustModal = (s: PointSubmissionSchedule) => {
+  scheduleToAdjust.value = s
+  isOpenAdjustModal.value = true
+}
+
+const handleAdjust = async (price: number) => {
+  if (!scheduleToAdjust.value) return
+  adjusting.value = true
+  try {
+    const res = await pointSubmissionService.adjustSchedule(scheduleToAdjust.value.id, price)
+    if (res.success) {
+      toast.success('Komisi bulanan berhasil diperbarui')
+      isOpenAdjustModal.value = false
+      fetchSchedules()
+    } else {
+      toast.error(res.message || 'Gagal memperbarui komisi bulanan')
+    }
+  } finally {
+    adjusting.value = false
+  }
+}
+
+const isOpenStopModal = ref(false)
+const scheduleToStop = ref<PointSubmissionSchedule | null>(null)
+const stopping = ref(false)
+
+const openStopModal = (s: PointSubmissionSchedule) => {
+  scheduleToStop.value = s
+  isOpenStopModal.value = true
+}
+
+const handleStop = async () => {
+  if (!scheduleToStop.value) return
+  stopping.value = true
+  try {
+    const res = await pointSubmissionService.stopSchedule(scheduleToStop.value.id)
+    if (res.success) {
+      toast.success('Jadwal komisi bulanan dihentikan')
+      isOpenStopModal.value = false
+      fetchSchedules()
+    } else {
+      toast.error(res.message || 'Gagal menghentikan jadwal')
+    }
+  } finally {
+    stopping.value = false
+  }
+}
 
 onMounted(() => {
   fetchSubmissions()
