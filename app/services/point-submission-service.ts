@@ -82,7 +82,7 @@ export class PointSubmissionService {
         }
     }
 
-    async getSchedules(params?: { page?: number; limit?: number; isActive?: boolean }): Promise<PointSubmissionScheduleResponse> {
+    async getSchedules(params?: { page?: number; limit?: number; isActive?: boolean; sort?: string; order?: 'asc' | 'desc' }): Promise<PointSubmissionScheduleResponse> {
         try {
             const response = await apiService.client.get<PointSubmissionScheduleResponse>('/point-submission/schedule', {
                 params,

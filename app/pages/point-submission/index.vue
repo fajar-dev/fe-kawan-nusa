@@ -229,8 +229,12 @@
         :total-entries="totalEntries"
         :current-page="page"
         :last-page="lastPage"
+        :current-sort="scheduleSort"
+        :current-order="scheduleOrder"
         :show-search="false"
         @update:page="handlePageChange"
+        @update:sort="handleScheduleSort"
+        @update:order="handleScheduleOrderChange"
       >
         <template #body="{ isColumnVisible }">
           <tbody class="text-sm text-neutral-600">
@@ -254,6 +258,9 @@
                 <span :class="['badge badge-sm font-medium', s.isActive ? 'bg-success/10 text-success border-success/20' : 'bg-neutral-100 text-neutral-500 border-neutral-200']">
                   {{ s.isActive ? 'Aktif' : 'Berhenti' }}
                 </span>
+              </td>
+              <td v-show="isColumnVisible('createdBy')" class="border-r border-base-200 whitespace-nowrap max-w-[150px] truncate" :title="s.createdBy?.name">
+                {{ s.createdBy?.name || '-' }}
               </td>
               <td v-show="isColumnVisible('actions')" class="text-center px-4 w-32">
                 <div v-if="s.isActive && canEdit('point-submission')" class="flex items-center justify-center gap-0">
@@ -355,12 +362,13 @@ const approvedColumns = [
 ]
 
 const scheduleColumns = [
-  { label: 'Nama Referral', key: 'user', sortable: false },
+  { label: 'Nama Referral', key: 'user', sortable: true },
   { label: 'Nama Akun', key: 'account', sortable: false },
-  { label: 'Komisi / Bulan', key: 'price', sortable: false },
-  { label: 'Poin / Bulan', key: 'point', sortable: false },
-  { label: 'Jadwal', key: 'anchorDay', sortable: false },
-  { label: 'Status', key: 'status', sortable: false },
+  { label: 'Komisi / Bulan', key: 'price', sortable: true },
+  { label: 'Poin / Bulan', key: 'point', sortable: true },
+  { label: 'Jadwal', key: 'anchorDay', sortable: true },
+  { label: 'Status', key: 'status', sortable: true },
+  { label: 'Dibuat Oleh', key: 'createdBy', sortable: false },
   { label: 'Aksi', key: 'actions', sortable: false },
 ]
 
@@ -421,6 +429,9 @@ const toggleSelectAll = () => {
 const currentSort = ref('createdAt')
 const currentOrder = ref<'asc' | 'desc'>('desc')
 
+const scheduleSort = ref('createdAt')
+const scheduleOrder = ref<'asc' | 'desc'>('desc')
+
 const toast = useToast()
 const { canCreate, canEdit, canDelete } = usePermission()
 
@@ -456,7 +467,12 @@ const fetchSubmissions = async () => {
 const fetchSchedules = async () => {
   loading.value = true
   try {
-    const res = await pointSubmissionService.getSchedules({ page: page.value, limit: 10 })
+    const res = await pointSubmissionService.getSchedules({
+      page: page.value,
+      limit: 10,
+      sort: scheduleSort.value,
+      order: scheduleOrder.value
+    })
     if (res.success && res.data) {
       schedules.value = res.data
       meta.value = res.meta
@@ -498,6 +514,18 @@ const handleOrderChange = (order: 'asc' | 'desc') => {
   currentOrder.value = order
   page.value = 1
   fetchSubmissions()
+}
+
+const handleScheduleSort = (key: string) => {
+  scheduleSort.value = key
+  page.value = 1
+  fetchSchedules()
+}
+
+const handleScheduleOrderChange = (order: 'asc' | 'desc') => {
+  scheduleOrder.value = order
+  page.value = 1
+  fetchSchedules()
 }
 
 // Tab switching
