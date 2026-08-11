@@ -95,7 +95,8 @@ const emit = defineEmits(['submit'])
 const price = ref<number>(0)
 const error = ref('')
 
-const calculatedPoint = computed(() => Math.floor((price.value || 0) / 100))
+// Rp 1.000 = 1 Poin (sama dengan rate pencairan tunai)
+const calculatedPoint = computed(() => Math.floor((price.value || 0) / 1000))
 
 watch(isOpen, (val) => {
   error.value = ''

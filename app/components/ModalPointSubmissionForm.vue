@@ -251,12 +251,13 @@ const showNisDropdown = ref(false)
 const searchingNis = ref(false)
 let nisSearchTimeout: any = null
 
-const calculatedPoint = computed(() => Math.floor((form.value.price || 0) / 100))
+// Rp 1.000 = 1 Poin (sama dengan rate pencairan tunai)
+const calculatedPoint = computed(() => Math.floor((form.value.price || 0) / 1000))
 
 const submissionSchema = z.object({
   userId: z.number().min(1, 'Nama referral wajib dipilih'),
   type: z.enum(['OTC', 'Bulanan']),
-  price: z.number().min(100, 'Komisi minimal adalah Rp 100'),
+  price: z.number().min(1000, 'Komisi minimal adalah Rp 1.000'),
   nisData: z.any().refine(val => val !== null, { message: 'Akun layanan wajib dipilih' }),
 })
 
