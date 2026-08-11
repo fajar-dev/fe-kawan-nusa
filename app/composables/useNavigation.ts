@@ -73,7 +73,10 @@ const navItems: NavItem[] = [
     match: '/catalog/admin',
     role: 'admin',
     position: 'top',
-    permissionKey: 'catalog',
+    children: [
+      { label: 'Kategori', to: '/catalog/admin/category', match: '/catalog/admin/category', permissionKey: 'catalog' },
+      { label: 'Katalog', to: '/catalog/admin/reward', match: '/catalog/admin/reward', permissionKey: 'catalog' },
+    ],
   },
   {
     label: 'Konten Edukasi',
@@ -160,7 +163,20 @@ export const useNavigation = () => {
 
   const isActive = (item: NavItem | NavChild, path: string) => {
     if ('exact' in item && item.exact) return path === item.match
-    return path.startsWith(item.match)
+    if (!path.startsWith(item.match)) return false
+
+    // For children with overlapping prefixes (e.g. /user vs /user/approval), only the
+    // most specific (longest) matching sibling should light up — otherwise both children
+    // stay highlighted together whenever the more specific route is active.
+    const parent = navItems.find(nav => nav.children?.includes(item as NavChild))
+    if (parent?.children) {
+      const longestMatch = Math.max(
+        ...parent.children.filter(c => path.startsWith(c.match)).map(c => c.match.length)
+      )
+      return item.match.length === longestMatch
+    }
+
+    return true
   }
 
   return { topNav, bottomNav, isActive }
