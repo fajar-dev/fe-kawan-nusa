@@ -20,6 +20,7 @@ useSeoMeta({
 </script>
 <template>
   <div>
+    <DebugBanner />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
