@@ -9,6 +9,7 @@ export interface NisAccount {
     serviceName: string
     accountManager: string | null
     salesEmployeeId: string | null
+    branchCode: string | null
 }
 
 export interface PointSubmission {
@@ -24,6 +25,7 @@ export interface PointSubmission {
         serviceName: string
         accountManager: string
         salesEmployeeId: string | null
+        branchCode: string | null
     }
     status: 'pending' | 'approved' | 'rejected'
     scheduleId: number | null
@@ -53,6 +55,16 @@ export interface PointSubmissionSchedule {
     createdBy: { id: number; name: string } | null
     stoppedBy: { id: number; name: string } | null
     stoppedAt: string | null
+    createdAt: string
+}
+
+export interface PointSubmissionScheduleHistory {
+    id: number
+    fromPrice: number
+    toPrice: number
+    fromAnchorDay: number
+    toAnchorDay: number
+    changedBy: { id: number; name: string } | null
     createdAt: string
 }
 
