@@ -7,7 +7,7 @@
         <!-- Header -->
         <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-100">
           <div>
-            <h3 class="text-lg font-semibold text-neutral-800 leading-tight">Adjust Komisi Bulanan</h3>
+            <h3 class="text-lg font-semibold text-neutral-800 leading-tight">Ubah Komisi & Jadwal Bulanan</h3>
             <p class="text-xs text-neutral-500 mt-0.5">Berlaku untuk poin bulan berikutnya</p>
           </div>
           <button @click="isOpen = false" class="text-neutral-400 hover:text-neutral-800 transition-colors self-start mt-1">
@@ -30,6 +30,10 @@
               <span class="text-neutral-400">Komisi Saat Ini</span>
               <span class="font-medium text-neutral-700">Rp {{ (schedule?.price || 0).toLocaleString('id-ID') }}</span>
             </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-neutral-400">Jadwal Saat Ini</span>
+              <span class="font-medium text-neutral-700">Tiap tanggal {{ schedule?.anchorDay || '-' }}</span>
+            </div>
           </div>
 
           <!-- New commission -->
@@ -46,11 +50,11 @@
                   min="0"
                   placeholder="0"
                   class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary bg-white pl-10"
-                  :class="{ 'border-red-500': error }"
+                  :class="{ 'border-red-500': priceError }"
                   :disabled="loading"
                 />
               </div>
-              <p v-if="error" class="text-xs text-red-500 mt-1">{{ error }}</p>
+              <p v-if="priceError" class="text-xs text-red-500 mt-1">{{ priceError }}</p>
             </div>
             <div>
               <label class="label pb-1">
@@ -64,6 +68,25 @@
                 disabled
               />
             </div>
+          </div>
+
+          <!-- New schedule day -->
+          <div>
+            <label class="label pb-1">
+              <span class="label-text text-sm font-medium text-gray-700">Tanggal Generate Baru <span class="text-red-500">*</span></span>
+            </label>
+            <input
+              v-model.number="anchorDay"
+              type="number"
+              min="1"
+              max="31"
+              placeholder="1-31"
+              class="input input-bordered w-full text-sm h-10 rounded-lg border-gray-200 focus:border-primary bg-white"
+              :class="{ 'border-red-500': anchorDayError }"
+              :disabled="loading"
+            />
+            <p v-if="anchorDayError" class="text-xs text-red-500 mt-1">{{ anchorDayError }}</p>
+            <p v-else class="text-xs text-neutral-400 mt-1">Jika bulan berikutnya tidak punya tanggal ini, submission dibuat di tanggal terakhir bulan itu.</p>
           </div>
 
           <!-- Footer -->
@@ -90,18 +113,22 @@ const props = defineProps<{
 }>()
 
 const isOpen = defineModel<boolean>({ default: false })
-const emit = defineEmits(['submit'])
+const emit = defineEmits<{ submit: [payload: { price: number; anchorDay: number }] }>()
 
 const price = ref<number>(0)
-const error = ref('')
+const anchorDay = ref<number>(1)
+const priceError = ref('')
+const anchorDayError = ref('')
 
 // Rp 1.000 = 1 Poin (sama dengan rate pencairan tunai)
 const calculatedPoint = computed(() => Math.floor((price.value || 0) / 1000))
 
 watch(isOpen, (val) => {
-  error.value = ''
+  priceError.value = ''
+  anchorDayError.value = ''
   if (val) {
     price.value = Number(props.schedule?.price ?? 0)
+    anchorDay.value = Number(props.schedule?.anchorDay ?? 1)
     if (import.meta.client) document.body.style.overflow = 'hidden'
   } else {
     if (import.meta.client) document.body.style.overflow = ''
@@ -113,11 +140,17 @@ onUnmounted(() => {
 })
 
 const handleSubmit = () => {
-  error.value = ''
+  priceError.value = ''
+  anchorDayError.value = ''
+
   if (price.value === null || price.value === undefined || price.value < 0 || isNaN(Number(price.value))) {
-    error.value = 'Komisi harus berupa angka ≥ 0'
-    return
+    priceError.value = 'Komisi harus berupa angka ≥ 0'
   }
-  emit('submit', Number(price.value))
+  if (anchorDay.value === null || anchorDay.value === undefined || isNaN(Number(anchorDay.value)) || anchorDay.value < 1 || anchorDay.value > 31) {
+    anchorDayError.value = 'Tanggal harus di antara 1-31'
+  }
+  if (priceError.value || anchorDayError.value) return
+
+  emit('submit', { price: Number(price.value), anchorDay: Number(anchorDay.value) })
 }
 </script>

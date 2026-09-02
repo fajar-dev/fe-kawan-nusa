@@ -70,6 +70,32 @@ export class AdditionalService {
         }
     }
 
+    async getBranches(): Promise<AdditionalResponse> {
+        try {
+            const response = await apiService.client.get<AdditionalResponse>('/additional/branch', {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Gagal mengambil daftar cabang')
+        }
+    }
+
+    async getEmployees(): Promise<AdditionalResponse> {
+        try {
+            const response = await apiService.client.get<AdditionalResponse>('/additional/employee', {
+                headers: {
+                    Authorization: `Bearer ${useAuth().state.token}`
+                }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Gagal mengambil daftar karyawan')
+        }
+    }
+
     async search(q: string): Promise<SearchResponse> {
         try {
             const response = await apiService.client.get<SearchResponse>('/additional/search', {

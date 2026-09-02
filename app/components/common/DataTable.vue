@@ -66,11 +66,15 @@
           <!-- Table Header -->
           <thead class="bg-base-200/50 text-neutral-800 font-semibold border-b border-base-200">
             <tr>
-              <th 
-                v-for="col in columns" 
+              <th
+                v-for="col in columns"
                 v-show="isColumnVisible(col.key)"
-                :key="col.key" 
-                :class="['border-r border-base-200 font-medium transition-colors', col.sortable ? 'cursor-pointer hover:bg-base-300/50' : '']"
+                :key="col.key"
+                :class="[
+                  'border-r border-base-200 font-medium transition-colors',
+                  col.sortable ? 'cursor-pointer hover:bg-base-300/50' : '',
+                  col.sticky ? 'sticky right-0 z-20 bg-base-200 shadow-[-8px_0_8px_-8px_rgba(0,0,0,0.15)]' : ''
+                ]"
                 @click="col.sortable ? handleSort(col.key) : null"
               >
                 <div class="flex items-center justify-between gap-2">
@@ -93,7 +97,12 @@
           <!-- Table Body -->
           <tbody v-if="loading" class="text-sm text-neutral-600">
             <tr v-for="n in 5" :key="n" class="border-b border-base-100 last:border-0 animate-pulse">
-              <td v-for="col in columns" v-show="isColumnVisible(col.key)" :key="col.key" class="py-4 border-r border-base-200 px-4">
+              <td
+                v-for="col in columns"
+                v-show="isColumnVisible(col.key)"
+                :key="col.key"
+                :class="['py-4 border-r border-base-200 px-4', col.sticky ? 'sticky right-0 z-10 bg-base-100' : '']"
+              >
                 <div class="h-4 bg-neutral-200 rounded-lg w-full opacity-50"></div>
               </td>
             </tr>
@@ -185,6 +194,7 @@ interface Column {
   label: string
   key: string
   sortable?: boolean
+  sticky?: boolean
 }
 
 const props = withDefaults(defineProps<{

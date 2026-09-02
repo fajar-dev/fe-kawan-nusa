@@ -1,6 +1,6 @@
 import { apiService } from "./api-service"
 import { handleServiceError } from "../composables/error-helper"
-import type { PointSubmissionResponse, PointSubmissionDetailResponse, NisAccountResponse, PointSubmissionScheduleResponse, PointSubmissionSchedule } from "../types/point-submission"
+import type { PointSubmissionResponse, PointSubmissionDetailResponse, NisAccountResponse, PointSubmissionScheduleResponse, PointSubmissionSchedule, PointSubmissionScheduleHistory } from "../types/point-submission"
 import type { ApiResponse } from "../types/auth"
 
 export interface PointSubmissionParams {
@@ -13,6 +13,9 @@ export interface PointSubmissionParams {
     type?: string
     startDate?: string
     endDate?: string
+    branchCode?: string[]
+    serviceCode?: string[]
+    salesEmployeeId?: string[]
 }
 
 export class PointSubmissionService {
@@ -82,7 +85,18 @@ export class PointSubmissionService {
         }
     }
 
-    async getSchedules(params?: { page?: number; limit?: number; isActive?: boolean; sort?: string; order?: 'asc' | 'desc' }): Promise<PointSubmissionScheduleResponse> {
+    async getSchedules(params?: {
+        page?: number
+        limit?: number
+        isActive?: boolean
+        sort?: string
+        order?: 'asc' | 'desc'
+        q?: string
+        branchCode?: string[]
+        serviceCode?: string[]
+        stoppedStartDate?: string
+        stoppedEndDate?: string
+    }): Promise<PointSubmissionScheduleResponse> {
         try {
             const response = await apiService.client.get<PointSubmissionScheduleResponse>('/point-submission/schedule', {
                 params,
@@ -94,14 +108,25 @@ export class PointSubmissionService {
         }
     }
 
-    async adjustSchedule(id: number, price: number): Promise<ApiResponse<PointSubmissionSchedule>> {
+    async adjustSchedule(id: number, data: { price?: number; anchorDay?: number }): Promise<ApiResponse<PointSubmissionSchedule>> {
         try {
-            const response = await apiService.client.patch<ApiResponse<PointSubmissionSchedule>>(`/point-submission/schedule/${id}`, { price }, {
+            const response = await apiService.client.patch<ApiResponse<PointSubmissionSchedule>>(`/point-submission/schedule/${id}`, data, {
                 headers: { Authorization: `Bearer ${useAuth().state.token}` }
             })
             return response.data
         } catch (error: any) {
             return handleServiceError(error || 'Failed to adjust schedule')
+        }
+    }
+
+    async getScheduleHistory(id: number): Promise<ApiResponse<PointSubmissionScheduleHistory[]>> {
+        try {
+            const response = await apiService.client.get<ApiResponse<PointSubmissionScheduleHistory[]>>(`/point-submission/schedule/${id}/history`, {
+                headers: { Authorization: `Bearer ${useAuth().state.token}` }
+            })
+            return response.data
+        } catch (error: any) {
+            return handleServiceError(error || 'Failed to fetch schedule history')
         }
     }
 
