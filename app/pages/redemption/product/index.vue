@@ -267,7 +267,7 @@
 
 <script setup lang="ts">
 import { ArrowLeftRight, CircleHelp, Eye, Check, Package, Truck, X, History } from 'lucide-vue-next'
-import ModalProcessShipping from '~/components/ModalProcessShipping.vue'
+import ModalProcessShipping from '~/components/redemption/ModalProcessShipping.vue'
 import { redemptionService } from '~/services/redemption-service'
 import { getInitials } from '~/utils/initials'
 import { formatNumber } from '~/utils/string'

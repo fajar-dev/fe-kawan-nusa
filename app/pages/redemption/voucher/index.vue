@@ -263,7 +263,7 @@
 
 <script setup lang="ts">
 import { ArrowLeftRight, CircleHelp, Eye, Check, Ticket, X, History } from 'lucide-vue-next'
-import ModalProcessVoucher from '~/components/ModalProcessVoucher.vue'
+import ModalProcessVoucher from '~/components/redemption/ModalProcessVoucher.vue'
 import { redemptionService } from '~/services/redemption-service'
 import { getInitials } from '~/utils/initials'
 import { formatNumber } from '~/utils/string'

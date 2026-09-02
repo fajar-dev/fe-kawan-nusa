@@ -16,6 +16,13 @@ export default defineNuxtConfig({
     clientId: process.env.GOOGLE_CLIENT_ID || '',
   },
 
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false,
+    },
+  ],
+
   devtools: { enabled: true },
   
   routeRules: {
