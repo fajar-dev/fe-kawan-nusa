@@ -1,4 +1,4 @@
-import { Home, Users, UsersRound, UserPlus, Package, Coins, BookOpen, Settings, ArrowLeftRight, Gift, PackageSearch, Shapes, Shield, Percent } from 'lucide-vue-next'
+import { Home, Users, UsersRound, UserPlus, Package, Coins, BookOpen, Settings, ArrowLeftRight, Gift, PackageSearch, Shapes, Shield, Percent, Download } from 'lucide-vue-next'
 import type { Component } from 'vue'
 
 export interface NavChild {
@@ -141,6 +141,15 @@ const navItems: NavItem[] = [
   },
 
   // ── Bottom section ──
+  {
+    label: 'Unduh Laporan',
+    to: '/report',
+    icon: Download,
+    match: '/report',
+    role: 'admin',
+    position: 'bottom',
+    permissionKey: 'report',
+  },
   {
     label: 'Pengaturan Akses',
     to: '/role-permission',
