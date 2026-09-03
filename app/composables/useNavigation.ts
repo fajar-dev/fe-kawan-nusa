@@ -1,4 +1,4 @@
-import { Home, Users, UsersRound, Package, Coins, BookOpen, Settings, ArrowLeftRight, Gift, PackageSearch, Shapes, Shield } from 'lucide-vue-next'
+import { Home, Users, UsersRound, Package, Coins, BookOpen, Settings, ArrowLeftRight, Gift, PackageSearch, Shapes, Shield, Percent } from 'lucide-vue-next'
 import type { Component } from 'vue'
 
 export interface NavChild {
@@ -52,6 +52,15 @@ const navItems: NavItem[] = [
     role: 'admin',
     position: 'top',
     permissionKey: 'point-submission',
+  },
+  {
+    label: 'Rate Komisi',
+    to: '/rate-commission',
+    icon: Percent,
+    match: '/rate-commission',
+    role: 'admin',
+    position: 'top',
+    permissionKey: 'rate-commission',
   },
   {
     label: 'Tukar Poin',
