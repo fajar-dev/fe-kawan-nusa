@@ -259,8 +259,8 @@
               <td v-show="isColumnVisible('actions')" class="sticky right-0 z-10 bg-base-100 group-hover:bg-base-200/30 transition-colors shadow-[-8px_0_8px_-8px_rgba(0,0,0,0.15)] text-center px-4 w-32">
                 <div class="flex items-center justify-center gap-0">
                   <template v-if="activeTab === 'pending'">
-                    <button v-if="canEdit('point-submission')" @click="openEditModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded" title="Edit">
-                      <SquarePen class="w-4.5 h-4.5" />
+                    <button v-if="canCreate('point-adjustment') && item.createdBy?.id === state.user?.id" @click="openAdjustmentModal(item)" class="btn btn-ghost btn-xs hover:bg-primary/10 rounded gap-1.5" title="Ajukan Penyesuaian Poin">
+                      <ArrowLeftRight class="w-4 h-4" />
                     </button>
                     <button v-if="canDelete('point-submission')" @click="openDeleteModal(item)" class="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 rounded" title="Hapus">
                       <Trash2 class="w-4.5 h-4.5" />
@@ -429,6 +429,13 @@
       @submit="handleFormSubmit"
     />
 
+    <ModalPointAdjustmentCreate
+      v-model="isOpenAdjustmentCreateModal"
+      :initial-submission-id="adjustmentSubmissionId"
+      :submitting="submittingAdjustment"
+      @submit="handleAdjustmentSubmit"
+    />
+
     <ModalConfirmDelete
       v-model="isOpenDeleteModal"
       title="Hapus Poin Referral"
@@ -467,8 +474,9 @@
 </template>
 
 <script setup lang="ts">
-import { CircleHelp, SquarePen, Trash2, Eye, RefreshCw, Ban, Clock, MoreVertical } from 'lucide-vue-next'
+import { CircleHelp, SquarePen, Trash2, Eye, RefreshCw, Ban, Clock, MoreVertical, ArrowLeftRight } from 'lucide-vue-next'
 import { pointSubmissionService } from '~/services/point-submission-service'
+import { pointAdjustmentService } from '~/services/point-adjustment-service'
 import { additionalService } from '~/services/additional-service'
 import type { PointSubmission, PointSubmissionSchedule } from '~/types/point-submission'
 import type { AdditionalItem } from '~/types/additional'
@@ -617,6 +625,7 @@ const appliedScheduleFilters = ref({
 
 const toast = useToast()
 const { canCreate, canEdit, canDelete } = usePermission()
+const { state } = useAuth()
 
 const fetchSubmissions = async () => {
   loading.value = true
@@ -852,6 +861,31 @@ const openEditModal = (item: PointSubmission) => {
   }
   selectedSubmission.value = item
   isOpenFormModal.value = true
+}
+
+const isOpenAdjustmentCreateModal = ref(false)
+const adjustmentSubmissionId = ref<number | null>(null)
+const submittingAdjustment = ref(false)
+
+const openAdjustmentModal = (item: PointSubmission) => {
+  adjustmentSubmissionId.value = item.id
+  isOpenAdjustmentCreateModal.value = true
+}
+
+const handleAdjustmentSubmit = async (payload: { pointSubmissionId: number; toValue: number; reason: string }) => {
+  submittingAdjustment.value = true
+  try {
+    const res = await pointAdjustmentService.create(payload)
+    if (res.success) {
+      toast.success('Pengajuan penyesuaian poin berhasil dikirim, entri ini akan disembunyikan dari antrean sampai atasan Anda memutuskan')
+      isOpenAdjustmentCreateModal.value = false
+      fetchSubmissions()
+    } else {
+      toast.error(res.message || 'Gagal mengajukan penyesuaian poin')
+    }
+  } finally {
+    submittingAdjustment.value = false
+  }
 }
 
 const handleFormSubmit = async (formData: any) => {
