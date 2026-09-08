@@ -45,13 +45,16 @@ const navItems: NavItem[] = [
     ],
   },
   {
-    label: 'Input Poin Referral',
+    label: 'Manajemen Poin',
     to: '/point-submission',
     icon: Coins,
     match: '/point-submission',
     role: 'admin',
     position: 'top',
-    permissionKey: 'point-submission',
+    children: [
+      { label: 'Input Poin Referral', to: '/point-submission', match: '/point-submission', permissionKey: 'point-submission' },
+      { label: 'Penyesuaian Poin', to: '/point-adjustment', match: '/point-adjustment', permissionKey: 'point-adjustment' },
+    ],
   },
   {
     label: 'Rate Komisi',
